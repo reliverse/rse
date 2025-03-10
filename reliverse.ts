@@ -11,7 +11,7 @@ export default defineConfig({
   projectAuthor: "reliverse",
   projectDescription:
     "This CLI tool can help you easily create new web projects, manage existing projects, and automatically make advanced codebase modifications, with more features coming soon.",
-  version: "1.5.11",
+  version: "1.5.12",
   projectLicense: "MIT",
   projectState: "creating",
   projectRepository: "https://github.com/reliverse/cli",

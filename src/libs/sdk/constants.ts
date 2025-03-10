@@ -1,7 +1,7 @@
 import os from "os";
 import path from "pathe";
 
-export const cliVersion = "1.5.11";
+export const cliVersion = "1.5.12";
 export const cliName = "@reliverse/cli";
 
 // GENERAL CONFIG NAMES

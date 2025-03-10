@@ -1,8 +1,0 @@
-{
-  "@reliverse/config": {
-    "main": "src/libs/config/config-main.ts"
-  },
-  "@reliverse/sdk": {
-    "main": "src/libs/sdk/sdk-main.ts"
-  }
-}

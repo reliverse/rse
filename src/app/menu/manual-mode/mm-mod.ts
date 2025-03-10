@@ -9,7 +9,7 @@ import { askAppOrLib } from "~/app/prompts/askAppOrLib.js";
 import { askInstallDeps } from "~/app/prompts/askInstallDeps.js";
 import { askOpenInIDE } from "~/app/prompts/askOpenInIDE.js";
 import { askProjectName } from "~/app/prompts/askProjectName.js";
-import { hasOnlyReliverseConfig } from "~/libs/sdk/funcs/hasOnlyReliverseConfig.js";
+import { hasOnlyReliverseConfig } from "~/libs/sdk/functions.js";
 import { createPackageJSON } from "~/utils/createPackageJSON.js";
 import { createTSConfig } from "~/utils/createTSConfig.js";
 import { isDirectoryEmpty } from "~/utils/filesysHelpers.js";

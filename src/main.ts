@@ -21,6 +21,7 @@ const main = defineCommand({
     multireli: () =>
       import("./arg/multireli/multireli-mod.js").then((r) => r.default),
     env: () => import("./arg/env/env-mod.js").then((r) => r.default),
+    rules: () => import("./arg/rules/rules-mod.js").then((r) => r.default),
   },
 });
 

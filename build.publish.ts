@@ -582,7 +582,7 @@ async function filterDeps(
 
     // Match import statements
     const importMatches = content.matchAll(
-      /from\s+['"](@[^'"]+|[^'".][^'"]*)['"]/g,
+      /from\s+['"](\.|\.\/|\.\\)?src(\/|\\)/g,
     );
     for (const match of importMatches) {
       const importPath = match[1];
@@ -766,6 +766,7 @@ async function copyReadmeLicense(outdirRoot: string): Promise<void> {
 
 /**
  * Converts .js import paths to .ts in files within the given directory for JSR builds.
+ * Also fixes relative paths for subdirectory files.
  */
 async function convertJsToTsImports(
   outdirBin: string,
@@ -784,10 +785,38 @@ async function convertJsToTsImports(
       if (filePath.includes("template/")) continue;
       const content = await fs.readFile(filePath, "utf8");
       if (isJSR) {
-        const finalContent = content.replace(
+        // Fix import paths for JSR distribution
+        let finalContent = content;
+
+        // Convert src to bin in import paths
+        finalContent = finalContent.replace(
           /(from\s*['"])(\.|\.\/|\.\\)?src(\/|\\)/g,
           "$1$2bin$3",
         );
+
+        // Convert .js to .ts in all import statements
+        finalContent = finalContent.replace(
+          /(from\s*['"].*?)\.js(['"]\s*;?)/g,
+          "$1.ts$2",
+        );
+
+        // Fix relative paths for subdirectory files
+        // Check if the file is inside a subdirectory of outdirBin
+        const relativePath = path.relative(outdirBin, filePath);
+
+        if (
+          (filePath.includes("/bin/") || filePath.includes("\\bin\\")) &&
+          relativePath.includes(path.sep) && // indicates file is in a subdirectory
+          (finalContent.includes("../libs/") ||
+            finalContent.includes("../libs\\")) &&
+          (filePath.includes("/libs/") || filePath.includes("\\libs\\"))
+        ) {
+          // Throw error for libraries with subdirectories
+          throw new Error(
+            `Subdirectories in libraries are not currently supported. Found subdirectory in: ${filePath}`,
+          );
+        }
+
         logger.verbose("Converted .js imports to .ts for JSR build", true);
         await fs.writeFile(filePath, finalContent, "utf8");
       } else {
@@ -1479,9 +1508,14 @@ async function createLibPackageJSON(
   const originalPkg = await readPackageJSON();
   let { description } = originalPkg;
   const { version, license, keywords, author } = originalPkg;
-  if (!pubConfig.isCLI) {
+
+  // Use the description from the library config if available
+  if (pubConfig.libs?.[libName]?.description) {
+    description = pubConfig.libs[libName].description;
+  } else if (!pubConfig.isCLI) {
     description = "A helper library for the Reliverse CLI";
   }
+
   const commonPkg: Partial<PackageJson> = {
     name: libName,
     version,
@@ -1603,54 +1637,243 @@ async function renameEntryFile(
 }
 
 /**
- * Builds the NPM distribution for a library.
+ * Analyzes TypeScript imports in a file and returns a list of imported files.
+ * This is used to ensure all imported files are copied to the output directory.
  */
-async function buildLibNpmDist(
-  libName: string,
-  entryDir: string,
-  outdirRoot: string,
-  entryFile: string,
+async function analyzeImports(
+  filePath: string,
+  baseDir: string,
+  processedFiles = new Set<string>(),
+): Promise<string[]> {
+  if (processedFiles.has(filePath)) {
+    return [];
+  }
+
+  logger.info(`Analyzing imports in file: ${filePath}`, true);
+  processedFiles.add(filePath);
+
+  if (!(await fs.pathExists(filePath))) {
+    logger.warn(`Could not find file at: ${filePath}`, true);
+    return [];
+  }
+
+  try {
+    const content = await fs.readFile(filePath, "utf8");
+    const importRegex =
+      /(?:import|export)(?:(?:[\s\S]*?from\s+)|(?:(?:[\s\S]|(?:\n))+?=\s+require\())\s*["']([^"']+)["']/g;
+    const importPaths: string[] = [];
+    let match;
+
+    while ((match = importRegex.exec(content)) !== null) {
+      const importPath = match[1];
+      logger.info(`Found import path: ${importPath}`, true);
+
+      // Skip npm package imports
+      if (!importPath.startsWith(".") && !importPath.startsWith("/")) {
+        logger.info(`Skipping npm package import: ${importPath}`, true);
+        continue;
+      }
+
+      // Handle path normalization - remove any .js or .ts extensions to normalize
+      let normalizedImportPath = importPath;
+      if (
+        normalizedImportPath.endsWith(".js") ||
+        normalizedImportPath.endsWith(".ts")
+      ) {
+        normalizedImportPath = normalizedImportPath.replace(/\.(js|ts)$/, "");
+        logger.info(`Normalized import path: ${normalizedImportPath}`, true);
+      }
+
+      // Special handling for SDK paths or any relative paths to libs
+      // Convert paths like "../libs/sdk/constants" to simply "../constants" for JSR
+      if (
+        normalizedImportPath.includes("libs/sdk/") ||
+        normalizedImportPath.includes("libs/")
+      ) {
+        // Extract just the file name component (everything after the last slash)
+        const pathComponents = normalizedImportPath.split("/");
+        const fileName = pathComponents[pathComponents.length - 1];
+
+        // For files in subdirectories, we need to go up to the root bin directory
+        // For example, in libs/sdk/funcs/file.ts importing from libs/sdk/constants.ts,
+        // we need to use "../constants" instead of "../libs/sdk/constants"
+        if (filePath.includes("/funcs/") || filePath.includes("\\funcs\\")) {
+          normalizedImportPath = `../${fileName}`;
+          logger.info(
+            `Simplified SDK import path for subdirectory: ${normalizedImportPath}`,
+            true,
+          );
+        }
+      }
+
+      // Resolve the import path relative to the current file
+      let resolvedPath: string;
+      if (normalizedImportPath.startsWith("/")) {
+        resolvedPath = path.join(ROOT_DIR, normalizedImportPath.slice(1));
+      } else {
+        resolvedPath = path.resolve(
+          path.dirname(filePath),
+          normalizedImportPath,
+        );
+      }
+      logger.info(`Resolved base path: ${resolvedPath}`, true);
+
+      // Try with different extensions
+      let foundFile = false;
+      for (const ext of [".ts", ".tsx", ".js", ".jsx", ".json"]) {
+        const withExt = `${resolvedPath}${ext}`;
+        if (await fs.pathExists(withExt)) {
+          resolvedPath = withExt;
+          logger.info(`Found file with extension: ${resolvedPath}`, true);
+          foundFile = true;
+          break;
+        }
+      }
+
+      // Handle directory imports (index.ts)
+      if (
+        !foundFile &&
+        (await fs.pathExists(resolvedPath)) &&
+        (await fs.stat(resolvedPath)).isDirectory()
+      ) {
+        logger.info(`Import path is a directory: ${resolvedPath}`, true);
+        for (const indexFile of ["index.ts", "index.js"]) {
+          const indexPath = path.join(resolvedPath, indexFile);
+          if (await fs.pathExists(indexPath)) {
+            resolvedPath = indexPath;
+            logger.info(`Using index file: ${resolvedPath}`, true);
+            foundFile = true;
+            break;
+          }
+        }
+      }
+
+      if (foundFile) {
+        importPaths.push(resolvedPath);
+        logger.info(`Added import path to list: ${resolvedPath}`, true);
+        // Recursively analyze imports in the imported file
+        const nestedImports = await analyzeImports(
+          resolvedPath,
+          baseDir,
+          processedFiles,
+        );
+        importPaths.push(...nestedImports);
+      } else {
+        logger.warn(`Import path does not exist: ${resolvedPath}`, true);
+
+        // Special handling for the SDK or any other libs - try alternative paths
+        // Try to find the files without .js extension when they have .js in the import
+        if (importPath.endsWith(".js")) {
+          const possibleTsPath = importPath.replace(".js", ".ts");
+          logger.info(
+            `Trying to find TS version of JS import: ${possibleTsPath}`,
+            true,
+          );
+
+          // Resolve again with .ts instead of .js
+          let tsResolvedPath: string;
+          if (possibleTsPath.startsWith("/")) {
+            tsResolvedPath = path.join(ROOT_DIR, possibleTsPath.slice(1));
+          } else {
+            tsResolvedPath = path.resolve(
+              path.dirname(filePath),
+              possibleTsPath,
+            );
+          }
+
+          if (await fs.pathExists(tsResolvedPath)) {
+            logger.info(`Found TS file instead: ${tsResolvedPath}`, true);
+            importPaths.push(tsResolvedPath);
+            // Recursively analyze imports in the imported file
+            const nestedImports = await analyzeImports(
+              tsResolvedPath,
+              baseDir,
+              processedFiles,
+            );
+            importPaths.push(...nestedImports);
+          }
+        }
+      }
+    }
+
+    logger.info(
+      `Completed import analysis for ${filePath}, found ${importPaths.length} imports`,
+      true,
+    );
+    return importPaths;
+  } catch (error) {
+    logger.error(`Error analyzing imports in ${filePath}:`, error, true);
+    return [];
+  }
+}
+
+/**
+ * Copies a file with all its imports to the output directory.
+ */
+async function copyFileWithImports(
+  sourcePath: string,
+  outputDir: string,
+  baseDir: string,
 ): Promise<void> {
-  const outdirBin = path.join(outdirRoot, "bin");
-  await cleanDir(outdirRoot);
-
-  const entryFilePath = path.join(entryDir, entryFile);
-  if (!(await fs.pathExists(entryFilePath))) {
-    logger.error(`Lib ${libName}: entry file not found at ${entryFilePath}`);
-    throw new Error(`Entry file not found: ${entryFilePath}`);
-  }
   logger.info(
-    `Building NPM distribution for lib ${libName} using entry ${entryFilePath}`,
+    `Starting to copy file with imports: ${sourcePath} -> ${outputDir}`,
     true,
   );
-  const cfg = { ...pubConfig, lastBuildFor: "npm" } as BuildPublishConfig;
-  await fs.ensureDir(path.dirname(outdirBin));
-  if (cfg.builderNpm !== "bun") {
-    await bundleUsingMkdist(entryDir, outdirBin);
-  } else {
-    await bundleUsingBun(cfg, entryFilePath, outdirBin, libName);
+  logger.info(`Base directory for relative paths: ${baseDir}`, true);
+
+  // Get all imported files
+  const imports = await analyzeImports(sourcePath, baseDir);
+  logger.info(`Found ${imports.length} imports to copy`, true);
+
+  const allFiles = [sourcePath, ...imports];
+  logger.info(
+    `Total files to copy (including source): ${allFiles.length}`,
+    true,
+  );
+
+  // Copy all files to the output directory
+  for (const file of allFiles) {
+    const relativePath = path.relative(baseDir, file);
+    const targetPath = path.join(outputDir, relativePath);
+
+    logger.info(`Copying file: ${file} -> ${targetPath}`, true);
+    await fs.ensureDir(path.dirname(targetPath));
+    await fs.copyFile(file, targetPath);
+    logger.verbose(`Copied ${file} to ${targetPath}`, true);
   }
 
-  const { updatedEntryFile } = await renameEntryFile(
-    false,
-    outdirBin,
-    entryDir,
-    entryFile,
-  );
-  entryFile = updatedEntryFile;
+  logger.success(`Completed copying ${allFiles.length} files`, true);
+}
 
-  await copyReadmeLicense(outdirRoot);
-  await createLibPackageJSON(libName, outdirRoot, false);
-  await convertSymbolPaths(outdirBin, false);
-  await convertSrcToBinPaths(outdirRoot, false);
-  await deleteSpecificFiles(outdirBin);
-  await deleteRootSpecificFiles(outdirRoot);
+/**
+ * Bundles source files by copying them with all imports.
+ *
+ * This function enhances bundleUsingCopy by also including all imported files.
+ */
+async function bundleUsingCopyWithImports(
+  src: string,
+  dest: string,
+  baseDir: string,
+): Promise<void> {
+  logger.info(`Starting bundleUsingCopyWithImports: ${src} -> ${dest}`, true);
+  logger.info(`Base directory: ${baseDir}`, true);
 
-  const size = await getDirectorySize(outdirRoot);
-  logger.success(
-    `Successfully created NPM distribution for lib ${libName} (${size} bytes)`,
-    true,
-  );
+  await fs.ensureDir(path.dirname(dest));
+  const stats = await fs.stat(src);
+
+  if (stats.isFile()) {
+    // Copy the file with all its imports
+    logger.info("Source is a file, using copyFileWithImports", true);
+    await copyFileWithImports(src, path.dirname(dest), baseDir);
+    logger.verbose(`Copied file with imports from ${src} to ${dest}`, true);
+  } else {
+    // For a directory, we'll use the normal copy function
+    logger.info("Source is a directory, using fs.copy", true);
+    await fs.copy(src, dest);
+    logger.verbose(`Copied directory from ${src} to ${dest}`, true);
+  }
+
+  logger.success("Completed bundling with imports", true);
 }
 
 /**
@@ -1674,9 +1897,11 @@ async function buildLibJsrDist(
   const cfg = { ...pubConfig, lastBuildFor: "jsr" } as BuildPublishConfig;
 
   if (cfg.builderJsr === "jsr") {
-    await bundleUsingCopy(
+    // Use the enhanced copy function that follows imports
+    await bundleUsingCopyWithImports(
       path.join(entryDir, entryFile),
       path.join(outdirBin, entryFile),
+      entryDir,
     );
   } else if (cfg.builderJsr === "bun") {
     await bundleUsingBun(
@@ -1710,6 +1935,67 @@ async function buildLibJsrDist(
   const size = await getDirectorySize(outdirRoot);
   logger.success(
     `Successfully created JSR distribution for lib ${libName} (${size} bytes)`,
+    true,
+  );
+}
+
+/**
+ * Builds the NPM distribution for a library.
+ */
+async function buildLibNpmDist(
+  libName: string,
+  entryDir: string,
+  outdirRoot: string,
+  entryFile: string,
+): Promise<void> {
+  const outdirBin = path.join(outdirRoot, "bin");
+  await cleanDir(outdirRoot);
+
+  const entryFilePath = path.join(entryDir, entryFile);
+  if (!(await fs.pathExists(entryFilePath))) {
+    logger.error(`Lib ${libName}: entry file not found at ${entryFilePath}`);
+    throw new Error(`Entry file not found: ${entryFilePath}`);
+  }
+  logger.info(
+    `Building NPM distribution for lib ${libName} using entry ${entryFilePath}`,
+    true,
+  );
+  const cfg = { ...pubConfig, lastBuildFor: "npm" } as BuildPublishConfig;
+  await fs.ensureDir(path.dirname(outdirBin));
+  if (cfg.builderNpm !== "bun") {
+    // For mkdist, ensure we're copying the directory containing all imports
+    // If entry file is in the root of the entry directory, we need to copy the entire entry directory
+    // Otherwise, we need to copy the parent directory of the entry file
+    if (path.dirname(entryFilePath) === entryDir) {
+      await bundleUsingMkdist(entryDir, outdirBin);
+    } else {
+      // Extract the subdirectory path relative to entryDir
+      const subDir = path.dirname(path.relative(entryDir, entryFilePath));
+      const fullSourceDir = path.join(entryDir, subDir);
+      await bundleUsingMkdist(fullSourceDir, outdirBin);
+    }
+  } else {
+    await bundleUsingBun(cfg, entryFilePath, outdirBin, libName);
+  }
+
+  const { updatedEntryFile } = await renameEntryFile(
+    false,
+    outdirBin,
+    entryDir,
+    entryFile,
+  );
+  entryFile = updatedEntryFile;
+
+  await copyReadmeLicense(outdirRoot);
+  await createLibPackageJSON(libName, outdirRoot, false);
+  await convertSymbolPaths(outdirBin, false);
+  await convertSrcToBinPaths(outdirRoot, false);
+  await deleteSpecificFiles(outdirBin);
+  await deleteRootSpecificFiles(outdirRoot);
+
+  const size = await getDirectorySize(outdirRoot);
+  logger.success(
+    `Successfully created NPM distribution for lib ${libName} (${size} bytes)`,
     true,
   );
 }
@@ -1762,44 +2048,47 @@ async function publishLibToJsr(
 }
 
 /**
- * Processes all libraries defined in build.libs.jsonc.
+ * Processes all libraries defined in pubConfig.libs.
  */
 async function buildPublishLibs(): Promise<void> {
-  const libsFile = path.resolve(ROOT_DIR, "build.libs.jsonc");
-  if (!(await fs.pathExists(libsFile))) {
+  // Check if library configurations exist in pubConfig
+  if (!pubConfig.libs || Object.keys(pubConfig.libs).length === 0) {
     logger.verbose(
-      "No build.libs.jsonc file found, skipping libs build.",
+      "No library configurations found in pubConfig, skipping libs build.",
       true,
     );
     return;
   }
-  logger.info("build.libs.jsonc detected, processing libraries...", true);
 
-  const libsContent = await fs.readFile(libsFile, "utf8");
-  const libsJson = parseJSONC(libsContent);
-  const libs = Object.entries(libsJson as Record<string, unknown>);
+  logger.info(
+    "Library configurations detected in pubConfig, processing libraries...",
+    true,
+  );
+
+  const libs = Object.entries(pubConfig.libs);
   const dry = !!pubConfig.dryRun;
 
   for (const [libName, config] of libs) {
-    const typedConfig = config as { main?: string };
-    if (!typedConfig.main) {
+    if (!config.main) {
       logger.warn(
         `Library ${libName} is missing "main" property. Skipping...`,
         true,
       );
       continue;
     }
+
     let folderName = libName;
     if (libName.startsWith("@")) {
       const parts = libName.split("/");
       if (parts.length > 1) folderName = parts[1]!;
     }
+
     const libBaseDir = path.resolve(ROOT_DIR, "dist-libs", folderName);
     const npmOutDir = path.join(libBaseDir, "npm");
     const jsrOutDir = path.join(libBaseDir, "jsr");
 
     // Parse the main path to separate file from directory
-    const mainPath = path.parse(typedConfig.main);
+    const mainPath = path.parse(config.main);
     const mainFile = mainPath.base; // File with extension
     const mainDir = mainPath.dir || "."; // Directory path, defaults to '.' if empty
 
@@ -1827,6 +2116,21 @@ async function buildPublishLibs(): Promise<void> {
   }
 }
 
+/**
+ * Deletes the deprecated build.libs.jsonc file if it exists.
+ * Call this function if you want to clean up after migrating to the new configuration format.
+ */
+export async function cleanupDeprecatedLibsFile(): Promise<void> {
+  const libsFile = path.resolve(ROOT_DIR, "build.libs.jsonc");
+  if (await fs.pathExists(libsFile)) {
+    logger.info("Removing deprecated build.libs.jsonc file...", true);
+    await fs.remove(libsFile);
+    logger.success("Successfully removed build.libs.jsonc file.", true);
+  } else {
+    logger.info("No build.libs.jsonc file found. No cleanup needed.", true);
+  }
+}
+
 // ============================
 // Main Function
 // ============================
@@ -1836,6 +2140,19 @@ async function buildPublishLibs(): Promise<void> {
  */
 export async function main(): Promise<void> {
   try {
+    // Check if build.libs.jsonc exists and warn about deprecation
+    const libsFile = path.resolve(ROOT_DIR, "build.libs.jsonc");
+    if (await fs.pathExists(libsFile)) {
+      logger.warn(
+        "build.libs.jsonc file found but is deprecated. Libraries are now configured in build.config.ts.",
+        true,
+      );
+      logger.info(
+        "You can call 'cleanupDeprecatedLibsFile()' to remove this file.",
+        true,
+      );
+    }
+
     await removeDistFolders();
     await bumpHandler();
     const registry = pubConfig.registry || "npm-jsr";

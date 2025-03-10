@@ -41,9 +41,7 @@ export async function app(params: ParamsOmitSkipPN) {
         config,
       );
       await showEndPrompt();
-      // deleteLastLines(4);
       deleteLastLine();
-      // renderEndLine();
       process.exit(0);
     }
   }
@@ -103,31 +101,7 @@ export async function app(params: ParamsOmitSkipPN) {
       memory,
       skipPrompts,
     });
-  } else if (mainMenuOption === "exit") {
-    // msg({ type: "M_BAR", title: "" });
-    // msg({ type: "M_BAR", title: "" });
-    // deleteLastLines(2);
-    // await endPrompt({
-    //   title: "✋ User pressed Ctrl+C, exiting...",
-    //   titleColor: "redBright",
-    //   titleTypography: "bold",
-    //   endTitleColor: "redBright",
-    // });
-    // deleteLastLines(4);
-    // renderEndLine();
-    // deleteLastLine();
-    // await completePrompt(
-    //   "select",
-    //   true,
-    //   "✋ User pressed Ctrl+C, exiting...",
-    //   "redBright",
-    //   "bold",
-    //   undefined,
-    //   true,
-    //   "redBright",
-    //   undefined,
-    //   false,
-    // );
-    // process.exit(0);
   }
+
+  await showEndPrompt();
 }

@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 
-import { cliConfigTs } from "~/libs/sdk/constants.js";
-import { cliConfigJsonc } from "~/libs/sdk/constants.js";
+const cliConfigTs = "reliverse.ts";
+const cliConfigJsonc = "reliverse.jsonc";
 
 /**
  * Checks if a directory contains only Reliverse config files

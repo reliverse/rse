@@ -10,7 +10,7 @@ const isCLI = true;
 const declaration = false;
 
 const pausePublish = false;
-const disableBump = false;
+const disableBump = true;
 const verbose = false;
 
 /** ------------------------------------
@@ -102,6 +102,19 @@ export type BuildPublishConfig = {
 
   /** Flag indicating if the build is for a CLI package */
   isCLI: boolean;
+
+  /** Configuration for libraries to be built and published */
+  libs?: Record<string, LibConfig>;
+};
+
+/**
+ * Configuration for a library to be built and published.
+ */
+export type LibConfig = {
+  /** The path to the main entry file for the library */
+  main: string;
+  /** Optional description for the library */
+  description?: string;
 };
 
 const ROOT_DIR = dirname(fileURLToPath(import.meta.url));
@@ -149,6 +162,18 @@ export const pubConfig: BuildPublishConfig = {
   // Build overrides – do not modify these manually
   lastBuildFor: "npm",
   isJSR: false,
+
+  // Library configurations
+  libs: {
+    "@reliverse/config": {
+      main: "src/libs/config/config-main.ts",
+      description: "Configuration utilities for @reliverse/cli",
+    },
+    "@reliverse/sdk": {
+      main: "src/libs/sdk/sdk-main.ts",
+      description: "SDK for interacting with @reliverse/cli and reliverse.org",
+    },
+  },
 };
 
 /**

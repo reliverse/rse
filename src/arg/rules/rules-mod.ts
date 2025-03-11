@@ -3,7 +3,7 @@ import fs from "fs-extra";
 import os from "os";
 import path from "pathe";
 
-import { showRulesMenu } from "./rules-menu.js";
+import { showRulesMenu } from "./rules-impl.js";
 
 export default defineCommand({
   meta: {

@@ -153,17 +153,15 @@ export const pubConfig: BuildPublishConfig = {
   allowDirty: true,
   dryRun: false,
 
-  // Helper flags
+  // Helpers
   verbose,
-
-  // CLI flag
   isCLI,
 
   // Build overrides – do not modify these manually
   lastBuildFor: "npm",
   isJSR: false,
 
-  // Library configurations
+  // Libs config
   libs: {
     "@reliverse/config": {
       main: "src/libs/config/config-main.ts",

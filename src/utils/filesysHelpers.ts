@@ -44,3 +44,20 @@ export async function isDirectoryEmpty(directory: string): Promise<boolean> {
     return false;
   }
 }
+
+/**
+ * Removes the specified directory if it exists and then ensures it exists.
+ * @param dir - The directory to remove and ensure.
+ */
+export async function rmEnsureDir(dir: string): Promise<void> {
+  try {
+    if (await fs.pathExists(dir)) {
+      relinka("info-verbose", `Removing existing directory: ${dir}`);
+      await fs.remove(dir);
+    }
+    await fs.ensureDir(dir);
+  } catch (error) {
+    relinka("error", `Error while removing directory ${dir}: ${error}`);
+    throw error;
+  }
+}

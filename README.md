@@ -6,7 +6,7 @@
 
 _Prerequisites: [Git](https://git-scm.com/downloads), [Node.js](https://nodejs.org), [Bun](https://bun.sh)_
 
-1️⃣ **Install**: `bun i -g @reliverse/cli` • 2️⃣ **Use**: `reliverse cli` • 3️⃣ **Update (if needed)**: `reliverse update`
+1️⃣ **Install**: `bun i -g @reliverse/cli` (or `reliverse update`) • 2️⃣ **Use**: `reliverse cli`
 
 ## Introduction
 
@@ -14,13 +14,11 @@ _Prerequisites: [Git](https://git-scm.com/downloads), [Node.js](https://nodejs.o
 
 - **Effortlessly create projects**: Spin up new web apps or import existing templates in a flash.  
 - **Apply powerful codemods**: Safely refactor code and integrate popular libraries.  
-- **Automate configuration**: Set up ESLint, Prettier, Biome, `.env` files, Git hooks, and more.  
-- **Support multiple frameworks**: Enjoy seamless compatibility with Next.js, React, Vue, Svelte, Astro, and beyond.  
+- **Automate configuration**: Set up ESLint, Biome, env files, and more.  
+- **Support multiple frameworks**: Enjoy seamless compatibility with Next.js and beyond.  
 - **Customize with templates**: Clone pre-built templates and merge them conflict-free.  
-- **Automate GitHub & deployments**: Quickly create repositories, push commits, and deploy to Vercel.  
-- **Extend functionality**: Upcoming Reliverse Addons enable even more features and integrations.
-
-Although it’s built primarily for JavaScript/TypeScript (especially React and Next.js), @reliverse/cli is flexible enough to grow beyond web development, streamlining workflows with a single, powerful CLI.
+- **Automate GitHub & deployments**: Quickly create GitHub repositories, push commits, and deploy to Vercel.  
+- **Reliverse Addons**: `🔬 Open manual builder mode` to enable even more features and integrations.
 
 ## Commands
 

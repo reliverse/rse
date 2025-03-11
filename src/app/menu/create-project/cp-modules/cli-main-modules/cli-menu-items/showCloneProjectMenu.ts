@@ -199,7 +199,7 @@ async function promptForRepo({
     }
 
     // If one of the predefined options is chosen, check if it's from custom repos
-    const normalizedSelection = normalizeGitHubUrl(selection);
+    const normalizedSelection = normalizeGitHubUrl(selection ?? "");
     return {
       repo: normalizedSelection,
       isCustom: customRepos.includes(normalizedSelection),

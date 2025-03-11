@@ -10,7 +10,10 @@ import type { ReliverseConfig } from "~/libs/config/config-main.js";
 
 import { initGitDir } from "~/app/menu/create-project/cp-modules/git-deploy-prompts/git.js";
 import { cliConfigJsonc, cliConfigTs } from "~/libs/sdk/constants.js";
-import { setHiddenAttributeOnWindows } from "~/utils/filesysHelpers.js";
+import {
+  rmEnsureDir,
+  setHiddenAttributeOnWindows,
+} from "~/utils/filesysHelpers.js";
 import { getReliverseConfigPath } from "~/utils/reliverseConfig.js";
 
 /**
@@ -384,8 +387,7 @@ export async function downloadRepo({
         ),
         projectReliverseConfigPath,
       );
-      await fs.remove(projectPath);
-      await fs.ensureDir(projectPath);
+      await rmEnsureDir(projectPath);
     }
 
     // 4) Parse and compute final repo info

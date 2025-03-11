@@ -46,8 +46,7 @@
     "reliverse.ts",
     "reset.d.ts",
     "src/**/*.ts",
-    "vitest.config.ts",
-    "manage-libs.ts"
+    "vitest.config.ts"
   ],
   "exclude": [
     "node_modules",

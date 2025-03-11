@@ -370,7 +370,6 @@ export async function handleNextActions(
 ) {
   const nextActions = await multiselectPrompt({
     title: "What would you like to do next?",
-    allowAllUnselected: true,
     titleColor: "cyanBright",
     defaultValue: ["ide"],
     options: [

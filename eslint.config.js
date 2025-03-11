@@ -88,7 +88,6 @@ const config = tseslint.config(
       "no-constant-binary-expression": "off",
       "no-constant-condition": "off",
       "no-case-declarations": "off",
-      "max-lines": ["error", 1000],
       "perfectionist/sort-imports": "warn",
       "@stylistic/operator-linebreak": "off",
       "@stylistic/indent": "off",
@@ -138,12 +137,6 @@ const config = tseslint.config(
           ],
         },
       ],
-    },
-  },
-  {
-    files: ["build.publish.ts", "**/reliverseConfig.ts"],
-    rules: {
-      "max-lines": "off",
     },
   },
 );

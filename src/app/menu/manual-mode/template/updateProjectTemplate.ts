@@ -1,9 +1,9 @@
 import { relinka } from "@reliverse/prompts";
 import { ofetch } from "ofetch";
 
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 
-import { UNKNOWN_VALUE } from "~/libs/sdk/constants.js";
+import { UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { REPO_TEMPLATES } from "~/utils/projectRepository.js";
 import { updateReliverseConfig } from "~/utils/reliverseConfig.js";
 

@@ -1,96 +1,55 @@
+import { ensuredir } from "@reliverse/fs";
 import { selectPrompt } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
+import { exec } from "child_process";
 import fs from "fs-extra";
+import https from "https";
+import { HttpsProxyAgent } from "https-proxy-agent";
 import { installDependencies } from "nypm";
 import path, { dirname } from "pathe";
 import prettyBytes from "pretty-bytes";
 import { simpleGit } from "simple-git";
+import { extract } from "tar";
+import { promisify } from "util";
 
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 
 import { initGitDir } from "~/app/menu/create-project/cp-modules/git-deploy-prompts/git.js";
-import { cliConfigJsonc, cliConfigTs } from "~/libs/sdk/constants.js";
+import {
+  cliConfigJsonc,
+  cliConfigTs,
+  cliHomeRepos,
+} from "~/libs/cfg/constants/cfg-details.js";
 import {
   rmEnsureDir,
   setHiddenAttributeOnWindows,
 } from "~/utils/filesysHelpers.js";
 import { getReliverseConfigPath } from "~/utils/reliverseConfig.js";
 
+const execAsync = promisify(exec);
+
 /**
  * Defines the options for downloading a project from a remote repository.
  */
 type DownloadRepoOptions = {
-  /**
-   * The repository to download, such as "owner/repo" (github:owner/repo), "owner/repo#ref" (github:owner/repo#ref), or "github:owner/repo/subdir".
-   */
   repoURL: string;
-  /**
-   * The name of the new local project directory.
-   */
   projectName: string;
-  /**
-   * Indicates if this operation is running in a development environment (used to place project in a 'tests-runtime' folder).
-   */
   isDev: boolean;
-  /**
-   * The current working directory where the new project folder will be created.
-   */
   cwd: string;
-  /**
-   * Optional authentication token (e.g., GitHub personal access token) if the repository is private.
-   */
   githubToken?: string;
-  /**
-   * If true, automatically installs dependencies (via `nypm`) after downloading.
-   */
   install?: boolean;
-  /**
-   * Specifies which Git hosting service to use. Supported values are "github", "gitlab", "bitbucket", and "sourcehut".
-   */
   provider?: "github" | "gitlab" | "bitbucket" | "sourcehut";
-  /**
-   * If set, only extracts a specified subdirectory from the downloaded repository.
-   */
   subdirectory?: string;
-  /**
-   * If true, forces the download to proceed even if the target directory is not empty.
-   */
   force?: boolean;
-  /**
-   * If true, removes any existing contents in the target directory before downloading.
-   */
   forceClean?: boolean;
-  /**
-   * If true, preserves the .git directory when cloning, maintaining Git history.
-   * @default true
-   */
   preserveGit?: boolean;
-  /**
-   * Configuration for the project when initializing a fresh Git repository.
-   * Only used when preserveGit is false.
-   */
   config?: ReliverseConfig | undefined;
-  /**
-   * If true, returns the duration (in seconds) it took to complete the download.
-   */
   returnTime?: boolean;
-  /**
-   * If true, returns the total size (in MB) of the downloaded project folder.
-   */
   returnSize?: boolean;
-  /**
-   * If true, returns the number of concurrent Git processes used.
-   */
   returnConcurrency?: boolean;
-  /**
-   * If provided, use the fast clone method.
-   * This should be the local path to a pre-populated ".git" folder that contains the complete history.
-   */
   fastCloneSource?: string;
-  /**
-   * If true, the downloaded repository is a template download.
-   */
   isTemplateDownload: boolean;
+  cache?: boolean;
 };
 
 /**
@@ -108,33 +67,19 @@ type RepoInfo = {
 type GitProvider = "github" | "gitlab" | "bitbucket" | "sourcehut";
 
 /**
- * Represents the result of a successful download operation, including the source URL,
- * the local directory path, and optionally the duration, size, and concurrency.
+ * Represents the result of a successful download operation.
  */
 export type DownloadResult = {
   source: string;
   dir: string;
-  /**
-   * The duration (in seconds) it took to complete the download.
-   */
   time?: number;
-  /**
-   * The total size (in MB) of the downloaded project.
-   */
   size?: number;
-  /**
-   * The total size in a human-readable format.
-   */
   sizePretty?: string;
-  /**
-   * The number of concurrent Git processes used.
-   */
   concurrency?: number;
 };
 
 /**
  * Recursively calculates the total size of a folder in bytes.
- * Optionally, directories with a basename found in skipDirs will be skipped.
  */
 async function getFolderSize(
   directory: string,
@@ -143,9 +88,7 @@ async function getFolderSize(
   let totalSize = 0;
   const entries = await fs.readdir(directory);
   for (const entry of entries) {
-    // Skip directories that match one of the names in skipDirs.
     if (skipDirs.includes(entry)) continue;
-
     const fullPath = path.join(directory, entry);
     const stats = await fs.stat(fullPath);
     if (stats.isFile()) {
@@ -158,14 +101,7 @@ async function getFolderSize(
 }
 
 /**
- * Reads a Git repository string and extracts the provider (if any), repository path, reference/branch, and subdirectory.
- *
- * Supports formats such as:
- *   - "owner/repo"
- *   - "owner/repo#ref"
- *   - "provider:owner/repo"
- *   - "provider:owner/repo#ref"
- *   - Full URLs (e.g., "https://github.com/owner/repo")
+ * Parses a Git URI and extracts provider, repo, ref, and subdirectory.
  */
 function parseGitURI(input: string) {
   const normalizedInput = input
@@ -198,7 +134,7 @@ function parseGitURI(input: string) {
 }
 
 /**
- * Gets the repository URL based on the provider.
+ * Returns the repository URL based on the provider.
  */
 function getRepoUrl(repo: string, provider: GitProvider): string {
   switch (provider) {
@@ -214,8 +150,7 @@ function getRepoUrl(repo: string, provider: GitProvider): string {
 }
 
 /**
- * Creates a final RepoInfo object (including gitUrl and optional headers)
- * from the raw repo string and user options (e.g., auth, subdirectory).
+ * Computes final RepoInfo from the raw repo string.
  */
 function computeRepoInfo(
   input: string,
@@ -228,13 +163,12 @@ function computeRepoInfo(
   const name = repo.replace("/", "-");
   const headers: Record<string, string> = {};
   if (githubToken) {
-    headers["Authorization"] = `Bearer ${githubToken}`;
+    headers.Authorization = `Bearer ${githubToken}`;
   }
   const gitUrl = getRepoUrl(repo, actualProvider);
   return {
     name,
     version: ref,
-    // Use the subdir from parseGitURI if no explicit subdirectory is given
     subdir: subdirectory ?? subdir.replace(/^\/+/, ""),
     defaultDir: name,
     headers,
@@ -243,7 +177,7 @@ function computeRepoInfo(
 }
 
 /**
- * Generates a new project name with an iteration number if the directory already exists.
+ * Generates a unique project path if the target directory exists.
  */
 async function getUniqueProjectPath(
   basePath: string,
@@ -264,16 +198,73 @@ async function getUniqueProjectPath(
 }
 
 /**
- * Downloads a repository using git clone (shallow clone) and optionally installs dependencies.
- * If a subdirectory is requested and preserveGit is true, a sparse checkout is used so that the
- * final project directory contains just that subdirectory's content (with Git history preserved).
- * Otherwise, a temporary clone is used to extract only the desired subdirectory.
- * If the fastCloneSource option is provided, the method copies the pre-populated ".git" folder from
- * that source and runs "git checkout -- ." to quickly rebuild the working tree while preserving complete history.
- * If the corresponding return options are enabled, the returned result will include:
- *  - time: the duration (in seconds) it took to complete the download,
- *  - size: the total size (in MB) of the downloaded project (excluding the .git folder when preserveGit is false),
- *  - concurrency: the max number of concurrent Git processes used.
+ * Helper: Uses git ls-remote to get the commit hash for the given ref.
+ */
+async function getCommitHash(repoUrl: string, ref: string): Promise<string> {
+  const { stdout } = await execAsync(`git ls-remote ${repoUrl} ${ref}`);
+  const lines = stdout.split("\n").filter(Boolean);
+  if (!lines.length) {
+    throw new Error(`Could not find commit hash for ref ${ref}`);
+  }
+  const firstLine = lines[0];
+  if (!firstLine) {
+    throw new Error("Invalid git response format");
+  }
+  const [hash] = firstLine.split("\t");
+  if (!hash) {
+    throw new Error("Failed to extract commit hash from git response");
+  }
+  return hash;
+}
+
+/**
+ * Helper: Downloads a tarball from a URL to a destination file.
+ * Supports proxy from process.env.https_proxy.
+ */
+function downloadTarball(url: string, dest: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(dest);
+    const proxy = process.env.https_proxy;
+    const options = proxy ? { agent: new HttpsProxyAgent(proxy) } : {};
+    https
+      .get(url, options, (response) => {
+        if (response.statusCode && response.statusCode >= 400) {
+          reject(
+            new Error(
+              `Failed to download tarball: ${response.statusCode} ${response.statusMessage}`,
+            ),
+          );
+          return;
+        }
+        response.pipe(file);
+        file.on("finish", () => {
+          file.close(() => resolve());
+        });
+      })
+      .on("error", (err) => {
+        fs.unlink(dest).catch((unlinkErr) =>
+          console.error("Failed to unlink:", unlinkErr),
+        );
+        reject(err);
+      });
+  });
+}
+
+/**
+ * Helper: Extracts a tarball file to the destination directory.
+ */
+async function extractTarball(
+  tarball: string,
+  dest: string,
+  subdir = "",
+): Promise<void> {
+  const strip = subdir ? subdir.split("/").length : 1;
+  await extract({ file: tarball, C: dest, strip });
+}
+
+/**
+ * Downloads a repository.
+ * Integrates an optional tarball cache branch if `cache` is enabled and preserveGit is false.
  */
 export async function downloadRepo({
   repoURL,
@@ -293,275 +284,273 @@ export async function downloadRepo({
   returnConcurrency = false,
   fastCloneSource,
   isTemplateDownload,
+  cache = false,
 }: DownloadRepoOptions): Promise<DownloadResult> {
   relinka("info-verbose", `Downloading repo ${repoURL}...`);
   const startTime = Date.now();
   let tempCloneDir: string | undefined = undefined;
   const maxConcurrentProcesses = 6;
 
-  try {
-    // 1) Decide where to create the project
-    let projectPath = isDev
-      ? path.join(cwd, "tests-runtime", projectName)
-      : path.join(cwd, projectName);
-    relinka("info-verbose", `Preparing to place repo in: ${projectPath}`);
+  // Decide where to create the project
+  let projectPath = isDev
+    ? path.join(cwd, "tests-runtime", projectName)
+    : path.join(cwd, projectName);
+  relinka("info-verbose", `Preparing to place repo in: ${projectPath}`);
 
-    // 2) Handle existing directory
-    if (forceClean) {
-      await fs.remove(projectPath);
-    } else if (!force && (await fs.pathExists(projectPath))) {
-      const files = await fs.readdir(projectPath);
-      const hasOnlyReliverseConfig =
-        files.length === 1 && files[0] === cliConfigJsonc;
-      if (files.length > 0 && !hasOnlyReliverseConfig) {
-        projectPath = await getUniqueProjectPath(
-          projectPath,
-          projectName,
-          isDev,
-        );
-        relinka(
-          "info-verbose",
-          `Directory already exists. Using new path: ${projectPath}`,
-        );
-      }
-    }
-    await fs.ensureDir(projectPath);
-
-    // 3) Handle reliverse config file
-    const parentDir = dirname(projectPath);
-    try {
-      await getReliverseConfigPath(parentDir, true); // Skip prompt during download
-    } catch (_error) {
-      // Ignore errors
-    }
-
-    // Check if the project directory has a reliverse config
-    const { configPath: projectReliverseConfigPath } =
-      await getReliverseConfigPath(projectPath, true); // Skip prompt during download
-
-    const hasReliverseConfig = await fs.pathExists(projectReliverseConfigPath);
-    if (hasReliverseConfig) {
-      if (await fs.pathExists(projectReliverseConfigPath)) {
-        const choice = await selectPrompt({
-          title: `${projectReliverseConfigPath} already exists in parent directory. What would you like to do?`,
-          options: [
-            { value: "delete", label: "Delete existing file" },
-            { value: "backup", label: "Create backup" },
-          ],
-        });
-        if (choice === "delete") {
-          await fs.remove(projectReliverseConfigPath);
-        } else {
-          let backupPath = path.join(
-            parentDir,
-            projectReliverseConfigPath.endsWith(cliConfigJsonc)
-              ? "reliverse-bak.jsonc"
-              : "reliverse-bak.ts",
-          );
-          let iteration = 1;
-          while (await fs.pathExists(backupPath)) {
-            backupPath = path.join(
-              parentDir,
-              `${
-                projectReliverseConfigPath.endsWith(cliConfigJsonc)
-                  ? "reliverse-bak-"
-                  : "reliverse-bak-"
-              }${iteration}.${
-                projectReliverseConfigPath.endsWith(cliConfigJsonc)
-                  ? "jsonc"
-                  : "ts"
-              }`,
-            );
-            iteration++;
-          }
-          await fs.move(projectReliverseConfigPath, backupPath);
-        }
-      }
-      // Move the file from projectPath to the parent directory
-      await fs.move(
-        path.join(
-          projectPath,
-          projectReliverseConfigPath.endsWith(cliConfigJsonc)
-            ? cliConfigJsonc
-            : cliConfigTs,
-        ),
-        projectReliverseConfigPath,
-      );
-      await rmEnsureDir(projectPath);
-    }
-
-    // 4) Parse and compute final repo info
-    const repoInfo = computeRepoInfo(
-      repoURL,
-      provider,
-      githubToken,
-      subdirectory,
-    );
-    if (!repoInfo.gitUrl) {
-      throw new Error(`Invalid repository URL or provider: ${repoURL}`);
-    }
-
-    // 5) Prepare final URL (embed auth token if needed)
-    let finalUrl = repoInfo.gitUrl;
-    if (githubToken) {
-      const authUrl = new URL(repoInfo.gitUrl);
-      authUrl.username = "oauth2";
-      authUrl.password = githubToken;
-      finalUrl = authUrl.toString();
-    }
-
-    // 6) Clone or fast clone the repository
-    if (fastCloneSource) {
-      // --- Fast clone method ---
-      // Copy the pre-populated ".git" folder from fastCloneSource into projectPath
+  // Handle existing directory
+  if (forceClean) {
+    await fs.remove(projectPath);
+  } else if (!force && (await fs.pathExists(projectPath))) {
+    const files = await fs.readdir(projectPath);
+    const hasOnlyReliverseConfig =
+      files.length === 1 && files[0] === cliConfigJsonc;
+    if (files.length > 0 && !hasOnlyReliverseConfig) {
+      projectPath = await getUniqueProjectPath(projectPath, projectName, isDev);
       relinka(
         "info-verbose",
-        `Using fast clone method from: ${fastCloneSource}`,
+        `Directory already exists. Using new path: ${projectPath}`,
       );
-      await fs.copy(fastCloneSource, path.join(projectPath, ".git"));
-      const git = simpleGit({ maxConcurrentProcesses });
-      await git.cwd(projectPath);
-      // Rebuild the working tree using the complete history from the .git folder
-      await git.checkout(["--", "."]);
+    }
+  }
+  await ensuredir(projectPath);
+
+  // Handle reliverse config file (backup or delete)
+  const parentDir = dirname(projectPath);
+  try {
+    await getReliverseConfigPath(parentDir, isDev, true);
+  } catch (_error) {
+    // Ignore errors
+  }
+  const { configPath: projectReliverseConfigPath } =
+    await getReliverseConfigPath(projectPath, isDev, true);
+  const hasReliverseConfig = await fs.pathExists(projectReliverseConfigPath);
+  if (hasReliverseConfig) {
+    const choice = await selectPrompt({
+      title: `${projectReliverseConfigPath} already exists in parent directory. What would you like to do?`,
+      options: [
+        { value: "delete", label: "Delete existing file" },
+        { value: "backup", label: "Create backup" },
+      ],
+    });
+    if (choice === "delete") {
+      await fs.remove(projectReliverseConfigPath);
     } else {
-      // --- Normal clone method ---
-      const git = simpleGit({ maxConcurrentProcesses });
-      try {
-        if (repoInfo.subdir) {
-          // A subdirectory was requested
-          if (preserveGit) {
-            // Preserve Git history: use sparse-checkout to check out only the subdirectory.
-            await git.clone(finalUrl, projectPath, [
-              "--branch",
-              repoInfo.version,
-            ]);
-            await git.cwd(projectPath);
-            await git.raw(["sparse-checkout", "init", "--cone"]);
-            await git.raw(["sparse-checkout", "set", repoInfo.subdir]);
-            const subdirPath = path.join(projectPath, repoInfo.subdir);
-            if (!(await fs.pathExists(subdirPath))) {
-              throw new Error(
-                `Subdirectory '${repoInfo.subdir}' not found in repository ${repoURL}`,
-              );
-            }
-            const files = await fs.readdir(subdirPath);
-            for (const file of files) {
-              await fs.move(
-                path.join(subdirPath, file),
-                path.join(projectPath, file),
-                { overwrite: true },
-              );
-            }
-            await fs.remove(subdirPath);
-          } else {
-            // Not preserving Git: clone the entire repository shallowly into a temporary directory,
-            // then copy only the requested subdirectory (excluding any .git files).
-            tempCloneDir = await fs.mkdtemp(path.join(parentDir, "gitclone-"));
-            await git.clone(finalUrl, tempCloneDir, [
-              "--branch",
-              repoInfo.version,
-              "--depth",
-              "1",
-              "--single-branch",
-            ]);
-            const srcSubdir = path.join(tempCloneDir, repoInfo.subdir);
-            if (!(await fs.pathExists(srcSubdir))) {
-              throw new Error(
-                `Subdirectory '${repoInfo.subdir}' not found in repository ${repoURL}`,
-              );
-            }
-            await fs.copy(srcSubdir, projectPath, {
-              filter: (src) => !src.includes(`${path.sep}.git`),
-            });
-          }
-        } else {
-          // No subdirectory requested: do a normal clone
-          const cloneOptions = ["--branch", repoInfo.version];
-          if (!preserveGit) {
-            cloneOptions.push("--depth", "1", "--single-branch");
-          }
-          await git.clone(finalUrl, projectPath, cloneOptions);
-        }
-
-        // 7) Post-clone adjustments
-        if (!repoInfo.subdir) {
-          if (!preserveGit) {
-            await fs.remove(path.join(projectPath, ".git"));
-            if (config) {
-              relinka("info-verbose", "[D] initGitDir");
-              await initGitDir({
-                cwd,
-                isDev,
-                projectName,
-                projectPath,
-                allowReInit: true,
-                createCommit: true,
-                config,
-                isTemplateDownload,
-              });
-            }
-          } else {
-            await setHiddenAttributeOnWindows(path.join(projectPath, ".git"));
-          }
-        } else {
-          if (preserveGit) {
-            await setHiddenAttributeOnWindows(path.join(projectPath, ".git"));
-          }
-        }
-      } finally {
-        if (tempCloneDir && (await fs.pathExists(tempCloneDir))) {
-          await fs.remove(tempCloneDir);
-        }
-      }
-    }
-
-    // 8) Restore config if it was moved
-    if (hasReliverseConfig) {
-      await fs.move(projectReliverseConfigPath, projectReliverseConfigPath, {
-        overwrite: true,
-      });
-    }
-
-    // 9) Install dependencies if requested
-    if (install) {
-      relinka("info", "Installing dependencies...");
-      await installDependencies({
-        cwd: projectPath,
-        silent: false,
-      });
-    }
-
-    relinka("success-verbose", "Repository downloaded successfully!");
-    const durationSeconds = (Date.now() - startTime) / 1000;
-    const result: DownloadResult = {
-      source: repoURL,
-      dir: projectPath,
-    };
-    if (returnTime) {
-      result.time = durationSeconds;
-    }
-    if (returnSize) {
-      // Calculate the folder size in bytes and then derive the size in MB.
-      // When preserveGit is false, exclude any ".git" folders.
-      const folderSizeBytes = await getFolderSize(
-        projectPath,
-        preserveGit ? [] : [".git"],
+      let backupPath = path.join(
+        parentDir,
+        projectReliverseConfigPath.endsWith(cliConfigJsonc)
+          ? "reliverse-bak.jsonc"
+          : "reliverse-bak.ts",
       );
+      let iteration = 1;
+      while (await fs.pathExists(backupPath)) {
+        backupPath = path.join(
+          parentDir,
+          `${
+            projectReliverseConfigPath.endsWith(cliConfigJsonc)
+              ? "reliverse-bak-"
+              : "reliverse-bak-"
+          }${iteration}.${
+            projectReliverseConfigPath.endsWith(cliConfigJsonc) ? "jsonc" : "ts"
+          }`,
+        );
+        iteration++;
+      }
+      await fs.move(projectReliverseConfigPath, backupPath);
+    }
+    await fs.move(
+      path.join(
+        projectPath,
+        projectReliverseConfigPath.endsWith(cliConfigJsonc)
+          ? cliConfigJsonc
+          : cliConfigTs,
+      ),
+      projectReliverseConfigPath,
+    );
+    await rmEnsureDir(projectPath);
+  }
+
+  // Parse and compute final repo info
+  const repoInfo = computeRepoInfo(
+    repoURL,
+    provider,
+    githubToken,
+    subdirectory,
+  );
+  if (!repoInfo.gitUrl) {
+    throw new Error(`Invalid repository URL or provider: ${repoURL}`);
+  }
+
+  // Prepare final URL (embed auth token if provided)
+  let finalUrl = repoInfo.gitUrl;
+  if (githubToken) {
+    const authUrl = new URL(repoInfo.gitUrl);
+    authUrl.username = "oauth2";
+    authUrl.password = githubToken;
+    finalUrl = authUrl.toString();
+  }
+
+  // --- Cache Branch: Use tarball download if cache enabled and not preserving Git ---
+  if (cache && !preserveGit) {
+    relinka("info-verbose", "Using tarball cache method...");
+    // Compute commit hash
+    const commitHash = await getCommitHash(finalUrl, repoInfo.version);
+    // Setup tarball cache directory
+    const tarballCacheDir = path.join(cliHomeRepos, "tarball-cache");
+    await ensuredir(tarballCacheDir);
+    const tarballFile = path.join(tarballCacheDir, `${commitHash}.tar.gz`);
+
+    // If tarball not already cached, download it
+    if (!(await fs.pathExists(tarballFile))) {
+      let tarUrl = "";
+      if (repoInfo.gitUrl.includes("gitlab.com")) {
+        tarUrl = `${repoInfo.gitUrl.replace(".git", "")}/repository/archive.tar.gz?ref=${commitHash}`;
+      } else if (repoInfo.gitUrl.includes("bitbucket.org")) {
+        tarUrl = `${repoInfo.gitUrl.replace(".git", "")}/get/${commitHash}.tar.gz`;
+      } else {
+        // Default: GitHub
+        tarUrl = `${repoInfo.gitUrl.replace(".git", "")}/archive/${commitHash}.tar.gz`;
+      }
+      relinka("info-verbose", `Downloading tarball from ${tarUrl}`);
+      await downloadTarball(tarUrl, tarballFile);
+    }
+    relinka("info-verbose", `Extracting tarball to ${projectPath}`);
+    await extractTarball(tarballFile, projectPath, repoInfo.subdir);
+    const durationSeconds = (Date.now() - startTime) / 1000;
+    const result: DownloadResult = { source: repoURL, dir: projectPath };
+    if (returnTime) result.time = durationSeconds;
+    if (returnSize) {
+      const folderSizeBytes = await getFolderSize(projectPath, [".git"]);
       const sizeMB = parseFloat((folderSizeBytes / (1024 * 1024)).toFixed(2));
       result.size = sizeMB;
       result.sizePretty = prettyBytes(folderSizeBytes);
     }
-    if (returnConcurrency) {
-      result.concurrency = maxConcurrentProcesses;
-    }
+    if (returnConcurrency) result.concurrency = 1;
     return result;
-  } catch (error) {
-    relinka("error", "Failed to download repository...");
-    if (error instanceof Error) {
-      throw new Error(`Failed to download ${repoURL}: ${error.message}`, {
-        cause: error,
-      });
-    }
-    throw error;
   }
+  // --- End Cache Branch ---
+
+  // 6) Clone or fast clone the repository
+  if (fastCloneSource) {
+    relinka("info-verbose", `Using fast clone method from: ${fastCloneSource}`);
+    await fs.copy(fastCloneSource, path.join(projectPath, ".git"));
+    const git = simpleGit({ maxConcurrentProcesses });
+    await git.cwd(projectPath);
+    await git.checkout(["--", "."]);
+  } else {
+    const git = simpleGit({ maxConcurrentProcesses });
+    try {
+      if (repoInfo.subdir) {
+        if (preserveGit) {
+          await git.clone(finalUrl, projectPath, [
+            "--branch",
+            repoInfo.version,
+          ]);
+          await git.cwd(projectPath);
+          await git.raw(["sparse-checkout", "init", "--cone"]);
+          await git.raw(["sparse-checkout", "set", repoInfo.subdir]);
+          const subdirPath = path.join(projectPath, repoInfo.subdir);
+          if (!(await fs.pathExists(subdirPath))) {
+            throw new Error(
+              `Subdirectory '${repoInfo.subdir}' not found in repository ${repoURL}`,
+            );
+          }
+          const files = await fs.readdir(subdirPath);
+          for (const file of files) {
+            await fs.move(
+              path.join(subdirPath, file),
+              path.join(projectPath, file),
+              { overwrite: true },
+            );
+          }
+          await fs.remove(subdirPath);
+        } else {
+          tempCloneDir = await fs.mkdtemp(path.join(parentDir, "gitclone-"));
+          await git.clone(finalUrl, tempCloneDir, [
+            "--branch",
+            repoInfo.version,
+            "--depth",
+            "1",
+            "--single-branch",
+          ]);
+          const srcSubdir = path.join(tempCloneDir, repoInfo.subdir);
+          if (!(await fs.pathExists(srcSubdir))) {
+            throw new Error(
+              `Subdirectory '${repoInfo.subdir}' not found in repository ${repoURL}`,
+            );
+          }
+          await fs.copy(srcSubdir, projectPath, {
+            filter: (src) => !src.includes(`${path.sep}.git`),
+          });
+        }
+      } else {
+        const cloneOptions = ["--branch", repoInfo.version];
+        if (!preserveGit) {
+          cloneOptions.push("--depth", "1", "--single-branch");
+        }
+        await git.clone(finalUrl, projectPath, cloneOptions);
+      }
+
+      // 7) Post-clone adjustments
+      if (!repoInfo.subdir) {
+        if (!preserveGit) {
+          await fs.remove(path.join(projectPath, ".git"));
+          if (config) {
+            relinka("info-verbose", "[D] initGitDir");
+            await initGitDir({
+              cwd,
+              isDev,
+              projectName,
+              projectPath,
+              allowReInit: true,
+              createCommit: true,
+              config,
+              isTemplateDownload,
+            });
+          }
+        } else {
+          await setHiddenAttributeOnWindows(path.join(projectPath, ".git"));
+        }
+      } else {
+        if (preserveGit) {
+          await setHiddenAttributeOnWindows(path.join(projectPath, ".git"));
+        }
+      }
+    } finally {
+      if (tempCloneDir && (await fs.pathExists(tempCloneDir))) {
+        await fs.remove(tempCloneDir);
+      }
+    }
+  }
+
+  // 8) Restore config if it was moved
+  if (hasReliverseConfig) {
+    await fs.move(projectReliverseConfigPath, projectReliverseConfigPath, {
+      overwrite: true,
+    });
+  }
+
+  // 9) Install dependencies if requested
+  if (install) {
+    relinka("info", "Installing dependencies...");
+    await installDependencies({
+      cwd: projectPath,
+      silent: false,
+    });
+  }
+
+  relinka("success-verbose", "Repository downloaded successfully!");
+  const durationSeconds = (Date.now() - startTime) / 1000;
+  const result: DownloadResult = { source: repoURL, dir: projectPath };
+  if (returnTime) result.time = durationSeconds;
+  if (returnSize) {
+    const folderSizeBytes = await getFolderSize(
+      projectPath,
+      preserveGit ? [] : [".git"],
+    );
+    const sizeMB = parseFloat((folderSizeBytes / (1024 * 1024)).toFixed(2));
+    result.size = sizeMB;
+    result.sizePretty = prettyBytes(folderSizeBytes);
+  }
+  if (returnConcurrency) result.concurrency = maxConcurrentProcesses;
+  return result;
 }

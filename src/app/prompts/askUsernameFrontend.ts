@@ -4,7 +4,7 @@ import { re } from "@reliverse/relico";
 
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
-import { DEFAULT_CLI_USERNAME } from "~/libs/sdk/constants.js";
+import { DEFAULT_CLI_USERNAME } from "~/libs/cfg/constants/cfg-details.js";
 import { updateReliverseMemory } from "~/utils/reliverseMemory.js";
 
 export async function askUsernameFrontend(

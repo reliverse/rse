@@ -1,7 +1,7 @@
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 
-import { memoryPath } from "~/libs/sdk/constants.js";
+import { memoryPath } from "~/libs/cfg/constants/cfg-details.js";
 
 export async function deleteMemory() {
   relinka("info-verbose", `Deleting config file: ${memoryPath}`);

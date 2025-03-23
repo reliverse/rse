@@ -2,12 +2,12 @@ import { confirmPrompt } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 import type { RepoOption } from "~/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import { composeEnvFile } from "~/app/menu/create-project/cp-modules/compose-env-file/cef-mod.js";
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/constants.js";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/cfg/constants/cfg-details.js";
 import { handleDownload } from "~/utils/downloading/handleDownload.js";
 import { generateProjectConfigs } from "~/utils/handlers/generateProjectConfigs.js";
 import { isMultireliProject } from "~/utils/multireliHelpers.js";
@@ -27,7 +27,6 @@ import { promptGitDeploy } from "./cp-modules/git-deploy-prompts/gdp-mod.js";
 
 /**
  * Creates a new web project from a template.
- * Also handles skipping prompts if `skipPromptsUseAutoBehavior` is true.
  */
 export async function createWebProject({
   initialProjectName,
@@ -89,12 +88,13 @@ export async function createWebProject({
     config,
     preserveGit: false,
     isTemplateDownload: true,
+    cache: false,
   });
 
   // -------------------------------------------------
   // 4) Replace placeholders in the template
   // -------------------------------------------------
-  const result = await getReliverseConfigPath(projectPath, true);
+  const result = await getReliverseConfigPath(projectPath, isDev, skipPrompts);
   if (!result) {
     throw new Error("Failed to get reliverse config path.");
   }
@@ -216,6 +216,142 @@ export async function createWebProject({
     isDeployed,
     primaryDomain,
     allDomains,
+    skipPrompts,
+    isDev,
+  );
+}
+
+/**
+ * Creates a new mobile project from a template.
+ */
+export async function createMobileProject({
+  initialProjectName,
+  selectedRepo,
+  message,
+  isDev,
+  config,
+  memory,
+  cwd,
+  skipPrompts,
+}: {
+  projectName: string;
+  initialProjectName: string;
+  selectedRepo: RepoOption;
+  message: string;
+  isDev: boolean;
+  config: ReliverseConfig;
+  memory: ReliverseMemory;
+  cwd: string;
+  skipPrompts: boolean;
+}): Promise<void> {
+  relinka("info", message);
+
+  // -------------------------------------------------
+  // 1) Initialize project configuration
+  // -------------------------------------------------
+  const projectConfig = await initializeProjectConfig(
+    initialProjectName,
+    memory,
+    config,
+    skipPrompts,
+    isDev,
+    cwd,
+  );
+  const {
+    frontendUsername,
+    projectName,
+    primaryDomain: initialDomain,
+  } = projectConfig;
+
+  // -------------------------------------------------
+  // 2) Download template
+  // -------------------------------------------------
+  const { dir: projectPath } = await handleDownload({
+    cwd,
+    isDev,
+    skipPrompts,
+    projectPath: "",
+    projectName,
+    selectedRepo,
+    config,
+    preserveGit: false,
+    isTemplateDownload: true,
+    cache: false,
+  });
+
+  // -------------------------------------------------
+  // 3) Replace placeholders in the template
+  // -------------------------------------------------
+  const result = await getReliverseConfigPath(projectPath, isDev, skipPrompts);
+  if (!result) {
+    throw new Error("Failed to get reliverse config path.");
+  }
+  const { configPath, isTS } = result;
+  await handleReplacements(
+    projectPath,
+    selectedRepo,
+    configPath,
+    {
+      primaryDomain: initialDomain,
+      frontendUsername,
+      projectName,
+    },
+    false,
+    true,
+    true,
+  );
+
+  // -------------------------------------------------
+  // 4) Remove reliverse config from project if exists
+  // -------------------------------------------------
+  if (await fs.pathExists(configPath)) {
+    relinka("info-verbose", `Removed: ${configPath}, isTS: ${isTS}`);
+    await fs.remove(configPath);
+  }
+
+  // -------------------------------------------------
+  // 5) Handle dependencies (install or not?)
+  // -------------------------------------------------
+  await handleDependencies(projectPath, config);
+
+  // -------------------------------------------------
+  // 6) Set framework based on template
+  // -------------------------------------------------
+  if (selectedRepo === "blefnk/relivator-react-native-template") {
+    config.projectFramework = "react-native";
+    relinka("info", "To start your React Native app, run:");
+    relinka("info", `cd ${projectName}`);
+    relinka("info", "bun start");
+  } else if (selectedRepo === "blefnk/relivator-lynxjs-template") {
+    config.projectFramework = "lynx";
+    relinka("info", "To start your Lynx app, run:");
+    relinka("info", `cd ${projectName}`);
+    relinka("info", "bun dev");
+  }
+
+  // -------------------------------------------------
+  // 7) Generate or update project config files
+  // -------------------------------------------------
+  await generateProjectConfigs(
+    projectPath,
+    projectName,
+    frontendUsername,
+    "none", // No deployment service for mobile projects
+    initialDomain,
+    false, // No i18n for mobile projects yet
+    isDev,
+  );
+
+  // -------------------------------------------------
+  // 8) Final success & next steps
+  // -------------------------------------------------
+  await showSuccessAndNextSteps(
+    projectPath,
+    selectedRepo,
+    frontendUsername,
+    false, // isDeployed
+    initialDomain,
+    [initialDomain], // allDomains
     skipPrompts,
     isDev,
   );

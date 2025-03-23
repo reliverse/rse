@@ -1,4 +1,4 @@
-import { reliverseOrgBase } from "~/libs/sdk/constants.js";
+import { reliverseOrgBase } from "~/libs/cfg/constants/cfg-details.js";
 
 const specialDomains = [
   // Vercel domains

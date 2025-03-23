@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 import { exec } from "node:child_process";
@@ -55,7 +56,7 @@ export async function rmEnsureDir(dir: string): Promise<void> {
       relinka("info-verbose", `Removing existing directory: ${dir}`);
       await fs.remove(dir);
     }
-    await fs.ensureDir(dir);
+    await ensuredir(dir);
   } catch (error) {
     relinka("error", `Error while removing directory ${dir}: ${error}`);
     throw error;

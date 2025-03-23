@@ -3,9 +3,9 @@ import { relinka } from "@reliverse/prompts";
 import { execa } from "execa";
 import fs from "fs-extra";
 
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 
-import { cliDomainEnv } from "~/libs/sdk/constants.js";
+import { cliDomainEnv } from "~/libs/cfg/constants/cfg-details.js";
 
 import {
   promptAndSetMissingValues,

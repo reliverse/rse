@@ -1,7 +1,7 @@
 import fs from "fs-extra";
 import os from "node:os";
 
-import { homeDir } from "~/libs/sdk/constants.js";
+import { homeDir } from "~/libs/cfg/constants/cfg-details.js";
 
 type Platform = "darwin" | "linux" | "win32";
 

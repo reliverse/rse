@@ -134,11 +134,11 @@ export async function handleIntegrations(cwd: string, isDev: boolean) {
       });
 
       const config = {
-        ...INTEGRATION_CONFIGS["drizzle"],
+        ...INTEGRATION_CONFIGS.drizzle,
         name: "drizzle",
         dependencies: [
           // @ts-expect-error TODO: fix strictNullChecks undefined
-          ...INTEGRATION_CONFIGS["drizzle"].dependencies,
+          ...INTEGRATION_CONFIGS.drizzle.dependencies,
           provider === "neon" ? "@neondatabase/serverless" : "postgres",
         ],
         files: [],
@@ -156,7 +156,7 @@ export async function handleIntegrations(cwd: string, isDev: boolean) {
     }
 
     // @ts-expect-error TODO: fix strictNullChecks undefined
-    await installIntegration(cwd, INTEGRATION_CONFIGS["drizzle"], isDev);
+    await installIntegration(cwd, INTEGRATION_CONFIGS.drizzle, isDev);
     relinka(
       "info",
       `Selected ${selectedIntegration} for ${category} - Implementation coming soon!`,

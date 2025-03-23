@@ -9,7 +9,7 @@ export async function askReliverseConfigType(): Promise<"jsonc" | "ts"> {
     title:
       "Please select a Reliverse CLI configuration file type. JSONC is recommended for most projects.",
     content:
-      "A tsconfig.json file was detected. You can use the TypeScript config type for this project; however, it requires @reliverse/config to be installed; without it, the Reliverse CLI cannot run correctly when using the TS config type.",
+      "A tsconfig.json file was detected. You can use the TypeScript config type for this project; however, it requires @reliverse/cli-cfg to be installed; without it, the Reliverse CLI cannot run correctly when using the TS config type.",
     options: [
       { label: "JSONC (reliverse.jsonc)", value: "jsonc" },
       { label: "TypeScript (reliverse.ts)", value: "ts" },

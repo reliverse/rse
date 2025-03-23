@@ -4,12 +4,18 @@ import { execa } from "execa";
 import { isVSCodeInstalled } from "~/utils/handlers/isAppInstalled.js";
 
 export async function askOpenInIDE({
+  isDev,
   projectPath,
   enforce = false,
 }: {
+  isDev: boolean;
   projectPath: string;
   enforce?: boolean;
 }) {
+  if (isDev) {
+    return;
+  }
+
   let shouldOpenIDE: boolean;
 
   if (enforce) {

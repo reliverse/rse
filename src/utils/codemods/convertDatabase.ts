@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 import path from "pathe";
@@ -128,24 +129,21 @@ function generateDrizzleSchema(models: PrismaModel[], dbType: string): string {
 
       let fieldDef = `${field.name}: ${drizzleType}("${field.name}")`;
 
-      if (field.attributes["id"]) {
+      if (field.attributes.id) {
         fieldDef += ".primaryKey()";
       }
-      if (field.attributes["unique"]) {
+      if (field.attributes.unique) {
         fieldDef += ".unique()";
       }
       if (!field.isOptional) {
         fieldDef += ".notNull()";
       }
-      if (field.attributes["default"]) {
-        if (
-          field.type === "DateTime" &&
-          field.attributes["default"] === "now()"
-        ) {
+      if (field.attributes.default) {
+        if (field.type === "DateTime" && field.attributes.default === "now()") {
           fieldDef += ".default(sql`CURRENT_TIMESTAMP`)";
           imports.add("sql");
         } else {
-          fieldDef += `.default(${field.attributes["default"]})`;
+          fieldDef += `.default(${field.attributes.default})`;
         }
       }
 
@@ -187,7 +185,7 @@ export default {
 } satisfies Config;`;
 
   // Write files
-  await fs.ensureDir(path.join(cwd, "src/db"));
+  await ensuredir(path.join(cwd, "src/db"));
   await fs.writeFile(path.join(cwd, "src/db/schema.ts"), drizzleSchema);
   await fs.writeFile(path.join(cwd, "drizzle.config.ts"), drizzleConfig);
 

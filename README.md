@@ -1,6 +1,6 @@
 # @reliverse/cli
 
-[📦 NPM](https://npmjs.com/@reliverse/cli) • [💬 Discord Community](https://discord.gg/Pb8uKbwpsJ) • [💖 Support on Patreon](https://patreon.com/blefnk) • [📚 Documentation](https://docs.reliverse.org/cli)
+[📦 NPM](https://npmjs.com/@reliverse/cli) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 Patreon](https://patreon.com/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
 
 ## Quick Start
 
@@ -18,7 +18,7 @@ _Prerequisites: [Git](https://git-scm.com/downloads), [Node.js](https://nodejs.o
 - **Support multiple frameworks**: Enjoy seamless compatibility with Next.js and beyond.  
 - **Customize with templates**: Clone pre-built templates and merge them conflict-free.  
 - **Automate GitHub & deployments**: Quickly create GitHub repositories, push commits, and deploy to Vercel.  
-- **Reliverse Addons**: `🔬 Open manual builder mode` to enable even more features and integrations.
+- **Reliverse Addons**: `🔬 Create/edit project manually` to enable even more features and integrations.
 
 ## Commands
 

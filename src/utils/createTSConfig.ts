@@ -4,17 +4,17 @@ import path from "pathe";
 import { defineTSConfig, writeTSConfig } from "pkg-types";
 
 /**
- * Creates a minimal tsconfig.json file for a new project
- * @param projectPath Path where the tsconfig.json should be created
+ * Creates a minimal tsconfig file for a new project. If `isDev` is true and
+ * the project path contains "tests-runtime", the file is saved as "tsconfig.txt"
+ * instead of "tsconfig.json".
  */
 export async function createTSConfig(
   projectPath: string,
   isLib: boolean,
+  isDev: boolean,
 ): Promise<void> {
-  // Define the tsconfig.json content
   const tsconfig = defineTSConfig({
     compilerOptions: {
-      // Base Options
       esModuleInterop: true,
       skipLibCheck: true,
       target: "es2022",
@@ -23,48 +23,43 @@ export async function createTSConfig(
       moduleDetection: "force",
       isolatedModules: true,
       verbatimModuleSyntax: true,
-
-      // Strictness
       strict: true,
       noUncheckedIndexedAccess: true,
       noImplicitOverride: true,
-
-      // Specific
       ...(isLib
-        ? {
-            // Libs
-            lib: ["es2022"],
-          }
+        ? { lib: ["es2022"] }
         : {
-            // Apps
             module: "preserve",
             noEmit: true,
             lib: ["es2022", "dom", "dom.iterable"],
           }),
     },
     ...(isLib
-      ? {
-          // Libs
-          include: ["**/*.ts"],
-        }
-      : {
-          // Apps
-          include: ["**/*.ts", "**/*.tsx"],
-        }),
+      ? { include: ["**/*.ts"] }
+      : { include: ["**/*.ts", "**/*.tsx"] }),
     exclude: ["node_modules"],
   });
 
-  // Write the tsconfig.json file
-  const tsconfigPath = path.join(projectPath, "tsconfig.json");
-  await writeTSConfig(tsconfigPath, tsconfig);
+  // Determine file extension based on dev mode and tests-runtime path
+  const useTxt = isDev && projectPath.includes("tests-runtime");
+  const filename = useTxt ? "tsconfig.txt" : "tsconfig.json";
 
-  // Format the tsconfig.json file with proper indentation
-  const content = await fs.readFile(tsconfigPath, "utf-8");
-  const formatted = JSON.stringify(JSON.parse(content), null, 2);
-  await fs.writeFile(tsconfigPath, formatted, "utf-8");
+  const tsconfigPath = path.join(projectPath, filename);
+
+  // If we're saving as tsconfig.txt, we can't use writeTSConfig from pkg-types directly
+  // because it expects a .json path. We'll just write a JSON string ourselves.
+  if (useTxt) {
+    const rawContent = JSON.stringify(tsconfig, null, 2);
+    await fs.writeFile(tsconfigPath, rawContent, "utf-8");
+  } else {
+    await writeTSConfig(tsconfigPath, tsconfig);
+    const content = await fs.readFile(tsconfigPath, "utf-8");
+    const formatted = JSON.stringify(JSON.parse(content), null, 2);
+    await fs.writeFile(tsconfigPath, formatted, "utf-8");
+  }
 
   relinka(
-    "info",
-    `Created tsconfig.json with ${isLib ? "library" : "application"} configuration`,
+    "info-verbose",
+    `Created ${filename} with ${isLib ? "library" : "application"} configuration`,
   );
 }

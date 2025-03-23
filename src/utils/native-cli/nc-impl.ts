@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 import { installDependencies } from "nypm";
@@ -151,7 +152,7 @@ async function downloadFile(
     ? join(outputDir, trimmedFilePath)
     : join(outputDir, scope, packageName, version, trimmedFilePath);
 
-  await fs.ensureDir(dirname(targetFilePath));
+  await ensuredir(dirname(targetFilePath));
   await fs.writeFile(targetFilePath, buffer);
 
   relinka("success-verbose", `Downloaded: ${url} -> ${targetFilePath}`);

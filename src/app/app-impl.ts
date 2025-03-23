@@ -4,7 +4,7 @@ import { generate } from "random-words";
 
 import { getMainMenuOptions } from "~/app/menu/create-project/cp-modules/cli-main-modules/cli-menu-items/getMainMenuOptions.js";
 import { handleOpenProjectMenu } from "~/app/menu/manual-mode/deprecated/editor-menu.js";
-import { cliJsrPath, UNKNOWN_VALUE } from "~/libs/sdk/constants.js";
+import { cliJsrPath, UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { showNativeCliMenu } from "~/utils/native-cli/nc-mod.js";
 import { detectProject } from "~/utils/reliverseConfig.js";
 

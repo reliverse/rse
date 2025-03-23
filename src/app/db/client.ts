@@ -1,12 +1,12 @@
 import { createClient } from "@libsql/client/node";
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import { drizzle } from "drizzle-orm/libsql/node";
-import fs from "fs-extra";
 
-import { memoryPath, cliHomeDir } from "~/libs/sdk/constants.js";
+import { memoryPath, cliHomeDir } from "~/libs/cfg/constants/cfg-details.js";
 
 // Ensure the directory exists
-await fs.ensureDir(cliHomeDir);
+await ensuredir(cliHomeDir);
 
 const client = createClient({
   url: `file:${memoryPath}`,

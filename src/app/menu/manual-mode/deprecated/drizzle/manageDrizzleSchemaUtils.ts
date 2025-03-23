@@ -58,7 +58,7 @@ export async function setupDrizzle(
       ],
     });
 
-    const drizzleConfig = INTEGRATION_CONFIGS["drizzle"];
+    const drizzleConfig = INTEGRATION_CONFIGS.drizzle;
     if (!drizzleConfig) {
       throw new Error("Drizzle integration configuration not found");
     }
@@ -73,7 +73,7 @@ export async function setupDrizzle(
 
     await installIntegration(cwd, config, isDev);
   } else {
-    const drizzleConfig = INTEGRATION_CONFIGS["drizzle"];
+    const drizzleConfig = INTEGRATION_CONFIGS.drizzle;
     if (!drizzleConfig) {
       throw new Error("Drizzle integration configuration not found");
     }

@@ -20,7 +20,8 @@ export async function createPackageJSON(
     type: "module",
     ...(isLib ? {} : { private: true }),
   });
-  const packageJsonPath = path.join(projectPath, "package.json");
+  const filename = "package.json";
+  const packageJsonPath = path.join(projectPath, filename);
   await writePackageJSON(packageJsonPath, packageJson);
 
   // Format the package.json file with proper indentation
@@ -29,7 +30,7 @@ export async function createPackageJSON(
   await fs.writeFile(packageJsonPath, formatted, "utf-8");
 
   relinka(
-    "info",
-    `Created package.json with ${isLib ? "library" : "application"} configuration`,
+    "info-verbose",
+    `Created ${filename} with ${isLib ? "library" : "application"} configuration`,
   );
 }

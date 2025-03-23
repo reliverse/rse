@@ -3,6 +3,8 @@ import fs from "fs-extra";
 const cliConfigTs = "reliverse.ts";
 const cliConfigJsonc = "reliverse.jsonc";
 
+// TODO: move more functions into this sdk
+
 /**
  * Checks if a directory contains only Reliverse config files
  * @param directory Path to the directory

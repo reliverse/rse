@@ -3,6 +3,7 @@
 // - `bun dev:multireli --ts`
 // - `bun dev:multireli --jsonc project1 project2 project3`
 
+import { ensuredir } from "@reliverse/fs";
 import { defineCommand } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
 import { parseJSONC } from "confbox";
@@ -12,7 +13,7 @@ import { jsonrepair } from "jsonrepair";
 import { loadFile, writeFile, builders } from "magicast";
 import path from "pathe";
 
-import { UNKNOWN_VALUE } from "~/libs/sdk/constants.js";
+import { UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { generateReliverseConfig } from "~/utils/reliverseConfig.js";
 
 import {
@@ -64,7 +65,7 @@ export default defineCommand({
     typesPath: {
       type: "string",
       description: "Custom path to type definitions for TypeScript configs",
-      default: "../src/libs/config/config-main.js",
+      default: "../src/libs/cfg/cfg-main.js",
     },
     _: {
       description: "Names of projects to generate configs for",
@@ -107,7 +108,7 @@ export default defineCommand({
 
     // Create 'multireli' folder if it doesn't exist
     const multireliFolderPath = path.join(cwd, "multireli");
-    await fs.ensureDir(multireliFolderPath);
+    await ensuredir(multireliFolderPath);
 
     // Check for and generate gen.cfg file if it doesn't exist
     const genCfgFileName = useJsonc ? "gen.cfg.jsonc" : "gen.cfg.ts";
@@ -312,10 +313,10 @@ export const genCfg: GenCfg[] = [
           // TypeScript - use magicast
           try {
             const mod = await loadFile(genCfgPath);
-            if (mod.exports && mod.exports["genCfg"]) {
+            if (mod.exports && mod.exports.genCfg) {
               // Convert the result to a plain object
               genCfgData = JSON.parse(
-                JSON.stringify(mod.exports["genCfg"]),
+                JSON.stringify(mod.exports.genCfg),
               ) as GenCfg[];
             } else {
               relinka(
@@ -528,6 +529,7 @@ export const genCfg: GenCfg[] = [
           ...(projectConfig?.projectTemplate
             ? { projectTemplate: projectConfig.projectTemplate }
             : {}),
+          overrides: {},
         });
 
         relinka("success", `Generated ${configFileName} in multireli folder`);

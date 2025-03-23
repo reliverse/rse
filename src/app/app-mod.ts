@@ -1,8 +1,10 @@
+import { ensuredir } from "@reliverse/fs";
 import { defineCommand } from "@reliverse/prompts";
+import { validateDevCwd } from "@reliverse/relidler-sdk";
 import fs from "fs-extra";
 
 import { authCheck } from "~/arg/login/login-impl.js";
-import { cliName, useLocalhost } from "~/libs/sdk/constants.js";
+import { cliName, useLocalhost } from "~/libs/cfg/constants/cfg-details.js";
 import { getReliverseConfig } from "~/utils/reliverseConfig.js";
 import { getReliverseMemory } from "~/utils/reliverseMemory.js";
 import { getCurrentWorkingDirectory } from "~/utils/terminalHelpers.js";
@@ -28,21 +30,23 @@ export default defineCommand({
   },
   run: async ({ args }) => {
     const isDev = args.dev;
-
     await showStartPrompt(isDev, false);
+
+    // Ensure --dev flag is used only within a valid reliverse dev envi
+    await validateDevCwd(isDev, ["cli", "reliverse"], "reliverse", "reliverse");
 
     let cwd: string;
     if (args.cwd) {
       cwd = args.cwd;
       if (!(await fs.pathExists(cwd))) {
-        await fs.ensureDir(cwd);
+        await ensuredir(cwd);
       }
     } else {
       cwd = getCurrentWorkingDirectory();
     }
 
     const memory = await getReliverseMemory();
-    const { config, multireli } = await getReliverseConfig(cwd, isDev);
+    const { config, multireli } = await getReliverseConfig(cwd, isDev, {});
 
     await authCheck(isDev, memory, useLocalhost);
     await app({ cwd, isDev, config, memory, multireli });

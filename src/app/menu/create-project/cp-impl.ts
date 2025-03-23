@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import {
   confirmPrompt,
   selectPrompt,
@@ -14,7 +15,7 @@ import os from "os";
 import path from "pathe";
 
 import type { ProjectConfigReturn } from "~/app/app-types.js";
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 import type { Behavior } from "~/types.js";
 import type { RepoOption } from "~/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
@@ -22,7 +23,11 @@ import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 import { askOpenInIDE } from "~/app/prompts/askOpenInIDE.js";
 import { askProjectName } from "~/app/prompts/askProjectName.js";
 import { askUsernameFrontend } from "~/app/prompts/askUsernameFrontend.js";
-import { cliDomainDocs, homeDir, UNKNOWN_VALUE } from "~/libs/sdk/constants.js";
+import {
+  cliDomainDocs,
+  homeDir,
+  UNKNOWN_VALUE,
+} from "~/libs/cfg/constants/cfg-details.js";
 import { experimental } from "~/utils/badgeNotifiers.js";
 import { setupI18nFiles } from "~/utils/downloading/downloadI18nFiles.js";
 import { isVSCodeInstalled } from "~/utils/handlers/isAppInstalled.js";
@@ -256,7 +261,7 @@ async function moveProjectFromTestsRuntime(
     });
 
     // Ensure the directory exists
-    await fs.ensureDir(targetDir);
+    await ensuredir(targetDir);
 
     // Check if a directory with the same name exists
     let effectiveProjectName = projectName;
@@ -336,6 +341,7 @@ export async function showSuccessAndNextSteps(
   if (!skipPrompts) {
     // Run all next actions concurrently
     await handleNextActions(
+      isDev,
       effectiveProjectPath,
       vscodeInstalled,
       isDeployed,
@@ -362,6 +368,7 @@ export async function showSuccessAndNextSteps(
  * Lets the user select further actions: open in IDE, open docs, etc.
  */
 export async function handleNextActions(
+  isDev: boolean,
   projectPath: string,
   vscodeInstalled: boolean,
   isDeployed: boolean,
@@ -405,7 +412,7 @@ export async function handleNextActions(
   // Run all actions concurrently to avoid waiting on one to finish before starting the next.
   await Promise.all(
     nextActions.map((action) =>
-      handleNextAction(action, projectPath, primaryDomain, allDomains),
+      handleNextAction(isDev, action, projectPath, primaryDomain, allDomains),
     ),
   );
 }
@@ -414,6 +421,7 @@ export async function handleNextActions(
  * Handles a single user-chosen action: open IDE, open docs, etc.
  */
 export async function handleNextAction(
+  isDev: boolean,
   action: string,
   projectPath: string,
   primaryDomain: string,
@@ -422,7 +430,7 @@ export async function handleNextAction(
   try {
     switch (action) {
       case "ide": {
-        await askOpenInIDE({ projectPath, enforce: true });
+        await askOpenInIDE({ projectPath, enforce: true, isDev });
         break;
       }
       case "deployed": {
@@ -471,3 +479,104 @@ export async function handleNextAction(
     relinka("error", `Error handling action '${action}':`, String(error));
   }
 }
+
+/**
+ * Creates a new project using the specified template and configuration.
+ */
+/* export async function createProject(params: {
+  projectName: string;
+  initialProjectName: string;
+  selectedRepo: RepoOption;
+  message: string;
+  isDev: boolean;
+  config: ReliverseConfig;
+  memory: ReliverseMemory;
+  cwd: string;
+  skipPrompts: boolean;
+}): Promise<void> {
+  const {
+    projectName,
+    selectedRepo,
+    message,
+    isDev,
+    config,
+    memory,
+    cwd,
+    skipPrompts,
+  } = params;
+
+  // Initialize project configuration
+  const { frontendUsername, primaryDomain } = await initializeProjectConfig(
+    projectName,
+    memory,
+    config,
+    skipPrompts,
+    isDev,
+    cwd,
+  );
+
+  // Create project directory
+  const projectPath = isDev
+    ? path.join(cwd, "tests-runtime", projectName)
+    : path.join(cwd, projectName);
+
+  relinka("info", message);
+
+  try {
+    // Download the repository
+    const { dir: downloadedPath } = await handleDownload({
+      cwd,
+      isDev,
+      skipPrompts,
+      projectPath: "",
+      projectName,
+      selectedRepo,
+      config,
+      preserveGit: false,
+      isTemplateDownload: true,
+      cache: false,
+    });
+
+    // Handle dependencies if user wants to install them
+    await handleDependencies(downloadedPath, config);
+
+    // Update project configuration
+    config.projectTemplate = selectedRepo;
+
+    // Set framework based on template
+    if (selectedRepo === "blefnk/relivator-react-native-template") {
+      config.projectFramework = "react-native";
+      relinka("info", "To start your React Native app, run:");
+      relinka("info", `cd ${projectName}`);
+      relinka("info", "bun start");
+    } else if (selectedRepo === "blefnk/relivator-lynxjs-template") {
+      config.projectFramework = "lynx";
+      relinka("info", "To start your Lynx app, run:");
+      relinka("info", `cd ${projectName}`);
+      relinka("info", "bun dev");
+    }
+
+    // Show success message and handle next steps
+    await showSuccessAndNextSteps(
+      downloadedPath,
+      selectedRepo,
+      frontendUsername,
+      false, // isDeployed
+      primaryDomain,
+      [primaryDomain], // allDomains
+      skipPrompts,
+      isDev,
+    );
+  } catch (error) {
+    if (error instanceof Error) {
+      relinka("error", `Failed to create project: ${error.message}`);
+    } else {
+      relinka("error", "An unknown error occurred while creating the project");
+    }
+    // Clean up if project creation failed
+    await fs.remove(projectPath).catch((err) => {
+      relinka("error", `Failed to clean up project directory: ${err}`);
+    });
+    throw error;
+  }
+} */

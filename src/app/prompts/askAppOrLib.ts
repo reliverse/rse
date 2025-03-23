@@ -1,10 +1,20 @@
 import { selectPrompt } from "@reliverse/prompts";
+import { re } from "@reliverse/relico";
 
-export async function askAppOrLib() {
-  const projectType = await selectPrompt({
-    title: "Are you planning to build a web app or a library?",
-    content:
-      "This will affect the config files to be generated. If you're not sure, choose 'Web app'.",
+const KNOWN_APPS = ["relivator"];
+const KNOWN_LIBS = ["recme"];
+
+export async function askAppOrLib(projectName: string): Promise<"app" | "lib"> {
+  if (KNOWN_APPS.includes(projectName)) {
+    return "app";
+  }
+  if (KNOWN_LIBS.includes(projectName)) {
+    return "lib";
+  }
+
+  const type = await selectPrompt({
+    title: "What type of project are you creating?",
+    content: `This will determine the config files to be generated. If you're unsure, choose ${re.bold("Web app")}.\nNo worries—you can always change it later by editing the project's Reliverse config.`,
     options: [
       {
         label: "Web app",
@@ -14,11 +24,10 @@ export async function askAppOrLib() {
       {
         label: "Library",
         value: "lib",
-        hint: "Includes CLIs and extensions",
+        hint: "Includes clis and extensions",
       },
     ],
   });
 
-  const isLib = projectType === "lib";
-  return isLib;
+  return type;
 }

@@ -1,8 +1,6 @@
 // @ts-check
 
 import eslint from "@eslint/js";
-import json from "@eslint/json";
-import markdown from "@eslint/markdown";
 import stylistic from "@stylistic/eslint-plugin";
 import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 import perfectionist from "eslint-plugin-perfectionist";
@@ -19,11 +17,11 @@ const config = tseslint.config(
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   {
-    files: ["**/*.{js,jsx,md,json}"],
+    files: ["**/*.{js}"],
     ...tseslint.configs.disableTypeChecked,
   },
   {
-    files: ["**/*.{js,jsx,ts,tsx}"],
+    files: ["**/*.{js,ts}"],
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -97,45 +95,6 @@ const config = tseslint.config(
       "no-relative-import-paths/no-relative-import-paths": [
         "warn",
         { allowSameFolder: true, rootDir: "src", prefix: "~" },
-      ],
-    },
-  },
-  {
-    files: ["**/*.json"],
-    plugins: {
-      json,
-    },
-    language: "json/json",
-    rules: {
-      "no-irregular-whitespace": "off",
-      "json/no-duplicate-keys": "error",
-    },
-  },
-  {
-    files: ["**/*.md"],
-    plugins: {
-      markdown,
-    },
-    language: "markdown/commonmark",
-    rules: {
-      "no-irregular-whitespace": "off",
-      "markdown/no-html": [
-        "error",
-        {
-          allowed: [
-            "a",
-            "Card",
-            "CardGrid",
-            "details",
-            "div",
-            "img",
-            "p",
-            "picture",
-            "source",
-            "span",
-            "summary",
-          ],
-        },
       ],
     },
   },

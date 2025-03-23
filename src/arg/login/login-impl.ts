@@ -14,7 +14,7 @@ import url from "url";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import { showAnykeyPrompt } from "~/app/menu/create-project/cp-modules/cli-main-modules/modules/showAnykeyPrompt.js";
-import { cliDomainDocs, memoryPath } from "~/libs/sdk/constants.js";
+import { cliDomainDocs, memoryPath } from "~/libs/cfg/constants/cfg-details.js";
 import {
   getReliverseMemory,
   updateReliverseMemory,
@@ -100,7 +100,7 @@ export async function auth({
               `Parsed query parameters: ${JSON.stringify(queryParams)}`,
             );
 
-            if (queryParams["cancelled"]) {
+            if (queryParams.cancelled) {
               relinka("info-verbose", "User cancelled the login process...");
               relinka(
                 "info-verbose",
@@ -207,7 +207,7 @@ export async function auth({
           `Authentication data received: ${JSON.stringify(authData)}`,
         );
 
-        if (authData["cancelled"]) {
+        if (authData.cancelled) {
           throw new UserCancellationError("Login process cancelled by user.");
         }
 

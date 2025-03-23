@@ -3,7 +3,7 @@ import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 import path from "pathe";
 
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 import type { RepoOption } from "~/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
@@ -11,7 +11,7 @@ import { composeEnvFile } from "~/app/menu/create-project/cp-modules/compose-env
 import { promptGitDeploy } from "~/app/menu/create-project/cp-modules/git-deploy-prompts/gdp-mod.js";
 import { askProjectName } from "~/app/prompts/askProjectName.js";
 import { askUsernameFrontend } from "~/app/prompts/askUsernameFrontend.js";
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/constants.js";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/cfg/constants/cfg-details.js";
 import { downloadRepo } from "~/utils/downloading/downloadRepo.js";
 import { cd, pwd, rm } from "~/utils/terminalHelpers.js";
 

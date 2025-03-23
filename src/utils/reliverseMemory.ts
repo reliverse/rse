@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import { eq } from "drizzle-orm";
 import fs from "fs-extra";
@@ -6,7 +7,7 @@ import path from "pathe";
 import { db } from "~/app/db/client.js";
 import { encrypt, decrypt } from "~/app/db/config.js";
 import { configKeysTable, userDataTable } from "~/app/db/schema.js";
-import { memoryPath } from "~/libs/sdk/constants.js";
+import { memoryPath } from "~/libs/cfg/constants/cfg-details.js";
 
 import type {
   EncryptedDataMemory,
@@ -17,7 +18,7 @@ import type {
 export async function getReliverseMemory(): Promise<ReliverseMemory> {
   // Ensure directory exists
   if (!(await fs.pathExists(path.dirname(memoryPath)))) {
-    await fs.ensureDir(path.dirname(memoryPath));
+    await ensuredir(path.dirname(memoryPath));
   }
 
   try {
@@ -62,17 +63,17 @@ export async function getReliverseMemory(): Promise<ReliverseMemory> {
 
     return {
       // Encrypted data
-      code: configData["code"] ?? "",
-      key: configData["key"] ?? "",
-      githubKey: configData["githubKey"] ?? "",
-      vercelKey: configData["vercelKey"] ?? "",
-      openaiKey: configData["openaiKey"] ?? "",
+      code: configData.code ?? "",
+      key: configData.key ?? "",
+      githubKey: configData.githubKey ?? "",
+      vercelKey: configData.vercelKey ?? "",
+      openaiKey: configData.openaiKey ?? "",
       // Non-encrypted data
-      name: userData["name"] ?? "",
-      email: userData["email"] ?? "",
-      githubUsername: userData["githubUsername"] ?? "",
-      vercelUsername: userData["vercelUsername"] ?? "",
-      vercelTeamId: userData["vercelTeamId"] ?? "",
+      name: userData.name ?? "",
+      email: userData.email ?? "",
+      githubUsername: userData.githubUsername ?? "",
+      vercelUsername: userData.vercelUsername ?? "",
+      vercelTeamId: userData.vercelTeamId ?? "",
     };
   } catch (error) {
     relinka(

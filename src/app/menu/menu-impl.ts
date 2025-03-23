@@ -10,14 +10,14 @@ import type {
   ProjectArchitecture,
   ProjectSubcategory,
   ReliverseConfig,
-} from "~/libs/config/config-main.js";
+} from "~/libs/cfg/constants/cfg-schema.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import {
   randomProjectFrameworkTitle,
   getRandomMessage,
 } from "~/app/db/messages.js";
-import { endTitle, UNKNOWN_VALUE } from "~/libs/sdk/constants.js";
+import { endTitle, UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { experimental } from "~/utils/badgeNotifiers.js";
 import { recommended } from "~/utils/badgeNotifiers.js";
 import {

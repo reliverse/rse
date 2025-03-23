@@ -3,7 +3,7 @@ import { subtle, getRandomValues } from "uncrypto";
 
 // Encryption key based on machine-specific data
 async function getDerivedKey(): Promise<CryptoKey> {
-  const machineId = `${process.platform}-${process.arch}-${process.env["USERNAME"] ?? process.env["USER"]}`;
+  const machineId = `${process.platform}-${process.arch}-${process.env.USERNAME ?? process.env.USER}`;
   const encoder = new TextEncoder();
   const data = encoder.encode(machineId);
 

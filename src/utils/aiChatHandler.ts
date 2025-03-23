@@ -29,17 +29,20 @@ async function ensureOpenAIKey(memory: ReliverseMemory): Promise<string> {
   let memoryKeyInvalid = false;
 
   // 1) Check .env
-  if (process.env["OPENAI_API_KEY"]) {
+  if (process.env.OPENAI_API_KEY) {
     try {
       await ofetch("https://api.openai.com/v1/models", {
         headers: {
-          Authorization: `Bearer ${process.env["OPENAI_API_KEY"]}`,
+          Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
         },
       });
-      return process.env["OPENAI_API_KEY"];
+      return process.env.OPENAI_API_KEY;
     } catch {
       envKeyInvalid = true;
-      relinka("warn", "OpenAI key in .env file is invalid, checking memory...");
+      relinka(
+        "warn",
+        "OpenAI key in .env file is invalid, let me check my memory...",
+      );
     }
   }
 
@@ -50,7 +53,7 @@ async function ensureOpenAIKey(memory: ReliverseMemory): Promise<string> {
         headers: { Authorization: `Bearer ${memory.openaiKey}` },
       });
       // If valid, update .env if needed.
-      process.env["OPENAI_API_KEY"] = memory.openaiKey;
+      process.env.OPENAI_API_KEY = memory.openaiKey;
       if (envKeyInvalid) {
         relinka(
           "info",
@@ -93,7 +96,7 @@ async function ensureOpenAIKey(memory: ReliverseMemory): Promise<string> {
 
   // Store the new token in both memory and process.env
   await updateReliverseMemory({ openaiKey: token });
-  process.env["OPENAI_API_KEY"] = token;
+  process.env.OPENAI_API_KEY = token;
   return token;
 }
 
@@ -121,6 +124,8 @@ export async function aiChatHandler(memory: ReliverseMemory) {
       const result = streamText({
         model: openai("gpt-3.5-turbo"),
         messages,
+        system:
+          "You are a professional software developer. Your name is Reliverse.",
       });
 
       let assistantResponse = "";
@@ -154,7 +159,10 @@ export async function aiChatHandler(memory: ReliverseMemory) {
 
     if (
       userInput.toLowerCase() === "exit" ||
-      userInput.toLowerCase() === "bye"
+      userInput.toLowerCase() === "quit" ||
+      userInput.toLowerCase() === "bye" ||
+      userInput.toLowerCase() === "goodbye" ||
+      userInput.toLowerCase() === "thanks! bye!"
     ) {
       break;
     }

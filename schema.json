@@ -65,7 +65,15 @@
     },
     "projectCategory": {
       "type": "string",
-      "enum": ["unknown", "website", "vscode", "browser", "cli", "library"]
+      "enum": [
+        "unknown",
+        "website",
+        "vscode",
+        "browser",
+        "cli",
+        "library",
+        "mobile"
+      ]
     },
     "projectSubcategory": {
       "type": "string",
@@ -82,7 +90,9 @@
         "astro",
         "npm-jsr",
         "wxt",
-        "vscode"
+        "vscode",
+        "react-native",
+        "lynx"
       ]
     },
     "projectTemplate": {
@@ -97,6 +107,8 @@
         "blefnk/create-next-app",
         "blefnk/astro-starlight-template",
         "blefnk/versator-nextjs-template",
+        "blefnk/relivator-lynxjs-template",
+        "blefnk/relivator-react-native-template",
         "reliverse/template-browser-extension",
         "microsoft/vscode-extension-samples",
         "microsoft/vscode-extension-template",

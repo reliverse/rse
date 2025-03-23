@@ -1,8 +1,9 @@
+import { ensuredir } from "@reliverse/fs";
 import { Type, type Static } from "@sinclair/typebox";
 import fs from "fs-extra";
 import path from "pathe";
 
-import { cliHomeRepos, cliVersion } from "~/libs/sdk/constants.js";
+import { cliHomeRepos, cliVersion } from "~/libs/cfg/constants/cfg-details.js";
 
 // Import package.json with type assertion
 // import pkg from "../../package.json" assert { type: "json" };
@@ -132,7 +133,7 @@ export async function generateReposJsonSchema(): Promise<void> {
     required: converted.required,
   };
 
-  await fs.ensureDir(cliHomeRepos);
+  await ensuredir(cliHomeRepos);
   const schemaPath = path.join(cliHomeRepos, "schema.json");
   await fs.writeFile(schemaPath, JSON.stringify(schema, null, 2));
 }

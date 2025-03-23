@@ -2,17 +2,12 @@ import { Type, type Static } from "@sinclair/typebox";
 import fs from "fs-extra";
 import path from "pathe";
 
-// ------------------------------------------------------------------
-// Duplicating the constants from the @reliverse/cli app/constants.ts
-// since the current file is published as a library to npm and jsr
-const UNKNOWN_VALUE = "unknown";
-const reliverseOrgBase = "reliverse.org";
-const reliverseOrgRoot = `https://${reliverseOrgBase}`;
-const cliDomainRoot = `https://docs.${reliverseOrgBase}`;
-const cliDomainDocs = `${cliDomainRoot}/cli`;
-const RELIVERSE_SCHEMA_DEV = "./schema.json";
-const RELIVERSE_SCHEMA_URL = `${reliverseOrgRoot}/schema.json`;
-// ------------------------------------------------------------------
+import {
+  cliDomainDocs,
+  RELIVERSE_SCHEMA_DEV,
+  RELIVERSE_SCHEMA_URL,
+  UNKNOWN_VALUE,
+} from "./cfg-details.js";
 
 const unknownLiteral = Type.Literal("unknown");
 
@@ -238,6 +233,7 @@ export const reliverseConfigSchema = Type.Object({
     Type.Literal("browser"),
     Type.Literal("cli"),
     Type.Literal("library"),
+    Type.Literal("mobile"),
   ]),
   projectSubcategory: Type.Union([
     Type.Literal(UNKNOWN_VALUE),
@@ -258,6 +254,9 @@ export const reliverseConfigSchema = Type.Object({
     Type.Literal("wxt"),
     // vscode extension frameworks
     Type.Literal("vscode"),
+    // mobile frameworks
+    Type.Literal("react-native"),
+    Type.Literal("lynx"),
   ]),
   projectTemplate: Type.Union([
     Type.Literal(UNKNOWN_VALUE),
@@ -269,6 +268,8 @@ export const reliverseConfigSchema = Type.Object({
     Type.Literal("blefnk/create-next-app"),
     Type.Literal("blefnk/astro-starlight-template"),
     Type.Literal("blefnk/versator-nextjs-template"),
+    Type.Literal("blefnk/relivator-lynxjs-template"),
+    Type.Literal("blefnk/relivator-react-native-template"),
     Type.Literal("reliverse/template-browser-extension"),
     Type.Literal("microsoft/vscode-extension-samples"),
     Type.Literal("microsoft/vscode-extension-template"),

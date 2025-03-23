@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import {
   selectPrompt,
   multiselectPrompt,
@@ -9,7 +10,7 @@ import { ofetch } from "ofetch";
 import pMap from "p-map";
 import path from "pathe";
 
-import { homeDir } from "~/libs/sdk/constants.js";
+import { homeDir } from "~/libs/cfg/constants/cfg-details.js";
 import { getMaxHeightSize } from "~/utils/microHelpers.js";
 
 // ----------------------
@@ -59,9 +60,9 @@ function getRepoCacheDir(owner: string): string {
 
 export const RULES_REPOS: RuleRepo[] = [
   {
-    id: "blefnk/rules",
+    id: "blefnk/awesome-cursor-rules",
     author: "blefnk",
-    name: "rules",
+    name: "Reliverse Rules",
     description: "AI IDE rules (Cursor, Windsurf, Copilot)",
     branch: "main",
     tags: ["cursor", "windsurf", "copilot"],
@@ -85,19 +86,6 @@ export const RULES_REPOS: RuleRepo[] = [
 // ----------------------
 // Utility Functions
 // ----------------------
-
-/**
- * Ensures that a directory exists. If not, creates it.
- * @param dir - The directory path.
- */
-async function ensureDirectory(dir: string): Promise<void> {
-  try {
-    await fs.ensureDir(dir);
-  } catch (error) {
-    relinka("error", `Failed to ensure directory ${dir}: ${error}`);
-    throw error;
-  }
-}
 
 /**
  * Remove unwanted header and footer lines from a TypeScript rule file.
@@ -288,7 +276,7 @@ async function downloadRules(
   const branch = repo.branch || DEFAULT_BRANCH;
   const repoCacheDir = getRepoCacheDir(owner);
   // Ensure the cache directory exists.
-  await ensureDirectory(repoCacheDir);
+  await ensuredir(repoCacheDir);
   relinka("info-verbose", `Cache directory: ${repoCacheDir}`);
 
   const apiUrl = `https://api.github.com/repos/${owner}/${repoName}/git/trees/${branch}?recursive=1`;
@@ -391,7 +379,7 @@ async function downloadRules(
 
     await pMap(
       selectedFiles,
-      async (filePath) => {
+      async (filePath: string) => {
         let expectedCacheFile: string;
         if (repo.isCommunity) {
           expectedCacheFile = `${path.basename(filePath, ".ts")}${RULE_FILE_EXTENSION}`;
@@ -489,7 +477,7 @@ async function installRules(
   const repoCacheDir = getRepoCacheDir(owner);
   const cursorRulesDir = path.join(cwd, ".cursor", "rules");
 
-  await ensureDirectory(cursorRulesDir);
+  await ensuredir(cursorRulesDir);
   relinka("info-verbose", `Source directory: ${repoCacheDir}`);
   relinka("info-verbose", `Target directory: ${cursorRulesDir}`);
 
@@ -610,7 +598,7 @@ export async function showRulesMenu({
       {
         value: "download-official",
         label: "Download official",
-        hint: "blefnk/rules",
+        hint: "blefnk/awesome-cursor-rules",
       },
       {
         value: "download-community",
@@ -640,7 +628,7 @@ export async function showRulesMenu({
   ) {
     const repoId =
       mainOption === "download-official"
-        ? "blefnk/rules"
+        ? "blefnk/awesome-cursor-rules"
         : "pontusab/directories";
 
     const [owner] = repoId.split("/");

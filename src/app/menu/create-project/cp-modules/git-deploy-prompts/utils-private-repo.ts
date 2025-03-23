@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import { confirmPrompt } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
@@ -13,7 +14,7 @@ import {
   cliConfigJsonc,
   cliConfigJsoncTmp,
   cliHomeTmp,
-} from "~/libs/sdk/constants.js";
+} from "~/libs/cfg/constants/cfg-details.js";
 import { setHiddenAttributeOnWindows } from "~/utils/filesysHelpers.js";
 
 const gzipAsync = promisify(gzip);
@@ -49,7 +50,7 @@ export async function archiveExistingRepoContent(
   const tempDir = path.join(cliHomeTmp, Date.now().toString());
   try {
     // Create temp directory
-    await fs.ensureDir(tempDir);
+    await ensuredir(tempDir);
 
     // Clone repository to temp directory
     const git = simpleGit();

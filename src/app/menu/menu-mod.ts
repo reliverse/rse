@@ -5,14 +5,20 @@ import fs from "fs-extra";
 import path from "pathe";
 
 import type { AppParams, ParamsOmitReli } from "~/app/app-types.js";
-import type { ProjectCategory } from "~/libs/config/config-main.js";
+import type {
+  ReliverseConfig,
+  ProjectCategory,
+} from "~/libs/cfg/constants/cfg-schema.js";
+import type { RepoOption } from "~/utils/projectRepository.js";
+import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import { getRandomMessage } from "~/app/db/messages.js";
-import { endTitle, UNKNOWN_VALUE } from "~/libs/sdk/constants.js";
+import { endTitle, UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { aiChatHandler } from "~/utils/aiChatHandler.js";
 import { experimental } from "~/utils/badgeNotifiers.js";
 import { detectProjectsWithReliverse } from "~/utils/reliverseConfig.js";
 
+import { createMobileProject } from "./create-project/cp-mod.js";
 import { rmTestsRuntime } from "./dev-submenu/dev-mod.js";
 import { downloadRepoOption } from "./dev-submenu/dev-mod.js";
 import { openVercelTools } from "./dev-submenu/dev-vercel.js";
@@ -36,6 +42,11 @@ async function handleProjectCategory(params: AppParams) {
           label: "Web Application",
           value: "website",
           hint: re.dim("Create a website with Next.js"),
+        },
+        {
+          label: "Mobile Application",
+          value: "mobile",
+          hint: experimental,
         },
         {
           label: "VS Code Extension",
@@ -83,6 +94,15 @@ async function handleProjectCategory(params: AppParams) {
       config,
       skipPrompts,
     );
+  } else if (projectCategory === "mobile") {
+    await optionCreateMobileProject(
+      params.projectName,
+      cwd,
+      isDev,
+      memory,
+      config,
+      skipPrompts,
+    );
   } else {
     // Default = "web"
     await optionCreateWebProject(
@@ -96,6 +116,57 @@ async function handleProjectCategory(params: AppParams) {
       skipPrompts,
     );
   }
+}
+
+/**
+ * Creates a new mobile project based on the selected framework
+ */
+async function optionCreateMobileProject(
+  projectName: string,
+  cwd: string,
+  isDev: boolean,
+  memory: ReliverseMemory,
+  config: ReliverseConfig,
+  skipPrompts: boolean,
+): Promise<void> {
+  const mobileFramework = await selectPrompt({
+    endTitle,
+    title: "Which mobile framework would you like to use?",
+    options: [
+      {
+        label: "Lynx",
+        value: "lynx",
+        hint: re.dim("iOS • Android • Web"),
+      },
+      {
+        label: "React Native",
+        value: "react-native",
+        hint: re.dim("iOS • Android • Web • macOS • Windows"),
+      },
+    ],
+  });
+
+  let selectedRepo: RepoOption;
+  if (mobileFramework === "react-native") {
+    selectedRepo = "blefnk/relivator-react-native-template" as RepoOption;
+  } else if (mobileFramework === "lynx") {
+    selectedRepo = "blefnk/relivator-lynxjs-template" as RepoOption;
+  } else {
+    relinka("error", "Invalid mobile framework selected");
+    return;
+  }
+
+  await createMobileProject({
+    projectName,
+    initialProjectName: projectName,
+    selectedRepo,
+    message: `Setting up ${mobileFramework} project...`,
+    isDev,
+    config,
+    memory,
+    cwd,
+    skipPrompts,
+  });
 }
 
 /**

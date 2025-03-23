@@ -4,7 +4,7 @@ import path from "pathe";
 
 import type { MonorepoType } from "~/types.js";
 
-import { tsconfigJson } from "~/libs/sdk/constants.js";
+import { tsconfigJson } from "~/libs/cfg/constants/cfg-details.js";
 
 const MONOREPO_CONFIGS = {
   turborepo: {

@@ -1,59 +1,33 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "~/*": ["./src/*"],
-      "#/*": ["./addons/*"]
+      "~/*": ["./src/*"]
     },
-    "allowImportingTsExtensions": false,
-    "allowJs": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
+    "baseUrl": ".",
     "esModuleInterop": true,
-    "exactOptionalPropertyTypes": false,
-    "forceConsistentCasingInFileNames": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "lib": ["DOM", "DOM.Iterable", "ES2023"],
-    "module": "NodeNext",
-    "moduleDetection": "force",
-    "moduleResolution": "nodenext",
-    "target": "ES2023",
-    "noEmit": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": false,
-    "noImplicitOverride": true,
-    "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "resolveJsonModule": true,
     "skipLibCheck": true,
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "moduleDetection": "force",
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
     "strict": true,
-    "strictNullChecks": true,
-    "verbatimModuleSyntax": true
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "module": "NodeNext",
+    "moduleResolution": "nodenext",
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true
   },
-  "include": [
-    "addons/**/*.ts",
-    "build.config.ts",
-    "build.publish.ts",
-    "drizzle.config.ts",
-    "eslint.config.js",
-    "latest.ts",
-    "multireli/**/*.ts",
-    "reliverse.ts",
-    "reset.d.ts",
-    "src/**/*.ts",
-    "vitest.config.ts"
-  ],
+  "include": ["**/*.ts", "reset.d.ts", "eslint.config.js"],
   "exclude": [
     "node_modules",
-    "tests-runtime",
-    "start-runtime",
     "dist-jsr",
     "dist-npm",
-    "dist-libs"
+    "dist-libs",
+    "tests-runtime",
+    "start-runtime"
   ]
 }

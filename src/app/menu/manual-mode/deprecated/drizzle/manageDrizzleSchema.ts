@@ -1,6 +1,6 @@
+import { ensuredir } from "@reliverse/fs";
 import { selectPrompt, confirmPrompt } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
 import path from "pathe";
 
 import {
@@ -39,9 +39,9 @@ export async function manageDrizzleSchema(cwd: string, isDev: boolean) {
 
   // Create necessary directories
   if (useMultipleFiles) {
-    await fs.ensureDir(multiSchemaDir);
+    await ensuredir(multiSchemaDir);
   } else {
-    await fs.ensureDir(singleSchemaDir);
+    await ensuredir(singleSchemaDir);
   }
 
   // Show schema management options

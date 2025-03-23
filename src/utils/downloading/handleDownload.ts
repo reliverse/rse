@@ -4,9 +4,12 @@ import fs from "fs-extra";
 import { ofetch } from "ofetch";
 import path from "pathe";
 
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 
-import { cliHomeRepos, UNKNOWN_VALUE } from "~/libs/sdk/constants.js";
+import {
+  cliHomeRepos,
+  UNKNOWN_VALUE,
+} from "~/libs/cfg/constants/cfg-details.js";
 import {
   downloadRepo,
   type DownloadResult,
@@ -36,7 +39,7 @@ async function checkRepoVersion(
   const url = `https://ungh.cc/repos/${owner}/${repoName}`;
 
   try {
-    // ofetch automatically parses json using destr
+    // ofetch automatically parses JSON using destr
     const data = await ofetch<UnghRepoResponse>(url);
     return data.repo?.pushedAt ?? null;
   } catch (error) {
@@ -58,6 +61,7 @@ export async function handleDownload({
   install = false,
   isCustom = false,
   isTemplateDownload,
+  cache = false,
 }: {
   cwd: string;
   isDev: boolean;
@@ -71,6 +75,7 @@ export async function handleDownload({
   install?: boolean | undefined;
   isCustom?: boolean | undefined;
   isTemplateDownload: boolean;
+  cache?: boolean;
 }): Promise<DownloadResult> {
   if (isTemplateDownload) {
     relinka("info-verbose", "Handling template downloading...");
@@ -178,13 +183,14 @@ export async function handleDownload({
         projectName,
         isDev,
         cwd,
-        ...(githubToken ? { auth: githubToken } : {}),
+        ...(githubToken ? { githubToken } : {}),
         preserveGit,
         ...(config ? { config } : {}),
         install,
         returnTime: true,
         returnSize: true,
         isTemplateDownload,
+        cache,
       });
       projectPath = result.dir;
       if (result.time) {

@@ -1,6 +1,6 @@
 export type Behavior = "prompt" | "autoYes" | "autoNo";
 
-export type DatabasePostgresProvider = "neon" | "railway";
+export type DatabasePostgresProvider = "neon" | "railway" | "vercel";
 
 export type DatabaseProvider = "postgres" | "sqlite" | "mysql";
 

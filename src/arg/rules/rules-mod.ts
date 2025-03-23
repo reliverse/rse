@@ -1,5 +1,5 @@
+import { ensuredir } from "@reliverse/fs";
 import { defineCommand } from "@reliverse/prompts";
-import fs from "fs-extra";
 import os from "os";
 import path from "pathe";
 
@@ -22,7 +22,7 @@ export default defineCommand({
     const rulesBaseDir = path.join(homeDir, ".reliverse", "rules");
 
     // Create the base rules directory if it doesn't exist
-    await fs.ensureDir(rulesBaseDir);
+    await ensuredir(rulesBaseDir);
 
     // Run the rules menu
     await showRulesMenu({

@@ -12,12 +12,12 @@ import path from "pathe";
 import { simpleGit } from "simple-git";
 
 import type { GitModParams } from "~/app/app-types.js";
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 import type { InstanceGithub } from "~/utils/instanceGithub.js";
 import type { RepoOption } from "~/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
-import { cliName } from "~/libs/sdk/constants.js";
+import { cliName } from "~/libs/cfg/constants/cfg-details.js";
 import { getEffectiveDir } from "~/utils/getEffectiveDir.js";
 import { cd, pwd } from "~/utils/terminalHelpers.js";
 

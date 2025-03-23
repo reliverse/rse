@@ -1,5 +1,6 @@
 import type { PackageJson } from "pkg-types";
 
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import { execa } from "execa";
 import fs from "fs-extra";
@@ -151,7 +152,7 @@ export async function installIntegration(
     // Create necessary files
     for (const file of config.files) {
       const filePath = path.join(cwd, file.path);
-      await fs.ensureDir(path.dirname(filePath));
+      await ensuredir(path.dirname(filePath));
       await fs.writeFile(filePath, file.content);
       relinka("success", `Created ${file.path}`);
     }

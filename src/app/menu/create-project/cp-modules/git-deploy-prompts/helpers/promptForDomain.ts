@@ -1,6 +1,6 @@
 import { inputPrompt, selectPrompt } from "@reliverse/prompts";
 
-import { DEFAULT_DOMAIN } from "~/libs/sdk/constants.js";
+import { DEFAULT_DOMAIN } from "~/libs/cfg/constants/cfg-details.js";
 import { experimental } from "~/utils/badgeNotifiers.js";
 import { recommended } from "~/utils/badgeNotifiers.js";
 

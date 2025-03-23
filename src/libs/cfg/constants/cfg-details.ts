@@ -1,6 +1,10 @@
 import os from "os";
 import path from "pathe";
 
+// PROJECT ROOT
+export const PROJECT_ROOT = path.resolve(process.cwd());
+
+// CLI VERSION AND NAME
 export const cliVersion = "1.5.12";
 export const cliName = "@reliverse/cli";
 

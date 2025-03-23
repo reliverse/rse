@@ -66,7 +66,7 @@ export async function monitorDeployment(
 
 /**
  * Creates the initial Vercel deployment for a project.
- * This function now fixes the gitSource information by:
+ * This function handles the gitSource information by:
  * 1. Retrieving the local HEAD commit SHA.
  * 2. Using Octokit (via the GitHub token) to get the repository's numeric ID.
  */

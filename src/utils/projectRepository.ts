@@ -1,5 +1,6 @@
 import type { Static } from "@sinclair/typebox";
 
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
 import { Value } from "@sinclair/typebox/value";
@@ -9,9 +10,9 @@ import { ofetch } from "ofetch";
 import path from "pathe";
 
 import type { VSCodeRepoOption } from "~/app/menu/menu-impl.js";
-import type { reliverseConfigSchema } from "~/libs/config/config-main.js";
+import type { reliverseConfigSchema } from "~/libs/cfg/constants/cfg-schema.js";
 
-import { cliHomeRepos } from "~/libs/sdk/constants.js";
+import { cliHomeRepos } from "~/libs/cfg/constants/cfg-details.js";
 import { experimental, recommended } from "~/utils/badgeNotifiers.js";
 
 import { setHiddenAttributeOnWindows } from "./filesysHelpers.js";
@@ -138,7 +139,7 @@ export const REPO_TEMPLATES: CloneOrTemplateRepo[] = [
 // ────────────────────────────────────────────────
 
 async function getReposConfigPath(): Promise<string> {
-  await fs.ensureDir(cliHomeRepos);
+  await ensuredir(cliHomeRepos);
 
   // Regenerate schema if required.
   if (await shouldRegenerateSchema()) {
@@ -218,7 +219,7 @@ export async function saveRepoToDevice(
   try {
     // Build destination path
     const repoSavePath = path.join(cliHomeRepos, repo.author, repo.name);
-    await fs.ensureDir(path.dirname(repoSavePath));
+    await ensuredir(path.dirname(repoSavePath));
     await fs.copy(projectPath, repoSavePath);
 
     // Set the .git folder hidden on Windows
@@ -284,12 +285,17 @@ export const TEMP_FULLSTACK_WEBSITE_TEMPLATE_OPTIONS = {
   "blefnk/relivator-nextjs-template": {
     label: `Relivator ${recommended}`,
     value: "blefnk/relivator-nextjs-template",
-    hint: re.dim("Full-featured e-commerce repo with auth, payments, etc."),
+    hint: re.dim("Full-featured template with BetterAuth, Polar, and more"),
+  },
+  "blefnk/versator-nextjs-template": {
+    label: `Versator ${experimental}`,
+    value: "blefnk/versator-nextjs-template",
+    hint: re.dim("Versatile template with Clerk, Stripe, and more"),
   },
   "blefnk/next-react-ts-src-minimal": {
     label: `Next.js Only ${experimental}`,
     value: "blefnk/next-react-ts-src-minimal",
-    hint: re.dim("Essentials only: minimal Next.js with TypeScript repo"),
+    hint: re.dim("Essentials only: minimal Next.js with TypeScript"),
   },
 } as const satisfies Partial<
   Record<RepoOption, { label: string; value: RepoOption; hint: string }>

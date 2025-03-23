@@ -24,11 +24,6 @@ import type { DeploymentService } from "~/types.js";
 
 import { askReliverseConfigType } from "~/app/prompts/askReliverseConfigType.js";
 import {
-  reliverseConfigSchema,
-  type ProjectFramework,
-  type ReliverseConfig,
-} from "~/libs/config/config-main.js";
-import {
   DEFAULT_DOMAIN,
   UNKNOWN_VALUE,
   RELIVERSE_SCHEMA_URL,
@@ -43,7 +38,13 @@ import {
   cliConfigTsBak,
   cliVersion,
   tsconfigJson,
-} from "~/libs/sdk/constants.js";
+  PROJECT_ROOT,
+} from "~/libs/cfg/constants/cfg-details.js";
+import {
+  reliverseConfigSchema,
+  type ProjectFramework,
+  type ReliverseConfig,
+} from "~/libs/cfg/constants/cfg-schema.js";
 import { getBiomeConfig } from "~/utils/configHandler.js";
 
 /* ------------------------------------------------------------------
@@ -77,55 +78,67 @@ const configPathCache = new Map<
  */
 
 /**
- * Returns the proper config file path and its type (TS or JSONC).
- * This function determines which config file to use based on existing files.
- * It does not contain UI prompts directly - those are delegated to a separate function.
- *
- * @param projectPath - Path to the project directory
- * @param skipPrompt - If true, will default to JSONC without prompting (optional)
- * @returns Object containing the config path and whether it's a TypeScript config
+ * Determines the Reliverse config file path and whether it's TS or JSONC.
+ * - In dev mode, automatically selects the TS path.
+ * - Honors a custom tsconfig.json path if provided.
+ * - Caches results by projectPath.
  */
 export async function getReliverseConfigPath(
   projectPath: string,
-  skipPrompt = false,
+  isDev: boolean,
+  skipPrompt: boolean,
+  customTsconfigPath?: string,
 ): Promise<{ configPath: string; isTS: boolean }> {
-  // Check cache first to avoid redundant file system checks and prompts
-  if (configPathCache.has(projectPath)) {
-    return configPathCache.get(projectPath)!;
+  // Dev mode: always choose .ts config in the project root
+  if (isDev) {
+    const devResult = {
+      configPath: path.join(projectPath, cliConfigTs),
+      isTS: true,
+    };
+    configPathCache.set(projectPath, devResult);
+    return devResult;
   }
 
-  // Define paths for all possible config files
-  const tsconfigPath = path.join(projectPath, tsconfigJson);
+  // Return cached if available
+  const cached = configPathCache.get(projectPath);
+  if (cached) {
+    return cached;
+  }
+
+  // Use the custom TS config path if provided, otherwise default to "tsconfig.json"
+  const finalTsconfigPath = customTsconfigPath
+    ? path.resolve(customTsconfigPath)
+    : path.join(projectPath, tsconfigJson);
+
+  // Identify potential config paths
   const reliverseJsoncPath = path.join(projectPath, cliConfigJsonc);
   const reliverseTsPath = path.join(projectPath, cliConfigTs);
 
-  // Check which files exist
-  const tsconfigExists = await fs.pathExists(tsconfigPath);
-  const reliverseJsoncExists = await fs.pathExists(reliverseJsoncPath);
-  const reliverseTsExists = await fs.pathExists(reliverseTsPath);
+  // Check if these paths exist
+  const [tsconfigExists, jsoncExists, tsExists] = await Promise.all([
+    fs.pathExists(finalTsconfigPath),
+    fs.pathExists(reliverseJsoncPath),
+    fs.pathExists(reliverseTsPath),
+  ]);
 
   let result: { configPath: string; isTS: boolean };
 
-  // Decision logic for which config file to use:
-
-  // Case 1: TS config already exists - use it
-  if (reliverseTsExists) {
+  // If an existing .ts config is present
+  if (tsExists) {
     result = { configPath: reliverseTsPath, isTS: true };
   }
-  // Case 2: Neither config exists but tsconfig.json is present - ask user (unless skipPrompt is true)
-  else if (tsconfigExists && !reliverseJsoncExists && !skipPrompt) {
+  // If no config yet, user has a tsconfig, and skipPrompt is false, ask which type to create
+  else if (tsconfigExists && !jsoncExists && !skipPrompt) {
     const choice = await askReliverseConfigType();
     result =
       choice === "ts"
         ? { configPath: reliverseTsPath, isTS: true }
         : { configPath: reliverseJsoncPath, isTS: false };
-  }
-  // Case 3: Default to JSONC for all other cases
-  else {
+  } else {
+    // Default to JSONC
     result = { configPath: reliverseJsoncPath, isTS: false };
   }
 
-  // Cache the result for this project
   configPathCache.set(projectPath, result);
   return result;
 }
@@ -184,6 +197,8 @@ export const PROJECT_FRAMEWORK_FILES: Record<ProjectFramework, string[]> = {
   vue: ["vue.config.js", "vite.config.ts"],
   wxt: ["wxt.config.js", "wxt.config.ts"],
   vscode: ["vscode.config.js", "vscode.config.ts"],
+  "react-native": ["App.js", "App.tsx", "App.ts"],
+  lynx: ["App.tsx", "App.css"],
 };
 
 export async function detectProjectFramework(
@@ -246,7 +261,11 @@ export async function updateReliverseConfig(
   updates: Partial<ReliverseConfig>,
   isDev: boolean,
 ): Promise<boolean> {
-  const { configPath } = await getReliverseConfigPath(projectPath);
+  const { configPath } = await getReliverseConfigPath(
+    projectPath,
+    isDev,
+    false,
+  );
   const { backupPath, tempPath } = getBackupAndTempPaths(configPath);
 
   try {
@@ -631,7 +650,7 @@ export function fixLineByLine(
       subSchema &&
       typeof subSchema === "object" &&
       "type" in subSchema &&
-      subSchema["type"] === "object"
+      subSchema.type === "object"
     ) {
       const { fixedConfig, changedKeys: nestedChanges } = fixLineByLine(
         userValue,
@@ -862,8 +881,9 @@ async function addDevDependency(
 }
 
 /**
- * Writes the given ReliverseConfig to the config file.
- * Uses an atomic write (via a temporary file) and creates a backup.
+ * Writes the given ReliverseConfig to the specified config file (TypeScript or JSONC).
+ * Performs an atomic write (using a temp file) and creates a backup of any existing config.
+ * In dev mode, automatically builds a relative path to `cfg-main.js`.
  */
 export async function writeReliverseConfig(
   configPath: string,
@@ -872,50 +892,67 @@ export async function writeReliverseConfig(
   skipInstallPrompt = false,
   customPathToTypes?: string,
 ): Promise<void> {
+  // TypeScript branch
   if (configPath.endsWith(".ts")) {
     const { backupPath, tempPath } = getBackupAndTempPaths(configPath);
+
     try {
-      // Backup if the config exists
       if (await fs.pathExists(configPath)) {
         await fs.copy(configPath, backupPath);
       }
+
+      // Convert the config object to a TypeScript-friendly string
       const objectLiteral = objectToCodeString(config, 0);
       const objectLiteralWithComments = injectSectionComments(objectLiteral);
-      const isTestsRuntimeDir = path.dirname(configPath) === process.cwd();
 
-      // Determine the import path - using customPathToTypes if provided
+      // Build the import path for dev or production
+      // - If dev is true, create a relative path to src/libs/cfg/cfg-main.js
+      // - Otherwise default to "@reliverse/cli-cfg"
       let importPath: string;
       if (customPathToTypes) {
         importPath = customPathToTypes;
+      } else if (isDev) {
+        const relativeDir = path.dirname(configPath);
+        const absoluteMainJs = path.join(
+          PROJECT_ROOT,
+          "src",
+          "libs",
+          "cfg",
+          "cfg-main.js",
+        );
+        const relativeMainJs = path
+          .relative(relativeDir, absoluteMainJs)
+          .replace(/\\/g, "/");
+        importPath = relativeMainJs.startsWith(".")
+          ? relativeMainJs
+          : `./${relativeMainJs}`;
       } else {
-        importPath = isDev
-          ? isTestsRuntimeDir
-            ? "../../src/libs/config/config-main.js"
-            : "./src/libs/config/config-main.js"
-          : "@reliverse/config";
+        importPath = "@reliverse/cli-cfg";
       }
 
-      // Create the TypeScript config file content with proper import statement
-      // We are separating the import statement from the configuration
+      // Produce TypeScript config file content
       const fileContent = `import { defineConfig } from "${importPath}";
 
 export default defineConfig(${objectLiteralWithComments});
 `;
 
+      // Atomic file write, plus optional backup restoration on failure
       await atomicWriteFile(configPath, fileContent, backupPath, tempPath);
-      // Update tsconfig.json to include "reliverse.ts"
+
+      // Ensure tsconfig.json includes this config
       await updateTsConfigInclude(path.dirname(configPath));
-      // Add "@reliverse/config" to devDependencies if !isDev
+
+      // Optionally add devDependency and prompt for install if not dev
       if (!isDev && !skipInstallPrompt) {
         await addDevDependency(
           path.dirname(configPath),
-          "@reliverse/config",
+          "@reliverse/cli-cfg",
           cliVersion,
         );
         relinka("success-verbose", "TS config written successfully");
 
         const shouldRunInstall = await confirmPrompt({
-          title: "Run `bun install` now to install '@reliverse/config'?",
+          title: "Run `bun install` now to install '@reliverse/cli-cfg'?",
           defaultValue: true,
         });
         if (shouldRunInstall) {
@@ -926,7 +963,7 @@ export default defineConfig(${objectLiteralWithComments});
         } else {
           relinka(
             "success",
-            "Please run `bun install` at your convenience, then use `reliverse cli` again to continue.",
+            "Please run `bun install` later, then use `reliverse cli` again to continue.",
           );
           process.exit(0);
         }
@@ -937,6 +974,8 @@ export default defineConfig(${objectLiteralWithComments});
       return;
     } catch (error) {
       relinka("error", "Failed to write TS config:", String(error));
+
+      // Attempt to restore from backup if write failed
       if (
         (await fs.pathExists(backupPath)) &&
         !(await fs.pathExists(configPath))
@@ -967,13 +1006,16 @@ export default defineConfig(${objectLiteralWithComments});
     relinka("error", "Invalid config:", issues.join("; "));
     throw new Error(`Invalid config: ${issues.join("; ")}`);
   }
+
   let fileContent = JSON.stringify(config, null, 2);
   fileContent = injectSectionComments(fileContent);
+
   const { backupPath, tempPath } = getBackupAndTempPaths(configPath);
   if (await fs.pathExists(configPath)) {
     await fs.copy(configPath, backupPath);
   }
   await atomicWriteFile(configPath, fileContent, backupPath, tempPath);
+
   relinka("success-verbose", "Config written successfully");
 }
 
@@ -1053,7 +1095,7 @@ export async function readReliverseConfig(
 }
 
 /* ------------------------------------------------------------------
- * parseAndFixConfig (Line-by-Line)
+ * parseAndFixReliverseConfig (Line-by-Line)
  * ------------------------------------------------------------------
  */
 
@@ -1061,7 +1103,7 @@ export async function readReliverseConfig(
  * Reads the config file, fixes invalid lines based on the schema,
  * writes back the fixed config, and returns the fixed config.
  */
-async function parseAndFixConfig(
+async function parseAndFixReliverseConfig(
   configPath: string,
   isDev: boolean,
 ): Promise<ReliverseConfig | null> {
@@ -1259,6 +1301,7 @@ async function createReliverseConfig(
   projectPath: string,
   githubUsername: string,
   isDev: boolean,
+  overrides: Partial<ReliverseConfig>,
 ): Promise<void> {
   const defaultRules = await generateDefaultRulesForProject(projectPath, isDev);
   const effectiveProjectName =
@@ -1280,6 +1323,7 @@ async function createReliverseConfig(
     projectPath,
     githubUsername,
     isDev,
+    overrides,
   });
 
   relinka(
@@ -1589,7 +1633,11 @@ export async function detectProject(
       await getProjectContent(projectPath);
     if (!requiredContent.fileReliverse || !requiredContent.filePackageJson)
       return null;
-    const { configPath } = await getReliverseConfigPath(projectPath);
+    const { configPath } = await getReliverseConfigPath(
+      projectPath,
+      isDev,
+      false,
+    );
     if (!(await fs.pathExists(configPath))) return null;
     const config = await readReliverseConfig(configPath, isDev);
     if (!config) return null;
@@ -2053,6 +2101,10 @@ export async function detectFeatures(
  * ------------------------------------------------------------------
  */
 
+/**
+ * Generates a Reliverse config (ReliverseConfig) by merging defaults, existing config, and overrides.
+ * Writes the resulting config to disk (TypeScript or JSONC), optionally skipping install prompts in non-dev mode.
+ */
 export async function generateReliverseConfig({
   projectName,
   frontendUsername,
@@ -2068,6 +2120,7 @@ export async function generateReliverseConfig({
   customFilename,
   skipInstallPrompt = false,
   customPathToTypes,
+  overrides,
 }: {
   projectName: string;
   frontendUsername: string;
@@ -2083,26 +2136,38 @@ export async function generateReliverseConfig({
   customFilename?: string;
   skipInstallPrompt?: boolean;
   customPathToTypes?: string;
+  overrides: Partial<ReliverseConfig>;
 }): Promise<void> {
+  // Read the project's package.json if available
   const packageJson = await getPackageJson(projectPath);
+
+  // In dev mode, override blefnk with "reliverse" for the frontend username
   if (frontendUsername === "blefnk" && isDev) {
     frontendUsername = "reliverse";
   }
-  const baseRules = await getDefaultReliverseConfig(
+
+  // Load the default config for this project
+  const defaultConfig = await getDefaultReliverseConfig(
     projectPath,
     isDev,
     projectName,
     frontendUsername,
   );
-  baseRules.projectName = projectName;
-  baseRules.projectAuthor = frontendUsername;
-  baseRules.projectDescription =
-    packageJson?.description ?? baseRules.projectDescription ?? UNKNOWN_VALUE;
-  baseRules.version = packageJson?.version ?? baseRules.version;
-  baseRules.projectLicense = packageJson?.license ?? baseRules.projectLicense;
 
+  // Update some base fields in the default config
+  defaultConfig.projectName = projectName;
+  defaultConfig.projectAuthor = frontendUsername;
+  defaultConfig.projectDescription =
+    packageJson?.description ??
+    defaultConfig.projectDescription ??
+    UNKNOWN_VALUE;
+  defaultConfig.version = packageJson?.version ?? defaultConfig.version;
+  defaultConfig.projectLicense =
+    packageJson?.license ?? defaultConfig.projectLicense;
+
+  // Derive a repository URL based on package.json or a fallback
   const projectNameWithoutAt = projectName?.replace("@", "");
-  baseRules.projectRepository = packageJson?.repository
+  defaultConfig.projectRepository = packageJson?.repository
     ? typeof packageJson.repository === "string"
       ? cleanGitHubUrl(packageJson.repository)
       : cleanGitHubUrl(packageJson.repository.url)
@@ -2110,30 +2175,35 @@ export async function generateReliverseConfig({
       ? `https://github.com/${projectNameWithoutAt}`
       : DEFAULT_DOMAIN;
 
-  baseRules.projectGitService = "github";
-  baseRules.projectDeployService = deployService;
-  baseRules.projectDomain = primaryDomain
+  defaultConfig.projectGitService = "github";
+  defaultConfig.projectDeployService = deployService;
+  defaultConfig.projectDomain = primaryDomain
     ? `https://${primaryDomain.replace(/^https?:\/\//, "")}`
     : projectName
       ? `https://${projectName}.vercel.app`
       : UNKNOWN_VALUE;
 
-  baseRules.features = await detectFeatures(projectPath, packageJson);
-  baseRules.features.i18n = enableI18n ?? false;
-  baseRules.multipleRepoCloneMode = false;
-  baseRules.customUserFocusedRepos = [];
-  baseRules.customDevsFocusedRepos = [];
-  baseRules.hideRepoSuggestions = false;
-  baseRules.customReposOnNewProject = false;
-  baseRules.envComposerOpenBrowser = true;
-  baseRules.gitBehavior = "prompt";
-  baseRules.deployBehavior = "prompt";
-  baseRules.depsBehavior = "prompt";
-  baseRules.i18nBehavior = "prompt";
-  baseRules.scriptsBehavior = "prompt";
-  baseRules.skipPromptsUseAutoBehavior = false;
-  baseRules.codeStyle = {
-    ...baseRules.codeStyle,
+  // Detect project features
+  defaultConfig.features = await detectFeatures(projectPath, packageJson);
+  defaultConfig.features.i18n = enableI18n ?? false;
+
+  // Various behavior defaults
+  defaultConfig.multipleRepoCloneMode = false;
+  defaultConfig.customUserFocusedRepos = [];
+  defaultConfig.customDevsFocusedRepos = [];
+  defaultConfig.hideRepoSuggestions = false;
+  defaultConfig.customReposOnNewProject = false;
+  defaultConfig.envComposerOpenBrowser = true;
+  defaultConfig.gitBehavior = "prompt";
+  defaultConfig.deployBehavior = "prompt";
+  defaultConfig.depsBehavior = "prompt";
+  defaultConfig.i18nBehavior = "prompt";
+  defaultConfig.scriptsBehavior = "prompt";
+  defaultConfig.skipPromptsUseAutoBehavior = false;
+
+  // Code style defaults
+  defaultConfig.codeStyle = {
+    ...defaultConfig.codeStyle,
     dontRemoveComments: true,
     shouldAddComments: true,
     typeOrInterface: "type",
@@ -2160,20 +2230,19 @@ export async function generateReliverseConfig({
     },
   };
 
-  // Determine where to write the config file
+  // Decide where to write the config file
   let effectiveConfigPath: string;
-
   if (customOutputPath && customFilename) {
-    // Use custom path and filename when provided
     effectiveConfigPath = path.join(customOutputPath, customFilename);
   } else {
-    // Use standard path determination with skipPrompt parameter
+    // Use standard logic to figure out TS or JSONC, unless configInfo is already provided
     const configPathInfo =
       configInfo ??
-      (await getReliverseConfigPath(projectPath, skipInstallPrompt));
+      (await getReliverseConfigPath(projectPath, isDev, skipInstallPrompt));
     effectiveConfigPath = configPathInfo.configPath;
   }
 
+  // If not overwriting, attempt to read any existing config
   let existingContent: ReliverseConfig | null = null;
   if (!overwrite && (await fs.pathExists(effectiveConfigPath))) {
     try {
@@ -2182,14 +2251,21 @@ export async function generateReliverseConfig({
       // fallback if reading fails
     }
   }
+
+  // Final merge: default config, existing config, newly derived config, then user overrides
   const effectiveConfig = {
     ...DEFAULT_CONFIG,
     ...existingContent,
-    ...baseRules,
+    ...defaultConfig,
+    ...overrides,
   };
+
+  // If dev mode, attach local dev schema reference
   if (isDev) {
     effectiveConfig.$schema = RELIVERSE_SCHEMA_DEV;
   }
+
+  // Write the final config to disk
   await writeReliverseConfig(
     effectiveConfigPath,
     effectiveConfig,
@@ -2204,13 +2280,21 @@ export async function generateReliverseConfig({
  * ------------------------------------------------------------------
  */
 
+/**
+ * Retrieves or creates the main Reliverse config (and any 'multireli' configs).
+ * Allows an optional custom path to the TS config file.
+ */
 export async function getReliverseConfig(
   projectPath: string,
   isDev: boolean,
+  overrides: Partial<ReliverseConfig>,
+  customTsconfigPath?: string,
 ): Promise<{ config: ReliverseConfig; multireli: ReliverseConfig[] }> {
   const githubUsername = UNKNOWN_VALUE;
   const multireliFolderPath = path.join(projectPath, "multireli");
   const results: ReliverseConfig[] = [];
+
+  // Collect additional configs in "multireli" folder
   if (await fs.pathExists(multireliFolderPath)) {
     const dirItems = await fs.readdir(multireliFolderPath);
     const reliverseFiles = dirItems.filter(
@@ -2219,14 +2303,14 @@ export async function getReliverseConfig(
     const configs = await Promise.all(
       reliverseFiles.map(async (file) => {
         const filePath = path.join(multireliFolderPath, file);
-        let config = await readReliverseConfig(filePath, isDev);
-        if (!config) {
-          config = await parseAndFixConfig(filePath, isDev);
+        let foundConfig = await readReliverseConfig(filePath, isDev);
+        if (!foundConfig) {
+          foundConfig = await parseAndFixReliverseConfig(filePath, isDev);
         }
-        if (!config) {
+        if (!foundConfig) {
           relinka("warn", `Skipping invalid config file: ${filePath}`);
         }
-        return config;
+        return foundConfig;
       }),
     );
     results.push(
@@ -2234,17 +2318,32 @@ export async function getReliverseConfig(
     );
   }
 
-  const { configPath } = await getReliverseConfigPath(projectPath);
+  // Retrieve the path to the main Reliverse config
+  const { configPath } = await getReliverseConfigPath(
+    projectPath,
+    isDev,
+    false,
+    customTsconfigPath,
+  );
+
+  // Ensure a config file exists
   if (!(await fs.pathExists(configPath))) {
-    await createReliverseConfig(projectPath, githubUsername, isDev);
+    await createReliverseConfig(projectPath, githubUsername, isDev, overrides);
   } else {
+    // Check if the file is empty or has only "{}"
     const content = (await fs.readFile(configPath, "utf-8")).trim();
     if (!content || content === "{}") {
-      await createReliverseConfig(projectPath, githubUsername, isDev);
+      await createReliverseConfig(
+        projectPath,
+        githubUsername,
+        isDev,
+        overrides,
+      );
     } else {
+      // If the existing config is invalid, attempt to fix it
       const validConfig = await readReliverseConfig(configPath, isDev);
       if (!validConfig) {
-        const fixed = await parseAndFixConfig(configPath, isDev);
+        const fixed = await parseAndFixReliverseConfig(configPath, isDev);
         if (!fixed) {
           relinka(
             "warn",
@@ -2254,16 +2353,16 @@ export async function getReliverseConfig(
       }
     }
   }
+
+  // Final read
   const mainConfig = await readReliverseConfig(configPath, isDev);
   if (!mainConfig) {
-    relinka(
-      "warn",
-      "Using fallback default config because the config could not be validated.",
-    );
+    relinka("warn", "Using fallback default config due to validation failure.");
     return { config: { ...DEFAULT_CONFIG }, multireli: results };
   }
   if (isDev) {
     mainConfig.$schema = RELIVERSE_SCHEMA_DEV;
   }
+
   return { config: mainConfig, multireli: results };
 }

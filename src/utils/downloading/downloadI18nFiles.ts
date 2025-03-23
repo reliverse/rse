@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 import path from "pathe";
@@ -37,12 +38,12 @@ export async function setupI18nFiles(projectPath: string): Promise<void> {
     }
 
     // Ensure target directory exists
-    await fs.ensureDir(projectPath);
+    await ensuredir(projectPath);
 
     // Generate i18n layout file
     const layoutPath = path.join(projectPath, "src/app/layout.tsx");
     if (!(await fs.pathExists(layoutPath))) {
-      await fs.ensureDir(path.dirname(layoutPath));
+      await ensuredir(path.dirname(layoutPath));
       const layoutContent = `
 import { dir } from "i18next";
 import { languages } from "~/config/i18n";
@@ -99,7 +100,7 @@ export default async function Home() {
     // Generate i18n config
     const i18nConfigPath = path.join(projectPath, "src/config/i18n.ts");
     if (!(await fs.pathExists(i18nConfigPath))) {
-      await fs.ensureDir(path.dirname(i18nConfigPath));
+      await ensuredir(path.dirname(i18nConfigPath));
       const i18nConfigContent = `
 export const languages = ["en", "es", "fr"];
 export const defaultLanguage = "en";

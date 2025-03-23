@@ -6,7 +6,7 @@ import {
 } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
 
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import { askProjectName } from "~/app/prompts/askProjectName.js";
@@ -45,190 +45,204 @@ type MultiRepoPromptResult = {
   isCustomMap: Map<string, boolean>;
 };
 
-/**
- * A collection of random repository examples for user-focused repositories.
- */
-const REPOS_USERS = [
-  "blefnk/all-in-one-nextjs-template",
-  "blefnk/astro-starlight-template",
-  "blefnk/create-next-app",
-  "blefnk/create-t3-app",
-  "blefnk/relivator-nextjs-template",
-  "blefnk/versator-nextjs-template",
-  "onwidget/astrowind",
-  "reliverse/template-browser-extension",
-  "shadcn-ui/taxonomy",
-];
+type MenuOption = {
+  label: string;
+  value: string;
+  hint?: string;
+};
 
 /**
- * A collection of random repository examples for developer-focused repositories.
+ * A collection of repository owners and their repositories
  */
-const REPOS_DEVS = [
-  "47ng/nuqs",
-  "biomejs/biome",
-  "pmndrs/zustand",
-  "reliverse/acme",
-  "reliverse/cli",
-  "reliverse/pm",
-  "reliverse/prompts",
-  "reliverse/relico",
-  "reliverse/relinka",
-  "unjs/template",
-  "webpro-nl/knip",
-];
+const REPO_OWNERS = {
+  blefnk: [
+    "all-in-one-nextjs-template",
+    "astro-starlight-template",
+    "create-next-app",
+    "create-t3-app",
+    "relivator-nextjs-template",
+    "versator-nextjs-template",
+  ],
+  reliverse: [
+    "template-browser-extension",
+    "acme",
+    "cli",
+    "pm",
+    "prompts",
+    "relico",
+    "relinka",
+  ],
+  onwidget: ["astrowind"],
+  "shadcn-ui": ["taxonomy"],
+  "47ng": ["nuqs"],
+  biomejs: ["biome"],
+  pmndrs: ["zustand"],
+  unjs: ["template"],
+  "webpro-nl": ["knip"],
+};
 
 /**
- * Helper function to create menu options from repository list
+ * Creates menu options for repositories based on the provided list,
+ * owner, and configuration.
  */
 function createMenuOptions(
   repos: string[],
+  owner: string,
   config: ReliverseConfig,
-  isUserFocused: boolean,
-) {
-  const customRepos = (
-    isUserFocused
-      ? (config.customUserFocusedRepos ?? [])
-      : (config.customDevsFocusedRepos ?? [])
-  ).map(normalizeGitHubUrl);
+): MenuOption[] {
+  const customRepos = (config.customUserFocusedRepos ?? [])
+    .concat(config.customDevsFocusedRepos ?? [])
+    .map(normalizeGitHubUrl)
+    .filter((repo) => repo.startsWith(`${owner}/`))
+    .map((repo) => repo.split("/")[1])
+    .filter((repo): repo is string => repo !== undefined);
 
-  // Hide predefined repos if hideRepoSuggestions is true and there are custom repos
-  const shouldHidePredefined =
-    config.hideRepoSuggestions && customRepos.length > 0;
-  const allRepos = shouldHidePredefined
-    ? customRepos
-    : [...repos, ...customRepos];
+  const allRepos =
+    config.hideRepoSuggestions && customRepos.length > 0
+      ? customRepos
+      : [...repos, ...customRepos];
 
-  // Only show custom input option when not in multiple mode
   if (!config.multipleRepoCloneMode) {
     return [
       {
-        label: "📝 I want to provide a custom GitHub repo link",
+        label: "📝 I want to provide a custom repository name",
         value: "custom",
       },
-      ...allRepos.map((repo) => ({
-        label: repo,
-        value: repo,
-        hint: customRepos.includes(repo) ? "custom" : undefined,
-      })),
+      ...allRepos.map(
+        (repo): MenuOption => ({
+          label: repo,
+          value: repo,
+          hint: customRepos.includes(repo) ? "custom" : undefined,
+        }),
+      ),
     ];
   }
 
-  return allRepos.map((repo) => ({
-    label: repo,
-    value: repo,
-    hint: customRepos.includes(repo) ? "custom" : undefined,
-  }));
+  return allRepos.map(
+    (repo): MenuOption => ({
+      label: repo,
+      value: repo,
+      hint: customRepos.includes(repo) ? "custom" : undefined,
+    }),
+  );
 }
 
 /**
- * Options for "End-user" category repositories.
- */
-function getUserOptions(config: ReliverseConfig) {
-  return createMenuOptions(REPOS_USERS, config, true);
-}
-
-/**
- * Options for "Developer" category repositories.
- */
-function getDevOptions(config: ReliverseConfig) {
-  return createMenuOptions(REPOS_DEVS, config, false);
-}
-
-/**
- * Helper function to prompt for a repository from a list of options.
- * If "custom" is chosen, it prompts the user for a link.
- * Returns both the `repo` string and a boolean `isCustom`.
+ * Prompts the user for a repository selection.
  */
 async function promptForRepo({
   title,
+  owner,
   options,
-  category,
   config,
 }: {
   title: string;
+  owner: string;
   options: { label: string; value: string }[];
-  category: "users" | "developers";
   config: ReliverseConfig;
 }): Promise<RepoPromptResult | MultiRepoPromptResult> {
-  const customRepos = (
-    category === "users"
-      ? (config.customUserFocusedRepos ?? [])
-      : (config.customDevsFocusedRepos ?? [])
-  ).map(normalizeGitHubUrl);
-
   if (config.multipleRepoCloneMode) {
-    const selections = await multiselectPrompt({
-      title,
-      options,
-    });
-
-    // If selections is empty, ask user to select at least one
+    const selections = await multiselectPrompt({ title, options });
     if (selections.length === 0) {
       relinka("error", "Please select at least one repository.");
-      return promptForRepo({ title, options, category, config });
+      return promptForRepo({ title, owner, options, config });
     }
-
-    // Map selections to normalized URLs and check if each is custom
-    const normalizedSelections = selections.map(normalizeGitHubUrl);
-    const isCustomMap = new Map<string, boolean>(
-      normalizedSelections.map((repo: string) => [
-        repo,
-        customRepos.includes(repo),
-      ]),
-    );
-
-    return {
-      repos: normalizedSelections,
-      isCustomMap,
-    };
+    const isCustomMap = new Map<string, boolean>();
+    const repos = selections.map((repo) => {
+      const fullRepo = `${owner}/${repo}`;
+      isCustomMap.set(fullRepo, false);
+      return fullRepo;
+    });
+    return { repos, isCustomMap };
   } else {
     const selection = await selectPrompt({ title, options });
-
-    // If user chooses "custom", ask for their custom GitHub link
     if (selection === "custom") {
-      const examples = category === "users" ? REPOS_USERS : REPOS_DEVS;
-      const randomUrl = `(e.g. ${examples[Math.floor(Math.random() * examples.length)]})`;
-      let customRepo = await inputPrompt({
-        title: `Enter a GitHub repository link ${randomUrl}`,
+      const customRepo = await inputPrompt({
+        title: `Enter a repository name for ${owner}`,
+        content: `This will be combined as ${owner}/<your-input>`,
       });
-
-      // Normalize the user input
-      customRepo = normalizeGitHubUrl(customRepo);
-
-      return { repo: customRepo, isCustom: true };
+      return { repo: `${owner}/${customRepo}`, isCustom: true };
     }
-
-    // If one of the predefined options is chosen, check if it's from custom repos
-    const normalizedSelection = normalizeGitHubUrl(selection ?? "");
-    return {
-      repo: normalizedSelection,
-      isCustom: customRepos.includes(normalizedSelection),
-    };
+    return { repo: `${owner}/${selection}`, isCustom: false };
   }
 }
 
 /**
- * Unified function to prompt for either user or developer repository selection.
+ * Helper function that handles the common steps for downloading a repository.
+ * It prompts for privacy, dependency installation, project name, and Git history preference,
+ * then downloads the repository.
  */
-async function getCategoryChoice(
-  category: "users" | "developers",
+async function downloadAndSetupRepo(
+  owner: string,
+  repoFullName: string,
   config: ReliverseConfig,
-): Promise<RepoPromptResult | MultiRepoPromptResult> {
-  if (category === "users") {
-    return promptForRepo({
-      title: "What end-user related project do you want to clone?",
-      options: getUserOptions(config),
-      category: "users",
-      config,
-    });
-  } else {
-    return promptForRepo({
-      title: "What developer related project do you want to clone?",
-      options: getDevOptions(config),
-      category: "developers",
-      config,
+  memory: ReliverseMemory,
+  isDev: boolean,
+  cwd: string,
+  isCustom: boolean,
+): Promise<void> {
+  // Check repository privacy if it's not one of the predefined repos
+  let privacy: "public" | "private" = "public";
+  // @ts-expect-error TODO: fix ts
+  if (!REPO_OWNERS[owner]?.includes(repoFullName.split("/")[1])) {
+    privacy = await selectPrompt({
+      title: `Is repo ${repoFullName} public or private?`,
+      options: [
+        { label: "Public", value: "public" },
+        { label: "Private", value: "private" },
+      ],
     });
   }
+
+  const { packageManager } = await getUserPkgManager();
+  let shouldInstallDeps = false;
+  if (!isDev) {
+    shouldInstallDeps = await confirmPrompt({
+      title: "Do you want me to install dependencies?",
+      content: `I can run "${packageManager} install" in the directory of the cloned repo.`,
+    });
+  }
+
+  const projectName = await askProjectName({ repoName: repoFullName });
+  const gitPreference = await selectPrompt({
+    title: "How would you like to handle Git history?",
+    content: `(project: ${projectName} | repo: ${repoFullName})`,
+    options: [
+      {
+        label: "Preserve original Git history",
+        hint: "keeps the original .git folder",
+        value: "preserve",
+      },
+      {
+        label: "Start fresh Git history",
+        hint: "initializes a new .git folder",
+        value: "fresh",
+      },
+    ],
+  });
+
+  let githubToken = "";
+  if (privacy === "private") {
+    githubToken = await ensureGithubToken(memory, "prompt");
+  }
+
+  const { source, dir } = await handleDownload({
+    cwd,
+    isDev,
+    skipPrompts: false,
+    projectPath: "",
+    projectName,
+    selectedRepo: repoFullName,
+    githubToken,
+    preserveGit: gitPreference === "preserve",
+    config: gitPreference === "fresh" ? config : undefined,
+    install: shouldInstallDeps,
+    isCustom,
+    isTemplateDownload: false,
+    cache: false,
+  });
+
+  relinka("success", `🎉 ${source} was downloaded to ${dir}`);
 }
 
 /**
@@ -255,169 +269,64 @@ export async function showCloneProjectMenu({
     "If you want a fully personalized project bootstrapped with a desired template, re-run the CLI and choose the `✨ Create a brand new project` option instead.",
   );
 
-  const category = await selectPrompt({
-    title: "What repo category do you want to clone from GitHub?",
-    options: [
-      {
-        label: "Developer related",
-        hint: "e.g. npm package, eslint plugin, etc",
-        value: "developers",
-      },
-      {
-        label: "End-user related",
-        hint: "e.g. web app, browser extension, cli, etc",
-        value: "users",
-      },
-      {
-        label: "👈 Exit",
-        value: "exit",
-      },
-    ],
+  // Prompt for the repository owner.
+  const ownerOptions = [
+    ...Object.keys(REPO_OWNERS).map((owner) => ({
+      label: owner,
+      value: owner,
+    })),
+    { label: "📝 Enter a custom owner", value: "custom" },
+    { label: "👈 Exit", value: "exit" },
+  ];
+
+  const selectedOwner = await selectPrompt({
+    title: "Select or enter a repository owner",
+    options: ownerOptions,
   });
 
-  // If user selects "Exit", we stop here
-  if (category === "exit") {
+  if (selectedOwner === "exit") {
     relinka("info", "Exiting without cloning any repository.");
     return;
   }
 
-  // Prompt the user with a different set of options depending on the category
-  const result = await getCategoryChoice(category, config);
+  const owner =
+    selectedOwner === "custom"
+      ? await inputPrompt({
+          title: "Enter the GitHub username or organization",
+        })
+      : selectedOwner;
 
-  if ("repos" in result) {
-    // Handle multiple repos
-    for (const repo of result.repos) {
-      // Decide if it's public or private (only relevant for custom repos)
-      let privacy = "public";
-      // Check if the repo is in the predefined list
-      const isCustom = !REPOS_DEVS.includes(repo);
-      if (isCustom) {
-        privacy = await selectPrompt({
-          title: `Is repo ${repo} public or private?`,
-          options: [
-            { label: "Public", value: "public" },
-            { label: "Private", value: "private" },
-          ],
-        });
-      }
+  // Get repository suggestions for the owner.
+  const ownerRepos = REPO_OWNERS[owner as keyof typeof REPO_OWNERS] || [];
+  const repoPromptResult = await promptForRepo({
+    title: `Select repositories from ${owner}`,
+    owner,
+    options: createMenuOptions(ownerRepos, owner, config),
+    config,
+  });
 
-      const { packageManager } = await getUserPkgManager();
-      let shouldInstallDeps = false;
-      if (!isDev) {
-        shouldInstallDeps = await confirmPrompt({
-          title: "Do you want me to install dependencies?",
-          content: `I can run "${packageManager} install" in the dir of the cloned repo.`,
-        });
-      }
-
-      const projectName = await askProjectName({ repoName: repo });
-
-      // Ask about Git history preference
-      const gitPreference = await selectPrompt({
-        title: "How would you like to handle Git history?",
-        content: `(project: ${projectName} | repo: ${repo})`,
-        options: [
-          {
-            label: "Preserve original Git history",
-            hint: "keeps the original .git folder",
-            value: "preserve",
-          },
-          {
-            label: "Start fresh Git history",
-            hint: "initializes a new .git folder",
-            value: "fresh",
-          },
-        ],
-      });
-
-      // Download the repository
-      let githubToken = "";
-      if (privacy === "private") {
-        githubToken = await ensureGithubToken(memory, "prompt");
-      }
-      const { source, dir } = await handleDownload({
-        cwd,
+  // Download each selected repository.
+  if ("repos" in repoPromptResult) {
+    for (const repo of repoPromptResult.repos) {
+      await downloadAndSetupRepo(
+        owner,
+        repo,
+        config,
+        memory,
         isDev,
-        skipPrompts: false,
-        projectPath: "",
-        projectName,
-        selectedRepo: repo,
-        githubToken,
-        preserveGit: gitPreference === "preserve",
-        config: gitPreference === "fresh" ? config : undefined,
-        install: shouldInstallDeps,
-        isCustom,
-        isTemplateDownload: false,
-      });
-      relinka("success", `🎉 ${source} was downloaded to ${dir}`);
+        cwd,
+        repoPromptResult.isCustomMap.get(repo) || false,
+      );
     }
   } else {
-    // Handle single repo
-    // Decide if it's public or private (only relevant for custom repos)
-    let privacy = "public";
-    // Check if the repo is in the predefined list
-    const isCustom = !REPOS_DEVS.includes(result.repo);
-    if (isCustom) {
-      privacy = await selectPrompt({
-        title: `Is repo ${result.repo} public or private?`,
-        options: [
-          { label: "Public", value: "public" },
-          { label: "Private", value: "private" },
-        ],
-      });
-    }
-
-    const { packageManager } = await getUserPkgManager();
-    let shouldInstallDeps = false;
-    if (!isDev) {
-      shouldInstallDeps = await confirmPrompt({
-        title: "Do you want me to install dependencies?",
-        content: `I can run "${packageManager} install" in the dir of the cloned repo.`,
-      });
-    }
-
-    const projectName = await askProjectName({ repoName: result.repo });
-
-    // Ask about Git history preference
-    const gitPreference = await selectPrompt({
-      title: "How would you like to handle Git history?",
-      content: `(project: ${projectName} | repo: ${result.repo})`,
-      options: [
-        {
-          label: "Preserve original Git history",
-          hint: "keeps the original .git folder",
-          value: "preserve",
-        },
-        {
-          label: "Start fresh Git history",
-          hint: "initializes a new .git folder",
-          value: "fresh",
-        },
-      ],
-    });
-
-    // Download the repository
-    let githubToken = "";
-    if (privacy === "private") {
-      githubToken = await ensureGithubToken(memory, "prompt");
-    }
-    const { source, dir } = await handleDownload({
-      cwd,
+    await downloadAndSetupRepo(
+      owner,
+      repoPromptResult.repo,
+      config,
+      memory,
       isDev,
-      skipPrompts: false,
-      projectPath: "",
-      projectName,
-      selectedRepo: result.repo,
-      githubToken,
-      preserveGit: gitPreference === "preserve",
-      config: gitPreference === "fresh" ? config : undefined,
-      install: shouldInstallDeps,
-      isCustom: result.isCustom,
-      isTemplateDownload: false,
-    });
-    relinka(
-      "success",
-      `I have downloaded the repo ${source} to ${dir}. Enjoy! 🎉`,
+      cwd,
+      repoPromptResult.isCustom,
     );
   }
 }

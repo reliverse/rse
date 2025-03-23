@@ -154,7 +154,7 @@ async function detectPackageManagers(
   }
 
   // 3. Environment detection
-  const pkgManagerUserAgent = process.env["npm_config_user_agent"] ?? "";
+  const pkgManagerUserAgent = process.env.npm_config_user_agent ?? "";
   if (pkgManagerUserAgent.startsWith("yarn")) {
     detected.push({ packageManager: "yarn", source: "env" });
   } else if (pkgManagerUserAgent.startsWith("pnpm")) {

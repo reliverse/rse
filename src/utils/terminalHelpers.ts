@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 import { cwd } from "node:process";
@@ -12,7 +13,7 @@ export const handleError = (error: unknown) =>
  */
 export async function cd(dir: string): Promise<void> {
   try {
-    await fs.ensureDir(dir);
+    await ensuredir(dir);
     await fs.access(dir);
     process.chdir(dir);
     relinka("info-verbose", `Changed directory to: ${process.cwd()}`);

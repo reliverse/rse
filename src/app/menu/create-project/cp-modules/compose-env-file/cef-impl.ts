@@ -11,7 +11,7 @@ import open from "open";
 import path from "pathe";
 import { getRandomValues } from "uncrypto";
 
-import type { ReliverseConfig } from "~/libs/config/config-main.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 
 import { db } from "~/app/db/client.js";
 import { encrypt, decrypt } from "~/app/db/config.js";

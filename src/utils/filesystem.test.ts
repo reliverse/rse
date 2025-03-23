@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import { expect, test, describe, beforeEach, afterEach } from "bun:test";
 import fs from "fs-extra";
 import path from "pathe";
@@ -15,7 +16,7 @@ if (activateHardcodedPathCheck) {
 describe("filesystem helpers", () => {
   beforeEach(async () => {
     if (!activateHardcodedPathCheck) {
-      await fs.ensureDir(TEST_DIR);
+      await ensuredir(TEST_DIR);
     }
   });
 

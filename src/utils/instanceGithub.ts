@@ -3,7 +3,7 @@ import { Octokit } from "@octokit/rest";
 import { inputPrompt, relinka } from "@reliverse/prompts";
 
 import { askUsernameGithub } from "~/app/prompts/askUsernameGithub.js";
-import { cliVersion } from "~/libs/sdk/constants.js";
+import { cliVersion } from "~/libs/cfg/constants/cfg-details.js";
 
 import type { ReliverseMemory } from "./schemaMemory.js";
 

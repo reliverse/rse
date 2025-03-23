@@ -11,6 +11,7 @@
       "node_modules/",
       "dist-jsr/",
       "dist-npm/",
+      "dist-libs/",
       "tests-runtime/",
       "bun.lock"
     ]

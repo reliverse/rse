@@ -1,3 +1,4 @@
+import { ensuredir } from "@reliverse/fs";
 import { relinka } from "@reliverse/prompts";
 import { destr } from "destr";
 import { execaCommand } from "execa";
@@ -6,7 +7,10 @@ import path from "pathe";
 
 import type { DeploymentService, VSCodeSettings } from "~/types.js";
 
-import { CONFIG_CATEGORIES, UNKNOWN_VALUE } from "~/libs/sdk/constants.js";
+import {
+  CONFIG_CATEGORIES,
+  UNKNOWN_VALUE,
+} from "~/libs/cfg/constants/cfg-details.js";
 import {
   generateReliverseConfig,
   getReliverseConfigPath,
@@ -33,7 +37,7 @@ async function generateVSCodeSettings(
   overwrite: boolean,
 ): Promise<void> {
   const vscodePath = path.join(projectPath, ".vscode");
-  await fs.ensureDir(vscodePath);
+  await ensuredir(vscodePath);
 
   const settingsPath = path.join(vscodePath, "settings.json");
   const defaultSettings: VSCodeSettings = {
@@ -133,8 +137,8 @@ export async function generateConfigFiles(
         frontendUsername === "reliverse" ? "blefnk" : frontendUsername;
     }
 
-    // Use the unified helper to determine the active config file name.
-    const configInfo = await getReliverseConfigPath(projectPath);
+    // Determine the active config file name.
+    const configInfo = await getReliverseConfigPath(projectPath, isDev, false);
     const mainConfigFileName = path.basename(configInfo.configPath);
 
     // The reliverse config generation
@@ -156,9 +160,10 @@ export async function generateConfigFiles(
           configInfo,
           ...(isDev && configInfo?.isTS
             ? {
-                customPathToTypes: "./src/libs/config/config-main.js",
+                customPathToTypes: "./src/libs/cfg/cfg-main.js",
               }
             : {}),
+          overrides: {},
         });
         return true;
       },

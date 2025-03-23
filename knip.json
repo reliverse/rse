@@ -3,7 +3,6 @@
   "entry": [
     "eslint.config.js",
     "build.config.ts",
-    "build.publish.ts",
     "addons/**/*.ts",
     "src/main.ts",
     "src/libs/**/*.ts"
@@ -11,7 +10,6 @@
   "project": [
     "eslint.config.js",
     "build.config.ts",
-    "build.publish.ts",
     "addons/**/*.ts",
     "src/**/*.ts"
   ],

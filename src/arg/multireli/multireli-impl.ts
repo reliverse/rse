@@ -1,9 +1,10 @@
+import { ensuredir } from "@reliverse/fs";
 import { confirmPrompt, relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 import path from "pathe";
 
 import { askUsernameFrontend } from "~/app/prompts/askUsernameFrontend.js";
-import { homeDir } from "~/libs/sdk/constants.js";
+import { homeDir } from "~/libs/cfg/constants/cfg-details.js";
 import { initGithubSDK } from "~/utils/instanceGithub.js";
 import { getReliverseMemory } from "~/utils/reliverseMemory.js";
 
@@ -55,7 +56,7 @@ export function getEnvCacheDir(): string {
  */
 export async function ensureEnvCacheDir(): Promise<string> {
   const cacheDir = getEnvCacheDir();
-  await fs.ensureDir(cacheDir);
+  await ensuredir(cacheDir);
   return cacheDir;
 }
 

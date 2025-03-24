@@ -15,7 +15,8 @@ export type MainMenuChoice =
   | "isDevTools"
   | "native-cli"
   | "manual"
-  | "exit";
+  | "exit"
+  | "ai";
 
 type MainMenuOption = {
   label: string;
@@ -71,14 +72,19 @@ export async function getMainMenuOptions(
       hint: multiConfigMsg,
       value: "clone",
     },
+    { label: "💬 Chat with Reliverse AI", value: "ai" },
+    {
+      label: "🧰 Open developer tools",
+      value: "isDevTools",
+    },
+    {
+      label: "👈 Exit",
+      value: "exit",
+      hint: re.dim("ctrl+c anywhere"),
+    },
   ];
 
-  // Dev tools
-  options.push({
-    label: "🧰 Open developer tools",
-    value: "isDevTools",
-  });
-
+  // TODO: remove, deprecated
   // Possibly show "native-cli" if using Bun PM but not running in Bun
   const isBun = await isBunPM();
   if (isBun && !isBunRuntime) {
@@ -102,13 +108,6 @@ export async function getMainMenuOptions(
       hint: re.dim(`Detected: ${detectedCount}`),
     });
   }
-
-  // Always add exit
-  options.push({
-    label: "👈 Exit",
-    value: "exit",
-    hint: re.dim("ctrl+c anywhere"),
-  });
 
   return options;
 }

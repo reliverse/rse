@@ -14,7 +14,6 @@ import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import { getRandomMessage } from "~/app/db/messages.js";
 import { endTitle, UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
-import { aiChatHandler } from "~/utils/aiChatHandler.js";
 import { experimental } from "~/utils/badgeNotifiers.js";
 import { detectProjectsWithReliverse } from "~/utils/reliverseConfig.js";
 
@@ -227,7 +226,6 @@ export async function showDevToolsMenu(params: ParamsOmitReli) {
     rmTestsRuntime: "rm-tests-runtime",
     downloadTemplate: "download-template",
     openVercelTools: "open-vercel-tools",
-    aiChatTest: "ai-chat-test",
     exit: "exit",
   } as const;
 
@@ -255,7 +253,6 @@ export async function showDevToolsMenu(params: ParamsOmitReli) {
         label: `Open Vercel devtools ${experimental}`,
         value: toolsOptions.openVercelTools,
       },
-      { label: "Test chat with Reliverse AI", value: toolsOptions.aiChatTest },
       { label: "👈 Exit", value: toolsOptions.exit },
     ],
   });
@@ -271,8 +268,6 @@ export async function showDevToolsMenu(params: ParamsOmitReli) {
       cwd,
       skipPrompts,
     );
-  } else if (option === toolsOptions.aiChatTest) {
-    await aiChatHandler(memory);
   } else if (option === toolsOptions.openVercelTools) {
     await openVercelTools(memory);
   }

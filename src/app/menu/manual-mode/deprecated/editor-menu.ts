@@ -27,15 +27,13 @@ import {
   convertDatabaseProvider,
   convertPrismaToDrizzle,
 } from "~/utils/codemods/convertDatabase.js";
+import { getProjectContent } from "~/utils/getProjectContent.js";
 import { handleCleanup } from "~/utils/handlers/handleCleanup.js";
 import { handleCodemods } from "~/utils/handlers/handleCodemods.js";
 import { initGithubSDK } from "~/utils/instanceGithub.js";
 import { initVercelSDK } from "~/utils/instanceVercel.js";
 import { checkScriptExists } from "~/utils/pkgJsonHelpers.js";
-import {
-  getProjectContent,
-  type DetectedProject,
-} from "~/utils/reliverseConfig.js";
+import { type DetectedProject } from "~/utils/reliverseConfig.js";
 
 type ProjectMenuOption =
   | "git-deploy"
@@ -51,9 +49,9 @@ type ProjectMenuOption =
   | "i18n"
   | "exit";
 
-// ──────────────────────────────────────────────
+// =============================================
 // Main Handler Function
-// ──────────────────────────────────────────────
+// =============================================
 export async function handleOpenProjectMenu(
   projects: DetectedProject[],
   isDev: boolean,

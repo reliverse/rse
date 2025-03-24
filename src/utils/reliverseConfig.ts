@@ -46,6 +46,7 @@ import {
   type ReliverseConfig,
 } from "~/libs/cfg/constants/cfg-schema.js";
 import { getBiomeConfig } from "~/utils/configHandler.js";
+import { getProjectContent } from "~/utils/getProjectContent.js";
 
 /* ------------------------------------------------------------------
 * Helper Function: Repair and Parse JSON
@@ -1238,47 +1239,6 @@ export async function getDefaultReliverseConfig(
  * Project Detection and Additional Logic
  * ------------------------------------------------------------------
  */
-
-/**
- * Gets information about the project content, separating required and optional elements.
- *
- * @param projectPath - Path to the project directory
- * @returns Object containing required and optional content status
- */
-export async function getProjectContent(projectPath: string): Promise<{
-  requiredContent: {
-    fileReliverse: boolean; // Whether reliverse config file exists
-    filePackageJson: boolean; // Whether package.json exists
-  };
-  optionalContent: {
-    dirNodeModules: boolean; // Whether node_modules directory exists
-    dirGit: boolean; // Whether .git directory exists
-  };
-}> {
-  // Check for reliverse config files
-  const configJSONC = path.join(projectPath, cliConfigJsonc);
-  const configTS = path.join(projectPath, cliConfigTs);
-  const fileReliverse =
-    (await fs.pathExists(configJSONC)) || (await fs.pathExists(configTS));
-
-  // Check for package.json
-  const filePackageJson = await fs.pathExists(
-    path.join(projectPath, "package.json"),
-  );
-
-  // Check for node_modules directory
-  const dirNodeModules = await fs.pathExists(
-    path.join(projectPath, "node_modules"),
-  );
-
-  // Check for .git directory
-  const dirGit = await fs.pathExists(path.join(projectPath, ".git"));
-
-  return {
-    requiredContent: { fileReliverse, filePackageJson },
-    optionalContent: { dirNodeModules, dirGit },
-  };
-}
 
 export type DetectedProject = {
   name: string;

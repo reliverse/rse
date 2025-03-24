@@ -9,9 +9,9 @@ import semver from "semver";
 import { glob } from "tinyglobby";
 import { fileURLToPath } from "url";
 
-// ────────────────────────────────────────────────
+// ================================================
 // Configuration & Constants
-// ────────────────────────────────────────────────
+// ================================================
 
 const verbose = false;
 const BASE_URL = "https://jsr.io";
@@ -20,9 +20,9 @@ const BASE_URL = "https://jsr.io";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-// ────────────────────────────────────────────────
+// ================================================
 // Type Definitions
-// ────────────────────────────────────────────────
+// ================================================
 
 /** Package-level metadata structure returned by JSR. */
 type PackageMeta = {
@@ -44,9 +44,9 @@ type VersionMeta = {
   exports?: Record<string, string>;
 };
 
-// ────────────────────────────────────────────────
+// ================================================
 // HTTP & JSON Helpers
-// ────────────────────────────────────────────────
+// ================================================
 
 /**
  * Fetches JSON from the provided URL using ofetch.
@@ -61,9 +61,9 @@ async function fetchJson<T>(url: string): Promise<T> {
   }
 }
 
-// ────────────────────────────────────────────────
+// ================================================
 // JSR API Helpers
-// ────────────────────────────────────────────────
+// ================================================
 
 /**
  * Fetches the package metadata (meta.json) for @scope/packageName from JSR.
@@ -211,9 +211,9 @@ async function renameTxtToTsx(dir: string): Promise<void> {
   }
 }
 
-// ────────────────────────────────────────────────
+// ================================================
 // Main Download Function
-// ────────────────────────────────────────────────
+// ================================================
 
 /**
  * Downloads all files for a given JSR package concurrently.

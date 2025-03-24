@@ -25,9 +25,9 @@ import {
   shouldRegenerateSchema,
 } from "./schemaTemplate.js";
 
-// ────────────────────────────────────────────────
+// ================================================
 // Type Definitions
-// ────────────────────────────────────────────────
+// ================================================
 
 // Extract project template type from the config schema.
 export type RepoFromSchema = NonNullable<
@@ -49,9 +49,9 @@ export type CloneOrTemplateRepo = {
 
 export type RepoOption = CloneOrTemplateRepo["id"] | "unknown";
 
-// ────────────────────────────────────────────────
+// ================================================
 // Repo Options
-// ────────────────────────────────────────────────
+// ================================================
 
 export const REPO_TEMPLATES: CloneOrTemplateRepo[] = [
   {
@@ -134,9 +134,9 @@ export const REPO_TEMPLATES: CloneOrTemplateRepo[] = [
   },
 ];
 
-// ────────────────────────────────────────────────
+// ================================================
 // Repos Config Utilities
-// ────────────────────────────────────────────────
+// ================================================
 
 async function getReposConfigPath(): Promise<string> {
   await ensuredir(cliHomeRepos);
@@ -177,9 +177,9 @@ export async function getRepoInfo(repoId: string): Promise<RepoInfo | null> {
   return config.repos.find((t) => t.id === repoId) ?? null;
 }
 
-// ────────────────────────────────────────────────
+// ================================================
 // Fetch Repository Data from UNGH API
-// ────────────────────────────────────────────────
+// ================================================
 
 type UnghRepoResponse = {
   repo: {
@@ -208,9 +208,9 @@ async function fetchRepoData(
   }
 }
 
-// ────────────────────────────────────────────────
+// ================================================
 // Save Repository to Local Device
-// ────────────────────────────────────────────────
+// ================================================
 
 export async function saveRepoToDevice(
   repo: CloneOrTemplateRepo,
@@ -277,9 +277,9 @@ export async function saveRepoToDevice(
   }
 }
 
-// ────────────────────────────────────────────────
+// ================================================
 // Template Options for CLI Prompts
-// ────────────────────────────────────────────────
+// ================================================
 
 export const TEMP_FULLSTACK_WEBSITE_TEMPLATE_OPTIONS = {
   "blefnk/relivator-nextjs-template": {

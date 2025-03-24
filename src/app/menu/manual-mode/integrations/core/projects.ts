@@ -14,10 +14,15 @@ import { createTSConfig } from "~/utils/createTSConfig.js";
 import { isDirectoryEmpty } from "~/utils/filesysHelpers.js";
 import {
   getProjectContent,
+  type RequiredProjectContent,
+} from "~/utils/getProjectContent.js";
+import {
   getReliverseConfig,
   detectProjectsWithReliverse,
 } from "~/utils/reliverseConfig.js";
 import { findTsconfigUp } from "~/utils/tsconfigHelpers.js";
+
+import type { ShowMenuResult } from "./types.js";
 
 import { checkMissingDependencies } from "./deps.js";
 import { getPromptContent } from "./prompts.js";
@@ -28,40 +33,66 @@ import {
 } from "./templates.js";
 
 /**
- * Shows a single selection menu allowing the user to manage
- * an existing project or create a new one. Also handles empty directories.
+ * Defines what is returned when selecting or creating a project.
+ */
+export type ProjectSelectionResult = {
+  projectPath: string;
+  wasNewlyCreated: boolean;
+};
+
+/**
+ * Constructs the menu options for selecting an existing project
+ * or creating a new one. Includes an "Exit" option.
+ */
+function buildProjectSelectionMenuOptions(
+  cwd: string,
+  detectedProjects: { path: string }[],
+  directoryEmpty: boolean,
+) {
+  const baseOptions = detectedProjects.map((proj) => ({
+    label: `Edit: ${path.relative(cwd, proj.path)}`,
+    value: proj.path,
+    hint: re.dim(proj.path),
+  }));
+
+  baseOptions.push({
+    label: "Create new project",
+    value: "new-project",
+    hint: re.dim("create a new project"),
+  });
+
+  baseOptions.push({
+    label: "Exit",
+    value: "exit",
+    hint: re.dim("exits the manual builder"),
+  });
+
+  return {
+    title: "Reliverse Project Selection",
+    content: directoryEmpty
+      ? `Dir ${cwd} is empty`
+      : "Choose an existing project or create a new one.",
+    options: baseOptions,
+  };
+}
+
+/**
+ * Shows a menu to pick an existing Reliverse project or create a new one.
  */
 export async function handleProjectSelectionMenu(
   cwd: string,
   isDev: boolean,
 ): Promise<string> {
-  // Detect all subprojects in this directory
   const detectedProjects = await detectProjectsWithReliverse(cwd, isDev);
   const directoryEmpty = await isDirectoryEmpty(cwd);
 
-  // Basic menu with subprojects (if any), plus "Create new" and "Exit"
-  const menuOptions: { label: string; value: string; hint?: string }[] =
-    detectedProjects.map((proj) => ({
-      label: `Edit: ${path.relative(cwd, proj.path)}`,
-      value: proj.path,
-      hint: re.dim(proj.path),
-    }));
+  const menuData = buildProjectSelectionMenuOptions(
+    cwd,
+    detectedProjects,
+    directoryEmpty,
+  );
 
-  // Provide option to create new project
-  menuOptions.push({
-    label: "Create new project",
-    value: "new-project",
-  });
-
-  menuOptions.push({ label: "Exit", value: "exit" });
-
-  const selectedOption = await selectPrompt({
-    title: "Reliverse Project Selection",
-    content: directoryEmpty
-      ? `Dir ${cwd} is empty`
-      : "Choose an existing project or create a new one.",
-    options: menuOptions,
-  });
+  const selectedOption = await selectPrompt(menuData);
 
   if (selectedOption === "exit") {
     process.exit(0);
@@ -71,35 +102,30 @@ export async function handleProjectSelectionMenu(
     const projectName = await askProjectName({});
     const projectPath = path.resolve(cwd, projectName);
     await createNewProject(projectPath, projectName, isDev);
-    // After creating a project, we switch to that path
     return projectPath;
   }
 
-  // If user selected an existing project path, return it as the new cwd
   return selectedOption;
 }
 
 /**
- * Creates a new project setup with package.json, tsconfig, and Reliverse config.
- * If in dev mode, attempts to locate a shared tsconfig in parent directories.
+ * Creates a new project directory and initializes it with basic config files.
+ * Also prompts the user for additional setup steps.
  */
 export async function createNewProject(
   projectPath: string,
   projectName: string,
   isDev: boolean,
 ): Promise<void> {
-  // Prompt if this project is a library or an app first
   const projectType = await askAppOrLib(projectName);
   const isLib = projectType === "lib";
   const projectFramework: ProjectFramework = isLib ? "npm-jsr" : "unknown";
 
-  // Then create the project folder
   await ensuredir(projectPath);
 
   await createPackageJSON(projectPath, projectName, isLib);
   await createTSConfig(projectPath, isLib, isDev);
 
-  // Attempt to inherit a tsconfig if dev mode
   let customTsconfigPath: string | undefined;
   if (isDev) {
     const foundTsconfig = await findTsconfigUp(path.resolve(projectPath));
@@ -118,7 +144,6 @@ export async function createNewProject(
     customTsconfigPath,
   );
 
-  // Prompt next steps and offer to open in an IDE
   await nextStepsPrompt({
     title: `Created new project "${projectName}" with minimal Reliverse config.`,
     content: [
@@ -141,48 +166,41 @@ export async function createNewProject(
 }
 
 /**
- * Presents a menu for an existing project that meets all requirements,
- * allowing dependency installation, template updates, or settings edits.
+ * Presents a menu for an existing project that already has the necessary files.
+ * Allows the user to install dependencies, update project templates, or edit settings.
  */
 export async function showExistingProjectMenu(
   cwd: string,
   isDev: boolean,
 ): Promise<{ areDependenciesMissing: boolean }> {
-  // Gather content information
   const { requiredContent, optionalContent } = await getProjectContent(cwd);
 
-  // Prepare dependency info
   const { depsMissing } = await checkMissingDependencies(
     cwd,
     requiredContent,
     optionalContent,
   );
 
-  // Check for template updates
   const { updateAvailable, updateInfo } = await getTemplateUpdateInfo(
     cwd,
     isDev,
     requiredContent.fileReliverse,
   );
 
-  // Build menu options
   const menuOptions = buildExistingProjectMenuOptions(
     depsMissing,
     updateAvailable,
     updateInfo,
   );
 
-  // Determine content for the prompt
   const promptContent = getPromptContent(depsMissing, updateAvailable);
 
-  // Prompt user with the final menu
   const action = await selectPrompt({
     title: "Manual Builder Mode",
     content: promptContent,
     options: menuOptions,
   });
 
-  // Handle the user's choice
   if (action === "install-deps") {
     await askInstallDeps(cwd);
   } else if (action === "update-template" && updateInfo?.latestDate) {
@@ -195,12 +213,12 @@ export async function showExistingProjectMenu(
     );
   }
 
-  // Return final condition on whether deps are missing
   return { areDependenciesMissing: depsMissing };
 }
 
 /**
- * Constructs the menu options for an existing project, based on missing deps or update info.
+ * Builds the selection menu for an existing project, reflecting whether
+ * dependencies are missing or a template update is available.
  */
 function buildExistingProjectMenuOptions(
   depsMissing: boolean,
@@ -222,10 +240,10 @@ function buildExistingProjectMenuOptions(
       label: "🔃 Update project template",
       value: "update-template",
       hint: re.dim(
-        `Current: ${updateInfo.currentDate.slice(
+        `Current: ${updateInfo.currentDate.slice(0, 10)}, Latest: ${updateInfo.latestDate?.slice(
           0,
           10,
-        )}, Latest: ${updateInfo.latestDate?.slice(0, 10)}`,
+        )}`,
       ),
     });
   }
@@ -243,4 +261,52 @@ function buildExistingProjectMenuOptions(
   });
 
   return menuOptions;
+}
+
+/**
+ * Determines the project status by checking whether the necessary
+ * Reliverse and package.json files exist in this directory.
+ */
+export function determineProjectStatus(
+  requiredContent: RequiredProjectContent,
+): "new" | "existing" | "incomplete" {
+  const isNewReliverseProject =
+    !requiredContent.fileReliverse && requiredContent.filePackageJson;
+  const isExistingProject = Object.values(requiredContent).every(Boolean);
+
+  if (isNewReliverseProject) return "new";
+  if (isExistingProject) return "existing";
+  return "incomplete";
+}
+
+/**
+ * Sets up new Reliverse configuration files for a project without them.
+ */
+export async function handleNewProject(
+  cwd: string,
+  isDev: boolean,
+): Promise<ShowMenuResult> {
+  relinka("info", "Setting up Reliverse config for this project...");
+  await getReliverseConfig(cwd, isDev, {});
+  relinka("success", "Reliverse config created. Please re-run the builder.");
+  return { areDependenciesMissing: false };
+}
+
+/**
+ * Calls the advanced menu handler for a project that already has necessary files.
+ */
+export async function handleExistingProject(
+  cwd: string,
+  isDev: boolean,
+): Promise<ShowMenuResult> {
+  return showExistingProjectMenu(cwd, isDev);
+}
+
+/**
+ * Explains that the current directory lacks the files needed for Reliverse work.
+ */
+export function handleIncompleteProject(): ShowMenuResult {
+  relinka("info", "Project doesn't meet requirements for manual builder menu.");
+  relinka("info", "Ensure you have a package.json and reliverse config file.");
+  return { areDependenciesMissing: true };
 }

@@ -17,8 +17,8 @@ import { ensureDbInitialized } from "~/app/menu/create-project/cp-modules/git-de
 import { checkVercelDeployment } from "~/app/menu/create-project/cp-modules/git-deploy-prompts/vercel/vercel-check.js";
 import { manageDrizzleSchema } from "~/app/menu/manual-mode/deprecated/drizzle/manageDrizzleSchema.js";
 import { handleIntegrations } from "~/app/menu/manual-mode/deprecated/editor-impl.js";
-import { useAddonLanguine } from "~/app/menu/manual-mode/deprecated/languine/languine-mod.js";
 import { manageShadcn } from "~/app/menu/manual-mode/deprecated/shadcn/shadcn-mod.js";
+import { useLanguine } from "~/app/menu/manual-mode/integrations/i18n/languine.js";
 import { askInstallDeps } from "~/app/prompts/askInstallDeps.js";
 import { askUsernameFrontend } from "~/app/prompts/askUsernameFrontend.js";
 import { envArgImpl } from "~/arg/env/env-impl.js";
@@ -409,7 +409,7 @@ export async function handleOpenProjectMenu(
     }
 
     case "languine": {
-      await useAddonLanguine(selectedProject.path);
+      await useLanguine(selectedProject.path);
       break;
     }
 

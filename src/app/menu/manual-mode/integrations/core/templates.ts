@@ -5,7 +5,11 @@ import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
 
 import { UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { REPO_TEMPLATES } from "~/utils/projectRepository.js";
-import { updateReliverseConfig } from "~/utils/reliverseConfig.js";
+import {
+  getReliverseConfigPath,
+  readReliverseConfig,
+  updateReliverseConfig,
+} from "~/utils/reliverseConfig.js";
 
 /**
  * Response type for UNGH API repository information
@@ -136,4 +140,30 @@ export async function updateProjectTemplateDate(
       `Failed to update template date: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
+}
+
+/**
+ * Retrieves template update info (if any) based on reliverse config presence.
+ */
+export async function getTemplateUpdateInfo(
+  cwd: string,
+  isDev: boolean,
+  hasReliverseFile: boolean,
+): Promise<{
+  updateAvailable: boolean;
+  updateInfo: TemplateUpdateInfo | null;
+}> {
+  let updateInfo: TemplateUpdateInfo | null = null;
+  let updateAvailable = false;
+
+  if (hasReliverseFile) {
+    const { configPath } = await getReliverseConfigPath(cwd, isDev, false);
+    const projectConfig = await readReliverseConfig(configPath, isDev);
+    if (projectConfig) {
+      updateInfo = await checkForTemplateUpdate(projectConfig);
+      updateAvailable = updateInfo.hasUpdate;
+    }
+  }
+
+  return { updateAvailable, updateInfo };
 }

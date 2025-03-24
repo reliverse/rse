@@ -18,7 +18,7 @@ _Prerequisites: [Git](https://git-scm.com/downloads), [Node.js](https://nodejs.o
 - **Support multiple frameworks**: Enjoy seamless compatibility with Next.js and beyond.  
 - **Customize with templates**: Clone pre-built templates and merge them conflict-free.  
 - **Automate GitHub & deployments**: Quickly create GitHub repositories, push commits, and deploy to Vercel.  
-- **Reliverse Addons**: `🔬 Create/edit project manually` to enable even more features and integrations.
+- **Reliverse Addons**: Use `🔬 Create/edit project manually` to enable even more features and integrations.
 
 ## Commands
 

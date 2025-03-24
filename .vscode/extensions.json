@@ -1,7 +1,12 @@
 {
   "recommendations": [
-    "biomejs.biome",
+    "fabiospampinato.vscode-open-multiple-files",
+    "davidanson.vscode-markdownlint",
+    "usernamehw.remove-empty-lines",
+    "yzhang.markdown-all-in-one",
+    "yoavbls.pretty-ts-errors",
     "dbaeumer.vscode-eslint",
-    "fabiospampinato.vscode-open-multiple-files"
+    "usernamehw.errorlens",
+    "biomejs.biome"
   ]
 }

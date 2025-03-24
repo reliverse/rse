@@ -18,14 +18,6 @@
   },
   "formatter": {
     "enabled": true,
-    "ignore": [
-      ".git/",
-      "node_modules/",
-      "dist-jsr/",
-      "dist-npm/",
-      "tests-runtime/",
-      "bun.lock"
-    ],
     "indentStyle": "space",
     "attributePosition": "auto",
     "formatWithErrors": false,
@@ -38,14 +30,6 @@
   },
   "linter": {
     "enabled": true,
-    "ignore": [
-      ".git/",
-      "node_modules/",
-      "dist-jsr/",
-      "dist-npm/",
-      "tests-runtime/",
-      "bun.lock"
-    ],
     "rules": {
       "recommended": true,
       "a11y": {

@@ -14,7 +14,13 @@
     "src/**/*.ts"
   ],
   "ignoreExportsUsedInFile": true,
-  "ignore": ["tests-runtime/", "dist-jsr/", "dist-npm/", "dist-libs/"],
+  "ignore": [
+    "tests-runtime/",
+    "dist-jsr/",
+    "dist-npm/",
+    "dist-libs/",
+    "relinter-test.ts"
+  ],
   "ignoreBinaries": ["code", "db:push"],
   "ignoreDependencies": ["octokit", "ora", "querystring"]
 }

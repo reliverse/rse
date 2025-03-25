@@ -13,3 +13,5 @@ merged.txt
 dist-npm
 dist-jsr
 dist-libs
+relinter.json
+relinter-test-*.ts

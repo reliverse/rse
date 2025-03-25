@@ -1,15 +1,20 @@
-import type { ReliverseMemory } from "~/utils/schemaMemory.js";
+import { inputPrompt } from "@reliverse/prompts";
 
 import { agentRelinter } from "./agents/relinter.js";
+import { AGENT_NAMES } from "./ai-const.js";
 import { ensureOpenAIKey } from "./ai-key.js";
-import { AGENTS, type Agent } from "./ai-types.js";
+import { type AIAgentOptions } from "./ai-types.js";
 
-export async function aiAgent(
-  agent: Agent,
-  isKeyEnsured: boolean,
-  memory?: ReliverseMemory,
-) {
-  if (!AGENTS.includes(agent)) {
+/**
+ * Invokes a specific agent based on provided options.
+ */
+export async function aiAgent({
+  agent,
+  isKeyEnsured,
+  memory,
+  target,
+}: AIAgentOptions): Promise<void> {
+  if (!AGENT_NAMES.includes(agent)) {
     throw new Error("Invalid agent specified.");
   }
   if (!isKeyEnsured && memory === undefined) {
@@ -19,11 +24,14 @@ export async function aiAgent(
     await ensureOpenAIKey(memory);
   }
 
-  // =========================================
-  // Reliverse Agents
-  // =========================================
-
   if (agent === "relinter") {
-    await agentRelinter();
+    let targetPath = target;
+    if (!targetPath) {
+      targetPath = await inputPrompt({
+        title: "Relinter",
+        content: "Enter the path to the file or directory to lint:",
+      });
+    }
+    await agentRelinter(targetPath);
   }
 }

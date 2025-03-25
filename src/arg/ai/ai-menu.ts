@@ -1,4 +1,4 @@
-import { selectPrompt } from "@reliverse/prompts";
+import { inputPrompt, selectPrompt } from "@reliverse/prompts";
 
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
@@ -32,6 +32,10 @@ export async function aiMenu(isKeyEnsured: boolean, memory?: ReliverseMemory) {
   if (choice === "chat") {
     await aiChat();
   } else if (choice === "relinter") {
-    await agentRelinter();
+    const targetPath = await inputPrompt({
+      title: "Relinter",
+      content: "Enter the path to the file or directory to lint:",
+    });
+    await agentRelinter(targetPath);
   }
 }

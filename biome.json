@@ -13,7 +13,8 @@
       "dist-npm/",
       "dist-libs/",
       "tests-runtime/",
-      "bun.lock"
+      "bun.lock",
+      "relinter-test-*.ts"
     ]
   },
   "formatter": {

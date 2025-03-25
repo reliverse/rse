@@ -11,7 +11,11 @@ import tseslint from "typescript-eslint";
 /** @type {import("typescript-eslint").Config} */
 const config = tseslint.config(
   {
-    ignores: ["**/.git/", "**/{node_modules,dist-jsr,dist-npm,tests-runtime}/"],
+    ignores: [
+      "**/.git/",
+      "**/{node_modules,dist-jsr,dist-npm,tests-runtime}/",
+      "relinter-test-*.ts",
+    ],
   },
   eslint.configs.recommended,
   ...tseslint.configs.strictTypeChecked,

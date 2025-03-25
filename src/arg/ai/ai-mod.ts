@@ -22,6 +22,10 @@ export default defineCommand({
       type: "string",
       description: "Select a Reliverse Agent",
     },
+    target: {
+      type: "string",
+      description: "Path to the file or directory (skips Relinter's prompt)",
+    },
   },
   run: async ({ args }) => {
     if (args.dev) {
@@ -36,7 +40,11 @@ export default defineCommand({
       if (!AGENTS.includes(agent)) {
         throw new Error("Invalid agent specified.");
       }
-      await aiAgent(agent, true);
+      await aiAgent({
+        agent,
+        isKeyEnsured: true,
+        target: args.target,
+      });
       process.exit(0);
     }
 

@@ -5,9 +5,9 @@ import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import { experimental } from "~/utils/badgeNotifiers.js";
 
-import { ensureOpenAIKey } from "./ai-impl/ai-auth.js";
-import { aiChat } from "./ai-impl/ai-chat.js";
-import { agentRelinter } from "./ai-impl/relinter/relinter.js";
+import { ensureOpenAIKey } from "./ai-auth.js";
+import { aiChat } from "./ai-chat.js";
+import { agentRelinter } from "./relinter/relinter.js";
 
 const RANDOM_HINTS = [
   "You can always exit by typing thing like 'bye', 'exit', or just by pressing Ctrl+C.",

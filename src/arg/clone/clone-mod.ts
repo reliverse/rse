@@ -58,7 +58,7 @@ export default defineCommand({
       default: false,
     },
   },
-  async run({ args }) {
+  run: async ({ args }) => {
     const cwd = process.cwd();
 
     // -------------------------------

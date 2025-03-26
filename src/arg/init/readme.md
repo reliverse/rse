@@ -1,0 +1,138 @@
+# Reliverse CLI: `add` (Composer Mode)
+
+[📦 NPM](https://npmjs.com/@reliverse/cli) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
+
+**@reliverse/cli** includes a **`add`** subcommand—internally known as the “Manual Project Builder” or **Composer Mode**. This interactive tool helps you **create, customize, and integrate** new or existing projects with **Reliverse Addons** (i.e., integrations for APIs, auth, i18n, DB, frameworks, etc.).
+
+> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+
+## Features
+
+- 🏗️ **Project Creation**  
+  Automatically generates a new Reliverse project and minimal config, if your current directory is empty.
+
+- 🔌 **Addons & Integrations**  
+  Easily integrate popular tools like Next.js, React Native, Prisma, or i18n solutions in just a few steps.
+
+- 📝 **Configurable & Re-runnable**  
+  Edits are stored in `reliverse.jsonc` or `reliverse.ts`. You can rerun the manual builder to apply changes.
+
+- ⚡ **Quick Setup**  
+  Automates tasks like installing dependencies, updating templates, or setting up key config files.
+
+## Terminology
+
+- **Manual Project Builder** = **Composer Mode**  
+- **Integrations** = **Addons**
+
+## Usage
+
+Install or update **@reliverse/cli**:
+
+```sh
+bun i -g @reliverse/cli
+reliverse update
+```
+
+Run the **add** command to open the manual builder:
+
+```sh
+reliverse add something
+```
+
+- If **your current directory is empty**, the builder will offer to **create** a new project.
+- If you already have an existing project or multiple projects, you’ll see a **project selector** to edit or create.
+
+## Example Flow
+
+Below is an overview of the prompts and menus you’ll encounter.
+
+### 1. Main Menu Prompt
+
+```bash
+│  > 🔬 Create/edit project manually
+```
+
+Selecting this opens Composer Mode to either create or configure a project.
+
+### 2. Project Creation (If Directory Is Empty)
+
+```bash
+◆  Reliverse Project Selection
+│  Dir C:/B/L/cli/tests-runtime is empty
+│  > Create new project
+│  Exit
+│
+◆  How should I name your brand new project?
+│  I've just generated a random name for you (press <Enter> to use it): extra-short
+│
+◆  What type of project are you creating?
+│  Web app (Includes desktop and mobile apps)
+│  > Library (Includes clis and extensions)
+│
+◆  Created new project "extra-short" with minimal Reliverse config.
+│  It's recommended to:
+│    1. Edit the generated config files as needed.
+│    2. Rerun the manual builder to apply changes.
+```
+
+### 3. Project Selection (If Directory Is Not Empty)
+
+```bash
+◆  Reliverse Project Selection
+│  Choose an existing project or create a new one.
+│  > Edit: extra-short (C:/B/L/cli/tests-runtime/extra-short)
+│  Create new project
+│  Exit
+```
+
+### 4. Project Menu
+
+```bash
+◆  Manual Builder Mode
+│  Select an action to perform
+│  > ...OPTIONS
+```
+
+#### Available OPTIONS
+
+- 🔌 **Install dependencies** (if not installed)  
+- 🔃 **Update project template** (if originally cloned from a template)  
+- 🟡 **api** (trpc, orpc)  
+- 🟡 **auth** ([better-auth](https://better-auth.com), next-auth, clerk)  
+- 🟡 **db** (drizzle, prisma)  
+- 🟡 **i18n** ([next-intl](https://next-intl.dev), [languine](https://languine.ai), [gt-libs](https://generaltranslation.com))  
+- 🟡 **payments** ([polar](https://polar.sh), [stripe](https://stripe.com))  
+- 🟡 **form** ([react-hook-form](https://react-hook-form.com), [tanstack-form](https://tanstack.com/form))  
+- 🟡 **files** ([uploadthing](https://uploadthing.com))  
+- 🟡 **web-frameworks** ([astro](https://astro.build), [next](https://nextjs.org), [vite](https://vite.dev), [jstack](https://jstack.app))  
+- 🟡 **native-frameworks** ([react-native](https://reactnative.dev), [lynx](https://lynxjs.org))  
+- 🟡 **browser-extensions** ([wxt](https://wxt.dev), [plasmo](https://plasmo.com))  
+- 📝 **Edit project settings** (on [reliverse.org](https://reliverse.org))  
+- 👈 **Exit**
+
+## TODO
+
+- [x] Create a project if the current directory is empty  
+- [x] Display the Reliverse project selector and selected project menu  
+- [ ] After an addon is integrated, ask if the user wants to install the related cursor rule  
+- [ ] Implement “Apply everything as configured in `reliverse.{ts,jsonc}`” option  
+
+## Contributing & Support
+
+Have feature requests or feedback? We’d love to hear from you:
+
+- Join the conversation on [Discord](https://discord.gg/Pb8uKbwpsJ).  
+- Check out our [Docs](https://docs.reliverse.org/cli) for detailed guidance.
+
+If Reliverse saves you time and helps your workflow, please consider supporting its continued development:
+
+- [GitHub Sponsors](https://github.com/sponsors/blefnk)  
+- [Patreon](https://patreon.com/blefnk)  
+- [PayPal](https://paypal.me/blefony)
+
+A star on [GitHub](https://github.com/reliverse/cli) is also greatly appreciated!
+
+## License
+
+[MIT](LICENSE) © 2025 [blefnk Nazar Kornienko](https://github.com/blefnk)

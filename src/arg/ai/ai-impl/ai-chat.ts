@@ -7,8 +7,8 @@ import { streamText } from "ai";
 
 import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 
-import { agentRelinter } from "./agents/relinter.js";
 import { EXIT_KEYWORDS, MODEL } from "./ai-const.js";
+import { agentRelinter } from "./relinter/relinter.js";
 
 /**
  * Represents the structured result of user input parsing.

@@ -248,7 +248,7 @@ export async function initGitDir(
 
 /**
  * Creates a commit in the repository.
- * If the repository isn’t initialized yet, it initializes it.
+ * If the repository isn't initialized yet, it initializes it.
  */
 export async function createCommit(
   params: GitModParams & {

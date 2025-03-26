@@ -11,7 +11,7 @@ import {
   MAX_TOKENS,
   MODEL,
   MODEL_NAME,
-} from "~/arg/ai/ai-const.js";
+} from "~/arg/ai/ai-impl/ai-const.js";
 
 /**
  * Describes a lint suggestion with file details and a recommended fix or note.

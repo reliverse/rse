@@ -49,7 +49,7 @@ export type ReplaceConfig = {
 
 /**
  * Check if a buffer looks like binary content
- * (very naive approach: if we see a null byte or lots of weird chars early on).
+ * (if we see a null byte or lots of weird chars early on).
  */
 function looksLikeBinary(buffer: Buffer, size: number): boolean {
   for (let i = 0; i < size; i++) {

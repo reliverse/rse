@@ -9,7 +9,7 @@ import { Value } from "@sinclair/typebox/value";
 import { execaCommand } from "execa";
 import fs from "fs-extra";
 import { addDevDependency } from "nypm";
-import path from "path";
+import path from "pathe";
 
 import type { ReliverseConfig } from "~/libs/cfg/cfg-main.js";
 import type { DeploymentService } from "~/types.js";

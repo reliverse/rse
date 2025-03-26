@@ -10,7 +10,7 @@ const main = defineCommand({
   },
   subCommands: {
     cli: () => import("./app/app-mod.js").then((r) => r.default),
-    get: () => import("./arg/get/get-mod.js").then((r) => r.default),
+    ai: () => import("./arg/ai/ai-mod.js").then((r) => r.default),
     help: () => import("./arg/help/help-mod.js").then((r) => r.default),
     login: () => import("./arg/login/login-mod.js").then((r) => r.default),
     logout: () => import("./arg/logout/logout-mod.js").then((r) => r.default),
@@ -18,7 +18,9 @@ const main = defineCommand({
     memory: () => import("./arg/memory/memory-mod.js").then((r) => r.default),
     studio: () => import("./arg/studio/studio-mod.js").then((r) => r.default),
     update: () => import("./arg/update/update-mod.js").then((r) => r.default),
-    rules: () => import("./arg/rules/rules-mod.js").then((r) => r.default),
+    upload: () => import("./arg/upload/upload-mod.js").then((r) => r.default),
+    rules: () =>
+      import("./arg/ai/ai-impl/rules/rules-mod.js").then((r) => r.default),
     env: () => import("./arg/env/env-mod.js").then((r) => r.default),
     multireli: () =>
       import("./arg/multireli/multireli-mod.js").then((r) => r.default),

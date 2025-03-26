@@ -19,10 +19,10 @@ import { checkVercelDeployment } from "~/app/menu/create-project/cp-modules/git-
 import { manageDrizzleSchema } from "~/app/menu/manual-mode/deprecated/drizzle/manageDrizzleSchema.js";
 import { handleIntegrations } from "~/app/menu/manual-mode/deprecated/editor-impl.js";
 import { manageShadcn } from "~/app/menu/manual-mode/deprecated/shadcn/shadcn-mod.js";
-import { useLanguine } from "~/app/menu/manual-mode/integrations/i18n/languine.js";
 import { askInstallDeps } from "~/app/prompts/askInstallDeps.js";
 import { askUsernameFrontend } from "~/app/prompts/askUsernameFrontend.js";
 import { envArgImpl } from "~/arg/env/env-impl.js";
+import { useLanguine } from "~/arg/init/i18n/languine.js";
 import { experimental } from "~/utils/badgeNotifiers.js";
 import {
   convertDatabaseProvider,

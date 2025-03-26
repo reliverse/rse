@@ -5,16 +5,13 @@ import { getReliverseConfig } from "~/utils/reliverseConfig/rc-mod.js";
 import { getReliverseMemory } from "~/utils/reliverseMemory.js";
 import { getCurrentWorkingDirectory } from "~/utils/terminalHelpers.js";
 
-import { ensureOpenAIKey } from "./ai-impl/ai-auth.js";
-import { AGENT_NAMES } from "./ai-impl/ai-const.js";
-import { aiMenu } from "./ai-impl/ai-menu.js";
-import { aiAgenticTool } from "./ai-impl/ai-tools.js";
-import { type Agent } from "./ai-impl/ai-types.js";
+import { showManualBuilderMenu } from "./add-impl.js";
 
 export default defineCommand({
   meta: {
-    name: "ai",
-    description: "Chat with Reliverse AI or use Reliverse Agents",
+    name: "add",
+    description:
+      "Create, customize, and integrate new or existing projects with Reliverse Addons",
   },
   args: {
     dev: {
@@ -43,25 +40,14 @@ export default defineCommand({
     const cwd = getCurrentWorkingDirectory();
     const { config } = await getReliverseConfig(cwd, isDev, {});
     const memory = await getReliverseMemory();
-    await ensureOpenAIKey(memory);
-
-    const agent = args.agent as Agent | undefined;
-    if (agent !== undefined) {
-      if (!AGENT_NAMES.includes(agent)) {
-        throw new Error(
-          `Invalid agent specified. Valid agents: ${AGENT_NAMES.join(", ")}`,
-        );
-      }
-      await aiAgenticTool({
-        config,
-        agent,
-        isKeyEnsured: true,
-        target: args.target,
-      });
-      process.exit(0);
-    }
-
-    await aiMenu(config, true);
+    await showManualBuilderMenu({
+      cwd,
+      isDev,
+      config,
+      memory,
+      projectName: "",
+      skipPrompts: false,
+    });
 
     process.exit(0);
   },

@@ -4,17 +4,22 @@ import { generate } from "random-words";
 
 import { getMainMenuOptions } from "~/app/menu/create-project/cp-modules/cli-main-modules/cli-menu-items/getMainMenuOptions.js";
 import { handleOpenProjectMenu } from "~/app/menu/manual-mode/deprecated/editor-menu.js";
-import { aiMenu } from "~/arg/ai/ai-menu.js";
+import { aiMenu } from "~/arg/ai/ai-impl/ai-menu.js";
+import { showManualBuilderMenu } from "~/arg/init/add-impl.js";
 import { cliJsrPath, UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { showNativeCliMenu } from "~/utils/native-cli/nc-mod.js";
 import { detectProject } from "~/utils/reliverseConfig/rc-detect.js";
 
 import type { ParamsOmitSkipPN } from "./app-types.js";
 
-import { getRandomMessage, getWelcomeTitle } from "./db/messages.js";
+import {
+  ad,
+  getRandomMessage,
+  getWelcomeTitle,
+  premium,
+} from "./db/messages.js";
 import { showCloneProjectMenu } from "./menu/create-project/cp-modules/cli-main-modules/cli-menu-items/showCloneProjectMenu.js";
 import { showEndPrompt } from "./menu/create-project/cp-modules/cli-main-modules/modules/showStartEndPrompt.js";
-import { showManualBuilderMenu } from "./menu/manual-mode/mm-mod.js";
 import {
   showDevToolsMenu,
   showNewProjectMenu,
@@ -54,6 +59,7 @@ export async function app(params: ParamsOmitSkipPN) {
     title: frontendUsername
       ? getWelcomeTitle(frontendUsername)
       : getRandomMessage("welcome"),
+    content: `[Ad] ${ad}\n${premium}`,
     titleColor: "retroGradient",
     displayInstructions: true,
     endTitle: "✋ User pressed Ctrl+C, exiting...",

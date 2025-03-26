@@ -1,14 +1,15 @@
 import { inputPrompt } from "@reliverse/prompts";
 
-import { agentRelinter } from "./agents/relinter.js";
+import type { AIAgentOptions } from "./ai-types.js";
+
+import { ensureOpenAIKey } from "./ai-auth.js";
 import { AGENT_NAMES } from "./ai-const.js";
-import { ensureOpenAIKey } from "./ai-key.js";
-import { type AIAgentOptions } from "./ai-types.js";
+import { agentRelinter } from "./relinter/relinter.js";
 
 /**
  * Invokes a specific agent based on provided options.
  */
-export async function aiAgent({
+export async function aiAgenticTool({
   config,
   agent,
   isKeyEnsured,

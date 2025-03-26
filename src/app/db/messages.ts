@@ -1,3 +1,5 @@
+import { re } from "@reliverse/relico";
+
 import { UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 
 export const randomWelcomeMessages = (username: string) => [
@@ -33,7 +35,7 @@ export const randomProjectCategoryTitle = [
   "Fantastic choice! Let's dive deeper. Which category captures the essence of your project?",
   "Great direction! Now, let's pinpoint your focus. What type of project are you envisioning?",
   "Perfect step! To fine-tune your setup, could you clarify the specific type of development you have in mind?",
-  "Excellent path! Let’s narrow it down further. Which of these categories aligns best with your vision?",
+  "Excellent path! Let's narrow it down further. Which of these categories aligns best with your vision?",
 ];
 
 export const randomProjectFrameworkTitle = [
@@ -51,11 +53,24 @@ export const randomWebsiteSubcategoryTitle = [
 ];
 
 export const randomWebsiteDetailsTitle = [
-  "Your initial plan is set! Now let’s personalize it. Please share some details about yourself and your app so I can tailor it to your style.",
-  "Great choice! Let’s add a personal touch. Share a bit about yourself and the app, and I'll make it uniquely yours.",
+  "Your initial plan is set! Now let's personalize it. Please share some details about yourself and your app so I can tailor it to your style.",
+  "Great choice! Let's add a personal touch. Share a bit about yourself and the app, and I'll make it uniquely yours.",
   "Excellent! To set you up with the right finishing touches, could you provide more specific details about yourself and your app?",
-  "Perfect! Let’s get more personal. Which details can you share so I can refine your website to truly match your vision?",
+  "Perfect! Let's get more personal. Which details can you share so I can refine your website to truly match your vision?",
 ];
+
+export const randomAdContent = [
+  "Got a cool saas•tool•lib•etc? This spot can be yours! → blefnk@gmail.com",
+  `Resend: "Railway is a game changer for us" → https://railway.com?referralCode=sATgpf`,
+];
+
+export const getRandomAd = () => {
+  return randomAdContent[Math.floor(Math.random() * randomAdContent.length)];
+};
+export const ad = getRandomAd();
+export const premium = re.bold(
+  "No ads, more power — get Reliverse Premium: https://github.com/sponsors/blefnk",
+);
 
 export function getWelcomeTitle(username: string) {
   return `🤖 ${

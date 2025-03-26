@@ -1,25 +1,27 @@
 # @reliverse/cli | Reliverse CLI | [reliverse.org](https://reliverse.org)
 
-[💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [✨ Repo](https://github.com/reliverse/cli-website-builder) • [📦 NPM](https://npmjs.com/@reliverse/cli) • [📚 Docs](https://blefnk.reliverse.org/blog/my-products/reliverse-cli)
+[💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [✨ Repo](https://github.com/reliverse/cli) • [📦 NPM](https://npmjs.com/@reliverse/cli) • [📚 Docs](https://blefnk.reliverse.org/blog/my-products/reliverse-cli)
 
-**@reliverse/cli** is your all-in-one command-line companion for setting up and enhancing web projects—whether you’re starting fresh or upgrading an existing app.
+**@reliverse/cli** is your all-in-one command-line companion for setting up and enhancing web projects—whether you're starting fresh or upgrading an existing app. It also empowers you to build virtually anything else by leveraging the power of AI like code lint, image generation, and more.
 
 ## Features
 
-- 🚀 Spin up new web apps or manage existing templates in a flash.
-- 🔧 Safely refactor code and integrate popular libraries into your workflow.
-- ⚙️ Set up ESLint, Biome, env files, and more without manual hassle.
-- 🏗️ Enjoy seamless compatibility with Next.js and beyond.
-- 📝 Clone pre-built templates and merge them conflict-free right into your project.
-- 🌐 Quickly create GitHub repos, push commits, and deploy to Vercel in a single command.
-- 🔌 Use `🔬 Create/edit project manually` to enable extra features and integrations.
-- 🤖 Speak with Reliverse AI or use powerful agents like Relinter.
+- 🦾 Reliverse makes things easier for anyone. You have a single superapp. It has everything to develop anything.
+- 🚀 For example, you can spin up new web apps or manage existing templates in a flash.
+- 🔧 Safely refactor code and seamlessly integrate popular libraries into your workflow.
+- ⚙️ Automate ESLint, Biome, env file setup, and more.
+- 🏗️ Seamlessly compatible with Next.js and many other frameworks.
+- 📝 Clone pre-built templates and merge them conflict-free into your projects.
+- 🌐 Instantly create GitHub repos, commit changes, and deploy to Vercel with a single command.
+- 🔌 Utilize the `🔬 Create/edit project manually` feature to access additional functionalities and integrations.
+- ⏬ Reliverse automatically clones repos/templates and configures them, handling file conflicts as needed.
+- 🤖 Interact with Reliverse AI and with powerful agentic tools such as Relinter (Reliverse Linter).
 
 ## Getting Started
 
-Ensure git, node.js, and bun/pnpm/yarn/npm are installed. Then:
+Ensure Git, Node.js, and bun•pnpm•yarn•npm are installed. Then:
 
-### CLI Installation
+### Installation
 
 1. **Install globally**:
 
@@ -39,50 +41,74 @@ Ensure git, node.js, and bun/pnpm/yarn/npm are installed. Then:
    reliverse cli
    ```
 
-   This command will guide you through creating or configuring a project with an interactive wizard.
+  `.reliverse/reliverse.config.{ts,jsonc}` is generated on first run.
+  Customize it to fit your project and tweak CLI behavior.
+  Changes apply next launch (hot-reload coming soon).
 
-## CLI Commands
+## Commands
 
-- `reliverse cli`  
-  Starts the interactive wizard to create, configure, or enhance your project.
+- 🧙 `reliverse cli` — Spin up an interactive wizard to create, configure, or boost your project.
+- 🤖 `reliverse ai` — Talk to Reliverse AI or let it run agentic tools like Relinter. [Learn more](./src/arg/ai/readme.md).
+- 🧼 `reliverse logout` — Time for a clean slate? Logs you out and forgets your credentials.
+- 🖥️ `reliverse studio` — Opens the Reliverse Studio — your Reliverse’s visual brain center.
+- 🆘 `reliverse --help` — Lost in flags? This brings up all commands and usage tips.
 
-- `reliverse ai`  
-  Speak with Reliverse AI or use powerful agents like Relinter.
+## TODO
 
-- `reliverse login` / `reliverse logout`  
-  Log in or out of Reliverse services.
+- [x] Build a bunch of useful stuff
+- [ ] Release V2 when all features will be stable
+- [ ] Make sure Reliverse CLI handles full dev workflows
 
-- `reliverse studio`  
-  Launches the Reliverse Studio interface.
+## Contribute, please 😽
 
-- `reliverse --help`  
-  Displays all available commands and usage info.
+- All currently created things related to Reliverse are made by one person ([@blefnk Nazar Kornienko](https://github.com/blefnk)).
+- Got something on your mind? Wanna suggest an idea, report a bug, or just hang out? [Hop into my Discord](https://discord.gg/Pb8uKbwpsJ) and say hi — I’m the dev, and I’d love to chat!
+- It's all for devs who like to build cool stuff. If that sounds like you, I’d seriously appreciate your help!
+- Whether you wanna code, brainstorm, fix typos, or just vibe with the vision — you’re always welcome.  
+- No pressure, no gatekeeping, just good energy and open-source fun.
 
-## Configuration
+### Come together, right now
 
-When you run `reliverse cli`, a `reliverse.jsonc` or `reliverse.ts` file is created in your project’s root directory. Customize it to tweak CLI behavior—any changes take effect the next time you start the CLI.
+```bash
+bun i -g @reliverse/cli
+reliverse cli
+> 🧱 Clone an existing repository  
+> Developer related  
+> reliverse  
+> cli  
+> fork
+> Open in editor
+```
 
-## Installing Other Templates
+Boom. You're in.
 
-Inside the `reliverse cli` wizard, choose **“Clone an existing repository”** to point the CLI at any public GitHub repo:
+### You're a magician, do magic
 
-1. Provide the repository link.  
-2. Reliverse will automatically clone and configure it, merging files as needed.
+1. Run `bun latest` to get things up to date.
+2. Use AI (Reliverse, Cursor, whatever you like) or just do your thing manually.
+3. Run `reliverse cli` in the root of the cloned repo.
+4. Select: `> Commit and push`
 
-## Collaborate & Contribute
+### What a great time to live
 
-We love community input! Check out our [Contributing Guide](https://docs.reliverse.org/intro/contributing) for instructions on getting involved or proposing new features. If you’re interested in deeper collaboration or partnerships, [join our Discord](https://discord.gg/Pb8uKbwpsJ) to chat directly with the team.
+- Done? Head to GitHub & Open a PR
+- And that’s it! You’re awesome 🤗
 
-## Support
+## Shoutout
 
-If Reliverse saves you time and effort, please consider supporting its development:
+Reliverse CLI was inspired by this gem:  
 
-- [GitHub Sponsors](https://github.com/sponsors/blefnk)  
-- [Patreon](https://patreon.com/blefnk)  
-- [PayPal](https://paypal.me/blefony)
+- [t3-oss/create-t3-app](https://github.com/t3-oss/create-t3-app#readme)
 
-Even a simple ⭐ on [GitHub](https://github.com/reliverse/cli) shows your love. Thank you!
+## Show some love 🫶
+
+If `@reliverse/cli` saved you time or made you smile:
+
+- Support on [GitHub Sponsors](https://github.com/sponsors/blefnk)
+- Or just drop a ⭐️ on [GitHub](https://github.com/reliverse/cli)
+
+It helps more than you think! Thanks for being here!
 
 ## License
 
-[MIT](./LICENSE) © 2025 [blefnk Nazar Kornienko](https://github.com/blefnk)
+💖 [MIT](./LICENSE) © 2025 [blefnk (Nazar Kornienko)](https://github.com/blefnk)

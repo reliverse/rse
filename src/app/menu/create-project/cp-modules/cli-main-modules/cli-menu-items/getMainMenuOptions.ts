@@ -72,9 +72,9 @@ export async function getMainMenuOptions(
       hint: multiConfigMsg,
       value: "clone",
     },
-    { label: "💬 Chat with Reliverse AI", value: "ai" },
+    { label: "💬 Chat with Reliverse AI agent", value: "ai" },
     {
-      label: "🧰 Open developer tools",
+      label: "🧰 Open developer tools kit",
       value: "isDevTools",
     },
     {

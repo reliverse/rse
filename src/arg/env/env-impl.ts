@@ -3,7 +3,7 @@ import { relinka } from "@reliverse/prompts";
 
 import { composeEnvFile } from "~/app/menu/create-project/cp-modules/compose-env-file/cef-mod.js";
 import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/cfg/constants/cfg-details.js";
-import { getReliverseConfig } from "~/utils/reliverseConfig.js";
+import { getReliverseConfig } from "~/utils/reliverseConfig/rc-mod.js";
 import { getCurrentWorkingDirectory } from "~/utils/terminalHelpers.js";
 
 export async function envArgImpl(isDev: boolean, pathToProject?: string) {

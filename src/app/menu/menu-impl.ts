@@ -10,7 +10,7 @@ import type {
   ProjectArchitecture,
   ProjectSubcategory,
   ReliverseConfig,
-} from "~/libs/cfg/constants/cfg-schema.js";
+} from "~/libs/cfg/constants/cfg-types.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import {

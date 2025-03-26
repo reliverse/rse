@@ -1,4 +1,4 @@
-import { defineConfig } from "./src/libs/cfg/constants/cfg-schema.js";
+import { defineConfig } from "./src/libs/cfg/cfg-main.js";
 
 export default defineConfig({
   // RELIVERSE CONFIG (https://docs.reliverse.org/cli)
@@ -11,7 +11,7 @@ export default defineConfig({
   projectAuthor: "reliverse",
   projectDescription:
     "This CLI tool can help you easily create new web projects, manage existing projects, and automatically make advanced codebase modifications, with more features coming soon.",
-  version: "1.6.1",
+  version: "1.6.2",
   projectLicense: "MIT",
   projectState: "creating",
   projectRepository: "https://github.com/reliverse/cli",
@@ -27,7 +27,7 @@ export default defineConfig({
   repoBranch: "main",
 
   // Primary tech stack/framework
-  projectFramework: "npm-jsr",
+  projectFramework: "unknown",
   projectPackageManager: "bun",
   projectRuntime: "bun",
   preferredLibraries: {
@@ -35,10 +35,10 @@ export default defineConfig({
     formManagement: "unknown",
     styling: "unknown",
     uiComponents: "unknown",
-    testing: "vitest",
+    testing: "unknown",
     authentication: "unknown",
-    databaseLibrary: "drizzle",
-    databaseProvider: "pg",
+    databaseLibrary: "unknown",
+    databaseProvider: "unknown",
     api: "unknown",
     linting: "unknown",
     formatting: "unknown",
@@ -50,7 +50,7 @@ export default defineConfig({
     notifications: "unknown",
     search: "unknown",
     uploads: "unknown",
-    validation: "typebox",
+    validation: "unknown",
     documentation: "unknown",
     icons: "unknown",
     mail: "unknown",
@@ -76,7 +76,8 @@ export default defineConfig({
   // List dependencies to exclude from checks
   ignoreDependencies: [],
 
-  // Custom rules for Reliverse AI
+  // Provide custom additional project details
+  // always sent to Reliverse AI Chat & Agents
   customRules: {},
 
   // Project features
@@ -91,13 +92,16 @@ export default defineConfig({
     docker: false,
     ci: false,
     commands: [
+      "pub",
       "dev:studio",
       "dev:logout",
       "dev:schema",
+      "dev:rules",
       "dev:multireli",
-      "pub",
-      "latest",
       "check",
+      "latest",
+      "knip",
+      "agg",
     ],
     webview: [],
     language: ["typescript"],
@@ -157,4 +161,8 @@ export default defineConfig({
   // Behavior for existing GitHub repos during project creation
   // Options: prompt | autoYes | autoYesSkipCommit | autoNo
   existingRepoBehavior: "prompt",
+
+  // Behavior for Reliverse AI Chat & Agents
+  // Options: promptOnce | promptEachFile | autoYes
+  relinterConfirm: "promptOnce",
 });

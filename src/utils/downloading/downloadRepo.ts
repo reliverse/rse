@@ -12,7 +12,7 @@ import { simpleGit } from "simple-git";
 import { extract } from "tar";
 import { promisify } from "util";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 
 import { initGitDir } from "~/app/menu/create-project/cp-modules/git-deploy-prompts/git.js";
 import {
@@ -24,7 +24,7 @@ import {
   rmEnsureDir,
   setHiddenAttributeOnWindows,
 } from "~/utils/filesysHelpers.js";
-import { getReliverseConfigPath } from "~/utils/reliverseConfig.js";
+import { getReliverseConfigPath } from "~/utils/reliverseConfig/rc-path.js";
 
 const execAsync = promisify(exec);
 

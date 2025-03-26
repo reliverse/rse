@@ -5,13 +5,17 @@ import { printLineBar } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
 import { streamText } from "ai";
 
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+
 import { agentRelinter } from "./agents/relinter.js";
 import { EXIT_KEYWORDS, MODEL } from "./ai-const.js";
 
+/**
+ * Represents the structured result of user input parsing.
+ */
 type ParsedUserInput = {
   hasRelinter: boolean;
-  path1?: string;
-  path2?: string;
+  paths: string[];
   task: string;
 };
 
@@ -20,13 +24,13 @@ const messages: CoreMessage[] = [];
 /**
  * Initiates a loop to capture user input and provide AI responses.
  */
-export async function aiChat(): Promise<void> {
+export async function aiChat(config: ReliverseConfig): Promise<void> {
   while (true) {
     const userInput = await getUserInput();
     const parsedInput = parseUserInput(userInput);
 
     if (parsedInput.hasRelinter) {
-      await handleRelinterFlow(parsedInput);
+      await handleRelinterFlow(config, parsedInput);
     } else {
       await handleNormalChatFlow(userInput);
     }
@@ -46,79 +50,65 @@ async function getUserInput(): Promise<string> {
 }
 
 /**
- * Analyzes the user input for specific tokens and paths.
+ * Analyzes user input for @relinter usage and collects any path-like tokens.
  */
 function parseUserInput(userInput: string): ParsedUserInput {
-  const splitInput = userInput.split(/\s+/);
+  const tokens = userInput.split(/\s+/);
   let hasRelinter = false;
-  let path1: string | undefined;
-  let path2: string | undefined;
+  const paths: string[] = [];
   const taskParts: string[] = [];
 
-  let i = 0;
-  while (i < splitInput.length) {
-    const token = splitInput[i]!;
+  for (const rawToken of tokens) {
+    const token = removeTrailingPunctuation(rawToken);
 
     if (token.toLowerCase() === "@relinter") {
       hasRelinter = true;
-      i++;
       continue;
     }
 
-    if (token.toLowerCase() === "@path1") {
-      i++;
-      path1 = splitInput[i];
-      i++;
-      continue;
-    }
-
-    if (token.toLowerCase() === "@path2") {
-      i++;
-      path2 = splitInput[i];
-      i++;
+    if (looksLikePath(token)) {
+      paths.push(token);
       continue;
     }
 
     taskParts.push(token);
-    i++;
-  }
-
-  if (hasRelinter && !path1 && taskParts.length > 0) {
-    const possiblePath = taskParts[taskParts.length - 1]!;
-    if (/[\\/]/.exec(possiblePath) || /\.(jsx?|tsx?)$/i.exec(possiblePath)) {
-      path1 = possiblePath;
-      taskParts.pop();
-    }
   }
 
   return {
     hasRelinter,
-    path1,
-    path2,
+    paths,
     task: taskParts.join(" ").trim(),
   };
 }
 
 /**
- * Directs the flow if '@relinter' is detected, calling the relinter agent as needed.
+ * Removes common trailing punctuation from a token.
  */
-async function handleRelinterFlow(parsedInput: ParsedUserInput): Promise<void> {
-  const { hasRelinter, path1, path2, task } = parsedInput;
-  if (hasRelinter && (path1 || path2)) {
-    const finalPath = path1 ?? path2;
-    if (!finalPath) {
-      console.log(
-        "No valid path was found after @relinter. Skipping relinter flow.",
-      );
-    } else {
-      await agentRelinter(finalPath, task);
-    }
-    return;
-  }
+function removeTrailingPunctuation(token: string): string {
+  return token.replace(/[.,!?;:]+$/, "");
+}
 
-  if (hasRelinter && !path1 && !path2) {
-    await agentRelinter(".", task);
-  }
+/**
+ * Determines if a token might represent a file or directory path.
+ */
+function looksLikePath(token: string): boolean {
+  return (
+    token.includes("/") || token.includes("\\") || /\.(jsx?|tsx?)$/i.test(token)
+  );
+}
+
+/**
+ * Directs the flow if @relinter is detected, calling the relinter agent with all paths.
+ */
+async function handleRelinterFlow(
+  config: ReliverseConfig,
+  parsedInput: ParsedUserInput,
+): Promise<void> {
+  const { hasRelinter, paths, task } = parsedInput;
+  if (!hasRelinter) return;
+
+  const finalPaths = paths.length > 0 ? paths : ["."];
+  await agentRelinter(config, finalPaths, task);
 }
 
 /**

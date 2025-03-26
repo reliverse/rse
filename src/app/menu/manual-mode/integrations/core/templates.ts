@@ -1,15 +1,13 @@
 import { relinka } from "@reliverse/prompts";
 import { ofetch } from "ofetch";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 
 import { UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { REPO_TEMPLATES } from "~/utils/projectRepository.js";
-import {
-  getReliverseConfigPath,
-  readReliverseConfig,
-  updateReliverseConfig,
-} from "~/utils/reliverseConfig.js";
+import { getReliverseConfigPath } from "~/utils/reliverseConfig/rc-path.js";
+import { readReliverseConfig } from "~/utils/reliverseConfig/rc-read.js";
+import { updateReliverseConfig } from "~/utils/reliverseConfig/rc-update.js";
 
 /**
  * Response type for UNGH API repository information

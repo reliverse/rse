@@ -94,4 +94,4 @@ Possible issues detected:
 - [ ] Implement an extension for VSCode-like IDEs to visualize Relinter suggestions directly within the coding environment.
 - [ ] Allow configurable thresholds for severity levels (error, warning, info) within `relinter.json` output.
 - [ ] Include quick-fix suggestions that can automatically apply recommended changes.
-- [ ] Implement continuous integration (CI) hooks or actions to automatically run Relinter as part of build pipelines or pre-commit hooks.
+- [ ] Implement CI (continuous integration) hooks or actions to automatically run Relinter as part of build pipelines or pre-commit hooks.

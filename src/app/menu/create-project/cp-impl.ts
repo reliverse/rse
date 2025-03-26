@@ -15,7 +15,7 @@ import os from "os";
 import path from "pathe";
 
 import type { ProjectConfigReturn } from "~/app/app-types.js";
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 import type { Behavior } from "~/types.js";
 import type { RepoOption } from "~/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";

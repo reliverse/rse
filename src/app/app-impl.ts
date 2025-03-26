@@ -7,7 +7,7 @@ import { handleOpenProjectMenu } from "~/app/menu/manual-mode/deprecated/editor-
 import { aiMenu } from "~/arg/ai/ai-menu.js";
 import { cliJsrPath, UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { showNativeCliMenu } from "~/utils/native-cli/nc-mod.js";
-import { detectProject } from "~/utils/reliverseConfig.js";
+import { detectProject } from "~/utils/reliverseConfig/rc-detect.js";
 
 import type { ParamsOmitSkipPN } from "./app-types.js";
 
@@ -104,7 +104,7 @@ export async function app(params: ParamsOmitSkipPN) {
       skipPrompts,
     });
   } else if (mainMenuOption === "ai") {
-    await aiMenu(false, memory);
+    await aiMenu(config, false, memory);
   }
 
   await showEndPrompt();

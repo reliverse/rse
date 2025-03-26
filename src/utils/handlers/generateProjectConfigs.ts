@@ -11,10 +11,8 @@ import {
   CONFIG_CATEGORIES,
   UNKNOWN_VALUE,
 } from "~/libs/cfg/constants/cfg-details.js";
-import {
-  generateReliverseConfig,
-  getReliverseConfigPath,
-} from "~/utils/reliverseConfig.js";
+import { generateReliverseConfig } from "~/utils/reliverseConfig/rc-create.js";
+import { getReliverseConfigPath } from "~/utils/reliverseConfig/rc-path.js";
 
 // ------------------------------------------------------------------
 // Helper Functions for Additional Config Files

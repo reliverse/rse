@@ -2,7 +2,7 @@ import { confirmPrompt } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 import type { RepoOption } from "~/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
@@ -11,10 +11,8 @@ import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/cfg/constants/cfg-details.js";
 import { handleDownload } from "~/utils/downloading/handleDownload.js";
 import { generateProjectConfigs } from "~/utils/handlers/generateProjectConfigs.js";
 import { isMultireliProject } from "~/utils/multireliHelpers.js";
-import {
-  getReliverseConfigPath,
-  updateReliverseConfig,
-} from "~/utils/reliverseConfig.js";
+import { getReliverseConfigPath } from "~/utils/reliverseConfig/rc-path.js";
+import { updateReliverseConfig } from "~/utils/reliverseConfig/rc-update.js";
 import { handleReplacements } from "~/utils/replacements/reps-mod.js";
 
 import {

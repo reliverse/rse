@@ -5,7 +5,7 @@ import fs from "fs-extra";
 
 import { authCheck } from "~/arg/login/login-impl.js";
 import { cliName, useLocalhost } from "~/libs/cfg/constants/cfg-details.js";
-import { getReliverseConfig } from "~/utils/reliverseConfig.js";
+import { getReliverseConfig } from "~/utils/reliverseConfig/rc-mod.js";
 import { getReliverseMemory } from "~/utils/reliverseMemory.js";
 import { getCurrentWorkingDirectory } from "~/utils/terminalHelpers.js";
 

@@ -21,7 +21,7 @@
     "noEmit": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["**/*.ts", "reset.d.ts", "eslint.config.js"],
+  "include": ["**/*.ts", "reset.d.ts", "eslint.config.js", "reliverse.ts"],
   "exclude": [
     "node_modules",
     "dist-jsr",

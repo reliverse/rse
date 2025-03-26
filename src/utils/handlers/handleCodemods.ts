@@ -1,7 +1,7 @@
 import { confirmPrompt, multiselectPrompt } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 import type { MonorepoType } from "~/types.js";
 
 import { cliConfigJsonc } from "~/libs/cfg/constants/cfg-details.js";

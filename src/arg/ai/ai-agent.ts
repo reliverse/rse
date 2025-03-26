@@ -9,6 +9,7 @@ import { type AIAgentOptions } from "./ai-types.js";
  * Invokes a specific agent based on provided options.
  */
 export async function aiAgent({
+  config,
   agent,
   isKeyEnsured,
   memory,
@@ -32,6 +33,10 @@ export async function aiAgent({
         content: "Enter the path to the file or directory to lint:",
       });
     }
-    await agentRelinter(targetPath);
+
+    // Convert the string to a string[] and handle multiple paths
+    const userPaths = targetPath.split(/\s+/).filter(Boolean);
+
+    await agentRelinter(config, userPaths);
   }
 }

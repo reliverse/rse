@@ -2,13 +2,13 @@ import { relinka } from "@reliverse/prompts";
 import { simpleGit } from "simple-git";
 
 import type { GitModParams } from "~/app/app-types.js";
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 import type { RepoOption } from "~/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import { cliName } from "~/libs/cfg/constants/cfg-details.js";
 import { getEffectiveDir } from "~/utils/getEffectiveDir.js";
-import { migrateReliverseConfig } from "~/utils/reliverseConfig.js";
+import { migrateReliverseConfig } from "~/utils/reliverseConfig/rc-migrate.js";
 import { handleReplacements } from "~/utils/replacements/reps-mod.js";
 
 import { handleExistingRepoContent } from "./utils-private-repo.js";

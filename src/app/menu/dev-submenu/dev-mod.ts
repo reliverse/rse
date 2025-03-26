@@ -3,7 +3,7 @@ import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 import path from "pathe";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 import type { RepoOption } from "~/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 

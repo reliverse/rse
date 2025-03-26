@@ -8,14 +8,14 @@ import type { AppParams, ParamsOmitReli } from "~/app/app-types.js";
 import type {
   ReliverseConfig,
   ProjectCategory,
-} from "~/libs/cfg/constants/cfg-schema.js";
+} from "~/libs/cfg/constants/cfg-types.js";
 import type { RepoOption } from "~/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import { getRandomMessage } from "~/app/db/messages.js";
 import { endTitle, UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { experimental } from "~/utils/badgeNotifiers.js";
-import { detectProjectsWithReliverse } from "~/utils/reliverseConfig.js";
+import { detectProjectsWithReliverse } from "~/utils/reliverseConfig/rc-detect.js";
 
 import { createMobileProject } from "./create-project/cp-mod.js";
 import { rmTestsRuntime } from "./dev-submenu/dev-mod.js";

@@ -12,7 +12,7 @@ import type { BaseConfig } from "~/types.js";
 
 import { removeComments } from "~/utils/codemods/removeComments.js";
 import { getUnusedDependencies } from "~/utils/codemods/removeUnusedDeps.js";
-import { readReliverseConfig } from "~/utils/reliverseConfig.js";
+import { readReliverseConfig } from "~/utils/reliverseConfig/rc-read.js";
 
 import { uninstallDependencies } from "./dependencies.js";
 

@@ -38,7 +38,7 @@ export type {
   ProjectSubcategory,
   ProjectFramework,
   ProjectArchitecture,
-} from "./constants/cfg-schema.js";
+} from "./constants/cfg-types.js";
 export {
   reliverseConfigSchema,
   generateJsonSchema,

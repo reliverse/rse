@@ -3,7 +3,7 @@ import { relinka } from "@reliverse/prompts";
 import { execa } from "execa";
 import fs from "fs-extra";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 
 import { cliDomainEnv } from "~/libs/cfg/constants/cfg-details.js";
 

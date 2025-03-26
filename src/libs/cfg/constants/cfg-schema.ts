@@ -1,6 +1,8 @@
-import { Type, type Static } from "@sinclair/typebox";
+import { Type } from "@sinclair/typebox";
 import fs from "fs-extra";
 import path from "pathe";
+
+import type { ReliverseConfig } from "./cfg-types.js";
 
 import {
   cliDomainDocs,
@@ -347,29 +349,12 @@ export const reliverseConfigSchema = Type.Object({
     Type.Literal("autoYesSkipCommit"),
     Type.Literal("autoNo"),
   ]),
+  relinterConfirm: Type.Union([
+    Type.Literal("promptOnce"),
+    Type.Literal("promptEachFile"),
+    Type.Literal("autoYes"),
+  ]),
 });
-
-export type ReliverseConfig = Static<typeof reliverseConfigSchema>;
-
-export type ProjectCategory = Exclude<
-  ReliverseConfig["projectCategory"],
-  undefined
->;
-
-export type ProjectSubcategory = Exclude<
-  ReliverseConfig["projectSubcategory"],
-  undefined
->;
-
-export type ProjectFramework = Exclude<
-  ReliverseConfig["projectFramework"],
-  undefined
->;
-
-export type ProjectArchitecture = Exclude<
-  ReliverseConfig["projectArchitecture"],
-  undefined
->;
 
 /**
  * Converts a TypeBox schema to a JSON Schema

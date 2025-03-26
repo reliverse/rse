@@ -3,10 +3,10 @@ import { isBunPM, isBunRuntime } from "@reliverse/runtime";
 import fs from "fs-extra";
 import path from "pathe";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 
 import { cliJsrPath } from "~/libs/cfg/constants/cfg-details.js";
-import { detectProjectsWithReliverse } from "~/utils/reliverseConfig.js";
+import { detectProjectsWithReliverse } from "~/utils/reliverseConfig/rc-detect.js";
 
 export type MainMenuChoice =
   | "create"

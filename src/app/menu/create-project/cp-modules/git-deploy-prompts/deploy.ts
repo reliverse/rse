@@ -2,7 +2,7 @@ import { selectPrompt } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 import type { DeploymentService } from "~/types.js";
 import type { InstanceGithub } from "~/utils/instanceGithub.js";
 import type { InstanceVercel } from "~/utils/instanceVercel.js";

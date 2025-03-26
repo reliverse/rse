@@ -14,7 +14,7 @@ import { loadFile, writeFile, builders } from "magicast";
 import path from "pathe";
 
 import { UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
-import { generateReliverseConfig } from "~/utils/reliverseConfig.js";
+import { generateReliverseConfig } from "~/utils/reliverseConfig/rc-create.js";
 
 import {
   downloadFileFromGitHub,

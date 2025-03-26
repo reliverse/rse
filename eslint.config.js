@@ -39,6 +39,7 @@ const config = tseslint.config(
       "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
+      "max-lines": ["error", 800],
       "@typescript-eslint/require-await": "off",
       "@typescript-eslint/no-dynamic-delete": "off",
       "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",

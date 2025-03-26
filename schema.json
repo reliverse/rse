@@ -603,6 +603,10 @@
     "existingRepoBehavior": {
       "type": "string",
       "enum": ["prompt", "autoYes", "autoYesSkipCommit", "autoNo"]
+    },
+    "relinterConfirm": {
+      "type": "string",
+      "enum": ["promptOnce", "promptEachFile", "autoYes"]
     }
   },
   "required": [
@@ -643,6 +647,7 @@
     "gitBehavior",
     "i18nBehavior",
     "scriptsBehavior",
-    "existingRepoBehavior"
+    "existingRepoBehavior",
+    "relinterConfirm"
   ]
 }

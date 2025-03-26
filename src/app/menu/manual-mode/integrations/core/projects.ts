@@ -3,7 +3,7 @@ import { nextStepsPrompt, relinka, selectPrompt } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
 import path from "pathe";
 
-import type { ProjectFramework } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ProjectFramework } from "~/libs/cfg/constants/cfg-types.js";
 
 import { askAppOrLib } from "~/app/prompts/askAppOrLib.js";
 import { askInstallDeps } from "~/app/prompts/askInstallDeps.js";
@@ -16,10 +16,8 @@ import {
   getProjectContent,
   type RequiredProjectContent,
 } from "~/utils/getProjectContent.js";
-import {
-  getReliverseConfig,
-  detectProjectsWithReliverse,
-} from "~/utils/reliverseConfig.js";
+import { detectProjectsWithReliverse } from "~/utils/reliverseConfig/rc-detect.js";
+import { getReliverseConfig } from "~/utils/reliverseConfig/rc-mod.js";
 import { findTsconfigUp } from "~/utils/tsconfigHelpers.js";
 
 import type { ShowMenuResult } from "./types.js";

@@ -2,7 +2,8 @@ import { selectPrompt, inputPrompt } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-schema.js";
+import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { DetectedProject } from "~/utils/reliverseConfig/rc-types.js";
 import type { ReliverseMemory } from "~/utils/schemaMemory.js";
 
 import { deployProject } from "~/app/menu/create-project/cp-modules/git-deploy-prompts/deploy.js";
@@ -33,7 +34,6 @@ import { handleCodemods } from "~/utils/handlers/handleCodemods.js";
 import { initGithubSDK } from "~/utils/instanceGithub.js";
 import { initVercelSDK } from "~/utils/instanceVercel.js";
 import { checkScriptExists } from "~/utils/pkgJsonHelpers.js";
-import { type DetectedProject } from "~/utils/reliverseConfig.js";
 
 type ProjectMenuOption =
   | "git-deploy"

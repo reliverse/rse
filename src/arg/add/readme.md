@@ -1,4 +1,4 @@
-# Reliverse CLI: `add` (Composer Mode)
+# Reliverse CLI: `add` command
 
 > **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
 
@@ -24,7 +24,7 @@ The `reliverse add -g` command simplifies installing global NPM packages and pop
 
 ## Terminology
 
-- **Manual Project Builder** = **Composer Mode**  
+- **Manual Project Builder** = `bun add` (without any params) = **Composer Mode**: Composer mode is perfect when you want full control over your stack, one step at a time — with an interactive CLI experience. Think of it as your project’s composer, conductor, and toolbox — all in one.  
 - **Integrations** = **Addons**
 
 ## Usage

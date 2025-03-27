@@ -41,7 +41,7 @@ Reliverse will run through them one by one and generate all the projects automat
 
 ## 🛠️ Use Case Example
 
-Let’s say you want:
+Let's say you want:
 
 - A landing page
 - A marketing site

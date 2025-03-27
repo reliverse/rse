@@ -55,12 +55,12 @@ It helps more than you think! Thanks for being here!
 
 ## Commands
 
-From bootstrapping projects to leveraging AI superpowers. Here’s a quick overview of the Reliverse CLI commands:
+From bootstrapping projects to leveraging AI superpowers. Here's a quick overview of the Reliverse CLI commands:
 
 ### Core
 
 - 🧙 `reliverse cli` — Your starting point for everything. Here you can launch an interactive wizard to create, configure, or boost your project.
-- 🧼 `reliverse logout` — Logs you out and clears credentials. For when it’s time to start fresh.
+- 🧼 `reliverse logout` — Logs you out and clears credentials. For when it's time to start fresh.
 - 🖥️ `reliverse studio` — Opens the Reliverse Studio — the visual brain center of your own Reliverse.
 - 🆘 `reliverse --help` — Shows all available commands and handy usage tips. Because we all forget sometimes.
 
@@ -71,9 +71,16 @@ From bootstrapping projects to leveraging AI superpowers. Here’s a quick overv
 - ✨ `reliverse ai gen <prompt>` — Describe an image and the AI will create it for you, saving it directly to your selected upload provider.  
 - ✅ `reliverse ai lint <prompt> <paths>` — Run smart linting on your code using AI. It catches issues, suggests fixes, and helps clean things up fast.
 
+### Add ([docs](./src/arg/add/readme.md))
+
+- ⬆️ `reliverse init` — Kickstart a new Reliverse project with a minimal setup. Building a library or an app? Just pick your direction and you're good to go — clean start, full power.
+- ➕ `reliverse add <something>` ([docs](./src/arg/add/readme.md)) — Drop in the essentials or the extras — from api, auth, db, payments, and i18n — to ai, file uploaders, and form libraries — all integrated into your codebase in seconds. Use `-g` to install global CLIs (like SDKs or toolchains), or even launch desktop apps like VSCode. Feels like magic. Actually is.
+- ⚙️ `reliverse add -g <something>` — Instantly install global CLI tools (like `bun`, `eslint`, or `@reliverse/relidler`), or even open desktop apps like VSCode or Obsidian right from your terminal.
+- 🧠 `reliverse add rules <something>` — Browse and install AI IDE rules for Reliverse, Cursor, Windsurf, Copilot, and more — official and community-sourced.  
+  Powered by smart caching and auto-conversion to `.mdc` format.
+
 ### Additional
 
-- ➕ `reliverse add` ([docs](./src/arg/add/readme.md)) — Integrates APIs, auth, DBs, payment providers, uploaders, form libs, i18n setups, and more — right into your codebase. Use `-g` to install global npm CLIs (like SDKs or tools), or even desktop apps like VSCode.
 - 🧬 `reliverse clone` ([docs](./src/arg/clone/readme.md)) — Clone a GitHub repo (just paste the link), or convert a webpage into LLM-ready content if you pass a non-GitHub URL.
 - 🪄 `reliverse cmod` ([docs](./src/arg/cmod/readme.md)) — Applies codemods to your project — for quick, safe refactoring powered by AI or presets.
 - 🔐 `reliverse env` ([docs](./src/arg/env/readme.md)) — Instantly generates a .env file based on your .env.example with an interactive wizard. Saves time, avoids typos.
@@ -90,8 +97,8 @@ From bootstrapping projects to leveraging AI superpowers. Here’s a quick overv
 ## Contribute, please 😽
 
 - Everything you see in Reliverse so far is **built by one person** ([@blefnk Nazar Kornienko](https://github.com/blefnk)) — with love, caffeine, and way too many terminal tabs.
-- Got feedback, ideas, bugs to squash, or just wanna vibe with the project? [Hop into my Discord](https://discord.gg/Pb8uKbwpsJ) — I’d love to hear from you.
-- Whether you want to code, brainstorm, fix typos, or just hang out — you’re always welcome here. No pressure, no gatekeeping — just good energy and open-source fun.
+- Got feedback, ideas, bugs to squash, or just wanna vibe with the project? [Hop into my Discord](https://discord.gg/Pb8uKbwpsJ) — I'd love to hear from you.
+- Whether you want to code, brainstorm, fix typos, or just hang out — you're always welcome here. No pressure, no gatekeeping — just good energy and open-source fun.
 
 ### <🏗️1> Come together, right now
 
@@ -148,7 +155,7 @@ reliverse cli
 
 - All done?
 - Head to GitHub and open a PR.
-- That’s it. You're amazing.
+- That's it. You're amazing.
 
 Thanks for being part of this!
 

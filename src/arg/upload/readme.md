@@ -1,10 +1,10 @@
 # Reliverse CLI: `upload` Command
 
+> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+
 [📦 NPM](https://npmjs.com/@reliverse/cli) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
 
 **@reliverse/cli** offers a streamlined `upload` command for quickly uploading images (and other files) to your preferred hosting destination—perfect for sharing assets or storing them for AI-driven workflows.
-
-> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
 
 ## Features
 
@@ -41,7 +41,7 @@ reliverse upload file1.jpg file2.pdf -p uploadthing
 reliverse upload path/to/image.jpg path/to/directory/**/*.{png,jpg,gif}
 ```
 
-- Detects the file is an image and uploads it to your chosen provider.  
+- Detects the file is an image and uploads it to your chosen provider.
 - Returns a direct link to the hosted file.
 
 - **Multiple File Upload**  
@@ -50,11 +50,11 @@ reliverse upload path/to/image.jpg path/to/directory/**/*.{png,jpg,gif}
 reliverse upload images/
 ```
 
-- Recursively scans the `images` directory for supported file types.  
+- Recursively scans the `images` directory for supported file types.
 - Uploads each file separately, logging the final URLs or statuses.
 
 - **Custom Configuration**  
-- Environment variables or a `reliverse.jsonc`/`.ts` file can specify custom hosting settings.  
+- Environment variables or a `reliverse.jsonc`/`.ts` file can specify custom hosting settings.
 - Example:
 
 ```jsonc
@@ -70,20 +70,20 @@ reliverse upload images/
 ## Behind the Scenes
 
 1. **File Detection**  
-   The CLI checks if the path is a single file or directory.  
+   The CLI checks if the path is a single file or directory.
 2. **Upload Process**  
-   - Gathers metadata (file type, size, etc.).  
-   - Sends data to the configured hosting endpoint.  
+   - Gathers metadata (file type, size, etc.).
+   - Sends data to the configured hosting endpoint.
 3. **Result Logging**  
-   - On success, prints the final hosted URL or location.  
+   - On success, prints the final hosted URL or location.
    - On failure, shows an error message with debug info.
 
 ## Contributing & Support
 
 We welcome feature requests, bug reports, and community contributions:
 
-- Join our [Discord](https://discord.gg/Pb8uKbwpsJ) to connect directly with the team and community.  
-- Check out the [Docs](https://docs.reliverse.org/cli) for detailed guides.  
+- Join our [Discord](https://discord.gg/Pb8uKbwpsJ) to connect directly with the team and community.
+- Check out the [Docs](https://docs.reliverse.org/cli) for detailed guides.
 
 If Reliverse helps your workflow, please consider supporting its development:
 

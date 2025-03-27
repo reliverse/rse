@@ -48,6 +48,7 @@ async function listServers(flags: string[]): Promise<void> {
   }
 
   const baseUrl = "https://glama.ai/api/mcp/v1/servers";
+  // @ts-expect-error TODO: fix ts
   const queryString = new URLSearchParams(queryParams).toString();
   const url = queryString ? `${baseUrl}?${queryString}` : baseUrl;
 

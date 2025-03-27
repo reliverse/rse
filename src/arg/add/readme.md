@@ -1,10 +1,12 @@
 # Reliverse CLI: `add` (Composer Mode)
 
+> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+
 [📦 NPM](https://npmjs.com/@reliverse/cli) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
 
 **@reliverse/cli** includes a **`add`** subcommand—internally known as the “Manual Project Builder” or **Composer Mode**. This interactive tool helps you **create, customize, and integrate** new or existing projects with **Reliverse Addons** (i.e., integrations for APIs, auth, i18n, DB, frameworks, etc.).
 
-> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+The `reliverse add -g` command simplifies installing global NPM packages and popular desktop applications directly from your command line. With a user-friendly, interactive prompt system, you can quickly select and install essential tools or specify exactly what you need in one go.
 
 ## Features
 
@@ -41,11 +43,11 @@ reliverse add something
 ```
 
 - If **your current directory is empty**, the builder will offer to **create** a new project.
-- If you already have an existing project or multiple projects, you’ll see a **project selector** to edit or create.
+- If you already have an existing project or multiple projects, you'll see a **project selector** to edit or create.
 
 ## Example Flow
 
-Below is an overview of the prompts and menus you’ll encounter.
+Below is an overview of the prompts and menus you'll encounter.
 
 ### 1. Main Menu Prompt
 
@@ -118,11 +120,98 @@ Selecting this opens Composer Mode to either create or configure a project.
 - [ ] After an addon is integrated, ask if the user wants to install the related cursor rule  
 - [ ] Implement “Apply everything as configured in `reliverse.{ts,jsonc}`” option  
 
+---
+
+## Global Apps
+
+## Global Apps Features
+
+- ⚡ **Interactive Multiselect Installation**
+  Choose multiple apps or packages from an interactive checklist.
+
+- 🛠️ **Dual Installation Modes**
+  Easily switch between installing global NPM packages or common desktop applications for your OS.
+
+- 💻 **Cross-platform Compatibility**
+  Automatically detects your OS and installs apps suitable for macOS, Windows, or Linux.
+
+- 📦 **Quick Direct Installation**
+  Install multiple packages and apps directly from the command line with one command.
+
+## Global Apps Usage
+
+### Interactive Installation
+
+Run the command without arguments to launch an interactive prompt:
+
+```sh
+reliverse install
+```
+
+You'll see:
+
+```bash
+◆ Select Installation Type
+│
+│ > cli apps
+│   desktop apps
+```
+
+- **cli apps**: Opens a multiselect prompt listing popular global NPM packages.
+- **desktop apps**: Presents you with a list of essential desktop applications tailored to your OS.
+
+Simply select the tools you need and confirm.
+
+### Direct Installation
+
+Install CLIs or desktop apps directly without prompts:
+
+```sh
+reliverse i <app1> <app2> ...
+reliverse install bun obsidian vscode node biome
+```
+
+This immediately installs the selected applications or global NPM packages, automatically handling OS-specific details.
+
+## Supported Desktop Apps
+
+**💡 Coming Soon**:
+
+- **Editors & IDEs**: VSCode, Cursor, Windsurf
+- **Productivity**: Obsidian, Notion, Evernote
+- **Development Tools**: Git, Node.js, Bun, Pnpm, Docker
+- **Utilities**: Postman, Warp, Tabby
+- _**and more...**_
+
+## Supported Global NPM Packages
+
+**💡 Coming Soon**:
+
+- `typescript`, `eslint`, `biome`
+- `@reliverse/relidler`
+- _**and more...**_
+
+## Example Usage
+
+- **Quick install essential development tools**:
+
+```sh
+reliverse install bun node vscode biome
+```
+
+- **Interactive selection**:
+
+```sh
+reliverse install
+```
+
+Then follow the interactive prompts to choose from desktop apps or npm packages.
+
 ## Contributing & Support
 
-Have feature requests or feedback? We’d love to hear from you:
+Have feature requests or feedback? We'd love to hear from you:
 
-- Join the conversation on [Discord](https://discord.gg/Pb8uKbwpsJ).  
+- Join the conversation on [Discord](https://discord.gg/Pb8uKbwpsJ).
 - Check out our [Docs](https://docs.reliverse.org/cli) for detailed guidance.
 
 If Reliverse saves you time and helps your workflow, please consider supporting its continued development:

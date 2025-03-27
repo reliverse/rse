@@ -1,5 +1,7 @@
 # Reliverse CLI: `cmod` Command
 
+> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+
 [📦 NPM](https://npmjs.com/@reliverse/cli) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
 
 The `reliverse cmod` command allows you to easily apply powerful codemods (code modifications) to your project. Codemods automate complex or repetitive refactoring tasks, saving significant time and effort while ensuring consistency across your codebase.

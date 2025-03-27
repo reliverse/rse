@@ -1,5 +1,7 @@
 # Reliverse CLI: `ai` Command
 
+> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+
 [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [📚 Docs](https://docs.reliverse.org) • [💖 Sponsors](https://github.com/sponsors/blefnk)
 
 **@reliverse/ai** is a multi-modal AI agent. This integration allows for AI-powered chat and agents. Easily invoke specialized AI agents using simple chat commands and watch them work magic on your code.
@@ -51,16 +53,16 @@ All text before, after, or between these tokens (`@agentName`, `@-params`) is ad
 
 ```bash
 # Simple usage
-reliverse ai generate "robot playing guitar"
+reliverse ai gen "robot playing guitar"
 
 # Change model
-reliverse ai generate "watercolor forest" -m stable-diffusion
+reliverse ai gen "watercolor forest" -m stable-diffusion
 
 # Specify provider for upload
-reliverse ai generate "space sunset" -p uploadcare
+reliverse ai gen "space sunset" -p uploadcare
 
 # Experimental chat invocation
-@reimgen generate an image of a cat
+@reimgen gen an image of a cat
 ```
 
 ### 2. Relinter Agent

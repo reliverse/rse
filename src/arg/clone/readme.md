@@ -1,15 +1,15 @@
 # Reliverse CLI: `clone` Command
 
+> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+
 [📦 NPM](https://npmjs.com/@reliverse/cli) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
 
 **The `clone` command** in **@reliverse/cli** lets you directly clone GitHub repositories or crawl arbitrary URLs to capture “LLM-ready” structure for AI-driven analysis.
 
-> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
-
 ## Features
 
 - 🚀 **One Command, Two Modes**  
-  - **GitHub Repos**: Quickly clone repositories from GitHub.  
+  - **GitHub Repos**: Quickly clone repositories from GitHub.
   - **Other URLs**: Use **Firecrawl** under the hood to capture website content in a structured format.
 
 - 🔗 **Seamless Integration**  
@@ -54,7 +54,7 @@ reliverse clone https://example.com
 ## How It Works
 
 1. **URL Check**  
-   The CLI first checks if the URL is a valid GitHub repository link.  
+   The CLI first checks if the URL is a valid GitHub repository link.
    - If **yes**, it clones the repo.
    - If **no**, it switches to **Firecrawl** mode.
 
@@ -63,7 +63,7 @@ reliverse clone https://example.com
    - Organizes the data in a “git-like” directory structure for easy integration into AI workflows.
 
 3. **Output**  
-   - GitHub repos are cloned into a local directory matching the repo name.  
+   - GitHub repos are cloned into a local directory matching the repo name.
    - Firecrawl exports or logs its structured data so you can review or feed it directly to an AI tool.
 
 ## Example Scenarios

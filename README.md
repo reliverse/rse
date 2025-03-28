@@ -71,14 +71,14 @@ From bootstrapping projects to unleashing AI superpowers. Below is a quick overv
 - `reliverse studio` — Opens the Reliverse Studio — the visual brain center of your local Reliverse memory.
 - `reliverse --help` — Shows all available commands and handy usage tips. Because we all forget sometimes.
 
-### AI Commands ([docs](./src/arg/ai/readme.md))
+### AI Commands ([docs](./src/cli/docs/docs-ai.md))
 
 - `reliverse ai <prompt>` — Your terminal-sidekick. Ask questions, get help, or just have a quick chat with Reliverse AI.  
 - `reliverse ai code <prompt> <paths>` — Need a refactor or something new? Let AI generate or improve code across the given paths.  
 - `reliverse ai gen <prompt>` — Describe an image and the AI will create it for you, saving it directly to your selected upload provider.  
 - `reliverse ai lint <prompt> <paths>` — Run smart linting on your code using AI. It catches issues, suggests fixes, and helps clean things up fast.
 
-### Init/Add Commands ([docs](./src/arg/add/readme.md))
+### Init/Add Commands ([docs](./src/cli/docs/docs-add.md))
 
 - `reliverse init` — Kickstart a new minimal Reliverse project. Building a library or an app? Just pick your direction and you're good to go — clean start, full power.
 - `reliverse add` _(without args)_ — Same as `reliverse init`. Both open an interactive wizard — with different prompts depending on whether the folder is empty or not.
@@ -88,12 +88,22 @@ From bootstrapping projects to unleashing AI superpowers. Below is a quick overv
 
 ### Additional
 
-- `reliverse clone` ([docs](./src/arg/clone/readme.md)) — Clone a GitHub repo (just paste the link), or convert a webpage into LLM-ready content if you pass a non-GitHub URL.
-- `reliverse cmod` ([docs](./src/arg/cmod/readme.md)) — Applies codemods to your project — for quick, safe refactoring powered by AI or presets.
-- `reliverse env` ([docs](./src/arg/env/readme.md)) — Instantly generates a .env file based on your .env.example with an interactive wizard. Saves time, avoids typos.
-- `reliverse multireli` ([docs](./src/arg/multireli/readme.md)) — Generates multiple reliverse config files so you can batch-generate multiple projects with reliverse cli.
-- `reliverse upload` ([docs](./src/arg/upload/readme.md)) — Uploads a media files like images to your selected provider like UploadThing and Uploadcare.
+- `reliverse clone` ([docs](./src/cli/docs/docs-clone.md)) — Clone a GitHub repo (just paste the link), or convert a webpage into LLM-ready content if you pass a non-GitHub URL.
+- `reliverse cmod` ([docs](./src/cli/docs/docs-cmod.md)) — Applies codemods to your project — for quick, safe refactoring powered by AI or presets.
+- `reliverse env` ([docs](./src/cli/docs/docs-env.md)) — Instantly generates a .env file based on your .env.example with an interactive wizard. Saves time, avoids typos.
+- `reliverse multireli` ([docs](./src/cli/docs/docs-multireli.md)) — Generates multiple reliverse config files so you can batch-generate multiple projects with reliverse cli.
+- `reliverse upload` ([docs](./src/cli/docs/docs-upload.md)) — Uploads a media files like images to your selected provider like UploadThing and Uploadcare.
 - `reliverse sync` _(coming soon)_ — Syncs your local @reliverse/cli memory with your own Reliverse AI which lies on [reliverse.org](https://reliverse.org).
+
+## API (for advanced users)
+
+- The SDK lets you build custom Reliverse CLI plugins, interact with [reliverse.org](https://reliverse.org), or even power up your own CLIs.
+- No need to reinvent the wheel — [@blefnk](https://github.com/blefnk) already took care of the hard parts, so you can use it however you like.
+- If it saves you time, please [consider making a small donation](https://github.com/sponsors/blefnk) 🩷 to support ongoing development.
+
+```sh
+bun add @reliverse/cli-sdk
+```
 
 ## Contribute, please 😽
 

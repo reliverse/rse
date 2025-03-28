@@ -7,7 +7,7 @@ import { defineConfig } from "@reliverse/relidler-cfg";
  */
 export default defineConfig({
   // Bump configuration
-  bumpDisable: false,
+  bumpDisable: true,
   bumpFilter: ["package.json", "reliverse.ts"],
   bumpMode: "autoPatch",
 
@@ -48,10 +48,20 @@ export default defineConfig({
   libsList: {
     "@reliverse/cli-cfg": {
       libDeclarations: true,
-      libDescription: "@reliverse/cli defineConfig",
+      libDescription:
+        "@reliverse/cli-cfg provides defineConfig() for the @reliverse/cli config",
       libDirName: "cfg",
       libMainFile: "cfg/cfg-main.ts",
       libPkgKeepDeps: ["pathe", "fs-extra", "@sinclair/typebox"],
+      libTranspileMinify: true,
+    },
+    "@reliverse/sdk": {
+      libDeclarations: true,
+      libDescription:
+        "@reliverse/sdk allows you to create new Reliverse CLI plugins, interact with reliverse.org, and even extend your own CLI functionality.",
+      libDirName: "sdk",
+      libMainFile: "sdk/sdk-main.ts",
+      libPkgKeepDeps: true,
       libTranspileMinify: true,
     },
   },

@@ -1,6 +1,6 @@
 # Reliverse CLI: `ai` Command
 
-> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+> **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
 [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [📚 Docs](https://docs.reliverse.org) • [💖 Sponsors](https://github.com/sponsors/blefnk)
 

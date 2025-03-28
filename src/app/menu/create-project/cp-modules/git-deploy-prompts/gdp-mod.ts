@@ -127,6 +127,7 @@ export async function configureGithubRepo(
  * - Proceeds with Vercel deployment (including domain selection).
  */
 export async function promptGitDeploy({
+  isLib,
   projectName,
   config,
   projectPath,
@@ -143,6 +144,7 @@ export async function promptGitDeploy({
   isTemplateDownload,
   frontendUsername,
 }: {
+  isLib: boolean;
   projectName: string;
   config: ReliverseConfig;
   projectPath: string;
@@ -409,8 +411,17 @@ export async function promptGitDeploy({
     }
 
     // -----------------------------------------------------------------
-    // STEP 4: Deployment to Vercel (if GitHub was successful)
+    // STEP 4: Deployment to Vercel (if GitHub was successful and !isLib)
     // -----------------------------------------------------------------
+    if (isLib) {
+      return {
+        deployService: "none",
+        primaryDomain,
+        isDeployed: false,
+        allDomains,
+      };
+    }
+
     let alreadyDeployed = false;
     try {
       alreadyDeployed = await checkVercelDeployment(

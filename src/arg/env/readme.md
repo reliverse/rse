@@ -1,6 +1,6 @@
 # 🔐 `reliverse env`
 
-> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+> **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
 Need a `.env` file but don't want to copy things manually or mess it up?  
 This command auto-generates a `.env` file based on your `.env.example`.  

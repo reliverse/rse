@@ -2,7 +2,7 @@ import { selectPrompt } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
 
 const KNOWN_APPS = ["relivator"];
-const KNOWN_LIBS = ["recme"];
+const KNOWN_LIBS = ["recme", "reinit"];
 
 export async function askAppOrLib(projectName: string): Promise<"app" | "lib"> {
   if (KNOWN_APPS.includes(projectName)) {

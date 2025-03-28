@@ -63,7 +63,7 @@ async function removeGitDir(effectiveDir: string): Promise<boolean> {
  * Initializes Git repository in effectiveDir if not already present.
  * Also renames the default branch to config.repoBranch if provided.
  */
-async function initializeGitRepo(
+export async function initializeGitRepo(
   git: SimpleGit,
   alreadyGit: boolean,
   config: ReliverseConfig,

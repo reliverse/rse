@@ -1,6 +1,6 @@
 # Reliverse CLI: `upload` Command
 
-> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+> **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
 [📦 NPM](https://npmjs.com/@reliverse/cli) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
 

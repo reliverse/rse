@@ -1,12 +1,16 @@
 # Reliverse CLI: `add` command
 
-> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+> **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
 [📦 NPM](https://npmjs.com/@reliverse/cli) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
 
-**@reliverse/cli** includes a **`add`** subcommand—internally known as the “Manual Project Builder” or **Composer Mode**. This interactive tool helps you **create, customize, and integrate** new or existing projects with **Reliverse Addons** (i.e., integrations for APIs, auth, i18n, DB, frameworks, etc.).
+**@reliverse/cli** includes a **`reliverse add <something>`** subcommand—internally known as the “Manual Project Builder” or **Composer Mode**. This interactive tool helps you **create, customize, and integrate** new or existing projects with **Reliverse Addons** (i.e., integrations for APIs, auth, i18n, DB, frameworks, etc.).
 
-The `reliverse add -g` command simplifies installing global NPM packages and popular desktop applications directly from your command line. With a user-friendly, interactive prompt system, you can quickly select and install essential tools or specify exactly what you need in one go.
+The `reliverse add -g <something>` command simplifies installing global NPM packages and popular desktop applications directly from your command line. With a user-friendly, interactive prompt system, you can quickly select and install essential tools or specify exactly what you need in one go.
+
+**Note**: Running `reliverse add` without a target (aka `<something>`) does the same thing as `reliverse init`.
+
+`reliverse add rule <something>` — Browse and install AI IDE rules for Reliverse, Cursor, Windsurf, Copilot, and more — official and community-sourced. Powered by smart caching and auto-conversion to `.mdc` format when needed.
 
 ## Features
 
@@ -24,7 +28,7 @@ The `reliverse add -g` command simplifies installing global NPM packages and pop
 
 ## Terminology
 
-- **Manual Project Builder** = `bun add` (without any params) = **Composer Mode**: Composer mode is perfect when you want full control over your stack, one step at a time — with an interactive CLI experience. Think of it as your project’s composer, conductor, and toolbox — all in one.  
+- **Manual Project Builder** = `bun add` (without any params) = **Composer Mode**: Composer mode is perfect when you want full control over your stack, one step at a time — with an interactive CLI experience. Think of it as your project's composer, conductor, and toolbox — all in one.  
 - **Integrations** = **Addons**
 
 ## Usage

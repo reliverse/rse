@@ -2,13 +2,17 @@ import { ensuredir } from "@reliverse/fs";
 import { nextStepsPrompt, relinka, selectPrompt } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
 import path from "pathe";
+import { simpleGit, type SimpleGit } from "simple-git";
 
 import type { ProjectFramework } from "~/libs/cfg/constants/cfg-types.js";
 
+import { promptGitDeploy } from "~/app/menu/create-project/cp-modules/git-deploy-prompts/gdp-mod.js";
+import { initializeGitRepo } from "~/app/menu/create-project/cp-modules/git-deploy-prompts/git.js";
 import { askAppOrLib } from "~/app/prompts/askAppOrLib.js";
 import { askInstallDeps } from "~/app/prompts/askInstallDeps.js";
 import { askOpenInIDE } from "~/app/prompts/askOpenInIDE.js";
 import { askProjectName } from "~/app/prompts/askProjectName.js";
+import { shouldInitGit } from "~/app/prompts/shouldInitGit.js";
 import { createPackageJSON } from "~/utils/createPackageJSON.js";
 import { createTSConfig } from "~/utils/createTSConfig.js";
 import { isDirectoryEmpty } from "~/utils/filesysHelpers.js";
@@ -18,6 +22,7 @@ import {
 } from "~/utils/getProjectContent.js";
 import { detectProjectsWithReliverse } from "~/utils/reliverseConfig/rc-detect.js";
 import { getReliverseConfig } from "~/utils/reliverseConfig/rc-mod.js";
+import { getReliverseMemory } from "~/utils/reliverseMemory.js";
 import { findTsconfigUp } from "~/utils/tsconfigHelpers.js";
 
 import type { ShowMenuResult } from "./types.js";
@@ -99,7 +104,7 @@ export async function handleProjectSelectionMenu(
   if (selectedOption === "new-project") {
     const projectName = await askProjectName({});
     const projectPath = path.resolve(cwd, projectName);
-    await createNewProject(projectPath, projectName, isDev);
+    await initMinimalReliverseProject(projectPath, projectName, isDev, true);
     return projectPath;
   }
 
@@ -110,10 +115,11 @@ export async function handleProjectSelectionMenu(
  * Creates a new project directory and initializes it with basic config files.
  * Also prompts the user for additional setup steps.
  */
-export async function createNewProject(
+export async function initMinimalReliverseProject(
   projectPath: string,
   projectName: string,
   isDev: boolean,
+  isNonInteractive: boolean,
 ): Promise<void> {
   const projectType = await askAppOrLib(projectName);
   const isLib = projectType === "lib";
@@ -135,20 +141,53 @@ export async function createNewProject(
     }
   }
 
-  await getReliverseConfig(
+  const { config } = await getReliverseConfig(
     projectPath,
     isDev,
     { projectFramework },
     customTsconfigPath,
   );
 
+  if (isDev) {
+    const shouldInit = await shouldInitGit(isDev);
+    if (shouldInit) {
+      const git: SimpleGit = simpleGit({ baseDir: projectPath });
+      await initializeGitRepo(git, false, config, false);
+    }
+  } else {
+    const memory = await getReliverseMemory();
+    await promptGitDeploy({
+      isLib: false,
+      projectName,
+      config,
+      projectPath,
+      primaryDomain: "",
+      hasDbPush: false,
+      shouldRunDbPush: false,
+      shouldInstallDeps: false,
+      isDev,
+      memory,
+      cwd: projectPath,
+      maskInput: false,
+      skipPrompts: false,
+      selectedTemplate: "unknown",
+      isTemplateDownload: false,
+      frontendUsername: "",
+    });
+  }
+
   await nextStepsPrompt({
     title: `Created new project "${projectName}" with minimal Reliverse config.`,
-    content: [
-      "It's recommended to:",
-      "1. Edit the generated config files as needed.",
-      "2. Rerun the manual builder to apply changes.",
-    ],
+    content: isNonInteractive
+      ? [
+          "It's recommended to:",
+          "1. Edit the generated config files as needed.",
+          "2. Rerun the manual builder to apply changes.",
+          "p.s. Fast way to open manual builder: reliverse init",
+        ]
+      : isDev
+        ? ["It's recommended to:", "bun dev:init"]
+        : ["It's recommended to:", `cd ${projectPath}`, "reliverse init"],
   });
 
   try {

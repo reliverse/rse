@@ -73,6 +73,7 @@ export async function downloadRepoOption(
   }
 
   const { deployService } = await promptGitDeploy({
+    isLib: false,
     projectName,
     config,
     projectPath: dir,

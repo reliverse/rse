@@ -1,6 +1,6 @@
 # 🧪 `reliverse multireli`
 
-> **Note**: This command is currently in the development and may have some limitations. Feedback is welcome!
+> **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
 The `multireli` command lets you define multiple Reliverse config files and use them to generate multiple projects in a single run.  
 Useful when you want to scaffold several related projects at once — like a monorepo, microservices setup, or just different playgrounds to experiment with.

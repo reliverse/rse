@@ -175,6 +175,7 @@ export async function createWebProject({
   // -------------------------------------------------
   const { deployService, primaryDomain, isDeployed, allDomains } =
     await promptGitDeploy({
+      isLib: false,
       projectName,
       config,
       projectPath,

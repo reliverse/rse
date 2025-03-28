@@ -6,15 +6,15 @@
 
 ## What it can do
 
-- 🦾 It's a superapp for devs. One CLI. Tons of stuff. Spin up, refactor, deploy — it's all in there.
+- 🦾 It's a superapp for devs. One CLI. Tons of stuff. Spin up, refactor, deploy, AI — it's all in there.
 - 🚀 Start fresh or load up an existing template in seconds.
-- 🔧 Refactor safely, drop in popular libraries, and keep your codebase happy.
+- 🔧 Refactor safely, drop in popular libs, and keep your codebase happy.
 - ⚙️ Automate boring setup stuff like ESLint, env files, etc — let the CLI handle it.
 - 🏗️ Works great with Next.js and plays nice with other frameworks too.
 - 🌐 Push to GitHub, deploy to Vercel — all in one go.
 - ⏬ Reliverse auto-clones repos/templates and configures them smartly.
-- 🔌 Wanna get nerdy? Use the `🔬 Create/edit project manually` option for more control and power tools.
-- 🤖 Chat with Reliverse AI or let agentic tools like Relinter improve your code.
+- 🔌 Use the `🔬 Create/edit project manually` (or `reliverse init`) to integrate things into your codebase.
+- 🤖 Chat with Reliverse AI or let agentic tools like Relinter suggest improvements to your code.
 
 ## Getting Started
 
@@ -55,7 +55,11 @@ It helps more than you think! Thanks for being here!
 
 ## Commands
 
-From bootstrapping projects to leveraging AI superpowers. Here's a quick overview of the Reliverse CLI commands:
+From bootstrapping projects to leveraging AI superpowers. Below is a quick overview of the Reliverse CLI commands.
+
+- All commands and flags are optional. Reliverse CLI does its best to guide you even when you skip arguments.
+- `reliverse cli` is the all-in-one entrypoint — it includes everything the individual commands offer.  
+- Use individual commands/flags if you prefer quick access to specific features or your terminal is non-interactive (e.g. CI/CD).
 
 ### Core
 
@@ -71,13 +75,13 @@ From bootstrapping projects to leveraging AI superpowers. Here's a quick overvie
 - ✨ `reliverse ai gen <prompt>` — Describe an image and the AI will create it for you, saving it directly to your selected upload provider.  
 - ✅ `reliverse ai lint <prompt> <paths>` — Run smart linting on your code using AI. It catches issues, suggests fixes, and helps clean things up fast.
 
-### Add ([docs](./src/arg/add/readme.md))
+### Init & Add ([docs](./src/arg/add/readme.md))
 
-- ⬆️ `reliverse init` — Kickstart a new Reliverse project with a minimal setup. Building a library or an app? Just pick your direction and you're good to go — clean start, full power.
-- ➕ `reliverse add <something>` ([docs](./src/arg/add/readme.md)) — Drop in the essentials or the extras — from api, auth, db, payments, and i18n — to ai, file uploaders, and form libraries — all integrated into your codebase in seconds. Use `-g` to install global CLIs (like SDKs or toolchains), or even launch desktop apps like VSCode. Feels like magic. Actually is.
-- ⚙️ `reliverse add -g <something>` — Instantly install global CLI tools (like `bun`, `eslint`, or `@reliverse/relidler`), or even open desktop apps like VSCode or Obsidian right from your terminal.
-- 🧠 `reliverse add rules <something>` — Browse and install AI IDE rules for Reliverse, Cursor, Windsurf, Copilot, and more — official and community-sourced.  
-  Powered by smart caching and auto-conversion to `.mdc` format.
+- ⬆️ **`reliverse init`** — Kickstart a new minimal Reliverse project. Building a library or an app? Just pick your direction and you're good to go — clean start, full power.
+- ⬆️ **`reliverse add`** _(without args)_ — Same as `reliverse init`. Both open an interactive wizard — with different prompts depending on whether the folder is empty or not.
+- ➕ **`reliverse add <something>`** — Drop in the essentials or the extras — from API, auth, DB, payments, and i18n — to AI tools, file uploaders, and form libraries — all integrated into your codebase in seconds. Feels like magic. Actually is.
+- ⚙️ **`reliverse add -g <something>`** — Use `-g` to install global CLIs (e.g. `eslint`, `@reliverse/relidler`), essential tools (e.g. `bun`, `stripe`), or even desktop apps (e.g. `code`, `obsidian`) — all from your terminal.
+- 🧠 **`reliverse add rule <something>`** — Browse and install AI IDE rules for Reliverse, Cursor, Windsurf, Copilot, and more — from both official and community sources. Powered by smart caching and auto-conversion to `.mdc` when needed.
 
 ### Additional
 
@@ -88,23 +92,18 @@ From bootstrapping projects to leveraging AI superpowers. Here's a quick overvie
 - ☁️ `reliverse upload` ([docs](./src/arg/upload/readme.md)) — Uploads a media files like images to your selected provider like UploadThing and Uploadcare.
 - 🧠 `reliverse sync` _(coming soon)_ — Syncs your local @reliverse/cli memory with your own Reliverse AI which lies on [reliverse.org](https://reliverse.org).
 
-## TODO
-
-- [x] Build a bunch of useful stuff
-- [ ] Release V2 when all features will be stable
-- [ ] Make sure Reliverse CLI handles full dev workflows
-
 ## Contribute, please 😽
 
 - Everything you see in Reliverse so far is **built by one person** ([@blefnk Nazar Kornienko](https://github.com/blefnk)) — with love, caffeine, and way too many terminal tabs.
-- Got feedback, ideas, bugs to squash, or just wanna vibe with the project? [Hop into my Discord](https://discord.gg/Pb8uKbwpsJ) — I'd love to hear from you.
-- Whether you want to code, brainstorm, fix typos, or just hang out — you're always welcome here. No pressure, no gatekeeping — just good energy and open-source fun.
+- Got feedback, ideas, bugs to squash, or just wanna vibe with the project? [Hop into my Discord](https://discord.gg/Pb8uKbwpsJ) — I'd love to chat.
+- Whether you want to code, brainstorm, fix typos, or just hang out — you're always welcome here.  
+  No pressure, no gatekeeping — just good energy and open-source fun.
 
 ### <🏗️1> Come together, right now
 
 Two ways to clone this repo and contribute:
 
-**Go classic**:
+**Classic way**:
 
 ```bash
 git clone https://github.com/reliverse/cli.git
@@ -113,7 +112,7 @@ code . # open vscode
 bun i
 ```
 
-**Or go auto-mode**:
+**Or the Reliverse way**:
 
 ```bash
 bun i -g @reliverse/cli
@@ -130,8 +129,8 @@ Boom. You're in.
 
 ### <🏗️2> You're a magician, do magic
 
-1. Run `bun latest` to update dependencies.
-2. Use AI (Reliverse, Cursor, whatever floats your dev boat) or do it manually.
+1. Run `bun latest` to install deps and get things fresh.
+2. Use AI (Reliverse, Cursor, whatever floats your dev boat) — or code it by hand.
 3. Commit and push your changes:
 
 **Classic way**:
@@ -142,7 +141,7 @@ git commit -m "your commit message"
 git push
 ```
 
-**Automated way**:
+**Reliverse way**:
 
 ```bash
 reliverse cli
@@ -153,7 +152,7 @@ reliverse cli
 
 ### <🏗️3> What a great time to live
 
-- All done?
+- All done? High five! 🖐️
 - Head to GitHub and open a PR.
 - That's it. You're amazing.
 

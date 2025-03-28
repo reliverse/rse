@@ -9,8 +9,9 @@ export default defineConfig({
   // General project information
   projectName: "@reliverse/cli",
   projectAuthor: "reliverse",
-  projectDescription: "@reliverse/cli is your all-in-one companion for building and improving web projects — whether you're kicking off something new or upgrading an existing app. It's like having a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.",
-  version: "1.6.2",
+  projectDescription:
+    "@reliverse/cli is your all-in-one companion for building and improving web projects — whether you're kicking off something new or upgrading an existing app. It's like having a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.",
+  version: "1.6.3",
   projectLicense: "MIT",
   projectState: "creating",
   projectRepository: "https://github.com/reliverse/cli",
@@ -64,12 +65,12 @@ export default defineConfig({
     dates: "unknown",
     markdown: "unknown",
     security: "unknown",
-    routing: "unknown"
+    routing: "unknown",
   },
   monorepo: {
     type: "none",
     packages: [],
-    sharedPackages: []
+    sharedPackages: [],
   },
 
   // List dependencies to exclude from checks
@@ -100,20 +101,11 @@ export default defineConfig({
       "dev:add",
       "dev:ai",
       "dev:clone",
-      "dev:cmod"
+      "dev:cmod",
     ],
     webview: [],
-    language: [
-      "typescript"
-    ],
-    themes: [
-      "default",
-      "eslint",
-      "biome",
-      "uploadthing",
-      "zod",
-      "typebox"
-    ]
+    language: ["typescript"],
+    themes: ["default", "eslint", "biome", "uploadthing", "zod", "typebox"],
   },
 
   // Code style preferences
@@ -140,8 +132,8 @@ export default defineConfig({
       replaceHttp: false,
       replaceProcess: false,
       replaceConsole: false,
-      replaceEvents: false
-    }
+      replaceEvents: false,
+    },
   },
 
   // Settings for cloning an existing repo
@@ -172,6 +164,5 @@ export default defineConfig({
 
   // Behavior for Reliverse AI Chat & Agents
   // Options: promptOnce | promptEachFile | autoYes
-  relinterConfirm: "promptOnce"
-}
-);
+  relinterConfirm: "promptOnce",
+});

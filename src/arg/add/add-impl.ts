@@ -3,7 +3,7 @@ import type { ParamsOmitReli } from "~/app/app-types.js";
 import { getProjectContent } from "~/utils/getProjectContent.js";
 import { setupDevModeIfNeeded } from "~/utils/testsRuntime.js";
 
-import type { ShowMenuResult } from "./local/core/types.js";
+import type { ShowMenuResult } from "./add-local/core/types.js";
 
 import {
   determineProjectStatus,
@@ -11,7 +11,7 @@ import {
   handleIncompleteProject,
   handleNewProject,
   handleProjectSelectionMenu,
-} from "./local/core/projects.js";
+} from "./add-local/core/projects.js";
 
 /**
  * Main entry point for the manual builder menu.

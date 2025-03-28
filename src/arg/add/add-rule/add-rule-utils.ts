@@ -1,87 +1,21 @@
 import { ensuredir } from "@reliverse/fs";
-import {
-  selectPrompt,
-  multiselectPrompt,
-  confirmPrompt,
-} from "@reliverse/prompts";
+import { multiselectPrompt, confirmPrompt } from "@reliverse/prompts";
 import { relinka } from "@reliverse/prompts";
 import fs from "fs-extra";
 import { ofetch } from "ofetch";
 import pMap from "p-map";
 import path from "pathe";
 
-import { homeDir } from "~/libs/cfg/constants/cfg-details.js";
 import { getMaxHeightSize } from "~/utils/microHelpers.js";
 
-// ----------------------
-// Type Definitions
-// ----------------------
+import type { UnghRepoResponse } from "./add-rule-types.js";
 
-export type UnghRepoResponse = {
-  repo?: {
-    pushedAt: string;
-  };
-};
-
-export type RuleRepo = {
-  id: string;
-  author: string;
-  name: string;
-  description: string;
-  branch?: string;
-  tags?: string[];
-  category?: string;
-  website?: string;
-  isOfficial?: boolean;
-  isCommunity?: boolean;
-  communityPath?: string;
-};
-
-// ----------------------
-// Constants & Helpers
-// ----------------------
-
-const CACHE_ROOT_DIR = path.join(homeDir, ".reliverse", "rules");
-const DEFAULT_BRANCH = "main";
-const RULE_FILE_EXTENSION = ".mdc";
-
-/**
- * Returns the cache directory for a given repository owner.
- * @param owner - The repository owner.
- * @returns The cache directory path.
- */
-function getRepoCacheDir(owner: string): string {
-  return path.join(CACHE_ROOT_DIR, owner);
-}
-
-// ----------------------
-// Repository Configurations
-// ----------------------
-
-export const RULES_REPOS: RuleRepo[] = [
-  {
-    id: "blefnk/awesome-cursor-rules",
-    author: "blefnk",
-    name: "Reliverse Rules",
-    description: "AI IDE rules (Cursor, Windsurf, Copilot)",
-    branch: "main",
-    tags: ["cursor", "windsurf", "copilot"],
-    category: "ide",
-    isOfficial: true,
-  },
-  {
-    id: "pontusab/directories",
-    author: "pontusab",
-    name: "Community Rules",
-    description: "Community-contributed AI IDE rules",
-    branch: "main",
-    tags: ["community", "cursor"],
-    category: "ide",
-    isOfficial: false,
-    isCommunity: true,
-    communityPath: "packages/data/src/rules",
-  },
-];
+import {
+  DEFAULT_BRANCH,
+  getRepoCacheDir,
+  RULE_FILE_EXTENSION,
+  RULES_REPOS,
+} from "./add-rule-const.js";
 
 // ----------------------
 // Utility Functions
@@ -109,7 +43,7 @@ function cleanTsContent(content: string): string {
  * @param filePath - The source file path.
  * @returns The converted markdown content.
  */
-function convertTsToMdc(content: string, filePath: string): string {
+export function convertTsToMdc(content: string, filePath: string): string {
   let cleaned = content.replace(/export\s+const\s+\w+\s*=\s*/, "");
   cleaned = cleaned.replace(/;\s*$/, "");
   cleaned = cleaned.replace(/import\s+.*?from\s+['"].*?['"];?\s*/g, "");
@@ -146,7 +80,7 @@ export async function hasCursorRulesDir(cwd: string): Promise<boolean> {
  * @param cwd - Current working directory.
  * @returns Boolean indicating if at least one .mdc file exists.
  */
-async function hasInstalledRules(cwd: string): Promise<boolean> {
+export async function hasInstalledRules(cwd: string): Promise<boolean> {
   const rulesDir = path.join(cwd, ".cursor", "rules");
   if (!(await fs.pathExists(rulesDir))) return false;
   const files = await fs.readdir(rulesDir);
@@ -253,7 +187,7 @@ async function getCachedRuleFiles(owner: string): Promise<string[]> {
  * @param isDev - Flag indicating development mode.
  * @returns Array of file names (cached filenames) that will be installed.
  */
-async function downloadRules(
+export async function downloadRules(
   repoId: string,
   isDev: boolean,
 ): Promise<string[]> {
@@ -465,7 +399,7 @@ async function downloadRules(
  * @param owner - Repository owner.
  * @param cwd - Current working directory.
  */
-async function installRules(
+export async function installRules(
   files: string[],
   owner: string,
   cwd: string,
@@ -520,7 +454,10 @@ async function installRules(
  * @param cwd - Current working directory.
  * @param isDev - Flag indicating development mode.
  */
-async function handleRuleUpdates(cwd: string, isDev: boolean): Promise<void> {
+export async function handleRuleUpdates(
+  cwd: string,
+  isDev: boolean,
+): Promise<void> {
   relinka("info-verbose", `Checking for rule updates in workspace: ${cwd}`);
   const hasUpdates = await checkForRuleUpdates(isDev);
   if (!hasUpdates) {
@@ -561,146 +498,4 @@ async function handleRuleUpdates(cwd: string, isDev: boolean): Promise<void> {
     }
   }
   relinka("success", "Rule updates completed");
-}
-
-/**
- * Main menu handler for the rules command.
- * @param cwd - Current working directory.
- * @param isDev - Flag indicating development mode.
- */
-export async function showRulesMenu({
-  cwd,
-  isDev,
-}: {
-  cwd: string;
-  isDev: boolean;
-}): Promise<void> {
-  const hasInstalledMdc = await hasInstalledRules(cwd);
-
-  type MainMenuChoice =
-    | "download-official"
-    | "download-community"
-    | "update"
-    | "manage"
-    | "exit";
-
-  const mainOptions: MainMenuChoice[] = [
-    "download-official",
-    "download-community",
-  ];
-  if (hasInstalledMdc) {
-    mainOptions.push("update", "manage");
-  }
-
-  const mainOption = await selectPrompt<MainMenuChoice>({
-    title: "AI IDE Rules",
-    options: [
-      {
-        value: "download-official",
-        label: "Download official",
-        hint: "blefnk/awesome-cursor-rules",
-      },
-      {
-        value: "download-community",
-        label: "Download community",
-        hint: "pontusab/directories",
-      },
-      ...(hasInstalledMdc
-        ? [
-            {
-              value: "update" as const,
-              label: "Update rules",
-              hint: "Check and update installed rules",
-            },
-            {
-              value: "manage" as const,
-              label: "Manage installed rules",
-              hint: "View, enable, or disable installed rules",
-            },
-          ]
-        : []),
-    ],
-  });
-
-  if (
-    mainOption === "download-official" ||
-    mainOption === "download-community"
-  ) {
-    const repoId =
-      mainOption === "download-official"
-        ? "blefnk/awesome-cursor-rules"
-        : "pontusab/directories";
-
-    const [owner] = repoId.split("/");
-    if (!owner) {
-      relinka("error", "Invalid repository selection");
-      return;
-    }
-
-    // Always display the multiselect prompt for file selection.
-    const filesToInstall = await downloadRules(repoId, isDev);
-    if (filesToInstall.length === 0) {
-      relinka("error", "No rule files found");
-      return;
-    }
-
-    await installRules(filesToInstall, owner, cwd);
-    relinka("success-verbose", "Rules installation completed");
-  } else if (mainOption === "update") {
-    await handleRuleUpdates(cwd, isDev);
-  } else if (mainOption === "manage") {
-    const rulesDir = path.join(cwd, ".cursor", "rules");
-    const files = await fs.readdir(rulesDir);
-    const ruleFiles = files.filter(
-      (file) => file.endsWith(".md") || file.endsWith(RULE_FILE_EXTENSION),
-    );
-
-    if (ruleFiles.length === 0) {
-      relinka("info", "No rules installed");
-      return;
-    }
-
-    const managementOption = await selectPrompt<"view" | "delete">({
-      title: "Rule Management",
-      options: [
-        {
-          value: "view",
-          label: "View installed rules",
-          hint: `${ruleFiles.length} rules installed`,
-        },
-        {
-          value: "delete",
-          label: "Delete rules",
-          hint: "Remove installed rules",
-        },
-      ],
-    });
-
-    if (managementOption === "view") {
-      relinka("success", "Installed rules:");
-      for (const file of ruleFiles) {
-        relinka("info", `  - ${path.basename(file)}`);
-      }
-    } else if (managementOption === "delete") {
-      const filesToDelete = await multiselectPrompt({
-        title: "Select rules to delete",
-        displayInstructions: true,
-        options: ruleFiles.map((file) => ({
-          value: file,
-          label: path.basename(file),
-        })),
-      });
-      if (filesToDelete.length > 0) {
-        const confirmed = await confirmPrompt({
-          title: `Delete ${filesToDelete.length} rule(s)?`,
-        });
-        if (confirmed) {
-          for (const file of filesToDelete) {
-            await fs.remove(path.join(rulesDir, file));
-          }
-          relinka("success", `Deleted ${filesToDelete.length} rule(s)`);
-        }
-      }
-    }
-  }
 }

@@ -1,23 +1,23 @@
 {
   "name": "@reliverse/cli",
   "author": "reliverse",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "type": "module",
   "license": "MIT",
   "keywords": ["cli"],
   "description": "@reliverse/cli is your all-in-one companion for building and improving web projects — whether you're kicking off something new or upgrading an existing app. It's like having a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.",
   "scripts": {
-    "dev": "bun src/main.ts cli --dev",
-    "db": "drizzle-kit studio",
+    "dev": "bun dev:cli",
     "pub": "relidler",
-
     "knip": "knip",
-    "test": "vitest",
+    "vi": "vitest",
+    "test": "bun cli-test.ts",
+    "db": "drizzle-kit studio",
     "latest": "bun update --latest && bun check",
     "start": "bun src/main.ts cli --cwd start-runtime",
     "check": "tsc --noEmit && eslint --cache --fix . && biome check --write .",
     "agg": "relidler tools --tool agg --input src/libs/cfg/constants --out src/libs/cfg/cfg-main.ts --recursive --named --strip src/libs/cfg",
-
+    "dev:cli": "bun src/main.ts cli --dev",
     "dev:add": "bun src/main.ts add --dev",
     "dev:ai": "bun src/main.ts ai --dev",
     "dev:clone": "bun src/main.ts clone --dev",
@@ -35,7 +35,7 @@
     "dev:upload": "bun src/main.ts upload --dev"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^1.3.3",
+    "@ai-sdk/openai": "^1.3.4",
     "@libsql/client": "^0.15.1",
     "@mendable/firecrawl-js": "^1.21.0",
     "@octokit/plugin-rest-endpoint-methods": "^13.5.0",
@@ -48,7 +48,7 @@
     "@sinclair/typebox": "^0.34.31",
     "@uploadcare/upload-client": "^6.14.3",
     "@vercel/sdk": "^1.5.0",
-    "ai": "^4.2.6",
+    "ai": "^4.2.8",
     "async-listen": "^3.1.0",
     "better-sqlite3": "^11.9.1",
     "bun-types": "^1.2.7",

@@ -31,6 +31,9 @@ export default defineCommand({
       description: "Path to the file or directory (skips Relinter's prompt)",
     },
   },
+  subCommands: {
+    rule: () => import("./add-rule/add-rule-mod.js").then((r) => r.default),
+  },
   run: async ({ args }) => {
     const isDev = args.dev;
     if (isDev) {

@@ -21,7 +21,7 @@ import { handleIntegrations } from "~/app/menu/manual-mode/deprecated/editor-imp
 import { manageShadcn } from "~/app/menu/manual-mode/deprecated/shadcn/shadcn-mod.js";
 import { askInstallDeps } from "~/app/prompts/askInstallDeps.js";
 import { askUsernameFrontend } from "~/app/prompts/askUsernameFrontend.js";
-import { useLanguine } from "~/arg/add/local/i18n/languine.js";
+import { useLanguine } from "~/arg/add/add-local/i18n/languine.js";
 import { envArgImpl } from "~/arg/env/env-impl.js";
 import { experimental } from "~/utils/badgeNotifiers.js";
 import {

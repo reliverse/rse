@@ -3,7 +3,7 @@ import path from "pathe";
 
 import { askProjectName } from "~/app/prompts/askProjectName.js";
 import { showManualBuilderMenu } from "~/arg/add/add-impl.js";
-import { initMinimalReliverseProject } from "~/arg/add/local/core/projects.js";
+import { initMinimalReliverseProject } from "~/arg/add/add-local/core/projects.js";
 import { getReliverseConfig } from "~/utils/reliverseConfig/rc-mod.js";
 import { getReliverseMemory } from "~/utils/reliverseMemory.js";
 import { getCurrentWorkingDirectory } from "~/utils/terminalHelpers.js";

@@ -1,7 +1,7 @@
 {
 	"name": "rse",
 	"version": "0.1.0",
-	"description": "🌠 @reliverse/rse is a brand-new modern alternative to npm and jsr registries, as well as to package managers like npm, bun, deno, yarn, and pnpm. It's a robust, secure, fast, all-in-one package ecosystem—offering everything from private registries with granular tokens to bundling, testing, hot reloading, Bun, Node.js-compatible environment. W.I.P.",
+	"description": "🌠 `@reliverse/rse` is a radical rethinking of the modern JavaScript ecosystem. Drop-in JS replacement. Public and private registries. Universal package manager. All built on Rust. All-in-one.",
 	"private": true,
 	"type": "module",
 	"main": "src/index.tsx",
@@ -13,26 +13,26 @@
 		"check": "biome check --write ."
 	},
 	"dependencies": {
-		"@hookform/resolvers": "^4.1.0",
-		"@radix-ui/react-label": "^2.1.2",
-		"@radix-ui/react-select": "^2.1.6",
-		"@radix-ui/react-slot": "^1.1.2",
-		"bun-plugin-tailwind": "^0.0.14",
+		"@hookform/resolvers": "^5.0.1",
+		"@radix-ui/react-label": "^2.1.4",
+		"@radix-ui/react-select": "^2.2.1",
+		"@radix-ui/react-slot": "^1.2.0",
+		"bun-plugin-tailwind": "^0.0.15",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
-		"lucide-react": "^0.475.0",
-		"react": "^19",
-		"react-dom": "^19",
-		"react-hook-form": "^7.54.2",
-		"tailwind-merge": "^3.0.1",
-		"tailwindcss": "^4.0.6",
+		"lucide-react": "^0.501.0",
+		"react": "^19.1.0",
+		"react-dom": "^19.1.0",
+		"react-hook-form": "^7.55.0",
+		"tailwind-merge": "^3.2.0",
+		"tailwindcss": "^4.1.4",
 		"tailwindcss-animate": "^1.0.7",
-		"zod": "^3.24.2"
+		"zod": "^3.24.3"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
-		"@types/bun": "latest",
-		"@types/react": "^19",
-		"@types/react-dom": "^19"
+		"@types/bun": "^1.2.10",
+		"@types/react": "^19.1.2",
+		"@types/react-dom": "^19.1.2"
 	}
 }

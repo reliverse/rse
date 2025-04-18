@@ -2,6 +2,7 @@
 	"recommendations": [
 		"chunsen.bracket-select",
 		"usernamehw.remove-empty-lines",
-		"aaron-bond.better-comments"
+		"aaron-bond.better-comments",
+		"rust-lang.rust-analyzer"
 	]
 }

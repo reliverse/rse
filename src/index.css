@@ -1,4 +1,4 @@
-@import "../styles/globals.css";
+@import "./styles/globals.css";
 
 @layer base {
 	:root {
@@ -28,6 +28,7 @@ body::before {
 	from {
 		background-position: 0 0;
 	}
+
 	to {
 		background-position: 256px 224px;
 	}
@@ -37,12 +38,14 @@ body::before {
 	from {
 		transform: rotate(0);
 	}
+
 	to {
 		transform: rotate(360deg);
 	}
 }
 
 @media (prefers-reduced-motion) {
+
 	*,
 	::before,
 	::after {

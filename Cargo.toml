@@ -1,0 +1,8 @@
+[package]
+name = "reliscript"
+version = "0.0.1"
+edition = "2025"
+
+[dependencies]
+clap = { version = "4", features = ["derive"] }
+anyhow = "1"

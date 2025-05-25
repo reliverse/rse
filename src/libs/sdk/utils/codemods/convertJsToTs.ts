@@ -1,8 +1,9 @@
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { readPackageJSON, writePackageJSON } from "pkg-types";
 
-import { tsconfigJson } from "~/libs/cfg/constants/cfg-details.js";
+import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 function generateTypeDefinitions(content: string): string {
   let result = content;
@@ -126,7 +127,7 @@ export async function convertJsToTs(cwd: string) {
   // Update package.json
   const packageJsonPath = path.join(cwd, "package.json");
   if (await fs.pathExists(packageJsonPath)) {
-    const packageJson = await fs.readJson(packageJsonPath);
+    const packageJson = await readPackageJSON(packageJsonPath);
 
     // Inject TypeScript dependencies
     packageJson.devDependencies = {
@@ -142,7 +143,7 @@ export async function convertJsToTs(cwd: string) {
       "type-check": "tsc --noEmit",
     };
 
-    await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+    await writePackageJSON(packageJsonPath, packageJson);
     relinka("success", "Updated package.json with TypeScript configuration");
   }
 }

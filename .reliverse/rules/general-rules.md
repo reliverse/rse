@@ -1,1 +1,1 @@
-# Reliverse CLI: General Rules for LLMs
+# rse CLI: General Rules for LLMs

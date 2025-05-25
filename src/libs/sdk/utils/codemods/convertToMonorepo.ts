@@ -1,10 +1,11 @@
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { readPackageJSON, writePackageJSON } from "pkg-types";
 
 import type { MonorepoType } from "~/types.js";
 
-import { tsconfigJson } from "~/libs/cfg/constants/cfg-details.js";
+import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 const MONOREPO_CONFIGS = {
   turborepo: {
@@ -60,7 +61,9 @@ export async function convertToMonorepo(
   await fs.mkdir(path.join(projectPath, "packages"), { recursive: true });
 
   // Move current project to apps/web if it's not already in a monorepo structure
-  const packageJson = await fs.readJSON(path.join(projectPath, "package.json"));
+  const packageJson = await readPackageJSON(
+    path.join(projectPath, "package.json"),
+  );
   if (!packageJson.workspaces) {
     await fs.move(
       path.join(projectPath, "src"),
@@ -107,9 +110,10 @@ export async function convertToMonorepo(
         type === "turborepo" ? "turbo run lint" : "bun run --cwd apps/web lint",
     },
   };
-  await fs.writeJSON(path.join(projectPath, "package.json"), rootPackageJson, {
-    spaces: 2,
-  });
+  await writePackageJSON(
+    path.join(projectPath, "package.json"),
+    rootPackageJson,
+  );
 
   // Create monorepo config files
   const configs = MONOREPO_CONFIGS[type];
@@ -126,32 +130,24 @@ export async function convertToMonorepo(
   for (const pkg of packages) {
     const pkgPath = path.join(projectPath, "apps", pkg);
     await fs.mkdir(pkgPath, { recursive: true });
-    await fs.writeJSON(
-      path.join(pkgPath, "package.json"),
-      {
-        name: `@${packageJson.name}/${pkg}`,
-        version: "0.0.0",
-        private: true,
-      },
-      { spaces: 2 },
-    );
+    await writePackageJSON(path.join(pkgPath, "package.json"), {
+      name: `@${packageJson.name}/${pkg}`,
+      version: "0.0.0",
+      private: true,
+    });
   }
 
   // Create shared packages
   for (const pkg of sharedPackages) {
     const pkgPath = path.join(projectPath, "packages", pkg);
     await fs.mkdir(pkgPath, { recursive: true });
-    await fs.writeJSON(
-      path.join(pkgPath, "package.json"),
-      {
-        name: `@${packageJson.name}/${pkg}`,
-        version: "0.0.0",
-        main: "./src/index.ts",
-        types: "./src/index.ts",
-        private: true,
-      },
-      { spaces: 2 },
-    );
+    await writePackageJSON(path.join(pkgPath, "package.json"), {
+      name: `@${packageJson.name}/${pkg}`,
+      version: "0.0.0",
+      main: "./src/index.ts",
+      types: "./src/index.ts",
+      private: true,
+    });
     // Create basic TypeScript setup
     await fs.mkdir(path.join(pkgPath, "src"), { recursive: true });
     await fs.writeFile(path.join(pkgPath, "src", "index.ts"), "export {};\n");

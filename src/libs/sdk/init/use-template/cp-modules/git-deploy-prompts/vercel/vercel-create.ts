@@ -1,4 +1,5 @@
-import { confirmPrompt, relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt } from "@reliverse/rempts";
 import { projectsAddProjectDomain } from "@vercel/sdk/funcs/projectsAddProjectDomain.js";
 import { projectsCreateProject } from "@vercel/sdk/funcs/projectsCreateProject.js";
 
@@ -7,7 +8,7 @@ import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
 import { isSpecialDomain } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/helpers/domainHelpers.js";
-import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
+import { updateReliverseMemory } from "~/libs/sdk/sdk-mod.js";
 
 import { withRateLimit } from "./vercel-api.js";
 import {
@@ -46,7 +47,7 @@ export async function createVercelProject(
     throw createProjectRes.error;
   }
   const projectId = createProjectRes.value.id;
-  relinka("success-verbose", `Project created with ID: ${projectId}`);
+  relinka("verbose", `Project created with ID: ${projectId}`);
   return projectId;
 }
 
@@ -74,7 +75,7 @@ export async function prepareVercelProjectCreation(
 ): Promise<boolean> {
   if (!vercelToken) {
     throw new Error(
-      "Vercel token not found in Reliverse's memory. Please restart the CLI and try again. Notify the @reliverse/cli developers if the problem persists.",
+      "Vercel token not found in rse's memory. Please restart the CLI and try again. Notify the @reliverse/rse developers if the problem persists.",
     );
   }
 
@@ -173,7 +174,7 @@ export async function prepareVercelProjectCreation(
     );
 
     relinka("success", `Deployment preview URL: https://${deployment.url}`);
-    relinka("success-verbose", "✅ Deployment completed successfully!");
+    relinka("verbose", "✅ Deployment completed successfully!");
 
     return true;
   } catch (error) {

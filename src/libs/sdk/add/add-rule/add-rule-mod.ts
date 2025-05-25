@@ -1,9 +1,9 @@
 // rules-mod.ts
 
-import { ensuredir } from "@reliverse/fs";
-import { defineCommand } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import { defineCommand } from "@reliverse/rempts";
 import os from "os";
-import path from "pathe";
 
 import { showRulesMenu, handleDirectRules } from "./add-rule-impl.js";
 

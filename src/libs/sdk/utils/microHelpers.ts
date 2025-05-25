@@ -1,4 +1,4 @@
-import { getTerminalHeight } from "@reliverse/prompts";
+import { getTerminalHeight } from "@reliverse/rempts";
 
 /**
  * Helper function to compute maximum items based on terminal height.

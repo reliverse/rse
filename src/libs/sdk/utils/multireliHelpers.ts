@@ -1,5 +1,5 @@
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 
 // Check if the directory contains any .jsonc or .ts files (excluding *.gen.cfg.* files)
 export async function hasConfigFiles(projectPath: string): Promise<boolean> {

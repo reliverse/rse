@@ -12,7 +12,6 @@ const userDataSchema = Type.Object({
   name: Type.Optional(Type.String()),
   email: Type.Optional(Type.String()),
   githubUsername: Type.Optional(Type.String()),
-  vercelUsername: Type.Optional(Type.String()),
   vercelTeamId: Type.Optional(Type.String()),
   vercelTeamSlug: Type.Optional(Type.String()),
 });

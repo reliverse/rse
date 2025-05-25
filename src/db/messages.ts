@@ -1,6 +1,6 @@
 import { re } from "@reliverse/relico";
 
-import { UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
+import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 export const randomWelcomeMessages = (username: string) => [
   `Welcome back, ${username}! Ready to pick up where you left off?`,
@@ -69,7 +69,7 @@ export const getRandomAd = () => {
 };
 export const ad = getRandomAd();
 export const premium = re.bold(
-  "No ads, more power — get Reliverse Premium: https://github.com/sponsors/blefnk",
+  "No ads, more power — get rseum: https://github.com/sponsors/blefnk",
 );
 
 export function getWelcomeTitle(username: string) {

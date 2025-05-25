@@ -1,6 +1,6 @@
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { definePackageJSON, writePackageJSON } from "pkg-types";
 
 /**
@@ -16,7 +16,7 @@ export async function createPackageJSON(
   const packageJson = definePackageJSON({
     name: projectName,
     version: "0.1.0",
-    description: `${projectName} is built with ❤️ by @reliverse/cli`,
+    description: `${projectName} is built with ❤️ by @rse`,
     type: "module",
     ...(isLib ? {} : { private: true }),
   });
@@ -30,7 +30,7 @@ export async function createPackageJSON(
   await fs.writeFile(packageJsonPath, formatted, "utf-8");
 
   relinka(
-    "info-verbose",
+    "verbose",
     `Created ${filename} with ${isLib ? "library" : "application"} configuration`,
   );
 }

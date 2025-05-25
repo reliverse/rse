@@ -1,17 +1,17 @@
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
 
-import { memoryPath } from "~/libs/cfg/constants/cfg-details.js";
+import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 export async function deleteMemory() {
-  relinka("info-verbose", `Deleting config file: ${memoryPath}`);
+  relinka("verbose", `Deleting config file: ${memoryPath}`);
 
   try {
     if (await fs.pathExists(memoryPath)) {
       await fs.remove(memoryPath);
-      relinka("success-verbose", "Config file deleted successfully");
+      relinka("verbose", "Config file deleted successfully");
     } else {
-      relinka("info-verbose", "Config file not found");
+      relinka("verbose", "Config file not found");
     }
   } catch (error) {
     relinka(

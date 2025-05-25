@@ -1,12 +1,13 @@
-import { relinka } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { destr } from "destr";
-import fs from "fs-extra";
-import path from "pathe";
+import { readPackageJSON } from "pkg-types";
 import { glob } from "tinyglobby";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
-import type { ProjectConfigReturn } from "~/libs/sdk/types/types-mod.js";
+import type { ProjectConfigReturn } from "~/libs/sdk/sdk-types.js";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
 import { extractRepoInfo, replaceStringsInFiles } from "./reps-impl.js";
 import { CommonPatterns, HardcodedStrings } from "./reps-keys.js";
@@ -19,7 +20,7 @@ async function getPackageNames(projectPath: string): Promise<string[]> {
     const pkgPath = path.join(projectPath, "package.json");
     if (!(await fs.pathExists(pkgPath))) return [];
 
-    const pkg = await fs.readJson(pkgPath);
+    const pkg = await readPackageJSON(pkgPath);
     const allDeps = {
       ...(pkg.dependencies || {}),
       ...(pkg.devDependencies || {}),
@@ -78,7 +79,7 @@ async function getRepositoryUrl(projectPath: string): Promise<string> {
     const pkgPath = path.join(projectPath, "package.json");
     if (!(await fs.pathExists(pkgPath))) return "";
 
-    const pkg = await fs.readJson(pkgPath);
+    const pkg = await readPackageJSON(pkgPath);
 
     // If repository field exists, use it
     if (pkg.repository) {
@@ -139,7 +140,7 @@ function createCaseVariations(
 export async function handleReplacements(
   projectPath: string,
   selectedRepo: RepoOption,
-  externalReliverseFilePath: string,
+  externalrseth: string,
   config: ProjectConfigReturn & { projectDescription?: string },
   existingRepo: boolean,
   showSuccessMessage: boolean,
@@ -147,7 +148,7 @@ export async function handleReplacements(
 ) {
   const term = isTemplateDownload ? "template" : "repo";
 
-  relinka("info-verbose", "Personalizing texts in the initialized files...");
+  relinka("verbose", "Personalizing texts in the initialized files...");
 
   // Gather package names and import paths to protect
   const [packageNames, importPaths] = await Promise.all([
@@ -155,20 +156,13 @@ export async function handleReplacements(
     getImportPaths(projectPath),
   ]);
 
-  // Try to read external reliverse config (jsonc/ts)
+  // Try to read external rseg (jsonc/ts)
   // if it exists and we're using an existing repo
-  let externalConfig: ReliverseConfig | undefined;
-  if (
-    existingRepo &&
-    externalReliverseFilePath &&
-    (await fs.pathExists(externalReliverseFilePath))
-  ) {
+  let externalConfig: RseConfig | undefined;
+  if (existingRepo && externalrseth && (await fs.pathExists(externalrseth))) {
     try {
-      const externalConfigContent = await fs.readFile(
-        externalReliverseFilePath,
-        "utf-8",
-      );
-      const parsed = destr<ReliverseConfig>(externalConfigContent);
+      const externalConfigContent = await fs.readFile(externalrseth, "utf-8");
+      const parsed = destr<RseConfig>(externalConfigContent);
       if (parsed && typeof parsed === "object") {
         externalConfig = parsed;
         relinka(

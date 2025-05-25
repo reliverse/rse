@@ -1,13 +1,13 @@
-import { ensuredir } from "@reliverse/fs";
+import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import {
   selectPrompt,
   multiselectPrompt,
   confirmPrompt,
-} from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
+} from "@reliverse/rempts";
 import { ofetch } from "ofetch";
-import path from "pathe";
 
 import {
   DEFAULT_BRANCH,
@@ -93,7 +93,7 @@ export async function handleDirectRules(opts: {
   }
 
   await installRules(downloadedFiles, owner, cwd);
-  relinka("success-verbose", "Rules installation completed (no prompt).");
+  relinka("verbose", "Rules installation completed (no prompt).");
 }
 
 /**
@@ -224,7 +224,7 @@ async function downloadSpecificFiles(
 
     const cacheFilePath = path.join(repoCacheDir, expectedCacheFile);
     if (await fs.pathExists(cacheFilePath)) {
-      relinka("info-verbose", `[Cached] ${fileInfo.path} is already in cache.`);
+      relinka("verbose", `[Cached] ${fileInfo.path} is already in cache.`);
       results.push(expectedCacheFile);
       continue;
     }
@@ -247,7 +247,7 @@ async function downloadSpecificFiles(
         await fs.writeFile(cacheFilePath, content);
       }
       results.push(expectedCacheFile);
-      relinka("info-verbose", `Downloaded & processed ${fileInfo.path}`);
+      relinka("verbose", `Downloaded & processed ${fileInfo.path}`);
     } catch (error) {
       relinka("error", `Failed to download ${fileInfo.path}: ${error}`);
     }
@@ -320,7 +320,7 @@ export async function showRulesMenu({
     }
 
     await installRules(filesToInstall, owner, cwd);
-    relinka("success-verbose", "Rules installation completed");
+    relinka("verbose", "Rules installation completed");
     return; // Done, no further prompts
   }
 
@@ -388,7 +388,7 @@ export async function showRulesMenu({
     }
 
     await installRules(filesToInstall, owner, cwd);
-    relinka("success-verbose", "Rules installation completed");
+    relinka("verbose", "Rules installation completed");
   } else if (mainOption === "update") {
     await handleRuleUpdates(cwd, isDev);
   } else if (mainOption === "manage") {

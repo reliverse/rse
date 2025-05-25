@@ -1,0 +1,88 @@
+import "dotenv/config";
+{{#if (eq api "trpc")}}
+import { createExpressMiddleware } from "@trpc/server/adapters/express";
+import { createContext } from "./lib/context";
+import { appRouter } from "./routers/index";
+{{/if}}
+{{#if (eq api "orpc")}}
+import { RPCHandler } from "@orpc/server/node";
+import { appRouter } from "./routers";
+{{#if auth}}
+import { createContext } from "./lib/context";
+{{/if}}
+{{/if}}
+import cors from "cors";
+import express from "express";
+{{#if (includes examples "ai")}}
+import { streamText } from "ai";
+import { google } from "@ai-sdk/google";
+{{/if}}
+{{#if auth}}
+import { auth } from "./lib/auth";
+import { toNodeHandler } from "better-auth/node";
+{{/if}}
+
+const app = express();
+
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "",
+    methods: ["GET", "POST", "OPTIONS"],
+    {{#if auth}}
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    {{/if}}
+  })
+);
+
+{{#if auth}}
+app.all("/api/auth{/*path}", toNodeHandler(auth));
+{{/if}}
+
+app.use(express.json())
+
+{{#if (eq api "trpc")}}
+app.use(
+  "/trpc",
+  createExpressMiddleware({
+    router: appRouter,
+    createContext
+  })
+);
+{{/if}}
+
+{{#if (eq api "orpc")}}
+const handler = new RPCHandler(appRouter);
+app.use('/rpc{*path}', async (req, res, next) => {
+  const { matched } = await handler.handle(req, res, {
+    prefix: '/rpc',
+    {{#if auth}}
+    context: await createContext({ req }),
+    {{else}}
+    context: {},
+    {{/if}}
+  });
+  if (matched) return;
+  next();
+});
+{{/if}}
+
+{{#if (includes examples "ai")}}
+app.post("/ai", async (req, res) => {
+  const { messages = [] } = req.body || {};
+  const result = streamText({
+    model: google("gemini-1.5-flash"),
+    messages,
+  });
+  result.pipeDataStreamToResponse(res);
+});
+{{/if}}
+
+app.get("/", (_req, res) => {
+  res.status(200).send("OK");
+});
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});

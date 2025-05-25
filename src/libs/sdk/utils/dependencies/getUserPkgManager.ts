@@ -1,6 +1,6 @@
 import { execa } from "execa";
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 export type DetectionSource =

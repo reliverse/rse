@@ -1,23 +1,24 @@
-import { inputPrompt } from "@reliverse/prompts";
-import { deleteLastLine } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
+import { inputPrompt, deleteLastLine } from "@reliverse/rempts";
 
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
-import { DEFAULT_CLI_USERNAME } from "~/libs/cfg/constants/cfg-details.js";
-import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
+import { DEFAULT_CLI_USERNAME } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update.js";
 
+// TODO: make it reliverse memory-based again instead of rse config-based
 export async function askUsernameFrontend(
-  memory: ReliverseMemory,
+  config: RseConfig,
   shouldAskIfExists: boolean,
 ): Promise<string | null> {
-  if (!shouldAskIfExists && memory.name && memory.name !== "")
-    return memory.name;
+  if (!shouldAskIfExists && config.projectAuthor && config.projectAuthor !== "")
+    return config.projectAuthor;
 
-  const previousName = typeof memory.name === "string" ? memory.name : "";
+  const previousName =
+    typeof config.projectAuthor === "string" ? config.projectAuthor : "";
   const hasPreviousName = previousName !== "";
 
-  // Determine placeholder and content based on previous memory
+  // Determine placeholder and content based on previous config
   const placeholder = hasPreviousName ? previousName : DEFAULT_CLI_USERNAME;
   const content = hasPreviousName
     ? `Last used name: ${re.cyanBright(placeholder)} (just press <Enter> to use it again)`
@@ -42,12 +43,16 @@ export async function askUsernameFrontend(
     if (hasPreviousName) {
       return previousName;
     }
-    await updateReliverseMemory({ name: DEFAULT_CLI_USERNAME });
+    await updateRseConfig(
+      process.cwd(),
+      { projectAuthor: DEFAULT_CLI_USERNAME },
+      false,
+    );
     deleteLastLine();
     return DEFAULT_CLI_USERNAME;
   }
 
   // User provided a new name, save it to memory
-  await updateReliverseMemory({ name: trimmedInput });
+  await updateRseConfig(process.cwd(), { projectAuthor: trimmedInput }, false);
   return trimmedInput;
 }

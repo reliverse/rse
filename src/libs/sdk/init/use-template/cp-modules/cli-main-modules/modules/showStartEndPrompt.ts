@@ -1,8 +1,7 @@
-import { endPrompt, startPrompt } from "@reliverse/prompts";
-import { getTerminalWidth } from "@reliverse/prompts";
+import { endPrompt, startPrompt } from "@reliverse/rempts";
 import { isBun, isBunPM, isBunRuntime } from "@reliverse/runtime";
 
-import { cliName, cliVersion } from "~/libs/cfg/constants/cfg-details.js";
+import { getPkgName, getPkgVersion } from "~/info.js";
 
 export async function showStartPrompt(
   isDev: boolean,
@@ -11,8 +10,8 @@ export async function showStartPrompt(
   await startPrompt({
     titleColor: "inverse",
     clearConsole: true,
-    packageName: cliName,
-    packageVersion: cliVersion,
+    packageName: getPkgName(),
+    packageVersion: getPkgVersion(),
     isDev,
   });
 
@@ -24,12 +23,9 @@ export async function showStartPrompt(
 }
 
 export async function showEndPrompt() {
-  const width = getTerminalWidth();
   await endPrompt({
     title:
-      width < 100
-        ? "│  Please support the CLI: https://patreon.com/c/blefnk/membership"
-        : "│  ❤️  Please consider supporting @reliverse/cli development: https://patreon.com/c/blefnk/membership",
+      "│  ❤️  Please consider supporting dler: https://github.com/sponsors/blefnk",
     titleAnimation: "glitch",
     titleColor: "dim",
     titleTypography: "bold",

@@ -1,9 +1,10 @@
 import { restEndpointMethods } from "@octokit/plugin-rest-endpoint-methods";
 import { Octokit } from "@octokit/rest";
-import { inputPrompt, relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { inputPrompt } from "@reliverse/rempts";
 
-import { cliVersion } from "~/libs/cfg/constants/cfg-details.js";
 import { askUsernameGithub } from "~/libs/sdk/utils/prompts/askUsernameGithub.js";
+import { cliVersion } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 import type { ReliverseMemory } from "./schemaMemory.js";
 
@@ -12,7 +13,7 @@ import { updateReliverseMemory } from "./reliverseMemory.js";
 // A custom Octokit with REST endpoint methods.
 export const OctokitWithRest = Octokit.plugin(restEndpointMethods);
 // Our user agent string with the CLI version.
-export const octokitUserAgent = `reliverse/${cliVersion}`;
+export const octokitUserAgent = `rse/${cliVersion}`;
 // Type alias for OctokitWithRest.
 export type InstanceGithub = InstanceType<typeof OctokitWithRest>;
 
@@ -61,13 +62,13 @@ function initOctokitSDK(githubKey: string): InstanceGithub {
 }
 
 /**
- * Ensures a valid GitHub token is available in Reliverse's memory.
+ * Ensures a valid GitHub token is available in rse's memory.
  *
  * If a token is already stored in memory, this function validates it by fetching the
  * authenticated user's information. If the token is missing or invalid, the user is prompted
  * to input one. The new token is then saved persistently.
  *
- * @param memory - The Reliverse memory object.
+ * @param memory - The rse memory object.
  * @param maskInput - A flag or the string "prompt" that determines if input should be masked.
  * @returns The valid GitHub token.
  */
@@ -87,7 +88,7 @@ export async function ensureGithubToken(
         "Existing GitHub token is invalid. Please provide a new one.",
       );
       relinka(
-        "warn-verbose",
+        "verbose",
         error instanceof Error ? error.message : String(error),
       );
     }
@@ -114,7 +115,7 @@ export async function ensureGithubToken(
  * This function is analogous to the Vercel SDK init function; it ensures that a valid GitHub token is
  * available (prompting for one if necessary), initializes Octokit with the token, and returns both.
  *
- * @param memory - The Reliverse memory object.
+ * @param memory - The rse memory object.
  * @param maskInput - A flag or "prompt" to determine if the token input should be masked.
  * @returns A tuple containing the GitHub token and works as the wrapper for the Octokit instance.
  */

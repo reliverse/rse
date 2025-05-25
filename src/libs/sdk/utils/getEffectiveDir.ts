@@ -1,6 +1,6 @@
-import path from "pathe";
+import path from "@reliverse/pathkit";
 
-import type { GitModParams } from "~/libs/sdk/types/types-mod.js";
+import type { GitModParams } from "~/libs/sdk/sdk-types.js";
 
 /**
  * Gets the effective directory path based on dev mode and project settings

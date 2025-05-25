@@ -1,7 +1,7 @@
-import { selectPrompt, confirmPrompt, inputPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import { selectPrompt, confirmPrompt, inputPrompt } from "@reliverse/rempts";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 
 import type { ColumnType, DatabaseProvider, TableSchema } from "~/types.js";
 

@@ -3,7 +3,7 @@
 /**
  * WHAT SHOULD BE TESTED:
  *
- * [ tested manually **bun dev:cmd** | tested manually **reliverse cmd** | tested automatically **bun dev:cmd** | command ]
+ * [ tested manually **bun dev:cmd** | tested manually **rse cmd** | tested automatically **bun dev:cmd** | command ]
  *
  * - ❌ | ❌ | ❌ | `dev:cli`
  * - ❌ | ❌ | ❌ | `dev:add`

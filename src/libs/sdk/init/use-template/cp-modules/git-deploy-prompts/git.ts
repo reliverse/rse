@@ -1,23 +1,19 @@
 import type { SimpleGit } from "simple-git";
 
-import {
-  inputPrompt,
-  selectPrompt,
-  deleteLastLine,
-  relinka,
-} from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
-import fs from "fs-extra";
-import path from "pathe";
+import { relinka } from "@reliverse/relinka";
+import { inputPrompt, selectPrompt, deleteLastLine } from "@reliverse/rempts";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 import { simpleGit } from "simple-git";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
-import type { GitModParams } from "~/libs/sdk/types/types-mod.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { GitModParams } from "~/libs/sdk/sdk-types.js";
 import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
-import { cliName } from "~/libs/cfg/constants/cfg-details.js";
+import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 import { getEffectiveDir } from "~/libs/sdk/utils/getEffectiveDir.js";
 import { cd, pwd } from "~/libs/sdk/utils/terminalHelpers.js";
 
@@ -47,7 +43,7 @@ async function removeGitDir(effectiveDir: string): Promise<boolean> {
   const gitDir = path.join(effectiveDir, ".git");
   try {
     await fs.remove(gitDir);
-    relinka("info-verbose", "Removed existing .git directory");
+    relinka("verbose", "Removed existing .git directory");
     return true;
   } catch (error) {
     relinka(
@@ -66,15 +62,12 @@ async function removeGitDir(effectiveDir: string): Promise<boolean> {
 export async function initializeGitRepo(
   git: SimpleGit,
   alreadyGit: boolean,
-  config: ReliverseConfig,
+  config: RseConfig,
   isTemplateDownload: boolean,
 ): Promise<void> {
   // Skip initializing repo if this is a template download.
   if (isTemplateDownload) {
-    relinka(
-      "info-verbose",
-      "Skipping git initialization for template download",
-    );
+    relinka("verbose", "Skipping git initialization for template download");
     return;
   }
 
@@ -114,7 +107,7 @@ async function createGitCommit(
   message?: string,
 ): Promise<void> {
   if (isTemplateDownload) {
-    relinka("info-verbose", "Skipping commit creation for template download");
+    relinka("verbose", "Skipping commit creation for template download");
     return;
   }
 
@@ -155,15 +148,12 @@ export async function initGitDir(
   params: GitModParams & {
     allowReInit: boolean;
     createCommit: boolean;
-    config: ReliverseConfig;
+    config: RseConfig;
     isTemplateDownload: boolean;
   },
 ): Promise<boolean> {
   if (params.isTemplateDownload) {
-    relinka(
-      "info-verbose",
-      "Skipping git initialization for template download",
-    );
+    relinka("verbose", "Skipping git initialization for template download");
     return true;
   }
 
@@ -183,7 +173,7 @@ export async function initGitDir(
 
     if (alreadyGit && params.allowReInit) {
       deleteLastLine(); // Clear previous log line
-      relinka("info-verbose", "Reinitializing existing git repository...");
+      relinka("verbose", "Reinitializing existing git repository...");
       if (!(await removeGitDir(effectiveDir))) return false;
       const git: SimpleGit = simpleGit({ baseDir: effectiveDir });
       await initializeGitRepo(
@@ -253,12 +243,12 @@ export async function initGitDir(
 export async function createCommit(
   params: GitModParams & {
     message?: string;
-    config: ReliverseConfig;
+    config: RseConfig;
     isTemplateDownload: boolean;
   },
 ): Promise<boolean> {
   if (params.isTemplateDownload) {
-    relinka("info-verbose", "Skipping commit creation for template download");
+    relinka("verbose", "Skipping commit creation for template download");
     return true;
   }
 
@@ -329,7 +319,7 @@ async function isRepoOwner(
   githubInstance: InstanceGithub,
 ): Promise<boolean> {
   if (!githubToken) {
-    relinka("error", "GitHub token not found in Reliverse's memory");
+    relinka("error", "GitHub token not found in rse's memory");
     return false;
   }
   try {
@@ -358,7 +348,7 @@ export async function handleGithubRepo(
   params: GitModParams & {
     skipPrompts: boolean;
     memory: ReliverseMemory;
-    config: ReliverseConfig;
+    config: RseConfig;
     maskInput: boolean;
     selectedTemplate: RepoOption;
     isTemplateDownload: boolean;
@@ -370,7 +360,7 @@ export async function handleGithubRepo(
 ): Promise<boolean> {
   if (params.isTemplateDownload) {
     relinka(
-      "info-verbose",
+      "verbose",
       "Skipping GitHub repository handling for template download",
     );
     return true;

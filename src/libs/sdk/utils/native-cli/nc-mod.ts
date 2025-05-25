@@ -1,10 +1,10 @@
-import { confirmPrompt } from "@reliverse/prompts";
-import fs from "fs-extra";
+import { confirmPrompt } from "@reliverse/rempts";
+import fs from "@reliverse/relifso";
 
 import { downloadJsrDist } from "./nc-impl.js";
 
 export async function showNativeCliMenu({ outputDir }: { outputDir: string }) {
-  // @see https://jsr.io/@reliverse/cli
+  // @see https://jsr.io/@rse
 
   // Check if output directory exists and is not empty
   const dirExists = await fs.pathExists(outputDir);
@@ -49,14 +49,14 @@ export async function showNativeCliMenu({ outputDir }: { outputDir: string }) {
   // TODO: on reinstall, if 'cli' folder exists, we should check if node_modules exists, move it to temp dir and just move to updated folder, finally with using `bun install`
 
   await downloadJsrDist(
-    "reliverse",
+    "rse",
     "cli",
     undefined, // This will pick the latest version automatically
     outputDir,
     true,
     5,
     true,
-    "Downloading Bun-native Reliverse CLI from JSR...",
+    "Downloading Bun-native rse from JSR...",
     true,
     true,
   );

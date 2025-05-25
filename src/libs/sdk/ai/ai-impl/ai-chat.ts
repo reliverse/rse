@@ -1,11 +1,10 @@
 import type { CoreMessage } from "ai";
 
-import { inputPrompt } from "@reliverse/prompts";
-import { printLineBar } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
+import { inputPrompt, msg } from "@reliverse/rempts";
 import { streamText } from "ai";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
 import { EXIT_KEYWORDS, MODEL } from "./ai-const.js";
 import { agentRelinter } from "./relinter/relinter.js";
@@ -24,7 +23,7 @@ const messages: CoreMessage[] = [];
 /**
  * Initiates a loop to capture user input and provide AI responses.
  */
-export async function aiChat(config: ReliverseConfig): Promise<void> {
+export async function aiChat(config: RseConfig): Promise<void> {
   while (true) {
     const userInput = await getUserInput();
     const parsedInput = parseUserInput(userInput);
@@ -101,7 +100,7 @@ function looksLikePath(token: string): boolean {
  * Directs the flow if @relinter is detected, calling the relinter agent with all paths.
  */
 async function handleRelinterFlow(
-  config: ReliverseConfig,
+  config: RseConfig,
   parsedInput: ParsedUserInput,
 ): Promise<void> {
   const { hasRelinter, paths, task } = parsedInput;
@@ -116,14 +115,13 @@ async function handleRelinterFlow(
  */
 async function handleNormalChatFlow(userInput: string): Promise<void> {
   messages.push({ role: "user", content: userInput });
-  console.log(`${re.dim("ℹ")}  ${re.bold("Reliverse:")}`);
+  console.log(`${re.dim("ℹ")}  ${re.bold("rse")}`);
 
   try {
     const result = streamText({
       model: MODEL,
       messages,
-      system:
-        "You are a professional software developer. Your name is Reliverse.",
+      system: "You are a professional software developer. Your name is rse",
     });
 
     let assistantResponse = "";
@@ -138,12 +136,11 @@ async function handleNormalChatFlow(userInput: string): Promise<void> {
         }
         process.stdout.write(lines[i] ?? "");
       }
-      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
       assistantResponse += delta;
     }
 
     console.log();
-    printLineBar("");
+    msg({ type: "M_BAR" });
 
     messages.push({ role: "assistant", content: assistantResponse });
   } catch (error) {
@@ -151,7 +148,7 @@ async function handleNormalChatFlow(userInput: string): Promise<void> {
       "Error:",
       error instanceof Error ? error.message : String(error),
     );
-    printLineBar("Failed to get response from OpenAI. Please try again.");
+    msg({ type: "M_BAR", borderColor: "dim" });
   }
 }
 

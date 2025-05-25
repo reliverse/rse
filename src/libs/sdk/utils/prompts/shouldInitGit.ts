@@ -1,4 +1,4 @@
-import { confirmPrompt } from "@reliverse/prompts";
+import { confirmPrompt } from "@reliverse/rempts";
 
 export async function shouldInitGit(isDev: boolean) {
   return await confirmPrompt({

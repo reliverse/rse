@@ -1,18 +1,18 @@
+import { relinka } from "@reliverse/relinka";
 import {
   multiselectPrompt,
   confirmPrompt,
   selectPrompt,
-  relinka,
-} from "@reliverse/prompts";
+} from "@reliverse/rempts";
 import { destr } from "destr";
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 
 import type { BaseConfig } from "~/types.js";
 
 import { removeComments } from "~/libs/sdk/utils/codemods/removeComments.js";
 import { getUnusedDependencies } from "~/libs/sdk/utils/codemods/removeUnusedDeps.js";
-import { readReliverseConfig } from "~/libs/sdk/utils/reliverseConfig/rc-read.js";
+import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read.js";
 
 import { uninstallDependencies } from "./dependencies.js";
 
@@ -49,7 +49,7 @@ export async function handleCleanup(
     }
   } catch (error) {
     relinka(
-      "warn-verbose",
+      "verbose",
       "Error reading Knip config:",
       error instanceof Error ? error.message : String(error),
     );
@@ -57,13 +57,13 @@ export async function handleCleanup(
 
   // Read ignoreDependencies from the active config file
   try {
-    const rules = await readReliverseConfig(configPath, isDev);
+    const rules = await readRseConfig(configPath, isDev);
     if (rules?.ignoreDependencies) {
       rules.ignoreDependencies.forEach((dep) => ignoredDeps.add(dep));
     }
   } catch (error) {
     relinka(
-      "warn-verbose",
+      "verbose",
       `Error reading ${configPath}:`,
       error instanceof Error ? error.message : String(error),
     );

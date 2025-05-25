@@ -1,7 +1,7 @@
-import fs from "fs-extra";
+import fs from "@reliverse/relifso";
 import os from "node:os";
 
-import { homeDir } from "~/libs/cfg/constants/cfg-details.js";
+import { homeDir } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 type Platform = "darwin" | "linux" | "win32";
 

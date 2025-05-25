@@ -1,9 +1,12 @@
 import { createClient } from "@libsql/client/node";
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
+import { ensuredir } from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { drizzle } from "drizzle-orm/libsql/node";
 
-import { memoryPath, cliHomeDir } from "~/libs/cfg/constants/cfg-details.js";
+import {
+  memoryPath,
+  cliHomeDir,
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 // Ensure the directory exists
 await ensuredir(cliHomeDir);

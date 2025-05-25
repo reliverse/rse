@@ -1,0 +1,17 @@
+LICENSES
+
+---
+
+MIT License
+
+Copyright (c) Nazar Kornienko (blefnk), Reliverse
+
+See LICENSE file for full license text.
+
+---
+
+NOTICES
+
+Some parts of this project are based on and significantly adapt:
+- https://github.com/AmanVarshney01/create-better-t-stack/tree/e9f63be – MIT © Aman Varshney (AmanVarshney01)
+- https://github.com/better-auth/better-auth/tree/e9bc7fc – MIT © Bereket Engida (Bekacru)

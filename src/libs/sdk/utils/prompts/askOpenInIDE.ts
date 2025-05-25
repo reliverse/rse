@@ -1,4 +1,5 @@
-import { confirmPrompt, relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt } from "@reliverse/rempts";
 import { execa } from "execa";
 
 import { isVSCodeInstalled } from "~/libs/sdk/utils/handlers/isAppInstalled.js";
@@ -33,7 +34,7 @@ export async function askOpenInIDE({
 
   const vscodeInstalled = isVSCodeInstalled();
   relinka(
-    "info-verbose",
+    "verbose",
     vscodeInstalled
       ? "Opening bootstrapped project in VSCode-based IDE..."
       : "Trying to open project in default IDE...",

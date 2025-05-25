@@ -1,18 +1,18 @@
-import { confirmPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt } from "@reliverse/rempts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/sdk-types.js";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/cfg/constants/cfg-details.js";
+import { getRseConfigPath } from "~/libs/sdk/sdk-mod.js";
 import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload.js";
 import { generateProjectConfigs } from "~/libs/sdk/utils/handlers/generateProjectConfigs.js";
 import { isMultireliProject } from "~/libs/sdk/utils/multireliHelpers.js";
-import { getReliverseConfigPath } from "~/libs/sdk/utils/reliverseConfig/rc-path.js";
-import { updateReliverseConfig } from "~/libs/sdk/utils/reliverseConfig/rc-update.js";
 import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod.js";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update.js";
 
 import {
   initializeProjectConfig,
@@ -41,7 +41,7 @@ export async function createWebProject({
   selectedRepo: RepoOption;
   message: string;
   isDev: boolean;
-  config: ReliverseConfig;
+  config: RseConfig;
   memory: ReliverseMemory;
   cwd: string;
   skipPrompts: boolean;
@@ -92,9 +92,9 @@ export async function createWebProject({
   // -------------------------------------------------
   // 4) Replace placeholders in the template
   // -------------------------------------------------
-  const result = await getReliverseConfigPath(projectPath, isDev, skipPrompts);
+  const result = await getRseConfigPath(projectPath, isDev, skipPrompts);
   if (!result) {
-    throw new Error("Failed to get reliverse config path.");
+    throw new Error("Failed to get rseg path.");
   }
   const { configPath, isTS } = result;
   await handleReplacements(
@@ -112,10 +112,10 @@ export async function createWebProject({
   );
 
   // -------------------------------------------------
-  // 5) Remove reliverse config from project if exists
+  // 5) Remove rseg from project if exists
   // -------------------------------------------------
   if (await fs.pathExists(configPath)) {
-    relinka("info-verbose", `Removed: ${configPath}, isTS: ${isTS}`);
+    relinka("verbose", `Removed: ${configPath}, isTS: ${isTS}`);
     await fs.remove(configPath);
   }
 
@@ -193,9 +193,9 @@ export async function createWebProject({
       frontendUsername,
     });
 
-  // If the user changed domain or deploy service, update reliverse config again
+  // If the user changed domain or deploy service, update rseg again
   if (deployService !== "vercel" || primaryDomain !== initialDomain) {
-    await updateReliverseConfig(
+    await updateRseConfig(
       projectPath,
       {
         projectDeployService: deployService,
@@ -238,7 +238,7 @@ export async function createMobileProject({
   selectedRepo: RepoOption;
   message: string;
   isDev: boolean;
-  config: ReliverseConfig;
+  config: RseConfig;
   memory: ReliverseMemory;
   cwd: string;
   skipPrompts: boolean;
@@ -281,9 +281,9 @@ export async function createMobileProject({
   // -------------------------------------------------
   // 3) Replace placeholders in the template
   // -------------------------------------------------
-  const result = await getReliverseConfigPath(projectPath, isDev, skipPrompts);
+  const result = await getRseConfigPath(projectPath, isDev, skipPrompts);
   if (!result) {
-    throw new Error("Failed to get reliverse config path.");
+    throw new Error("Failed to get rseg path.");
   }
   const { configPath, isTS } = result;
   await handleReplacements(
@@ -301,10 +301,10 @@ export async function createMobileProject({
   );
 
   // -------------------------------------------------
-  // 4) Remove reliverse config from project if exists
+  // 4) Remove rseg from project if exists
   // -------------------------------------------------
   if (await fs.pathExists(configPath)) {
-    relinka("info-verbose", `Removed: ${configPath}, isTS: ${isTS}`);
+    relinka("verbose", `Removed: ${configPath}, isTS: ${isTS}`);
     await fs.remove(configPath);
   }
 

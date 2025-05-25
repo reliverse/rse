@@ -1,4 +1,4 @@
-import { selectPrompt } from "@reliverse/prompts";
+import { selectPrompt } from "@reliverse/rempts";
 import { re } from "@reliverse/relico";
 
 const KNOWN_APPS = ["relivator"];
@@ -14,7 +14,7 @@ export async function askAppOrLib(projectName: string): Promise<"app" | "lib"> {
 
   const type = await selectPrompt({
     title: "What type of project are you creating?",
-    content: `This will determine the config files to be generated. If you're unsure, choose ${re.bold("Web app")}.\nNo worries—you can always change it later by editing the project's Reliverse config.`,
+    content: `This will determine the config files to be generated. If you're unsure, choose ${re.bold("Web app")}.\nNo worries—you can always change it later by editing the project's rseg.`,
     options: [
       {
         label: "Web app",

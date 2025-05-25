@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Reliverse Configuration Schema",
+  "title": "rse Configuration Schema",
   "description": "https://docs.reliverse.org/cli",
   "type": "object",
   "properties": {
@@ -109,10 +109,10 @@
         "blefnk/versator-nextjs-template",
         "blefnk/relivator-lynxjs-template",
         "blefnk/relivator-react-native-template",
-        "reliverse/template-browser-extension",
+        "rse/template-browser-extension",
         "microsoft/vscode-extension-samples",
         "microsoft/vscode-extension-template",
-        "reliverse/cli-starter-template",
+        "rse/rse-starter-template",
         "blefnk/deno-cli-tutorial"
       ]
     },

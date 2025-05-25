@@ -1,18 +1,18 @@
 import type { Static } from "@sinclair/typebox";
 
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
-import fs from "fs-extra";
 import { ofetch } from "ofetch";
-import path from "pathe";
 
-import type { VSCodeRepoOption } from "~/cli/menu/menu-impl.js";
-import type { reliverseConfigSchema } from "~/libs/cfg/constants/cfg-schema.js";
+import type { rseSchema } from "~/libs/sdk/utils/rseConfig/cfg-schema.js";
+import type { VSCodeRepoOption } from "~/providers/reliverse-stack/rs-impl.js";
 
-import { cliHomeRepos } from "~/libs/cfg/constants/cfg-details.js";
+import { cliHomeRepos } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 import { experimental, recommended } from "~/libs/sdk/utils/badgeNotifiers.js";
 
 import { setHiddenAttributeOnWindows } from "./filesysHelpers.js";
@@ -31,12 +31,12 @@ import {
 
 // Extract project template type from the config schema.
 export type RepoFromSchema = NonNullable<
-  Static<(typeof reliverseConfigSchema)["properties"]["projectTemplate"]>
+  Static<(typeof rseSchema)["properties"]["projectTemplate"]>
 >;
 
 // Extract category type from the config schema.
 export type CategoryFromSchema = NonNullable<
-  Static<(typeof reliverseConfigSchema)["properties"]["projectCategory"]>
+  Static<(typeof rseSchema)["properties"]["projectCategory"]>
 >;
 
 export type CloneOrTemplateRepo = {
@@ -121,7 +121,7 @@ export const REPO_TEMPLATES: CloneOrTemplateRepo[] = [
   {
     id: "reliverse/template-browser-extension",
     author: "reliverse",
-    name: "repo-browser-extension",
+    name: "template-browser-extension",
     description: "Browser extension starter template",
     category: "browser",
   },
@@ -326,9 +326,9 @@ export const TEMP_VSCODE_TEMPLATE_OPTIONS = {
 >;
 
 export const TEMP_BROWSER_TEMPLATE_OPTIONS = {
-  "reliverse/repo-browser-extension": {
+  "rsebrowser-extension": {
     label: "Browser Extension Repo",
-    value: "reliverse/repo-browser-extension",
+    value: "rsebrowser-extension",
     hint: re.dim("Browser extension starter repo"),
   },
 };

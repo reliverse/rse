@@ -1,7 +1,7 @@
-import { confirmPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt } from "@reliverse/rempts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
 /**
  * A string literal union for either 'gitBehavior' or 'deployBehavior'
@@ -14,7 +14,7 @@ type DecisionKey = "gitBehavior" | "deployBehavior";
  * - Whether skipPrompts is true
  */
 export async function decide(
-  config: ReliverseConfig,
+  config: RseConfig,
   behaviorKey: DecisionKey,
   title: string,
   content: string | undefined,
@@ -32,10 +32,10 @@ export async function decide(
 
     switch (behavior) {
       case "autoYes":
-        relinka("info-verbose", `Auto-answering YES to: "${title}"`);
+        relinka("verbose", `Auto-answering YES to: "${title}"`);
         return true;
       case "autoNo":
-        relinka("info-verbose", `Auto-answering NO to: "${title}"`);
+        relinka("verbose", `Auto-answering NO to: "${title}"`);
         return false;
       // default is "prompt":
       default:

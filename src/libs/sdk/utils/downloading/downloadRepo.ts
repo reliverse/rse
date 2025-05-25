@@ -1,30 +1,30 @@
-import { ensuredir } from "@reliverse/fs";
-import { selectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import path, { dirname } from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { selectPrompt } from "@reliverse/rempts";
 import { exec } from "child_process";
-import fs from "fs-extra";
 import https from "https";
 import { HttpsProxyAgent } from "https-proxy-agent";
 import { installDependencies } from "nypm";
-import path, { dirname } from "pathe";
 import prettyBytes from "pretty-bytes";
 import { simpleGit } from "simple-git";
 import { extract } from "tar";
 import { promisify } from "util";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
-import {
-  cliConfigJsonc,
-  cliConfigTs,
-  cliHomeRepos,
-} from "~/libs/cfg/constants/cfg-details.js";
 import { initGitDir } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/git.js";
 import {
   rmEnsureDir,
   setHiddenAttributeOnWindows,
 } from "~/libs/sdk/utils/filesysHelpers.js";
-import { getReliverseConfigPath } from "~/libs/sdk/utils/reliverseConfig/rc-path.js";
+import {
+  cliConfigJsonc,
+  cliConfigTs,
+  cliHomeRepos,
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path.js";
 
 const execAsync = promisify(exec);
 
@@ -43,7 +43,7 @@ type DownloadRepoOptions = {
   force?: boolean;
   forceClean?: boolean;
   preserveGit?: boolean;
-  config?: ReliverseConfig | undefined;
+  config?: RseConfig | undefined;
   returnTime?: boolean;
   returnSize?: boolean;
   returnConcurrency?: boolean;
@@ -286,7 +286,7 @@ export async function downloadRepo({
   isTemplateDownload,
   cache = false,
 }: DownloadRepoOptions): Promise<DownloadResult> {
-  relinka("info-verbose", `Downloading repo ${repoURL}...`);
+  relinka("verbose", `Downloading repo ${repoURL}...`);
   const startTime = Date.now();
   let tempCloneDir: string | undefined = undefined;
   const maxConcurrentProcesses = 6;
@@ -295,76 +295,76 @@ export async function downloadRepo({
   let projectPath = isDev
     ? path.join(cwd, "tests-runtime", projectName)
     : path.join(cwd, projectName);
-  relinka("info-verbose", `Preparing to place repo in: ${projectPath}`);
+  relinka("verbose", `Preparing to place repo in: ${projectPath}`);
 
   // Handle existing directory
   if (forceClean) {
     await fs.remove(projectPath);
   } else if (!force && (await fs.pathExists(projectPath))) {
     const files = await fs.readdir(projectPath);
-    const hasOnlyReliverseConfig =
-      files.length === 1 && files[0] === cliConfigJsonc;
-    if (files.length > 0 && !hasOnlyReliverseConfig) {
+    const hasOnlyRse = files.length === 1 && files[0] === cliConfigJsonc;
+    if (files.length > 0 && !hasOnlyRse) {
       projectPath = await getUniqueProjectPath(projectPath, projectName, isDev);
       relinka(
-        "info-verbose",
+        "verbose",
         `Directory already exists. Using new path: ${projectPath}`,
       );
     }
   }
   await ensuredir(projectPath);
 
-  // Handle reliverse config file (backup or delete)
+  // Handle rse config file (backup or delete)
   const parentDir = dirname(projectPath);
   try {
-    await getReliverseConfigPath(parentDir, isDev, true);
+    await getRseConfigPath(parentDir, isDev, true);
   } catch (_error) {
     // Ignore errors
   }
-  const { configPath: projectReliverseConfigPath } =
-    await getReliverseConfigPath(projectPath, isDev, true);
-  const hasReliverseConfig = await fs.pathExists(projectReliverseConfigPath);
-  if (hasReliverseConfig) {
+  const { configPath: projectConfigPath } = await getRseConfigPath(
+    projectPath,
+    isDev,
+    true,
+  );
+  const hasConfig = await fs.pathExists(projectConfigPath);
+  if (hasConfig) {
     const choice = await selectPrompt({
-      title: `${projectReliverseConfigPath} already exists in parent directory. What would you like to do?`,
+      title: `${projectConfigPath} already exists in parent directory. What would you like to do?`,
       options: [
         { value: "delete", label: "Delete existing file" },
         { value: "backup", label: "Create backup" },
       ],
     });
     if (choice === "delete") {
-      await fs.remove(projectReliverseConfigPath);
+      await fs.remove(projectConfigPath);
     } else {
       let backupPath = path.join(
         parentDir,
-        projectReliverseConfigPath.endsWith(cliConfigJsonc)
-          ? "reliverse-bak.jsonc"
-          : "reliverse-bak.ts",
+        projectConfigPath.endsWith(cliConfigJsonc) ? "rseconfig" : "rseconfig",
       );
       let iteration = 1;
       while (await fs.pathExists(backupPath)) {
         backupPath = path.join(
           parentDir,
           `${
-            projectReliverseConfigPath.endsWith(cliConfigJsonc)
-              ? "reliverse-bak-"
-              : "reliverse-bak-"
+            projectConfigPath.endsWith(cliConfigJsonc)
+              ? "rseconfig"
+              : "rseconfig"
           }${iteration}.${
-            projectReliverseConfigPath.endsWith(cliConfigJsonc) ? "jsonc" : "ts"
+            projectConfigPath.endsWith(cliConfigJsonc) ? "jsonc" : "ts"
           }`,
         );
         iteration++;
       }
-      await fs.move(projectReliverseConfigPath, backupPath);
+      await fs.move(projectConfigPath, backupPath);
     }
     await fs.move(
       path.join(
         projectPath,
-        projectReliverseConfigPath.endsWith(cliConfigJsonc)
+        projectConfigPath.endsWith(cliConfigJsonc)
           ? cliConfigJsonc
           : cliConfigTs,
       ),
-      projectReliverseConfigPath,
+      projectConfigPath,
     );
     await rmEnsureDir(projectPath);
   }
@@ -391,7 +391,7 @@ export async function downloadRepo({
 
   // --- Cache Branch: Use tarball download if cache enabled and not preserving Git ---
   if (cache && !preserveGit) {
-    relinka("info-verbose", "Using tarball cache method...");
+    relinka("verbose", "Using tarball cache method...");
     // Compute commit hash
     const commitHash = await getCommitHash(finalUrl, repoInfo.version);
     // Setup tarball cache directory
@@ -410,10 +410,10 @@ export async function downloadRepo({
         // Default: GitHub
         tarUrl = `${repoInfo.gitUrl.replace(".git", "")}/archive/${commitHash}.tar.gz`;
       }
-      relinka("info-verbose", `Downloading tarball from ${tarUrl}`);
+      relinka("verbose", `Downloading tarball from ${tarUrl}`);
       await downloadTarball(tarUrl, tarballFile);
     }
-    relinka("info-verbose", `Extracting tarball to ${projectPath}`);
+    relinka("verbose", `Extracting tarball to ${projectPath}`);
     await extractTarball(tarballFile, projectPath, repoInfo.subdir);
     const durationSeconds = (Date.now() - startTime) / 1000;
     const result: DownloadResult = { source: repoURL, dir: projectPath };
@@ -431,7 +431,7 @@ export async function downloadRepo({
 
   // 6) Clone or fast clone the repository
   if (fastCloneSource) {
-    relinka("info-verbose", `Using fast clone method from: ${fastCloneSource}`);
+    relinka("verbose", `Using fast clone method from: ${fastCloneSource}`);
     await fs.copy(fastCloneSource, path.join(projectPath, ".git"));
     const git = simpleGit({ maxConcurrentProcesses });
     await git.cwd(projectPath);
@@ -495,7 +495,7 @@ export async function downloadRepo({
         if (!preserveGit) {
           await fs.remove(path.join(projectPath, ".git"));
           if (config) {
-            relinka("info-verbose", "[D] initGitDir");
+            relinka("verbose", "[D] initGitDir");
             await initGitDir({
               cwd,
               isDev,
@@ -523,8 +523,8 @@ export async function downloadRepo({
   }
 
   // 8) Restore config if it was moved
-  if (hasReliverseConfig) {
-    await fs.move(projectReliverseConfigPath, projectReliverseConfigPath, {
+  if (hasConfig) {
+    await fs.move(projectConfigPath, projectConfigPath, {
       overwrite: true,
     });
   }
@@ -538,7 +538,7 @@ export async function downloadRepo({
     });
   }
 
-  relinka("success-verbose", "Repository downloaded successfully!");
+  relinka("verbose", "Repository downloaded successfully!");
   const durationSeconds = (Date.now() - startTime) / 1000;
   const result: DownloadResult = { source: repoURL, dir: projectPath };
   if (returnTime) result.time = durationSeconds;

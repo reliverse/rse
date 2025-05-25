@@ -1,5 +1,6 @@
 import { openai } from "@ai-sdk/openai";
-import { defineCommand, relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { defineCommand } from "@reliverse/rempts";
 import { experimental_generateImage as generateImage } from "ai";
 import { Buffer } from "buffer";
 import ora from "ora";

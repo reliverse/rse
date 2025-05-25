@@ -1,12 +1,15 @@
 {
   "recommendations": [
-    "fabiospampinato.vscode-open-multiple-files",
+    "aaron-bond.better-comments",
+    "biomejs.biome",
+    "chunsen.bracket-select",
     "davidanson.vscode-markdownlint",
-    "usernamehw.remove-empty-lines",
-    "yzhang.markdown-all-in-one",
-    "yoavbls.pretty-ts-errors",
     "dbaeumer.vscode-eslint",
+    "fabiospampinato.vscode-open-multiple-files",
+    "oven.bun-vscode",
     "usernamehw.errorlens",
-    "biomejs.biome"
+    "usernamehw.remove-empty-lines",
+    "yoavbls.pretty-ts-errors",
+    "yzhang.markdown-all-in-one"
   ]
 }

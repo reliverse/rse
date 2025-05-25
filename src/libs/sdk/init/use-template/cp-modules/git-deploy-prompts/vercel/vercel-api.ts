@@ -1,4 +1,4 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { projectsGetProjectEnv } from "@vercel/sdk/funcs/projectsGetProjectEnv.js";
 
 import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";

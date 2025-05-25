@@ -1,4 +1,5 @@
-import { multiselectPrompt, relinka, selectPrompt } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { multiselectPrompt, selectPrompt } from "@reliverse/rempts";
 
 import {
   applyTheme,

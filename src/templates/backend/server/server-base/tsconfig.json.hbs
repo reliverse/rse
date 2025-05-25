@@ -1,0 +1,29 @@
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"verbatimModuleSyntax": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"baseUrl": "./",
+		"paths": {
+		  "@/*": ["./src/*"]
+		},
+		"outDir": "./dist",
+		"types": [
+      {{#if (eq runtime 'node')}}
+        "node"
+      {{else if (eq runtime 'bun')}}
+        "bun"
+      {{else}}
+        "node", "bun"
+      {{/if}}
+    ],
+		"jsx": "react-jsx"{{#if (eq backend 'hono')}},
+		"jsxImportSource": "hono/jsx"{{/if}}
+	},
+	"tsc-alias": {
+		"resolveFullPaths": true
+	}
+}

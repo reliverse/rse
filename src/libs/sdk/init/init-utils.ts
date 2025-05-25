@@ -1,11 +1,12 @@
-import { ensuredir } from "@reliverse/fs";
-import { nextStepsPrompt, relinka, selectPrompt } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
-import path from "pathe";
+import { ensuredir } from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { nextStepsPrompt, selectPrompt } from "@reliverse/rempts";
 import { simpleGit, type SimpleGit } from "simple-git";
 
-import type { ProjectFramework } from "~/libs/cfg/constants/cfg-types.js";
 import type { ShowMenuResult } from "~/libs/sdk/add/add-local/core/types.js";
+import type { ProjectFramework } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
 import { checkMissingDependencies } from "~/libs/sdk/add/add-local/core/deps.js";
 import { getPromptContent } from "~/libs/sdk/add/add-local/core/prompts.js";
@@ -26,9 +27,9 @@ import { askInstallDeps } from "~/libs/sdk/utils/prompts/askInstallDeps.js";
 import { askOpenInIDE } from "~/libs/sdk/utils/prompts/askOpenInIDE.js";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName.js";
 import { shouldInitGit } from "~/libs/sdk/utils/prompts/shouldInitGit.js";
-import { detectProjectsWithReliverse } from "~/libs/sdk/utils/reliverseConfig/rc-detect.js";
-import { getReliverseConfig } from "~/libs/sdk/utils/reliverseConfig/rc-mod.js";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
+import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect.js";
+import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod.js";
 import { findTsconfigUp } from "~/libs/sdk/utils/tsconfigHelpers.js";
 
 import { promptGitDeploy } from "./use-template/cp-modules/git-deploy-prompts/gdp-mod.js";
@@ -74,7 +75,7 @@ function buildProjectSelectionMenuOptions(
   });
 
   return {
-    title: "Reliverse Project Selection",
+    title: "rse Project Selection",
     content: directoryEmpty
       ? `Directory ${cwd} is empty`
       : "Choose an existing project or create a new one.",
@@ -83,14 +84,14 @@ function buildProjectSelectionMenuOptions(
 }
 
 /**
- * Shows a menu to pick an existing Reliverse project or create a new one.
+ * Shows a menu to pick an existing rse project or create a new one.
  */
 export async function handleProjectSelectionMenu(
   cwd: string,
   isDev: boolean,
 ): Promise<string> {
   try {
-    const detectedProjects = await detectProjectsWithReliverse(cwd, isDev);
+    const detectedProjects = await detectProjectsWithRseConfig(cwd, isDev);
     const directoryEmpty = await isDirectoryEmpty(cwd);
 
     const menuData = buildProjectSelectionMenuOptions(
@@ -108,7 +109,7 @@ export async function handleProjectSelectionMenu(
     if (selectedOption === NEW_PROJECT_OPTION) {
       const projectName = await askProjectName({});
       const projectPath = path.resolve(cwd, projectName);
-      await initMinimalReliverseProject(projectPath, projectName, isDev);
+      await initMinimalrseProject(projectPath, projectName, isDev);
       return projectPath;
     }
 
@@ -129,7 +130,7 @@ export async function handleProjectSelectionMenu(
  * Creates a new project directory and initializes it with basic config files.
  * Also prompts the user for additional setup steps.
  */
-export async function initMinimalReliverseProject(
+export async function initMinimalrseProject(
   projectPath: string,
   projectName: string,
   isDev: boolean,
@@ -152,20 +153,20 @@ export async function initMinimalReliverseProject(
     if (isDev) {
       const foundTsconfig = await findTsconfigUp(path.resolve(projectPath));
       if (foundTsconfig) {
-        relinka("info-verbose", `Found parent tsconfig: ${foundTsconfig}`);
+        relinka("verbose", `Found parent tsconfig: ${foundTsconfig}`);
         customTsconfigPath = foundTsconfig;
       } else {
         relinka("warn", "No parent-level tsconfig.json found in dev mode.");
       }
     }
 
-    // Load or create Reliverse configuration for the project
-    const { config } = await getReliverseConfig(
+    // Load or create rse configuration for the project
+    const { config } = await getRseConfig({
       projectPath,
       isDev,
-      { projectFramework },
+      overrides: { projectFramework },
       customTsconfigPath,
-    );
+    });
 
     // In dev mode, optionally initialize Git
     if (isDev) {
@@ -199,7 +200,7 @@ export async function initMinimalReliverseProject(
 
     // Prompt the user with next steps after project creation
     await nextStepsPrompt({
-      title: `Created new project "${projectName}" with minimal Reliverse config.`,
+      title: `Created new project "${projectName}" with minimal rse config.`,
       content: [
         "It's recommended to:",
         "1. Edit the generated config files as needed.",
@@ -207,7 +208,7 @@ export async function initMinimalReliverseProject(
         "p.s. Fast way to open manual builder:",
         isDev
           ? "`bun dev:init` or `bun dev:add` (the same thing)"
-          : "`reliverse init` or `reliverse add` (the same thing)",
+          : "`rse init` or `rse add` (the same thing)",
       ],
     });
 
@@ -252,7 +253,7 @@ export async function showExistingProjectMenu(
     const { updateAvailable, updateInfo } = await getTemplateUpdateInfo(
       cwd,
       isDev,
-      requiredContent.fileReliverse,
+      requiredContent.fileRseConfig,
     );
 
     const menuOptions = buildExistingProjectMenuOptions(
@@ -277,7 +278,7 @@ export async function showExistingProjectMenu(
     } else if (action === "edit-settings") {
       relinka(
         "info",
-        "Feature not implemented yet. Please edit your reliverse config file manually.",
+        "Feature not implemented yet. Please edit your rse config file manually.",
       );
     }
 
@@ -342,31 +343,35 @@ function buildExistingProjectMenuOptions(
 
 /**
  * Determines the project status by checking whether the necessary
- * Reliverse and package.json files exist in this directory.
+ * rse and package.json files exist in this directory.
  */
 export function determineProjectStatus(
   requiredContent: RequiredProjectContent,
 ): "new" | "existing" | "incomplete" {
-  const hasReliverse = Boolean(requiredContent.fileReliverse);
+  const hasrse = Boolean(requiredContent.fileRseConfig);
   const hasPackageJson = Boolean(requiredContent.filePackageJson);
   const isExistingProject = Object.values(requiredContent).every(Boolean);
 
-  if (!hasReliverse && hasPackageJson) return "new";
+  if (!hasrse && hasPackageJson) return "new";
   if (isExistingProject) return "existing";
   return "incomplete";
 }
 
 /**
- * Sets up new Reliverse configuration files for a project without them.
+ * Sets up new rse configuration files for a project without them.
  */
 export async function handleNewProject(
   cwd: string,
   isDev: boolean,
 ): Promise<ShowMenuResult> {
   try {
-    relinka("info", "Setting up Reliverse config for this project...");
-    await getReliverseConfig(cwd, isDev, {});
-    relinka("success", "Reliverse config created. Please re-run the builder.");
+    relinka("info", "Setting up rse config for this project...");
+    await getRseConfig({
+      projectPath: cwd,
+      isDev,
+      overrides: {},
+    });
+    relinka("success", "rse config created. Please re-run the builder.");
     return { areDependenciesMissing: false };
   } catch (error) {
     relinka(
@@ -390,10 +395,10 @@ export async function handleExistingProject(
 }
 
 /**
- * Explains that the current directory lacks the files needed for Reliverse work.
+ * Explains that the current directory lacks the files needed for rse work.
  */
 export function handleIncompleteProject(): ShowMenuResult {
   relinka("info", "Project doesn't meet requirements for manual builder menu.");
-  relinka("info", "Ensure you have a package.json and reliverse config file.");
+  relinka("info", "Ensure you have a package.json and rse config file.");
   return { areDependenciesMissing: true };
 }

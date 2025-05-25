@@ -3,11 +3,11 @@ import type {
   GetProjectsTarget1,
 } from "@vercel/sdk/models/getprojectsop.js";
 
-import { selectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { selectPrompt } from "@reliverse/rempts";
 import { projectsGetProjectDomain } from "@vercel/sdk/funcs/projectsGetProjectDomain.js";
-import fs from "fs-extra";
-import path from "pathe";
 
 import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
@@ -62,7 +62,6 @@ export async function saveVercelToken(
     // If team is valid, save it to memory
     if (isTeamValid) {
       await updateReliverseMemory({
-        ...memory,
         vercelTeamId: selectedTeam.id,
         vercelTeamSlug: selectedTeam.slug,
       });
@@ -74,14 +73,12 @@ export async function saveVercelToken(
         "Failed to verify Vercel team details. Vercel team will not be saved.",
       );
       await updateReliverseMemory({
-        ...memory,
         vercelTeamId: "",
         vercelTeamSlug: "",
       });
     }
   } else {
     await updateReliverseMemory({
-      ...memory,
       vercelTeamId: "",
       vercelTeamSlug: "",
     });
@@ -168,7 +165,10 @@ export async function detectFramework(
   try {
     const packageJsonPath = path.join(directory, "package.json");
     if (await fs.pathExists(packageJsonPath)) {
-      const packageJson = await fs.readJson(packageJsonPath);
+      const packageJson = (await fs.readJson(packageJsonPath)) as {
+        dependencies?: Record<string, string>;
+        devDependencies?: Record<string, string>;
+      };
       const { dependencies = {}, devDependencies = {} } = packageJson;
       const allDeps = { ...dependencies, ...devDependencies };
 

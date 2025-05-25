@@ -1,5 +1,5 @@
 import type { ShowMenuResult } from "~/libs/sdk/add/add-local/core/types.js";
-import type { ParamsOmitReli } from "~/libs/sdk/types/types-mod.js";
+import type { ParamsOmitReli } from "~/libs/sdk/sdk-types.js";
 
 import { getProjectContent } from "~/libs/sdk/utils/getProjectContent.js";
 import { setupDevModeIfNeeded } from "~/libs/sdk/utils/testsRuntime.js";

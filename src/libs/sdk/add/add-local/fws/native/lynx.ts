@@ -1,4 +1,4 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 
 export function useLynxNativeFramework() {
   relinka(

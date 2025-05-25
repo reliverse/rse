@@ -1,5 +1,6 @@
-import { confirmPrompt, relinka } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt } from "@reliverse/rempts";
 import { installDependencies } from "nypm";
 
 /**

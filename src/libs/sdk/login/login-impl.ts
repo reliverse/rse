@@ -1,8 +1,8 @@
 import type { ParsedUrlQuery } from "querystring";
 
-import { spinnerTaskPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
+import { relinka } from "@reliverse/relinka";
+import { spinnerTaskPrompt } from "@reliverse/rempts";
 import { listen } from "async-listen";
 import http from "http";
 import { customAlphabet } from "nanoid";
@@ -13,12 +13,13 @@ import url from "url";
 
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
-import { cliDomainDocs, memoryPath } from "~/libs/cfg/constants/cfg-details.js";
-import { showAnykeyPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt.js";
 import {
-  getReliverseMemory,
-  updateReliverseMemory,
-} from "~/libs/sdk/utils/reliverseMemory.js";
+  cliDomainDocs,
+  memoryPath,
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { showAnykeyPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt.js";
+import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update.js";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
 
 /**
  * Custom error for when a user cancels the process.
@@ -59,7 +60,7 @@ export async function auth({
         });
         port = serverListen.port;
         relinka(
-          "success-verbose",
+          "verbose",
           `Local server listening on http://localhost:${port}`,
         );
       } catch (listenError) {
@@ -76,10 +77,7 @@ export async function auth({
       // Handle incoming requests (auth or cancellation)
       const authPromise = new Promise<ParsedUrlQuery>((resolve, reject) => {
         server.on("request", (req, res) => {
-          relinka(
-            "success-verbose",
-            `Received ${req.method} request on ${req.url}`,
-          );
+          relinka("verbose", `Received ${req.method} request on ${req.url}`);
 
           res.setHeader("Access-Control-Allow-Origin", "*");
           res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
@@ -89,23 +87,20 @@ export async function auth({
           );
 
           if (req.method === "OPTIONS") {
-            relinka("info-verbose", "Handling OPTIONS request");
+            relinka("verbose", "Handling OPTIONS request");
             res.writeHead(200);
             res.end();
           } else if (req.method === "GET") {
             const parsedUrl = url.parse(req.url ?? "", true);
             const queryParams = parsedUrl.query;
             relinka(
-              "info-verbose",
+              "verbose",
               `Parsed query parameters: ${JSON.stringify(queryParams)}`,
             );
 
             if (queryParams.cancelled) {
-              relinka("info-verbose", "User cancelled the login process...");
-              relinka(
-                "info-verbose",
-                "Sleep 2s to finish the fetch process...",
-              );
+              relinka("verbose", "User cancelled the login process...");
+              relinka("verbose", "Sleep 2s to finish the fetch process...");
               void new Promise((r) => setTimeout(r, 2000)).then(() => {
                 res.writeHead(200);
                 res.end();
@@ -117,7 +112,7 @@ export async function auth({
               return;
             } else {
               relinka(
-                "info-verbose",
+                "verbose",
                 `Received authentication data: ${JSON.stringify(queryParams)}`,
               );
               res.writeHead(200);
@@ -148,7 +143,7 @@ export async function auth({
           ? "http://localhost:3000"
           : "https://reliverse.org"
         : "https://reliverse.org";
-      relinka("info-verbose", `Using client URL: ${clientUrl}`);
+      relinka("verbose", `Using client URL: ${clientUrl}`);
 
       const confirmationUrl = new URL(`${clientUrl}/auth/confirm`);
       confirmationUrl.searchParams.append("code", code);
@@ -164,7 +159,7 @@ export async function auth({
       // Open the URL in the default browser
       try {
         await open(confirmationUrl.toString());
-        relinka("info-verbose", "Opened browser with confirmation URL.");
+        relinka("verbose", "Opened browser with confirmation URL.");
       } catch (error) {
         relinka(
           "error",
@@ -203,7 +198,7 @@ export async function auth({
         const authData = await authPromise;
         clearTimeout(authTimeout);
         relinka(
-          "info-verbose",
+          "verbose",
           `Authentication data received: ${JSON.stringify(authData)}`,
         );
 
@@ -211,15 +206,15 @@ export async function auth({
           throw new UserCancellationError("Login process cancelled by user.");
         }
 
-        await updateReliverseMemory(authData);
+        await updateRseConfig(process.cwd(), authData, isDev);
         server.close(() => {
           relinka(
-            "info-verbose",
+            "verbose",
             "Wrote key to config file. To view it, type:",
             `code ${memoryPath}`,
           );
           relinka(
-            "info-verbose",
+            "verbose",
             "Local server closed after successful authentication.",
           );
         });
@@ -231,16 +226,13 @@ export async function auth({
           // User cancelled scenario: let's end gracefully
           updateMessage("Login cancelled. See you next time 👋");
           server.close(() => {
-            relinka(
-              "info-verbose",
-              "Local server closed due to user cancellation.",
-            );
+            relinka("verbose", "Local server closed due to user cancellation.");
             process.exit(0);
           });
         } else {
           server.close(() => {
             relinka(
-              "error-verbose",
+              "verbose",
               "Local server closed due to authentication failure.",
             );
           });

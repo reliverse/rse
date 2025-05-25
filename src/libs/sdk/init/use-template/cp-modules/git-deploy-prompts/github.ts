@@ -1,11 +1,11 @@
 import { RequestError } from "@octokit/request-error";
-import { selectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { selectPrompt } from "@reliverse/rempts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
-import { UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
+import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 import { cd } from "~/libs/sdk/utils/terminalHelpers.js";
 
 import { initGitDir } from "./git.js";
@@ -49,12 +49,12 @@ export async function createGithubRepo(
   projectPath: string,
   isDev: boolean,
   cwd: string,
-  config: ReliverseConfig,
+  config: RseConfig,
   isTemplateDownload: boolean,
 ): Promise<boolean> {
   if (isTemplateDownload) {
     relinka(
-      "info-verbose",
+      "verbose",
       "Skipping createGithubRepo since it's a template download",
     );
     return true;
@@ -66,7 +66,7 @@ export async function createGithubRepo(
     await cd(projectPath);
 
     // Initialize git and create repository
-    relinka("info-verbose", "[C] initGitDir");
+    relinka("verbose", "[C] initGitDir");
     await initGitDir({
       cwd,
       isDev,
@@ -101,7 +101,7 @@ export async function createGithubRepo(
     }
 
     // Create the repository
-    relinka("info-verbose", "Creating repository...");
+    relinka("verbose", "Creating repository...");
 
     try {
       await githubInstance.rest.repos.createForAuthenticatedUser({
@@ -119,10 +119,7 @@ export async function createGithubRepo(
 
     // Setup remote and push initial commit
     const remoteUrl = `https://github.com/${repoOwner}/${repoName}.git`;
-    relinka(
-      "info-verbose",
-      "Setting up Git remote and pushing initial commit...",
-    );
+    relinka("verbose", "Setting up Git remote and pushing initial commit...");
     return await setupGitRemote(
       cwd,
       isDev,

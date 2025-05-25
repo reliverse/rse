@@ -1,13 +1,13 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { ofetch } from "ofetch";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
-import { UNKNOWN_VALUE } from "~/libs/cfg/constants/cfg-details.js";
 import { REPO_TEMPLATES } from "~/libs/sdk/utils/projectRepository.js";
-import { getReliverseConfigPath } from "~/libs/sdk/utils/reliverseConfig/rc-path.js";
-import { readReliverseConfig } from "~/libs/sdk/utils/reliverseConfig/rc-read.js";
-import { updateReliverseConfig } from "~/libs/sdk/utils/reliverseConfig/rc-update.js";
+import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path.js";
+import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read.js";
+import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update.js";
 
 /**
  * Response type for UNGH API repository information
@@ -29,11 +29,11 @@ export type TemplateUpdateInfo = {
 
 /**
  * Checks if a project template has an update available
- * @param projectConfig The project's reliverse config
+ * @param projectConfig The project's rseg
  * @returns Object containing update info
  */
 export async function checkForTemplateUpdate(
-  projectConfig: ReliverseConfig,
+  projectConfig: RseConfig,
 ): Promise<TemplateUpdateInfo> {
   // If no template is specified or it has an unknown value, no updates to check
   if (
@@ -126,7 +126,7 @@ export async function updateProjectTemplateDate(
 ): Promise<void> {
   try {
     // Update the projectTemplateDate field in the config
-    await updateReliverseConfig(
+    await updateRseConfig(
       projectPath,
       { projectTemplateDate: latestDate },
       isDev,
@@ -141,12 +141,12 @@ export async function updateProjectTemplateDate(
 }
 
 /**
- * Retrieves template update info (if any) based on reliverse config presence.
+ * Retrieves template update info (if any) based on rseg presence.
  */
 export async function getTemplateUpdateInfo(
   cwd: string,
   isDev: boolean,
-  hasReliverseFile: boolean,
+  hasRseConfig: boolean,
 ): Promise<{
   updateAvailable: boolean;
   updateInfo: TemplateUpdateInfo | null;
@@ -154,9 +154,9 @@ export async function getTemplateUpdateInfo(
   let updateInfo: TemplateUpdateInfo | null = null;
   let updateAvailable = false;
 
-  if (hasReliverseFile) {
-    const { configPath } = await getReliverseConfigPath(cwd, isDev, false);
-    const projectConfig = await readReliverseConfig(configPath, isDev);
+  if (hasRseConfig) {
+    const { configPath } = await getRseConfigPath(cwd, isDev, false);
+    const projectConfig = await readRseConfig(configPath, isDev);
     if (projectConfig) {
       updateInfo = await checkForTemplateUpdate(projectConfig);
       updateAvailable = updateInfo.hasUpdate;

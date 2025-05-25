@@ -1,13 +1,13 @@
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { eq } from "drizzle-orm";
-import fs from "fs-extra";
-import path from "pathe";
 
 import { db } from "~/db/client.js";
 import { encrypt, decrypt } from "~/db/config.js";
 import { configKeysTable, userDataTable } from "~/db/schema.js";
-import { memoryPath } from "~/libs/cfg/constants/cfg-details.js";
+import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 import type {
   EncryptedDataMemory,
@@ -72,8 +72,8 @@ export async function getReliverseMemory(): Promise<ReliverseMemory> {
       name: userData.name ?? "",
       email: userData.email ?? "",
       githubUsername: userData.githubUsername ?? "",
-      vercelUsername: userData.vercelUsername ?? "",
       vercelTeamId: userData.vercelTeamId ?? "",
+      vercelTeamSlug: userData.vercelTeamSlug ?? "",
     };
   } catch (error) {
     relinka(
@@ -90,7 +90,7 @@ export async function getReliverseMemory(): Promise<ReliverseMemory> {
       name: "",
       email: "",
       githubUsername: "",
-      vercelUsername: "",
+      vercelTeamSlug: "",
       vercelTeamId: "",
     };
   }
@@ -130,14 +130,14 @@ export async function updateReliverseMemory(
           "name",
           "email",
           "githubUsername",
-          "vercelUsername",
+          "vercelTeamSlug",
           "vercelTeamId",
         ].includes(key),
       )
       .filter(([_, value]) => value !== null && value !== undefined)
       .map(([key, value]) => ({
         key: key as UserDataMemory,
-        value:
+        value:  
           typeof value === "object"
             ? JSON.stringify(value)
             : typeof value === "undefined"
@@ -180,7 +180,7 @@ export async function updateReliverseMemory(
         });
     }
 
-    relinka("success-verbose", "Memory updated successfully");
+    relinka("verbose", "Memory updated successfully");
   } catch (error) {
     relinka(
       "error",

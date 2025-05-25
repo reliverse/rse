@@ -1,4 +1,4 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { projectsGetProjectDomains } from "@vercel/sdk/funcs/projectsGetProjectDomains.js";
 
 import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";

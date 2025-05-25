@@ -1,6 +1,6 @@
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 import { simpleGit } from "simple-git";
 
 /**
@@ -82,7 +82,7 @@ export async function setupGitRemote(
     // Setup remote
     if (!remotes.find((remote) => remote.name === remoteName)) {
       await git.addRemote(remoteName, remoteUrl);
-      relinka("success-verbose", `Remote '${remoteName}' added successfully.`);
+      relinka("verbose", `Remote '${remoteName}' added successfully.`);
     } else {
       // Update existing remote URL if different
       const remoteGetUrl = await git.remote(["get-url", remoteName]);

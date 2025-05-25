@@ -1,10 +1,10 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import dotenv from "dotenv";
 import { ofetch } from "ofetch";
 dotenv.config();
 
 /**
- * Handles "reliverse mcp" commands, supporting actions like listing servers,
+ * Handles "rse mcp" commands, supporting actions like listing servers,
  * retrieving server details, attributes, or instances.
  */
 export async function handleMcpCommand(args: string[]): Promise<void> {
@@ -31,7 +31,7 @@ export async function handleMcpCommand(args: string[]): Promise<void> {
 
 /**
  * Lists MCP servers with optional flags for pagination and free-text queries.
- *   Usage: reliverse mcp servers --query "..." --first 10 --after <cursor>
+ *   Usage: rse mcp servers --query "..." --first 10 --after <cursor>
  */
 async function listServers(flags: string[]): Promise<void> {
   const params = parseFlags(flags);
@@ -48,7 +48,6 @@ async function listServers(flags: string[]): Promise<void> {
   }
 
   const baseUrl = "https://glama.ai/api/mcp/v1/servers";
-  // @ts-expect-error TODO: fix ts
   const queryString = new URLSearchParams(queryParams).toString();
   const url = queryString ? `${baseUrl}?${queryString}` : baseUrl;
 
@@ -62,7 +61,7 @@ async function listServers(flags: string[]): Promise<void> {
 
 /**
  * Shows details about a specific server by ID.
- *   Usage: reliverse mcp server <id>
+ *   Usage: rse mcp server <id>
  */
 async function showServer(flags: string[]): Promise<void> {
   const id = flags[0];
@@ -84,7 +83,7 @@ async function showServer(flags: string[]): Promise<void> {
 
 /**
  * Lists available MCP server attributes.
- *   Usage: reliverse mcp attributes
+ *   Usage: rse mcp attributes
  */
 async function listAttributes(): Promise<void> {
   const url = "https://glama.ai/api/mcp/v1/attributes";
@@ -99,7 +98,7 @@ async function listAttributes(): Promise<void> {
 
 /**
  * Lists MCP server instances, requiring a Bearer token in flags or via environment variable.
- *   Usage: reliverse mcp instances --token "YOUR_TOKEN_HERE"
+ *   Usage: rse mcp instances --token "YOUR_TOKEN_HERE"
  *   or set MCP_BEARER_TOKEN in your .env / environment.
  */
 async function listInstances(flags: string[]): Promise<void> {
@@ -151,22 +150,22 @@ function parseFlags(flags: string[]): Record<string, string> {
 }
 
 /**
- * Prints usage instructions for "reliverse mcp" commands.
+ * Prints usage instructions for "rse mcp" commands.
  */
 function printMcpUsage(): void {
   relinka(
     "info",
     `Usage:
-  reliverse mcp servers [--query <text>] [--first <n>] [--after <cursor>]
-  reliverse mcp server <id>
-  reliverse mcp attributes
-  reliverse mcp instances [--token <YOUR_TOKEN_HERE>]
+  rse mcp servers [--query <text>] [--first <n>] [--after <cursor>]
+  rse mcp server <id>
+  rse mcp attributes
+  rse mcp instances [--token <YOUR_TOKEN_HERE>]
 
 Examples:
-  reliverse mcp servers --query "hacker news" --first 5
-  reliverse mcp server oge85xl22f
-  reliverse mcp attributes
-  reliverse mcp instances --token MY_SECRET_TOKEN
+  rse mcp servers --query "hacker news" --first 5
+  rse mcp server oge85xl22f
+  rse mcp attributes
+  rse mcp instances --token MY_SECRET_TOKEN
   # or place MCP_BEARER_TOKEN=<TOKEN> in .env or the environment
 `,
   );

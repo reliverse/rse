@@ -1,10 +1,9 @@
-import { confirmPrompt, multiselectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt, multiselectPrompt } from "@reliverse/rempts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 import type { MonorepoType } from "~/types.js";
 
-import { cliConfigJsonc } from "~/libs/cfg/constants/cfg-details.js";
 import { convertCjsToEsm } from "~/libs/sdk/utils/codemods/convertCjsToEsm.js";
 import { convertTypeDefinitions } from "~/libs/sdk/utils/codemods/convertDefinitions.js";
 import { convertImportStyle } from "~/libs/sdk/utils/codemods/convertImportStyle.js";
@@ -14,8 +13,9 @@ import { convertRuntime } from "~/libs/sdk/utils/codemods/convertRuntime.js";
 import { convertToMonorepo } from "~/libs/sdk/utils/codemods/convertToMonorepo.js";
 import { replaceImportSymbol } from "~/libs/sdk/utils/codemods/replaceImportSymbol.js";
 import { replaceWithModern } from "~/libs/sdk/utils/codemods/replaceWithModern.js";
+import { cliConfigJsonc } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
-export async function handleCodemods(rules: ReliverseConfig, cwd: string) {
+export async function handleCodemods(rules: RseConfig, cwd: string) {
   if (!rules.codeStyle || !rules.preferredLibraries) {
     relinka("error", `Missing required configuration in ${cliConfigJsonc}`);
     return;

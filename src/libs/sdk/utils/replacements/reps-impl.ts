@@ -1,7 +1,7 @@
-import { relinka } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import escapeStringRegexp from "escape-string-regexp";
-import fs from "fs-extra";
-import path from "pathe";
 
 /**
  * Utility to extract author and project name from template URL
@@ -66,7 +66,7 @@ async function isBinaryFile(
   filePath: string,
   chunkSize = 1000,
 ): Promise<boolean> {
-  const fd = await fs.promises.open(filePath, "r");
+  const fd = await fs.open(filePath, "r");
   try {
     const buffer = Buffer.alloc(chunkSize);
     const { bytesRead } = await fd.read(buffer, 0, chunkSize, 0);
@@ -88,12 +88,12 @@ async function gatherAllFiles(
   dir: string,
   shouldSkipDir: (dirName: string) => boolean,
 ): Promise<string[]> {
-  const filesInDir = await fs.promises.readdir(dir);
+  const filesInDir = await fs.readdir(dir);
   const result: string[] = [];
 
   for (const file of filesInDir) {
     const fullPath = path.join(dir, file);
-    const stat = await fs.promises.lstat(fullPath);
+    const stat = await fs.lstat(fullPath);
 
     if (stat.isDirectory()) {
       if (!shouldSkipDir(file)) {
@@ -274,11 +274,11 @@ export async function replaceStringsInFiles(
     try {
       // Skip binary files if configured
       if (skipBinaryFiles && (await isBinaryFile(filePath))) {
-        verbose && relinka("info-verbose", `Skipping binary file: ${filePath}`);
+        verbose && relinka("verbose", `Skipping binary file: ${filePath}`);
         return;
       }
 
-      const fileContent = await fs.promises.readFile(filePath, "utf8");
+      const fileContent = await fs.readFile(filePath, "utf8");
       let newContent = fileContent;
       let hasChanges = false;
       const changesMade: string[] = [];
@@ -310,16 +310,16 @@ export async function replaceStringsInFiles(
       if (hasChanges) {
         // Write changes unless in dry-run mode
         if (!dryRun) {
-          await fs.promises.writeFile(filePath, newContent, "utf8");
+          await fs.writeFile(filePath, newContent, "utf8");
         }
 
         // Log changes based on verbosity setting
         if (verbose) {
           const relativePath = path.relative(projectPath, filePath);
-          relinka("info-verbose", `Updated ${relativePath}:`);
-          changesMade.forEach((c) => relinka("info-verbose", `  - ${c}`));
+          relinka("verbose", `Updated ${relativePath}:`);
+          changesMade.forEach((c) => relinka("verbose", `  - ${c}`));
         } else {
-          relinka("info-verbose", `Updated strings in ${filePath}`);
+          relinka("verbose", `Updated strings in ${filePath}`);
         }
       }
     } catch (error) {

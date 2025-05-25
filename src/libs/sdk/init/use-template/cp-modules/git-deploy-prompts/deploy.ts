@@ -1,27 +1,24 @@
-import { selectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
+import { relinka } from "@reliverse/relinka";
+import { selectPrompt } from "@reliverse/rempts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
 import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 import type { DeploymentService } from "~/types.js";
 
 import { prepareVercelProjectCreation } from "./vercel/vercel-create.js";
 
 export async function selectDeploymentService(
-  config: ReliverseConfig,
+  config: RseConfig,
 ): Promise<DeploymentService> {
   if (
     config.projectDeployService !== undefined &&
     config.projectDeployService !== "none"
   ) {
     const deployService = config.projectDeployService;
-    relinka(
-      "info-verbose",
-      `Using configured deployment service: ${deployService}`,
-    );
+    relinka("verbose", `Using configured deployment service: ${deployService}`);
     return deployService;
   }
 
@@ -48,7 +45,7 @@ export async function deployProject(
   githubToken: string,
   skipPrompts: boolean,
   projectName: string,
-  config: ReliverseConfig,
+  config: RseConfig,
   projectPath: string,
   primaryDomain: string,
   memory: ReliverseMemory,
@@ -60,7 +57,7 @@ export async function deployProject(
   isDeployed: boolean;
   allDomains: string[];
 }> {
-  relinka("info-verbose", `Preparing deployment for ${projectName} project...`);
+  relinka("verbose", `Preparing deployment for ${projectName} project...`);
 
   try {
     const deployService = await selectDeploymentService(config);
@@ -99,7 +96,7 @@ export async function deployProject(
     );
 
     if (success) {
-      relinka("success-verbose", "Deployment completed!");
+      relinka("verbose", "Deployment completed!");
       return {
         primaryDomain,
         deployService: deployService,

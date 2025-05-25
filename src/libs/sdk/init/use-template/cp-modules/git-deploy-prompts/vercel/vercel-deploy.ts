@@ -1,4 +1,4 @@
-import { relinka, relinkaAsync } from "@reliverse/prompts";
+import { relinka, relinkaAsync } from "@reliverse/relinka";
 import { deploymentsCreateDeployment } from "@vercel/sdk/funcs/deploymentsCreateDeployment.js";
 import { deploymentsGetDeployment } from "@vercel/sdk/funcs/deploymentsGetDeployment.js";
 import { deploymentsGetDeploymentEvents } from "@vercel/sdk/funcs/deploymentsGetDeploymentEvents.js";
@@ -35,7 +35,7 @@ export async function monitorDeployment(
     if (Array.isArray(logs)) {
       let errors = 0;
       let warnings = 0;
-      for (const log of logs as DeploymentLog[]) {
+      for (const log of logs as unknown as DeploymentLog[]) {
         const timestamp = new Date(log.created).toLocaleTimeString();
         const message = `[${log.type}] ${log.text}`;
         if (log.type === "error") {
@@ -83,16 +83,12 @@ export async function createInitialVercelDeployment(
 ): Promise<{ url: string; id: string }> {
   if (!githubToken) {
     throw new Error(
-      "GitHub token not found in Reliverse's memory. Please restart the CLI and try again. Notify the @reliverse/cli developers if the problem persists.",
+      "GitHub token not found in rse's memory. Please restart the CLI and try again. Notify the @reliverse/rse developers if the problem persists.",
     );
   }
 
   relinka("info", "Creating the initial deployment...");
-  relinka(
-    "info-verbose",
-    "Using Vercel deployment config:",
-    JSON.stringify(config),
-  );
+  relinka("verbose", "Using Vercel deployment config:", JSON.stringify(config));
 
   // Retrieve primary team details.
   const vercelTeam = await getPrimaryVercelTeam(vercelInstance, memory);

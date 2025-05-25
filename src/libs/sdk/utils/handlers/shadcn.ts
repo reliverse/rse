@@ -1,7 +1,7 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { execa } from "execa";
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 
 import type { ShadcnConfig, Theme } from "~/types.js";
 
@@ -366,18 +366,18 @@ export { THEMES };
 
 export function selectSidebarPrompt(projectPath: string): void {
   relinka(
-    "info-verbose",
+    "verbose",
     "The following project requested sidebar installation",
     projectPath,
   );
-  relinka("info-verbose", "Coming soon...");
+  relinka("verbose", "Coming soon...");
 }
 
 export function selectChartsPrompt(projectPath: string): void {
   relinka(
-    "info-verbose",
+    "verbose",
     "The following project requested charts installation",
     projectPath,
   );
-  relinka("info-verbose", "Coming soon...");
+  relinka("verbose", "Coming soon...");
 }

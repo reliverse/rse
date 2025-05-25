@@ -1,30 +1,24 @@
-import { ensuredir } from "@reliverse/fs";
+import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import {
   confirmPrompt,
   selectPrompt,
   multiselectPrompt,
   nextStepsPrompt,
   inputPrompt,
-} from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
-import { normalizeName } from "@reliverse/prompts";
-import fs from "fs-extra";
+} from "@reliverse/rempts";
+import { normalizeName } from "@reliverse/rempts";
 import { installDependencies } from "nypm";
 import open from "open";
 import os from "os";
-import path from "pathe";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
-import type { ProjectConfigReturn } from "~/libs/sdk/types/types-mod.js";
+import type { ProjectConfigReturn, RseConfig } from "~/libs/sdk/sdk-types.js";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 import type { Behavior } from "~/types.js";
 
-import {
-  cliDomainDocs,
-  homeDir,
-  UNKNOWN_VALUE,
-} from "~/libs/cfg/constants/cfg-details.js";
 import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
 import { setupI18nFiles } from "~/libs/sdk/utils/downloading/downloadI18nFiles.js";
 import { isVSCodeInstalled } from "~/libs/sdk/utils/handlers/isAppInstalled.js";
@@ -32,6 +26,11 @@ import { promptPackageJsonScripts } from "~/libs/sdk/utils/handlers/promptPackag
 import { askOpenInIDE } from "~/libs/sdk/utils/prompts/askOpenInIDE.js";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName.js";
 import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend.js";
+import {
+  cliDomainDocs,
+  homeDir,
+  UNKNOWN_VALUE,
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 /**
  * Ensures a unique project name by prompting for a new one if the target directory exists.
@@ -80,8 +79,8 @@ async function ensureUniqueProjectName(
  */
 export async function initializeProjectConfig(
   projectName: string,
-  memory: ReliverseMemory,
-  config: ReliverseConfig,
+  _memory: ReliverseMemory,
+  config: RseConfig,
   skipPrompts: boolean,
   isDev: boolean,
   cwd: string,
@@ -92,7 +91,7 @@ export async function initializeProjectConfig(
     config?.projectAuthor !== UNKNOWN_VALUE &&
     config?.projectAuthor !== ""
       ? config.projectAuthor
-      : ((await askUsernameFrontend(memory, true)) ?? "");
+      : ((await askUsernameFrontend(config, true)) ?? "");
 
   if (!frontendUsername) {
     throw new Error(
@@ -136,7 +135,7 @@ export async function initializeProjectConfig(
  */
 export async function setupI18nSupport(
   projectPath: string,
-  config: ReliverseConfig,
+  config: RseConfig,
 ): Promise<boolean> {
   // Check if i18n folder already exists
   const i18nFolderExists =
@@ -145,7 +144,7 @@ export async function setupI18nSupport(
 
   if (i18nFolderExists) {
     relinka(
-      "info-verbose",
+      "verbose",
       "i18n is already enabled in the template. No changes needed.",
     );
     return true;
@@ -204,7 +203,7 @@ export async function shouldInstallDependencies(
  */
 export async function handleDependencies(
   projectPath: string,
-  config: ReliverseConfig,
+  config: RseConfig,
 ) {
   const depsBehavior: Behavior = config?.depsBehavior ?? "prompt";
   const shouldInstallDeps = await shouldInstallDependencies(depsBehavior, true);
@@ -353,7 +352,7 @@ export async function showSuccessAndNextSteps(
   relinka(
     "success",
     "✨ By the way, one more thing you can try (highly experimental):",
-    "👉 Run `reliverse cli` in your new project to add/remove features.",
+    "👉 Run `rse cli` in your new project to add/remove features.",
   );
 
   relinka(
@@ -395,15 +394,15 @@ export async function handleNextActions(
           ]
         : []),
       {
-        label: "Support Reliverse on Patreon",
+        label: "Support rsetreon",
         value: "patreon",
       },
       {
-        label: "Join Reliverse Discord Server",
+        label: "Join rserd Server",
         value: "discord",
       },
       {
-        label: "Open Reliverse Documentation",
+        label: "Open rseentation",
         value: "docs",
       },
     ],
@@ -444,31 +443,28 @@ export async function handleNextAction(
             })),
           });
           relinka(
-            "info-verbose",
+            "verbose",
             `Opening deployed project at ${selectedDomain}...`,
           );
           await open(`https://${selectedDomain}`);
         } else {
-          relinka(
-            "info-verbose",
-            `Opening deployed project at ${primaryDomain}...`,
-          );
+          relinka("verbose", `Opening deployed project at ${primaryDomain}...`);
           await open(`https://${primaryDomain}`);
         }
         break;
       }
       case "patreon": {
-        relinka("info-verbose", "Opening Reliverse Patreon page...");
+        relinka("verbose", "Opening rseon page...");
         await open("https://patreon.com/c/blefnk/membership");
         break;
       }
       case "discord": {
-        relinka("info-verbose", "Opening Reliverse Discord server...");
+        relinka("verbose", "Opening rserd server...");
         await open("https://discord.gg/Pb8uKbwpsJ");
         break;
       }
       case "docs": {
-        relinka("info-verbose", "Opening Reliverse documentation...");
+        relinka("verbose", "Opening rseentation...");
         await open(cliDomainDocs);
         break;
       }
@@ -489,8 +485,8 @@ export async function handleNextAction(
   selectedRepo: RepoOption;
   message: string;
   isDev: boolean;
-  config: ReliverseConfig;
-  memory: ReliverseMemory;
+  config: rse;
+  memory: rse;
   cwd: string;
   skipPrompts: boolean;
 }): Promise<void> {

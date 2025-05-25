@@ -1,8 +1,9 @@
-import { confirmPrompt, inputPrompt, relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt, inputPrompt } from "@reliverse/rempts";
 import { generateText } from "ai";
 import { execaCommand } from "execa";
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
 import { MODEL } from "~/libs/sdk/ai/ai-impl/ai-const.js";
@@ -43,7 +44,7 @@ async function generateAiContent(
 5. Add TypeScript types where possible
 6. Use "~/" paths relative from "src"
 7. Prefer async/await over sync
-8. Your name is Reliverse AI`,
+8. Your name is rse AI`,
     prompt: userDescription,
   });
   return { text: result.text };

@@ -1,4 +1,4 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 
 import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
 
@@ -20,12 +20,12 @@ export async function checkVercelDeployment(
   githubToken: string,
   githubInstance: InstanceGithub,
 ): Promise<boolean> {
-  relinka("info-verbose", "Checking for existing deployment...");
+  relinka("verbose", "Checking for existing deployment...");
 
   if (!githubToken) {
     relinka(
       "error",
-      "GitHub token not found in Reliverse's memory. Please restart the CLI and try again. Notify the @reliverse/cli developers if the problem persists.",
+      "GitHub token not found in rseory. Please restart the CLI and try again. Notify the @reliverse/rsrseers if the problem persists.",
     );
     return false;
   }

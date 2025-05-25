@@ -1,11 +1,11 @@
 // @ts-check
 
 import eslint from "@eslint/js";
+import path from "@reliverse/pathkit";
 import stylistic from "@stylistic/eslint-plugin";
 import noRelativeImportPaths from "eslint-plugin-no-relative-import-paths";
 import perfectionist from "eslint-plugin-perfectionist";
 import { fileURLToPath } from "node:url";
-import path from "pathe";
 import tseslint from "typescript-eslint";
 
 /** @type {import("typescript-eslint").Config} */
@@ -39,7 +39,8 @@ const config = tseslint.config(
       "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
-      "max-lines": ["error", 800],
+      "max-lines": ["error", 1300],
+      "@typescript-eslint/await-thenable": "off",
       "@typescript-eslint/require-await": "off",
       "@typescript-eslint/no-dynamic-delete": "off",
       "@typescript-eslint/no-unnecessary-boolean-literal-compare": "off",

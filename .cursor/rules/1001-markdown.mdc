@@ -47,7 +47,7 @@ alwaysApply: false
 
   ```typescript
   function example(): void {
-    console.log("Hello, Reliverse!");
+    console.log("Hello, rse!");
   }
   ```
 

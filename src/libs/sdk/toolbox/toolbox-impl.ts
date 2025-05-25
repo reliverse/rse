@@ -1,20 +1,20 @@
-import { confirmPrompt, selectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
-import type { ParamsOmitReli } from "~/libs/sdk/types/types-mod.js";
+import type { ParamsOmitReli } from "~/libs/sdk/sdk-types.js";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/cfg/constants/cfg-details.js";
 import { composeEnvFile } from "~/libs/sdk/init/use-template/cp-modules/compose-env-file/cef-mod.js";
 import { promptGitDeploy } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/gdp-mod.js";
 import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
 import { downloadRepo } from "~/libs/sdk/utils/downloading/downloadRepo.js";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName.js";
 import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend.js";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 import { cd, pwd, rm } from "~/libs/sdk/utils/terminalHelpers.js";
 
 import { openVercelTools } from "./toolbox-vercel.js";
@@ -33,7 +33,7 @@ export async function rmTestsRuntime(cwd: string) {
 
 export async function downloadRepoOption(
   template: RepoOption,
-  config: ReliverseConfig,
+  config: RseConfig,
   memory: ReliverseMemory,
   isDev: boolean,
   cwd: string,
@@ -69,7 +69,7 @@ export async function downloadRepoOption(
     false, // isMultireli
   );
 
-  const frontendUsername = await askUsernameFrontend(memory, false);
+  const frontendUsername = await askUsernameFrontend(config, false);
   if (!frontendUsername) {
     throw new Error(
       "Failed to determine your frontend username. Please try again or notify the CLI developers.",

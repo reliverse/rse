@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "target": "ESNext",
-    "lib": ["ESNext"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "allowJs": true,
     "resolveJsonModule": true,
     "moduleDetection": "force",
@@ -19,15 +19,10 @@
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "noEmit": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "jsx": "react-jsx"
   },
-  "include": ["**/*.ts", "reset.d.ts", "eslint.config.js", "reliverse.ts"],
-  "exclude": [
-    "node_modules",
-    "dist-jsr",
-    "dist-npm",
-    "dist-libs",
-    "tests-runtime",
-    "start-runtime"
-  ]
+
+  "include": [".*/**/*.ts", "**/*.ts", "**/*.js", "src/templates/frontend/native/tailwind.config.cjs"],
+  "exclude": ["node_modules", "dist*"]
 }

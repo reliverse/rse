@@ -1,6 +1,6 @@
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
 export async function convertImportStyle(

@@ -1,4 +1,4 @@
-import { inputPrompt, isValidName } from "@reliverse/prompts";
+import { inputPrompt, isValidName } from "@reliverse/rempts";
 import { generate } from "random-words";
 
 export async function askProjectName({

@@ -1,11 +1,11 @@
 import type { GetProjectsResponseBody } from "@vercel/sdk/models/getprojectsop.js";
 
+import { relinka } from "@reliverse/relinka";
 import {
   multiselectPrompt,
   selectPrompt,
   confirmPrompt,
-} from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+} from "@reliverse/rempts";
 import { projectsDeleteProject } from "@vercel/sdk/funcs/projectsDeleteProject.js";
 import { projectsGetProjects } from "@vercel/sdk/funcs/projectsGetProjects.js";
 
@@ -28,7 +28,7 @@ export async function openVercelTools(memory: ReliverseMemory) {
   const result = await initVercelSDK(memory, true);
   if (!result) {
     throw new Error(
-      "Failed to initialize Vercel SDK. Please notify the @reliverse/cli developers if the problem persists.",
+      "Failed to initialize Vercel SDK. Please notify the @rseevelopers if the problem persists.",
     );
   }
   const [token, vercel] = result;
@@ -98,7 +98,7 @@ async function deleteVercelProjects(
   // Define projects that should not be deleted.
   const protectedNames = [
     "relivator",
-    "reliverse",
+    "rse",
     "relidocs",
     "versator",
     "bleverse",
@@ -154,7 +154,7 @@ async function deleteVercelProjects(
   for (const projectId of projectsToDelete) {
     const projectName = projectNames.get(projectId) ?? projectId;
     try {
-      relinka("info-verbose", `Deleting project ${projectName}...`);
+      relinka("verbose", `Deleting project ${projectName}...`);
       const res = await withRateLimit(async () => {
         return await projectsDeleteProject(vercelInstance, {
           idOrName: projectId,

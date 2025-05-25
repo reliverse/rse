@@ -1,11 +1,11 @@
-import { selectPrompt, inputPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { selectPrompt, inputPrompt } from "@reliverse/rempts";
 import { execa } from "execa";
-import fs from "fs-extra";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/sdk-types.js";
 
-import { cliDomainEnv } from "~/libs/cfg/constants/cfg-details.js";
+import { cliDomainEnv } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 import {
   promptAndSetMissingValues,
@@ -23,7 +23,7 @@ export async function composeEnvFile(
   fallbackEnvExampleURL: string,
   maskInput: boolean,
   skipPrompts: boolean,
-  config: ReliverseConfig | null,
+  config: RseConfig | null,
   isMultireli: boolean,
 ): Promise<void> {
   if (config === null) return;
@@ -107,7 +107,7 @@ export async function composeEnvFile(
     });
 
     if (response === "manual") {
-      relinka("info-verbose", "Opening .env for manual editing...");
+      relinka("verbose", "Opening .env for manual editing...");
       try {
         await execa("code", [envPath]);
       } catch {
@@ -206,7 +206,7 @@ export async function composeEnvFile(
 
     relinka(
       "info",
-      "You can always check the Reliverse Docs to learn more about env variables:",
+      "You can always check the rseto learn more about env variables:",
       cliDomainEnv,
     );
   } catch (err) {

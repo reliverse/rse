@@ -1,6 +1,6 @@
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 import { defineTSConfig, writeTSConfig } from "pkg-types";
 
 /**
@@ -59,7 +59,7 @@ export async function createTSConfig(
   }
 
   relinka(
-    "info-verbose",
+    "verbose",
     `Created ${filename} with ${isLib ? "library" : "application"} configuration`,
   );
 }

@@ -1,7 +1,7 @@
-import { ensuredir } from "@reliverse/fs";
-import { selectPrompt, confirmPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
-import path from "pathe";
+import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { selectPrompt, confirmPrompt } from "@reliverse/rempts";
 
 import {
   addNewTable,

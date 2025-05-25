@@ -1,10 +1,11 @@
-import { confirmPrompt, relinka } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt } from "@reliverse/rempts";
 import { generateText } from "ai";
-import fs from "fs-extra";
 import { countTokens } from "gpt-tokenizer/model/gpt-4o-mini";
-import path from "pathe";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
 import {
   CIRCULAR_TRIGGERS,
@@ -49,7 +50,7 @@ function calculatePrice(tokenCount: number): number {
  * Coordinates the relinter process. Accepts multiple target paths.
  */
 export async function agentRelinter(
-  config: ReliverseConfig,
+  config: RseConfig,
   targetPaths: string[],
   task?: string,
 ): Promise<void> {
@@ -70,7 +71,7 @@ export async function agentRelinter(
 
     relinka(
       "info",
-      `Found ${lintFiles.length} file(s). Sending them to Reliverse AI (${MODEL_NAME})...`,
+      `Found ${lintFiles.length} file(s). Sending them to rse AI (${MODEL_NAME})...`,
     );
 
     let promptDecision: boolean | undefined;
@@ -322,7 +323,7 @@ Keep line numbers relative to the full file, offset is ${offset}.
   try {
     const parsed = JSON.parse(text) as LintSuggestion[];
     if (!Array.isArray(parsed)) {
-      throw new Error(`Reliverse AI (${MODEL_NAME}) did not return an array.`);
+      throw new Error(`rse AI (${MODEL_NAME}) did not return an array.`);
     }
     parsed.forEach((s) => {
       s.startLine += offset;
@@ -338,7 +339,7 @@ Keep line numbers relative to the full file, offset is ${offset}.
         filePath,
         startLine: offset,
         endLine: offset,
-        suggestion: `Reliverse AI (${MODEL_NAME}) returned invalid JSON. Output:\n${response.text}`,
+        suggestion: `rse AI (${MODEL_NAME}) returned invalid JSON. Output:\n${response.text}`,
         severity: "warning",
       },
     ];

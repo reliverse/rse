@@ -1,5 +1,5 @@
-import { confirmPrompt, selectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
+import { relinka } from "@reliverse/relinka";
 
 import type { IntegrationCategory, IntegrationOptions } from "~/types.js";
 

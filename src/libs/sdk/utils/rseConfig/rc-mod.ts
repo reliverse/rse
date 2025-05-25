@@ -1,0 +1,108 @@
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+
+import {
+  UNKNOWN_VALUE,
+  RSE_SCHEMA_DEV,
+  cliConfigJsonc,
+  cliConfigTs,
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+
+import { DEFAULT_CONFIG } from "./rc-const.js";
+import { createRseConfig } from "./rc-create.js";
+import { getRseConfigPath } from "./rc-path.js";
+import { readRseConfig } from "./rc-read.js";
+import { parseAndFixRseConfig } from "./rc-repair.js";
+
+/* ------------------------------------------------------------------
+ * The Core Logic: Handle or Verify Config + MULTI-CONFIG
+ * ------------------------------------------------------------------
+ */
+
+/**
+ * Retrieves or creates the main rseg (and any 'multireli' configs).
+ * Allows an optional custom path to the TS config file.
+ */
+export async function getRseConfig({
+  projectPath,
+  isDev,
+  overrides,
+  customTsconfigPath,
+}: {
+  projectPath: string;
+  isDev: boolean;
+  overrides: Partial<RseConfig>;
+  customTsconfigPath?: string;
+}): Promise<{ config: RseConfig; multireli: RseConfig[] }> {
+  const githubUsername = UNKNOWN_VALUE;
+  const multireliFolderPath = path.join(projectPath, "multireli");
+  const results: RseConfig[] = [];
+
+  // Collect additional configs in "multireli" folder
+  if (await fs.pathExists(multireliFolderPath)) {
+    const dirItems = await fs.readdir(multireliFolderPath);
+    const rseFiles = dirItems.filter(
+      (item) => item === cliConfigJsonc || item === cliConfigTs,
+    );
+    const configs = await Promise.all(
+      rseFiles.map(async (file) => {
+        const filePath = path.join(multireliFolderPath, file);
+        let foundConfig = await readRseConfig(filePath, isDev);
+        if (!foundConfig) {
+          foundConfig = await parseAndFixRseConfig(filePath, isDev);
+        }
+        if (!foundConfig) {
+          relinka("warn", `Skipping invalid config file: ${filePath}`);
+        }
+        return foundConfig;
+      }),
+    );
+    results.push(...configs.filter((cfg): cfg is RseConfig => cfg !== null));
+  }
+
+  // Retrieve the path to the main rseg
+  const { configPath } = await getRseConfigPath(
+    projectPath,
+    isDev,
+    false,
+    customTsconfigPath,
+  );
+
+  // Ensure a config file exists
+  if (!(await fs.pathExists(configPath))) {
+    await createRseConfig(projectPath, githubUsername, isDev, overrides);
+  } else {
+    // Check if the file is empty or has only "{}"
+    const content = (await fs.readFile(configPath, "utf-8")).trim();
+    if (!content || content === "{}") {
+      await createRseConfig(projectPath, githubUsername, isDev, overrides);
+    } else {
+      // If the existing config is invalid, attempt to fix it
+      const validConfig = await readRseConfig(configPath, isDev);
+      if (!validConfig) {
+        const fixed = await parseAndFixRseConfig(configPath, isDev);
+        if (!fixed) {
+          relinka(
+            "warn",
+            "Could not fix existing config. Using fallback defaults.",
+          );
+        }
+      }
+    }
+  }
+
+  // Final read
+  const mainConfig = await readRseConfig(configPath, isDev);
+  if (!mainConfig) {
+    relinka("warn", "Using fallback default config due to validation failure.");
+    return { config: { ...DEFAULT_CONFIG }, multireli: results };
+  }
+  if (isDev) {
+    mainConfig.$schema = RSE_SCHEMA_DEV;
+  }
+
+  return { config: mainConfig, multireli: results };
+}

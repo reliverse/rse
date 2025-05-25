@@ -1,8 +1,8 @@
-import { selectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { selectPrompt } from "@reliverse/rempts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 import type { DeploymentService } from "~/types.js";
 
@@ -39,10 +39,10 @@ export async function handleGitInit(
   isDev: boolean,
   projectName: string,
   projectPath: string,
-  config: ReliverseConfig,
+  config: RseConfig,
   isTemplateDownload: boolean,
 ): Promise<boolean> {
-  relinka("info-verbose", "[B] initGitDir");
+  relinka("verbose", "[B] initGitDir");
   const gitInitialized = await initGitDir({
     cwd,
     isDev,
@@ -73,7 +73,7 @@ export async function configureGithubRepo(
   cwd: string,
   isDev: boolean,
   memory: ReliverseMemory,
-  config: ReliverseConfig,
+  config: RseConfig,
   projectName: string,
   projectPath: string,
   maskInput: boolean,
@@ -82,7 +82,7 @@ export async function configureGithubRepo(
   githubUsername: string,
 ): Promise<GithubSetupResult> {
   if (!memory) {
-    relinka("error", "Failed to read reliverse memory");
+    relinka("error", "Failed to read rsey");
     return { success: false };
   }
 
@@ -146,7 +146,7 @@ export async function promptGitDeploy({
 }: {
   isLib: boolean;
   projectName: string;
-  config: ReliverseConfig;
+  config: RseConfig;
   projectPath: string;
   primaryDomain: string;
   hasDbPush: boolean;
@@ -610,7 +610,7 @@ export async function promptGitDeploy({
     if (globalError instanceof Error) {
       relinka("error", `Process failed: ${globalError.message}`);
       if (globalError.stack) {
-        relinka("error-verbose", "Stack trace:", globalError.stack);
+        relinka("verbose", "Stack trace:", globalError.stack);
       }
     } else {
       relinka("error", "An unexpected error occurred:", String(globalError));

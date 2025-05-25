@@ -1,8 +1,8 @@
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
+import { ensuredir } from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
 import { cwd } from "node:process";
-import { normalize } from "pathe";
+import { normalize } from "@reliverse/pathkit";
 
 export const handleError = (error: unknown) =>
   error instanceof Error ? error.message : "Unknown error";
@@ -16,7 +16,7 @@ export async function cd(dir: string): Promise<void> {
     await ensuredir(dir);
     await fs.access(dir);
     process.chdir(dir);
-    relinka("info-verbose", `Changed directory to: ${process.cwd()}`);
+    relinka("verbose", `Changed directory to: ${process.cwd()}`);
   } catch (error) {
     relinka("warn", `Directory does not exist: ${dir}`, handleError(error));
   }
@@ -28,7 +28,7 @@ export async function cd(dir: string): Promise<void> {
 export function pwd() {
   // Re-check the current working directory
   const cwd = getCurrentWorkingDirectory();
-  relinka("info-verbose", `Current working directory: ${cwd}`);
+  relinka("verbose", `Current working directory: ${cwd}`);
 }
 
 /**
@@ -38,7 +38,7 @@ export function pwd() {
 export async function rm(target: string): Promise<void> {
   try {
     await fs.remove(target);
-    relinka("info-verbose", `Removed: ${target}`);
+    relinka("verbose", `Removed: ${target}`);
   } catch (error) {
     relinka("error", `Failed to remove: ${target}`, handleError(error));
   }

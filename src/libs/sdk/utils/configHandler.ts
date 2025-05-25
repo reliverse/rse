@@ -1,7 +1,7 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { parseJSONC } from "confbox";
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 
 import type { BiomeConfig, BiomeConfigResult } from "~/types.js";
 
@@ -32,7 +32,7 @@ export async function getBiomeConfig(
     }
   } catch (error) {
     relinka(
-      "error-verbose",
+      "verbose",
       "Error reading biome config:",
       error instanceof Error ? error.message : String(error),
     );

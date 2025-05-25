@@ -1,18 +1,18 @@
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { destr } from "destr";
 import { execaCommand } from "execa";
-import fs from "fs-extra";
-import path from "pathe";
 
 import type { DeploymentService, VSCodeSettings } from "~/types.js";
 
 import {
   CONFIG_CATEGORIES,
   UNKNOWN_VALUE,
-} from "~/libs/cfg/constants/cfg-details.js";
-import { generateReliverseConfig } from "~/libs/sdk/utils/reliverseConfig/rc-create.js";
-import { getReliverseConfigPath } from "~/libs/sdk/utils/reliverseConfig/rc-path.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { generateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-create.js";
+import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path.js";
 
 // ------------------------------------------------------------------
 // Helper Functions for Additional Config Files
@@ -26,7 +26,7 @@ async function generateBiomeConfig(projectPath: string): Promise<void> {
       cwd: projectPath,
       stdio: "inherit",
     });
-    relinka("success-verbose", "Generated biome.json");
+    relinka("verbose", "Generated biome.json");
   }
 }
 
@@ -89,7 +89,7 @@ async function generateVSCodeSettings(
       }
     } catch (error) {
       relinka(
-        "warn-verbose",
+        "verbose",
         "Error reading existing settings.json, creating new one",
         error instanceof Error ? error.message : String(error),
       );
@@ -98,7 +98,7 @@ async function generateVSCodeSettings(
 
   await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2));
   relinka(
-    "success-verbose",
+    "verbose",
     overwrite
       ? "Generated brand new VSCode settings.json file"
       : "Updated VSCode settings.json with required settings",
@@ -132,17 +132,17 @@ export async function generateConfigFiles(
 
     if (isDev) {
       frontendUsername =
-        frontendUsername === "reliverse" ? "blefnk" : frontendUsername;
+        frontendUsername === "blefnk" ? "reliverse" : frontendUsername;
     }
 
     // Determine the active config file name.
-    const configInfo = await getReliverseConfigPath(projectPath, isDev, false);
+    const configInfo = await getRseConfigPath(projectPath, isDev, false);
     const mainConfigFileName = path.basename(configInfo.configPath);
 
-    // The reliverse config generation
+    // The rseg generation
     const configGenerators: Record<string, () => Promise<boolean>> = {
       [mainConfigFileName]: async () => {
-        await generateReliverseConfig({
+        await generateRseConfig({
           projectName,
           frontendUsername:
             !frontendUsername || frontendUsername.trim() === ""
@@ -189,7 +189,7 @@ export async function generateConfigFiles(
 
     if (generatedFiles.length > 0) {
       relinka(
-        "success-verbose",
+        "verbose",
         `Generated configuration files: ${generatedFiles.join(", ")}`,
       );
     }
@@ -228,7 +228,7 @@ export async function generateProjectConfigs(
 
     if (existingFiles.length > 0) {
       relinka(
-        "info-verbose",
+        "verbose",
         `Found ${existingFiles.length} existing configuration files`,
       );
       // Generate missing files without overwriting existing ones

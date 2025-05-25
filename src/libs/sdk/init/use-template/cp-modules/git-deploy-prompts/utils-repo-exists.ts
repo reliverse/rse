@@ -1,22 +1,22 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { simpleGit } from "simple-git";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
-import type { GitModParams } from "~/libs/sdk/types/types-mod.js";
+import type { GitModParams } from "~/libs/sdk/sdk-types.js";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
-import { cliName } from "~/libs/cfg/constants/cfg-details.js";
 import { getEffectiveDir } from "~/libs/sdk/utils/getEffectiveDir.js";
-import { migrateReliverseConfig } from "~/libs/sdk/utils/reliverseConfig/rc-migrate.js";
 import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod.js";
+import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { migrateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-migrate.js";
 
 import { handleExistingRepoContent } from "./utils-private-repo.js";
 
 export async function handleExistingRepo(
   params: GitModParams & {
     memory: ReliverseMemory;
-    config: ReliverseConfig;
+    config: RseConfig;
     githubUsername: string;
     selectedTemplate: RepoOption;
   },
@@ -30,7 +30,7 @@ export async function handleExistingRepo(
     `Using existing repo: ${params.githubUsername}/${params.projectName}`,
   );
 
-  const { success: repoSuccess, externalReliverseFilePath } =
+  const { success: repoSuccess, externalRseConfig } =
     await handleExistingRepoContent(
       params.memory,
       params.githubUsername,
@@ -42,16 +42,12 @@ export async function handleExistingRepo(
     throw new Error("Failed to handle existing repository content");
   }
 
-  // If we have a reliverse-tmp.jsonc file, migrate its data
-  if (externalReliverseFilePath) {
-    await migrateReliverseConfig(
-      externalReliverseFilePath,
-      effectiveDir,
-      isDev,
-    );
+  // If we have a rsesonc file, migrate its data
+  if (externalRseConfig) {
+    await migrateRseConfig(externalRseConfig, effectiveDir, isDev);
   }
 
-  // Run replacements after reliverse-tmp.jsonc
+  // Run replacements after rsesonc
   // migration (even if migration failed)
   await handleReplacements(
     effectiveDir,

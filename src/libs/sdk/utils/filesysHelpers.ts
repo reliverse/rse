@@ -1,6 +1,6 @@
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
+import { ensuredir } from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
 
@@ -53,7 +53,7 @@ export async function isDirectoryEmpty(directory: string): Promise<boolean> {
 export async function rmEnsureDir(dir: string): Promise<void> {
   try {
     if (await fs.pathExists(dir)) {
-      relinka("info-verbose", `Removing existing directory: ${dir}`);
+      relinka("verbose", `Removing existing directory: ${dir}`);
       await fs.remove(dir);
     }
     await ensuredir(dir);

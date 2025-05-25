@@ -1,8 +1,8 @@
 import type { PackageJson } from "pkg-types";
 
 import { destr } from "destr";
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
 export async function getUnusedDependencies(

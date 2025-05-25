@@ -1,9 +1,9 @@
-import { confirmPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt } from "@reliverse/rempts";
 
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/cfg/constants/cfg-details.js";
 import { composeEnvFile } from "~/libs/sdk/init/use-template/cp-modules/compose-env-file/cef-mod.js";
-import { getReliverseConfig } from "~/libs/sdk/utils/reliverseConfig/rc-mod.js";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod.js";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers.js";
 
 export async function envArgImpl(isDev: boolean, pathToProject?: string) {
@@ -11,8 +11,12 @@ export async function envArgImpl(isDev: boolean, pathToProject?: string) {
     // Get project path
     const projectPath = pathToProject ?? getCurrentWorkingDirectory();
 
-    // Get reliverse config
-    const { config } = await getReliverseConfig(projectPath, isDev, {});
+    // Get rseg
+    const { config } = await getRseConfig({
+      projectPath,
+      isDev,
+      overrides: {},
+    });
 
     // Prompt user about secret masking
     const maskInput = await confirmPrompt({

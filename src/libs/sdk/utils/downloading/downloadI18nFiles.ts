@@ -1,7 +1,7 @@
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import { ensuredir } from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 
 /**
  * Checks if i18n is already set up in the project

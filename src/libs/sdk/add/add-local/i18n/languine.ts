@@ -1,9 +1,9 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { execaCommand } from "execa";
 import { lookpath } from "lookpath";
 
 export async function useLanguine(projectPath: string) {
-  relinka("info-verbose", `Using: ${projectPath}`);
+  relinka("verbose", `Using: ${projectPath}`);
   if (!(await isLanguineInstalled())) {
     relinka("info", "Installing the translation addon...");
     await execaCommand("bun add -g languine", { stdio: "inherit" });

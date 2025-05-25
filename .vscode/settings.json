@@ -9,10 +9,7 @@
   },
   "eslint.ignoreUntitled": true,
   "eslint.rules.customizations": [
-    {
-      "rule": "perfectionist/sort-imports",
-      "severity": "off"
-    }
+    { "rule": "perfectionist/*", "severity": "off" }
   ],
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.tsdk": "node_modules\\typescript\\lib"

@@ -1,6 +1,6 @@
-import path from "pathe";
+import path from "@reliverse/pathkit";
 
-import { homeDir } from "~/libs/cfg/cfg-main.js";
+import { homeDir } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 import type { RuleRepo } from "./add-rule-types.js";
 
@@ -8,7 +8,7 @@ import type { RuleRepo } from "./add-rule-types.js";
 // Constants & Micro Helpers
 // ----------------------
 
-export const CACHE_ROOT_DIR = path.join(homeDir, ".reliverse", "rules");
+export const CACHE_ROOT_DIR = path.join(homeDir, ".rse", "rules");
 export const DEFAULT_BRANCH = "main";
 export const RULE_FILE_EXTENSION = ".mdc";
 
@@ -29,7 +29,7 @@ export const RULES_REPOS: RuleRepo[] = [
   {
     id: "blefnk/awesome-cursor-rules",
     author: "blefnk",
-    name: "Reliverse Rules",
+    name: "rse Rules",
     description: "AI IDE rules (Cursor, Windsurf, Copilot)",
     branch: "main",
     tags: ["cursor", "windsurf", "copilot"],

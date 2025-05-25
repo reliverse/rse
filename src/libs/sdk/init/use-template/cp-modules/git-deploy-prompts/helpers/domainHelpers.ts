@@ -1,4 +1,4 @@
-import { reliverseOrgBase } from "~/libs/cfg/constants/cfg-details.js";
+import { rseOrgBase } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 const specialDomains = [
   // Vercel domains
@@ -13,7 +13,7 @@ const specialDomains = [
   "example.com",
 
   // Project specific domains
-  `.${reliverseOrgBase}`,
+  `.${rseOrgBase}`,
   ".relivator.com",
   ".bleverse.com",
 ];

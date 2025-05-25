@@ -1,5 +1,5 @@
-import fs from "fs-extra";
-import path from "pathe";
+import path from "@reliverse/pathkit";
+import { readPackageJSON } from "pkg-types";
 
 /**
  * Checks if deps exist in package.json but node_modules is missing.
@@ -21,7 +21,7 @@ export async function checkMissingDependencies(
   let hasAnyDeps = false;
   if (hasFilePackageJson) {
     try {
-      const pkgJson = await fs.readJSON(path.join(cwd, "package.json"));
+      const pkgJson = await readPackageJSON(path.join(cwd, "package.json"));
       const depCount =
         Object.keys(pkgJson.dependencies || {}).length +
         Object.keys(pkgJson.devDependencies || {}).length;

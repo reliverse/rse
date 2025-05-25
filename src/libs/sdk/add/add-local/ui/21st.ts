@@ -1,4 +1,4 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 
 /**
  * @see https://21st.dev

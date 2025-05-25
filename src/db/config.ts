@@ -1,4 +1,4 @@
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { subtle, getRandomValues } from "uncrypto";
 
 // Encryption key based on machine-specific data

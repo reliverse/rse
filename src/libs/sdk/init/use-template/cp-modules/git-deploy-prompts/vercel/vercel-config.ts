@@ -1,7 +1,7 @@
 import type { UpdateProjectRequestBody } from "@vercel/sdk/models/updateprojectop.js";
 
-import { multiselectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import { multiselectPrompt } from "@reliverse/rempts";
+import { relinka } from "@reliverse/relinka";
 import { projectsUpdateProject } from "@vercel/sdk/funcs/projectsUpdateProject.js";
 
 import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";

@@ -1,9 +1,9 @@
+import { relinka } from "@reliverse/relinka";
 import {
   defineCommand,
   multiselectPrompt,
-  relinka,
   selectPrompt,
-} from "@reliverse/prompts";
+} from "@reliverse/rempts";
 import { execa } from "execa";
 import os from "os";
 
@@ -64,7 +64,7 @@ export default defineCommand({
 
 /**
  * Direct install path:
- * e.g. reliverse install bun obsidian node ...
+ * e.g. rse install bun obsidian node ...
  */
 async function handleDirectInstall(items: string[]) {
   relinka("info", "\nDirect install of:", items.join(", "));

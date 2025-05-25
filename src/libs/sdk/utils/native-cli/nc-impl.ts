@@ -1,10 +1,10 @@
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
+import { ensuredir } from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
 import { installDependencies } from "nypm";
 import { ofetch } from "ofetch";
 import pLimit from "p-limit";
-import { dirname, join } from "pathe";
+import { dirname, join } from "@reliverse/pathkit";
 import semver from "semver";
 import { glob } from "tinyglobby";
 import { fileURLToPath } from "url";
@@ -155,7 +155,7 @@ async function downloadFile(
   await ensuredir(dirname(targetFilePath));
   await fs.writeFile(targetFilePath, buffer);
 
-  relinka("success-verbose", `Downloaded: ${url} -> ${targetFilePath}`);
+  relinka("verbose", `Downloaded: ${url} -> ${targetFilePath}`);
 }
 
 /**
@@ -199,7 +199,7 @@ async function renameTxtToTsx(dir: string): Promise<void> {
       const newPath = filePath.replace(/-tsx\.txt$/, ".tsx");
       await fs.rename(filePath, newPath);
       if (verbose) {
-        relinka("success-verbose", `Renamed: ${filePath} -> ${newPath}`);
+        relinka("verbose", `Renamed: ${filePath} -> ${newPath}`);
       }
     }
   } catch (error) {
@@ -299,7 +299,7 @@ export async function downloadJsrDist(
 
     // 6) Optionally rename -tsx.txt files back to .tsx (for CLI packages)
     if (pkgIsCLI && revertTsxFiles) {
-      relinka("info-verbose", "Reverting .tsx files...");
+      relinka("verbose", "Reverting .tsx files...");
       await renameTxtToTsx(outputDir);
     }
 

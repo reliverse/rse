@@ -1,0 +1,40 @@
+import { authClient } from "@/lib/auth-client";
+{{#if (eq api "orpc")}}
+import { orpc } from "@/utils/orpc";
+{{/if}}
+{{#if (eq api "trpc")}}
+import { trpc } from "@/utils/trpc";
+{{/if}}
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+
+export default function Dashboard() {
+  const { data: session, isPending } = authClient.useSession();
+  const navigate = useNavigate();
+
+  {{#if (eq api "orpc")}}
+  const privateData = useQuery(orpc.privateData.queryOptions());
+  {{/if}}
+  {{#if (eq api "trpc")}}
+  const privateData = useQuery(trpc.privateData.queryOptions());
+  {{/if}}
+
+  useEffect(() => {
+    if (!session && !isPending) {
+      navigate("/login");
+    }
+  }, [session, isPending]);
+
+  if (isPending) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      <p>Welcome {session?.user.name}</p>
+      <p>privateData: {privateData.data?.message}</p>
+    </div>
+  );
+}

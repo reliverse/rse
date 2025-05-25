@@ -1,8 +1,8 @@
-import { ensuredir } from "@reliverse/fs";
-import { confirmPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt } from "@reliverse/rempts";
 import { simpleGit } from "simple-git";
 import tar from "tar-stream";
 import { promisify } from "util";
@@ -10,12 +10,12 @@ import { gzip } from "zlib";
 
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
+import { setHiddenAttributeOnWindows } from "~/libs/sdk/utils/filesysHelpers.js";
 import {
   cliConfigJsonc,
   cliConfigJsoncTmp,
   cliHomeTmp,
-} from "~/libs/cfg/constants/cfg-details.js";
-import { setHiddenAttributeOnWindows } from "~/libs/sdk/utils/filesysHelpers.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 const gzipAsync = promisify(gzip);
 
@@ -46,7 +46,7 @@ async function createArchive(
 export async function archiveExistingRepoContent(
   repoUrl: string,
   projectPath: string,
-): Promise<{ success: boolean; externalReliverseFilePath?: string }> {
+): Promise<{ success: boolean; externalRseConfig?: string }> {
   const tempDir = path.join(cliHomeTmp, Date.now().toString());
   try {
     // Create temp directory
@@ -60,7 +60,7 @@ export async function archiveExistingRepoContent(
       title:
         "Would you like to create an archive of the existing repository content?",
       content:
-        "In the future, you will be able to run `reliverse cli` to use merge operations on the project's old and new content. The term `cluster` is used as the name for the old content.",
+        "In the future, you will be able to run `rse cli` to use merge operations on the project's old and new content. The term `cluster` is used as the name for the old content.",
       defaultValue: false,
     });
 
@@ -119,7 +119,7 @@ export async function archiveExistingRepoContent(
       const targetGitDir = path.join(projectPath, ".git");
       if (await fs.pathExists(targetGitDir)) {
         await fs.remove(targetGitDir);
-        relinka("info-verbose", "Removed existing .git directory");
+        relinka("verbose", "Removed existing .git directory");
       }
       await fs.copy(gitDir, path.join(projectPath, ".git"), {
         preserveTimestamps: true,
@@ -131,7 +131,7 @@ export async function archiveExistingRepoContent(
       const gitFolderPath = path.join(projectPath, ".git");
       await setHiddenAttributeOnWindows(gitFolderPath);
 
-      relinka("info-verbose", "Copied .git folder from existing repository");
+      relinka("verbose", "Copied .git folder from existing repository");
     } else {
       throw new Error("Required .git folder not found");
     }
@@ -148,7 +148,7 @@ export async function archiveExistingRepoContent(
       },
     ];
 
-    let externalReliverseFilePath: string | undefined;
+    let externalrseth: string | undefined;
 
     for (const file of filesToCopy) {
       if (file.name) {
@@ -163,9 +163,9 @@ export async function archiveExistingRepoContent(
             relinka("info", `Copied ${file.name} from existing repository`);
           }
 
-          // Store reliverse-tmp.jsonc path if found
+          // Store rsesonc path if found
           if (file.name === cliConfigJsonc) {
-            externalReliverseFilePath = targetPath;
+            externalrseth = targetPath;
           }
         }
       } else if (file.alternatives) {
@@ -182,7 +182,7 @@ export async function archiveExistingRepoContent(
 
     return {
       success: true,
-      ...(externalReliverseFilePath && { externalReliverseFilePath }),
+      ...(externalrseth && { externalRseConfig: externalrseth }),
     };
   } catch (error) {
     relinka(
@@ -206,12 +206,14 @@ export async function handleExistingRepoContent(
   repoOwner: string,
   repoName: string,
   projectPath: string,
-): Promise<{ success: boolean; externalReliverseFilePath?: string }> {
+): Promise<{ success: boolean; externalRseConfig?: string }> {
   try {
     // Clone repo to temp dir and copy files
     const repoUrl = `https://oauth2:${memory.githubKey}@github.com/${repoOwner}/${repoName}.git`;
-    const { success, externalReliverseFilePath } =
-      await archiveExistingRepoContent(repoUrl, projectPath);
+    const { success, externalRseConfig } = await archiveExistingRepoContent(
+      repoUrl,
+      projectPath,
+    );
 
     if (!success) {
       throw new Error("Failed to retrieve repository git data");
@@ -220,7 +222,7 @@ export async function handleExistingRepoContent(
     relinka("success", "Retrieved repository git directory data");
     return {
       success: true,
-      ...(externalReliverseFilePath && { externalReliverseFilePath }),
+      ...(externalRseConfig && { externalRseConfig }),
     };
   } catch (error) {
     relinka(

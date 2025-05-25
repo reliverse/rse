@@ -1,7 +1,7 @@
-import { ensuredir } from "@reliverse/fs";
+import { ensuredir } from "@reliverse/relifso";
 import { expect, test, describe, beforeEach, afterEach } from "bun:test";
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 
 import { setHiddenAttributeOnWindows, isHidden } from "./filesysHelpers.js";
 
@@ -10,7 +10,7 @@ let TEST_DIR = path.join(process.cwd(), "test-hidden-dir");
 const activateHardcodedPathCheck = false;
 
 if (activateHardcodedPathCheck) {
-  TEST_DIR = path.join(process.cwd(), "tests-runtime", "reliverse", ".git");
+  TEST_DIR = path.join(process.cwd(), "tests-runtime", "rseit");
 }
 
 describe("filesystem helpers", () => {

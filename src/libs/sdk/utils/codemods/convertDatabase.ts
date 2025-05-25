@@ -1,7 +1,8 @@
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { readPackageJSON, writePackageJSON } from "pkg-types";
 
 import type { PrismaField, PrismaModel } from "~/types.js";
 
@@ -192,11 +193,15 @@ export default {
   // Update dependencies
   const packageJsonPath = path.join(cwd, "package.json");
   if (await fs.pathExists(packageJsonPath)) {
-    const packageJson = await fs.readJson(packageJsonPath);
+    const packageJson = await readPackageJSON(packageJsonPath);
 
     // Remove Prisma dependencies
-    delete packageJson.dependencies?.["@prisma/client"];
-    delete packageJson.devDependencies?.prisma;
+    if (packageJson.dependencies) {
+      delete packageJson.dependencies["@prisma/client"];
+    }
+    if (packageJson.devDependencies) {
+      delete packageJson.devDependencies.prisma;
+    }
 
     // Inject Drizzle dependencies
     packageJson.dependencies = {
@@ -218,7 +223,7 @@ export default {
       packageJson.devDependencies["@types/better-sqlite3"] = "latest";
     }
 
-    await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+    await writePackageJSON(packageJsonPath, packageJson);
   }
 
   relinka("success", "Converted Prisma schema to Drizzle schema");
@@ -235,13 +240,15 @@ export async function convertDatabaseProvider(
     return;
   }
 
-  const packageJson = await fs.readJson(packageJsonPath);
+  const packageJson = await readPackageJSON(packageJsonPath);
 
   // Provider-specific conversions
   if (fromProvider === "postgres" && toProvider === "libsql") {
     // Remove PostgreSQL dependencies
-    delete packageJson.dependencies?.postgres;
-    delete packageJson.dependencies?.["@neondatabase/serverless"];
+    if (packageJson.dependencies) {
+      delete packageJson.dependencies.postgres;
+      delete packageJson.dependencies["@neondatabase/serverless"];
+    }
 
     // Inject libSQL dependencies
     packageJson.dependencies = {
@@ -290,7 +297,7 @@ export async function convertDatabaseProvider(
     }
   }
 
-  await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+  await writePackageJSON(packageJsonPath, packageJson);
   relinka(
     "success",
     `Converted database provider from ${fromProvider} to ${toProvider}`,

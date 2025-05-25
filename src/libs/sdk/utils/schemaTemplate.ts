@@ -1,9 +1,12 @@
-import { ensuredir } from "@reliverse/fs";
+import { ensuredir } from "@reliverse/relifso";
 import { Type, type Static } from "@sinclair/typebox";
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 
-import { cliHomeRepos, cliVersion } from "~/libs/cfg/constants/cfg-details.js";
+import {
+  cliHomeRepos,
+  cliVersion,
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 // Import package.json with type assertion
 // import pkg from "../../package.json" assert { type: "json" };
@@ -126,7 +129,7 @@ export async function generateReposJsonSchema(): Promise<void> {
   const converted = convertTypeBoxToJsonSchema(reposSchema);
   const schema = {
     $schema: "http://json-schema.org/draft-07/schema#",
-    title: "Reliverse Repos Schema",
+    title: "rse Repos Schema",
     description: "Schema for repos.json configuration file",
     type: "object",
     properties: converted.properties,

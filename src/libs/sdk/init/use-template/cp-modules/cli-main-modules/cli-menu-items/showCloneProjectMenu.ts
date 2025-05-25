@@ -1,12 +1,12 @@
+import { relinka } from "@reliverse/relinka";
 import {
   selectPrompt,
   inputPrompt,
   confirmPrompt,
   multiselectPrompt,
-} from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+} from "@reliverse/rempts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
 import { getUserPkgManager } from "~/libs/sdk/utils/dependencies/getUserPkgManager.js";
@@ -63,7 +63,7 @@ const REPO_OWNERS = {
     "relivator-nextjs-template",
     "versator-nextjs-template",
   ],
-  reliverse: [
+  rse: [
     "template-browser-extension",
     "acme",
     "cli",
@@ -88,14 +88,14 @@ const REPO_OWNERS = {
 function createMenuOptions(
   repos: string[],
   owner: string,
-  config: ReliverseConfig,
+  config: RseConfig,
 ): MenuOption[] {
   const customRepos = (config.customUserFocusedRepos ?? [])
     .concat(config.customDevsFocusedRepos ?? [])
     .map(normalizeGitHubUrl)
-    .filter((repo) => repo.startsWith(`${owner}/`))
-    .map((repo) => repo.split("/")[1])
-    .filter((repo): repo is string => repo !== undefined);
+    .filter((repo: string) => repo.startsWith(`${owner}/`))
+    .map((repo: string) => repo.split("/")[1])
+    .filter((repo: string | undefined): repo is string => repo !== undefined);
 
   const allRepos =
     config.hideRepoSuggestions && customRepos.length > 0
@@ -139,7 +139,7 @@ async function promptForRepo({
   title: string;
   owner: string;
   options: { label: string; value: string }[];
-  config: ReliverseConfig;
+  config: RseConfig;
 }): Promise<RepoPromptResult | MultiRepoPromptResult> {
   if (config.multipleRepoCloneMode) {
     const selections = await multiselectPrompt({ title, options });
@@ -175,7 +175,7 @@ async function promptForRepo({
 async function downloadAndSetupRepo(
   owner: string,
   repoFullName: string,
-  config: ReliverseConfig,
+  config: RseConfig,
   memory: ReliverseMemory,
   isDev: boolean,
   cwd: string,
@@ -256,7 +256,7 @@ export async function showCloneProjectMenu({
 }: {
   isDev: boolean;
   cwd: string;
-  config: ReliverseConfig;
+  config: RseConfig;
   memory: ReliverseMemory;
 }) {
   if (isDev) {

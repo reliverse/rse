@@ -1,17 +1,17 @@
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import {
   inputPrompt,
   multiselectPrompt,
   confirmPrompt,
-} from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+} from "@reliverse/rempts";
 import { eq } from "drizzle-orm";
-import fs from "fs-extra";
 import { ofetch } from "ofetch";
 import open from "open";
-import path from "pathe";
 import { getRandomValues } from "uncrypto";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
 import { db } from "~/db/client.js";
 import { encrypt, decrypt } from "~/db/config.js";
@@ -105,7 +105,7 @@ export async function ensureEnvExists(projectPath: string): Promise<boolean> {
     }
 
     relinka(
-      "success-verbose",
+      "verbose",
       ".env file created from .env.example provided by the template.",
     );
     return true;
@@ -215,10 +215,7 @@ export async function copyFromExisting(
     }
 
     await fs.copy(fullEnvPath, envPath);
-    relinka(
-      "success-verbose",
-      "Existing .env file has been copied successfully!",
-    );
+    relinka("verbose", "Existing .env file has been copied successfully!");
     return true;
   } catch {
     relinka("error", "Failed to copy existing .env file.");
@@ -332,7 +329,7 @@ export async function promptAndSetMissingValues(
   missingKeys: string[],
   envPath: string,
   maskInput: boolean,
-  config: ReliverseConfig,
+  config: RseConfig,
   wasEnvCopied = false,
   isMultireli = false,
   projectPath = "",
@@ -340,7 +337,7 @@ export async function promptAndSetMissingValues(
 ): Promise<void> {
   if (missingKeys.length === 0 || wasEnvCopied) {
     relinka(
-      "info-verbose",
+      "verbose",
       wasEnvCopied
         ? "Using values from copied .env file"
         : "No missing keys to process.",
@@ -348,10 +345,7 @@ export async function promptAndSetMissingValues(
     return;
   }
 
-  relinka(
-    "info-verbose",
-    `Processing missing values: ${missingKeys.join(", ")}`,
-  );
+  relinka("verbose", `Processing missing values: ${missingKeys.join(", ")}`);
 
   // Check for multireli project env file
   let multiReliEnvPath: string | null = null;
@@ -424,7 +418,7 @@ export async function promptAndSetMissingValues(
   // If for some reason no services matched, just skip
   if (validServices.length === 0) {
     relinka(
-      "info-verbose",
+      "verbose",
       "No known services require missing keys. Possibly custom keys missing?",
     );
     return;
@@ -506,13 +500,13 @@ async function processService(
   missingKeys: string[],
   envPath: string,
   maskInput: boolean,
-  config: ReliverseConfig,
+  config: RseConfig,
 ): Promise<void> {
   const service = KNOWN_SERVICES[serviceKey];
   if (!service) return;
 
   if (service.dashboardUrl && service.dashboardUrl !== "none") {
-    relinka("info-verbose", `Opening ${service.name} dashboard...`);
+    relinka("verbose", `Opening ${service.name} dashboard...`);
     if (config.envComposerOpenBrowser) {
       await open(service.dashboardUrl);
     } else {
@@ -551,7 +545,7 @@ async function processService(
               : keyConfig.defaultValue;
           await updateEnvValue(envPath, keyConfig.key, value);
           relinka(
-            "info-verbose",
+            "verbose",
             `Using ${
               keyConfig.defaultValue === "generate-64-chars"
                 ? "generated"

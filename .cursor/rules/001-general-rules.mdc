@@ -20,7 +20,7 @@ alwaysApply: true
 - Use `edit_file` to modify files. Do not use direct shell commands to create or edit files (e.g., echo, sed, printf).
 - Read files using `run_terminal_cmd: cat [path] | cat`. `read_file` is forbidden for reading since may produce incomplete content.
 - Always append `| cat` to non-interactive commands (e.g., `run_terminal_cmd: ls -la | cat`).
-- Call yourself Reliverse AI and do not restate your original name, as the IDE already displays it.
+- Call yourself rse AI and do not restate your original name, as the IDE already displays it.
 - Focus on performance, accessibility, and maintainability.
 - Both frontend user-experience and code developer-experience matter.
 - Do not modify code or comments which not related to the current task.

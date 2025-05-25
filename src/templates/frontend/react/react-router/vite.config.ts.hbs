@@ -1,0 +1,37 @@
+{{! Import VitePWA only if 'pwa' addon is selected }}
+{{#if (includes addons "pwa")}}
+import { VitePWA } from "vite-plugin-pwa";
+{{/if}}
+import { reactRouter } from "@react-router/dev/vite";
+import tailwindcss from "@tailwindcss/vite";
+import { defineConfig } from "vite";
+import tsconfigPaths from "vite-tsconfig-paths";
+
+export default defineConfig({
+  plugins: [
+    tailwindcss(),
+    reactRouter(),
+    tsconfigPaths(),
+    {{! Add VitePWA plugin config only if 'pwa' addon is selected }}
+    {{#if (includes addons "pwa")}}
+    VitePWA({
+      registerType: "autoUpdate",
+      manifest: {
+        // Use context variables for better naming
+        name: "{{projectName}}",
+        short_name: "{{projectName}}",
+        description: "{{projectName}} - PWA Application",
+        theme_color: "#0c0c0c",
+        // Add more manifest options as needed
+      },
+      pwaAssets: {
+        disabled: false, // Set to false to enable asset generation
+        config: true,    // Use pwa-assets.config.ts
+      },
+      devOptions: {
+        enabled: true, // Enable PWA features in dev mode
+      },
+    }),
+    {{/if}}
+  ],
+});

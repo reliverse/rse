@@ -1,4 +1,4 @@
-import { inputPrompt } from "@reliverse/prompts";
+import { inputPrompt } from "@reliverse/rempts";
 
 import type { AIAgentOptions } from "./ai-types.js";
 

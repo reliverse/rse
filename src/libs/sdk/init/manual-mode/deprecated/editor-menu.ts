@@ -1,9 +1,8 @@
-import { selectPrompt, inputPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
 import { re } from "@reliverse/relico";
+import { relinka } from "@reliverse/relinka";
+import { selectPrompt, inputPrompt } from "@reliverse/rempts";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
-import type { DetectedProject } from "~/libs/sdk/utils/reliverseConfig/rc-types.js";
+import type { DetectedProject, RseConfig } from "~/libs/sdk/sdk-types.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
 import { useLanguine } from "~/libs/sdk/add/add-local/i18n/languine.js";
@@ -59,9 +58,9 @@ export async function handleOpenProjectMenu(
   memory: ReliverseMemory,
   cwd: string,
   maskInput: boolean,
-  config: ReliverseConfig,
+  config: RseConfig,
 ): Promise<void> {
-  const frontendUsername = await askUsernameFrontend(memory, false);
+  const frontendUsername = await askUsernameFrontend(config, false);
   if (!frontendUsername) {
     throw new Error(
       "Failed to determine your frontend username. Please try again or notify the CLI developers.",
@@ -132,7 +131,7 @@ export async function handleOpenProjectMenu(
 
   // (3) Show Main Action Menu.
   const action = await selectPrompt<ProjectMenuOption>({
-    title: `[@reliverse/addons] Managing project: ${selectedProject.name}${gitStatusInfo}`,
+    title: `[@reliverse/relifso] Managing project: ${selectedProject.name}${gitStatusInfo}`,
     content: depsWarning ? re.bold(depsWarning) : "",
     options: [
       {
@@ -284,7 +283,7 @@ export async function handleOpenProjectMenu(
       if (gitAction === "exit") return;
 
       if (gitAction === "init") {
-        relinka("info-verbose", "[A] initGitDir");
+        relinka("verbose", "[A] initGitDir");
         const success = await initGitDir({
           cwd,
           isDev,

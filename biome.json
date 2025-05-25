@@ -110,7 +110,8 @@
         "useNodejsImportProtocol": "off",
         "useNumberNamespace": "off",
         "useShorthandFunctionType": "off",
-        "useWhile": "off"
+        "useWhile": "off",
+        "noUnusedTemplateLiteral": "off"
       },
       "suspicious": {
         "noControlCharactersInRegex": "off",

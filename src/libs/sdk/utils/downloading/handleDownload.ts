@@ -1,15 +1,11 @@
-import { confirmPrompt, selectPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 import { ofetch } from "ofetch";
-import path from "pathe";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
-import {
-  cliHomeRepos,
-  UNKNOWN_VALUE,
-} from "~/libs/cfg/constants/cfg-details.js";
 import {
   downloadRepo,
   type DownloadResult,
@@ -23,6 +19,10 @@ import {
   type CategoryFromSchema,
   type CloneOrTemplateRepo,
 } from "~/libs/sdk/utils/projectRepository.js";
+import {
+  cliHomeRepos,
+  UNKNOWN_VALUE,
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 type UnghRepoResponse = {
   repo?: {
@@ -71,14 +71,14 @@ export async function handleDownload({
   selectedRepo: string;
   githubToken?: string | undefined;
   preserveGit?: boolean | undefined;
-  config?: ReliverseConfig | undefined;
+  config?: RseConfig | undefined;
   install?: boolean | undefined;
   isCustom?: boolean | undefined;
   isTemplateDownload: boolean;
   cache?: boolean;
 }): Promise<DownloadResult> {
   if (isTemplateDownload) {
-    relinka("info-verbose", "Handling template downloading...");
+    relinka("verbose", "Handling template downloading...");
   }
 
   // -------------------------------------------------

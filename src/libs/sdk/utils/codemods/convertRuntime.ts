@@ -1,22 +1,22 @@
 import type { TSConfig } from "pkg-types";
 
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { destr } from "destr";
-import fs from "fs-extra";
-import path from "pathe";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
-import { tsconfigJson } from "~/libs/cfg/constants/cfg-details.js";
+import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 const RUNTIME_REPLACEMENTS = {
   bun: {
     // Node.js fs to Bun's fs
-    'import fs from "fs"':
-      'import { readFile, writeFile, readdir, mkdir, stat } from "fs"',
+    'import fs from "@reliverse/relifso"':
+      'import { readFile, writeFile, readdir, mkdir, stat } from "@reliverse/relifso"',
     'import fs from "fs/promises"':
-      'import { readFile, writeFile, readdir, mkdir, stat } from "fs"',
+      'import { readFile, writeFile, readdir, mkdir, stat } from "@reliverse/relifso"',
     "import { promises as fs }":
-      'import { readFile, writeFile, readdir, mkdir, stat } from "fs"',
+      'import { readFile, writeFile, readdir, mkdir, stat } from "@reliverse/relifso"',
     // Node.js path to Bun's path
     'import path from "path"':
       'import { join, resolve, dirname, basename } from "path"',
@@ -30,7 +30,7 @@ const RUNTIME_REPLACEMENTS = {
   },
   deno: {
     // Node.js fs to Deno's fs
-    'import fs from "fs"':
+    'import fs from "@reliverse/relifso"':
       'import * as fs from "https://deno.land/std/fs/mod.ts"',
     'import fs from "fs/promises"':
       'import * as fs from "https://deno.land/std/fs/mod.ts"',

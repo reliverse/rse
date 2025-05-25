@@ -1,12 +1,12 @@
+import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
+import fs from "@reliverse/relifso";
 import { isBunPM, isBunRuntime } from "@reliverse/runtime";
-import fs from "fs-extra";
-import path from "pathe";
 
-import type { ReliverseConfig } from "~/libs/cfg/constants/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 
-import { cliJsrPath } from "~/libs/cfg/constants/cfg-details.js";
-import { detectProjectsWithReliverse } from "~/libs/sdk/utils/reliverseConfig/rc-detect.js";
+import { cliJsrPath } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect.js";
 
 export type MainMenuChoice =
   | "create"
@@ -25,12 +25,12 @@ type MainMenuOption = {
 };
 
 /**
- * Builds the main menu options based on dev mode, multi-reliverse configs, detected projects, etc.
+ * Builds the main menu options based on dev mode, multi-rsegs, detected projects, etc.
  */
 export async function getMainMenuOptions(
   cwd: string,
   isDev: boolean,
-  multireli: ReliverseConfig[],
+  multireli: RseConfig[],
 ): Promise<MainMenuOption[]> {
   // Initial multi-config hint (if relevant)
   const multiConfigMsg =
@@ -39,13 +39,11 @@ export async function getMainMenuOptions(
       : "";
 
   // Detect local projects from the current directory or tests-runtime in dev mode
-  const reliverseConfigSearchPath = isDev
-    ? path.join(cwd, "tests-runtime")
-    : cwd;
+  const rseSearchPath = isDev ? path.join(cwd, "tests-runtime") : cwd;
   let detectedCount = 0;
-  if (await fs.pathExists(reliverseConfigSearchPath)) {
-    const detectedProjects = await detectProjectsWithReliverse(
-      reliverseConfigSearchPath,
+  if (await fs.pathExists(rseSearchPath)) {
+    const detectedProjects = await detectProjectsWithRseConfig(
+      rseSearchPath,
       isDev,
     );
     detectedCount = detectedProjects.length;
@@ -72,7 +70,7 @@ export async function getMainMenuOptions(
       hint: multiConfigMsg,
       value: "clone",
     },
-    { label: "💬 Chat with Reliverse AI agent", value: "ai" },
+    { label: "💬 Chat with rseent", value: "ai" },
     {
       label: "🧰 Open developer tools kit",
       value: "isDevTools",
@@ -94,7 +92,7 @@ export async function getMainMenuOptions(
       msg = "Configure";
     }
     options.push({
-      label: `🚀 ${msg} Bun-native @reliverse/cli`,
+      label: `🚀 ${msg} Bun-native @rse`,
       value: "native-cli",
     });
   }

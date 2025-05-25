@@ -1,5 +1,5 @@
-import { confirmPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
+import { confirmPrompt } from "@reliverse/rempts";
+import { relinka } from "@reliverse/relinka";
 import { re } from "@reliverse/relico";
 import { projectsCreateProjectEnv } from "@vercel/sdk/funcs/projectsCreateProjectEnv.js";
 
@@ -60,11 +60,11 @@ export async function addEnvVarsToVercelProject(
       }
     } else {
       await uploadEnvVars(vercelInstance, projectName, envVars);
-      relinka("success-verbose", "Environment variables added successfully");
+      relinka("verbose", "Environment variables added successfully");
     }
   } else {
     await uploadEnvVars(vercelInstance, projectName, envVars);
-    relinka("success-verbose", "Environment variables added successfully");
+    relinka("verbose", "Environment variables added successfully");
   }
 }
 

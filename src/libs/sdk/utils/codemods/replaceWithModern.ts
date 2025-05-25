@@ -1,6 +1,6 @@
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
-import path from "pathe";
+import { relinka } from "@reliverse/relinka";
+import fs from "@reliverse/relifso";
+import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
 import type { ModernReplacement } from "~/types.js";
@@ -9,29 +9,29 @@ const MODERN_REPLACEMENTS: ModernReplacement[] = [
   // File System
   {
     pattern: /import fs from ["']fs["'];/g,
-    replacement: 'import fs from "fs-extra";',
+    replacement: 'import fs from "@reliverse/relifso";',
     description: "Replace Node.js fs with fs-extra",
   },
   {
     pattern: /import \* as fs from ["']fs["'];/g,
-    replacement: 'import fs from "fs-extra";',
+    replacement: 'import fs from "@reliverse/relifso";',
     description: "Replace Node.js fs namespace with fs-extra",
   },
   {
     pattern: /import \{ promises as fs \} from ["']fs["'];/g,
-    replacement: 'import fs from "fs-extra";',
+    replacement: 'import fs from "@reliverse/relifso";',
     description: "Replace fs.promises with fs-extra",
   },
 
   // Path
   {
     pattern: /import path from ["']path["'];/g,
-    replacement: 'import path from "pathe";',
+    replacement: 'import path from "@reliverse/pathkit";',
     description: "Replace Node.js path with pathe",
   },
   {
     pattern: /import \* as path from ["']path["'];/g,
-    replacement: 'import path from "pathe";',
+    replacement: 'import path from "@reliverse/pathkit";',
     description: "Replace Node.js path namespace with pathe",
   },
 

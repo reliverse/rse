@@ -1,10 +1,10 @@
 import type { PackageJson } from "pkg-types";
 
-import { ensuredir } from "@reliverse/fs";
-import { relinka } from "@reliverse/prompts";
+import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { execa } from "execa";
-import fs from "fs-extra";
-import path from "pathe";
 import { readPackageJSON, writePackageJSON } from "pkg-types";
 
 import type { IntegrationConfig, RemovalConfig } from "~/types.js";
@@ -208,7 +208,10 @@ export async function removeIntegration(cwd: string, config: RemovalConfig) {
     relinka("info", `Removing ${config.name}...`);
 
     const packageJsonPath = path.join(cwd, "package.json");
-    const pkg = await fs.readJson(packageJsonPath);
+    const pkg = await readPackageJSON(packageJsonPath);
+    if (!pkg) {
+      throw new Error("package.json not found or could not be read");
+    }
 
     // Remove dependencies
     config.dependencies.forEach((dep) => delete pkg.dependencies?.[dep]);
@@ -218,7 +221,7 @@ export async function removeIntegration(cwd: string, config: RemovalConfig) {
     config.scripts.forEach((script) => delete pkg.scripts?.[script]);
 
     // Update package.json
-    await fs.writeJson(packageJsonPath, pkg, { spaces: 2 });
+    await writePackageJSON(packageJsonPath, pkg);
 
     // Remove files
     for (const file of config.files) {

@@ -1,10 +1,10 @@
-import { ensuredir } from "@reliverse/fs";
-import { multiselectPrompt, confirmPrompt } from "@reliverse/prompts";
-import { relinka } from "@reliverse/prompts";
-import fs from "fs-extra";
+import { ensuredir } from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
+import { multiselectPrompt, confirmPrompt } from "@reliverse/rempts";
+import fs from "@reliverse/relifso";
 import { ofetch } from "ofetch";
 import pMap from "p-map";
-import path from "pathe";
+import path from "@reliverse/pathkit";
 
 import { getMaxHeightSize } from "~/libs/sdk/utils/microHelpers.js";
 
@@ -151,10 +151,10 @@ export async function checkForRuleUpdates(isDev: boolean): Promise<boolean> {
  * @returns Array of cached rule file names.
  */
 async function getCachedRuleFiles(owner: string): Promise<string[]> {
-  relinka("info-verbose", `Getting cached rule files for owner: ${owner}`);
+  relinka("verbose", `Getting cached rule files for owner: ${owner}`);
   const repoCacheDir = getRepoCacheDir(owner);
   if (!(await fs.pathExists(repoCacheDir))) {
-    relinka("info-verbose", `Cache directory does not exist: ${repoCacheDir}`);
+    relinka("verbose", `Cache directory does not exist: ${repoCacheDir}`);
     return [];
   }
 
@@ -191,11 +191,8 @@ export async function downloadRules(
   repoId: string,
   isDev: boolean,
 ): Promise<string[]> {
-  relinka("info-verbose", `Development mode: ${isDev}`);
-  relinka(
-    "info-verbose",
-    `Starting download process for repository: ${repoId}`,
-  );
+  relinka("verbose", `Development mode: ${isDev}`);
+  relinka("verbose", `Starting download process for repository: ${repoId}`);
   const [owner, repoName] = repoId.split("/");
   if (!owner || !repoName) {
     relinka("error", "Invalid repository ID format");
@@ -211,7 +208,7 @@ export async function downloadRules(
   const repoCacheDir = getRepoCacheDir(owner);
   // Ensure the cache directory exists.
   await ensuredir(repoCacheDir);
-  relinka("info-verbose", `Cache directory: ${repoCacheDir}`);
+  relinka("verbose", `Cache directory: ${repoCacheDir}`);
 
   const apiUrl = `https://api.github.com/repos/${owner}/${repoName}/git/trees/${branch}?recursive=1`;
   let availableFiles: { path: string; type: string }[] = [];
@@ -324,7 +321,7 @@ export async function downloadRules(
 
         // If file is already cached, log and reuse it.
         if (await fs.pathExists(cacheFilePath)) {
-          relinka("info-verbose", `[Cached] ${filePath} is already in cache.`);
+          relinka("verbose", `[Cached] ${filePath} is already in cache.`);
           downloadedFiles.push(expectedCacheFile);
           return;
         }
@@ -345,7 +342,7 @@ export async function downloadRules(
           }
           downloadedFiles.push(expectedCacheFile);
           relinka(
-            "info-verbose",
+            "verbose",
             `[${downloadedFiles.length}/${total}] Processed ${filePath}`,
           );
         } catch (error) {
@@ -380,7 +377,7 @@ export async function downloadRules(
     );
 
     relinka(
-      "success-verbose",
+      "verbose",
       `Processed ${downloadedFiles.length}/${total} rule file(s) successfully`,
     );
     return downloadedFiles;
@@ -404,16 +401,13 @@ export async function installRules(
   owner: string,
   cwd: string,
 ): Promise<void> {
-  relinka(
-    "info-verbose",
-    `Installing ${files.length} rule(s) from owner: ${owner}`,
-  );
+  relinka("verbose", `Installing ${files.length} rule(s) from owner: ${owner}`);
   const repoCacheDir = getRepoCacheDir(owner);
   const cursorRulesDir = path.join(cwd, ".cursor", "rules");
 
   await ensuredir(cursorRulesDir);
-  relinka("info-verbose", `Source directory: ${repoCacheDir}`);
-  relinka("info-verbose", `Target directory: ${cursorRulesDir}`);
+  relinka("verbose", `Source directory: ${repoCacheDir}`);
+  relinka("verbose", `Target directory: ${cursorRulesDir}`);
 
   let installedCount = 0;
   let skippedCount = 0;
@@ -424,7 +418,7 @@ export async function installRules(
     const targetFileName = `${baseFileName}${RULE_FILE_EXTENSION}`;
     const targetFile = path.join(cursorRulesDir, targetFileName);
 
-    relinka("info-verbose", `Copying file: ${file} -> ${targetFile}`);
+    relinka("verbose", `Copying file: ${file} -> ${targetFile}`);
     try {
       // Overwrite any existing file without prompting.
       await fs.copy(sourceFile, targetFile, { overwrite: true });
@@ -440,10 +434,10 @@ export async function installRules(
     relinka("success", `Installed ${installedCount} rule file(s)`);
   }
   if (skippedCount > 0) {
-    relinka("info-verbose", `Skipped ${skippedCount} rule file(s)`);
+    relinka("verbose", `Skipped ${skippedCount} rule file(s)`);
   }
   relinka(
-    "info-verbose",
+    "verbose",
     `Total installed: ${installedCount}, skipped: ${skippedCount}`,
   );
 }
@@ -458,23 +452,23 @@ export async function handleRuleUpdates(
   cwd: string,
   isDev: boolean,
 ): Promise<void> {
-  relinka("info-verbose", `Checking for rule updates in workspace: ${cwd}`);
+  relinka("verbose", `Checking for rule updates in workspace: ${cwd}`);
   const hasUpdates = await checkForRuleUpdates(isDev);
   if (!hasUpdates) {
     relinka("success", "No updates available for installed rules");
     return;
   }
 
-  relinka("info-verbose", "Updates available for installed rules");
+  relinka("verbose", "Updates available for installed rules");
   const shouldUpdate = await confirmPrompt({
     title: "Updates available for installed rules. Download now?",
   });
   if (!shouldUpdate) {
-    relinka("info-verbose", "User chose not to update rules");
+    relinka("verbose", "User chose not to update rules");
     return;
   }
 
-  relinka("info-verbose", "Starting rule update process");
+  relinka("verbose", "Starting rule update process");
   for (const repo of RULES_REPOS) {
     const [owner] = repo.id.split("/");
     if (!owner) continue;

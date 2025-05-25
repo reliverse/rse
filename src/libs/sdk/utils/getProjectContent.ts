@@ -1,11 +1,14 @@
-import fs from "fs-extra";
-import path from "pathe";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 
-import { cliConfigJsonc, cliConfigTs } from "~/libs/cfg/cfg-main.js";
+import {
+  cliConfigJsonc,
+  cliConfigTs,
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 // Define a type that matches the boolean-based structure of requiredContent
 export type RequiredProjectContent = {
-  fileReliverse: boolean;
+  fileRseConfig: boolean;
   filePackageJson: boolean;
 };
 
@@ -22,7 +25,7 @@ export async function getProjectContent(projectPath: string): Promise<{
   const configJSONC = path.join(projectPath, cliConfigJsonc);
   const configTS = path.join(projectPath, cliConfigTs);
 
-  const fileReliverse =
+  const fileRseConfig =
     (await fs.pathExists(configJSONC)) || (await fs.pathExists(configTS));
 
   const filePackageJson = await fs.pathExists(
@@ -36,7 +39,7 @@ export async function getProjectContent(projectPath: string): Promise<{
   const dirGit = await fs.pathExists(path.join(projectPath, ".git"));
 
   return {
-    requiredContent: { fileReliverse, filePackageJson },
+    requiredContent: { fileRseConfig, filePackageJson },
     optionalContent: { dirNodeModules, dirGit },
   };
 }

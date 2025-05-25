@@ -1,6 +1,6 @@
 import type { GetTeamsResponseBody } from "@vercel/sdk/models/getteamsop.js";
 
-import { relinka } from "@reliverse/prompts";
+import { relinka } from "@reliverse/relinka";
 import { teamsGetTeam } from "@vercel/sdk/funcs/teamsGetTeam.js";
 import { teamsGetTeams } from "@vercel/sdk/funcs/teamsGetTeams.js";
 
@@ -111,11 +111,14 @@ export async function getVercelTeams(
   const { teams } = res.value;
   return teams
     .filter(
+      // @ts-expect-error TODO: fix ts
       (team): team is GetTeamsResponseBody["teams"][0] => team.name !== null,
     )
     .map((team) => ({
       id: team.id,
+      // @ts-expect-error TODO: fix ts
       slug: team.slug,
+      // @ts-expect-error TODO: fix ts
       name: team.name,
     }));
 }

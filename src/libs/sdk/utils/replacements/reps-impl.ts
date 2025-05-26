@@ -36,7 +36,7 @@ export function extractRepoInfo(templateUrl: string): {
 }
 
 // Type for optional configuration object
-export type ReplaceConfig = {
+export interface ReplaceConfig {
   fileExtensions?: string[]; // e.g. [".js", ".ts", ".json"]
   excludedDirs?: string[]; // e.g. ["node_modules", ".git"]
   stringExclusions?: string[]; // Values we never want to replace
@@ -45,7 +45,7 @@ export type ReplaceConfig = {
   skipBinaryFiles?: boolean; // If true, skip binary files
   maxConcurrency?: number; // Limit concurrency for file processing
   stopOnError?: boolean; // Whether to stop immediately if a file fails
-};
+}
 
 /**
  * Check if a buffer looks like binary content

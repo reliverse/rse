@@ -1,3 +1,6 @@
+import { useNavigate } from "react-router";
+import { Link } from "react-router";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,12 +8,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  // @ts-expect-error dler-remove-comment
 } from "@/components/ui/dropdown-menu";
+// @ts-expect-error dler-remove-comment
 import { authClient } from "@/lib/auth-client";
-import { useNavigate } from "react-router";
+
+// @ts-expect-error dler-remove-comment
 import { Button } from "./ui/button";
+// @ts-expect-error dler-remove-comment
 import { Skeleton } from "./ui/skeleton";
-import { Link } from "react-router";
 
 export default function UserMenu() {
   const navigate = useNavigate();

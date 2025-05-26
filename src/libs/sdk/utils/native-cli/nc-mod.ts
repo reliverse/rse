@@ -1,5 +1,5 @@
-import { confirmPrompt } from "@reliverse/rempts";
 import fs from "@reliverse/relifso";
+import { confirmPrompt } from "@reliverse/rempts";
 
 import { downloadJsrDist } from "./nc-impl";
 

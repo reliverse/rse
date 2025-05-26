@@ -1,10 +1,10 @@
+import { relinka } from "@reliverse/relinka";
 import { inputPrompt } from "@reliverse/rempts";
 import { VercelCore } from "@vercel/sdk/core";
 
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import { saveVercelToken } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-utils";
-import { relinka } from "@reliverse/relinka";
 
 export type InstanceVercel = VercelCore;
 

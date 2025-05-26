@@ -12,11 +12,11 @@ import { agentRelinter } from "./relinter/relinter";
 /**
  * Represents the structured result of user input parsing.
  */
-type ParsedUserInput = {
+interface ParsedUserInput {
   hasRelinter: boolean;
   paths: string[];
   task: string;
-};
+}
 
 const messages: CoreMessage[] = [];
 

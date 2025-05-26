@@ -2,13 +2,13 @@
 // Type Definitions
 // ----------------------
 
-export type UnghRepoResponse = {
+export interface UnghRepoResponse {
   repo?: {
     pushedAt: string;
   };
-};
+}
 
-export type RuleRepo = {
+export interface RuleRepo {
   id: string;
   author: string;
   name: string;
@@ -20,4 +20,4 @@ export type RuleRepo = {
   isOfficial?: boolean;
   isCommunity?: boolean;
   communityPath?: string;
-};
+}

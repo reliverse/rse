@@ -1,5 +1,5 @@
-import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 
 /**
  * Searches upward from the given path for a tsconfig.json.

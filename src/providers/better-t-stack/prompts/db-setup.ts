@@ -1,6 +1,11 @@
-import { cancel, isCancel, log, select } from "@clack/prompts";
+import { cancel, isCancel, select } from "@clack/prompts";
 import pc from "picocolors";
-import type { ProjectBackend, ProjectDBSetup, ProjectOrm } from "../types";
+
+import type {
+  ProjectBackend,
+  ProjectDBSetup,
+  ProjectOrm,
+} from "~/providers/better-t-stack/types";
 
 export async function getDBSetupChoice(
   databaseType: string,
@@ -22,8 +27,7 @@ export async function getDBSetupChoice(
     return "none";
   }
 
-  let options: Array<{ value: ProjectDBSetup; label: string; hint: string }> =
-    [];
+  let options: { value: ProjectDBSetup; label: string; hint: string }[] = [];
 
   if (databaseType === "sqlite") {
     options = [

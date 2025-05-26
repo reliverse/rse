@@ -43,7 +43,12 @@ async function getPathAliases(
     return null;
   }
   try {
-    const tsConfig = await getTsconfigInfo(cwd);
+    const tsConfig = (await getTsconfigInfo(cwd)) as {
+      compilerOptions: {
+        paths: Record<string, string[]>;
+        baseUrl: string;
+      };
+    };
     const { paths = {}, baseUrl = "." } = tsConfig.compilerOptions || {};
     const result: Record<string, string> = {};
     const obj = Object.entries(paths) as [string, string[]][];
@@ -113,7 +118,7 @@ export async function getConfig({
       }>({
         configFile: resolvedPath,
         dotenv: true,
-        jitiOptions: jitiOptions(cwd),
+        jitiOptions: await jitiOptions(cwd),
       });
       if (!config.auth && !config.default) {
         if (shouldThrowOnError) {
@@ -141,7 +146,7 @@ export async function getConfig({
             };
           }>({
             configFile: possiblePath,
-            jitiOptions: jitiOptions(cwd),
+            jitiOptions: await jitiOptions(cwd),
           });
           const hasConfig = Object.keys(config).length > 0;
           if (hasConfig) {

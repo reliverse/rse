@@ -9,12 +9,12 @@ import type { ProjectPackageManager } from "~/providers/better-t-stack/types";
 
 import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command";
 
-type NeonConfig = {
+interface NeonConfig {
   connectionString: string;
   projectId: string;
   dbName: string;
   roleName: string;
-};
+}
 
 async function executeNeonCommand(
   packageManager: ProjectPackageManager,

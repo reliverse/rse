@@ -8,11 +8,11 @@ rse auth better-auth generate
 
 // 👉 `bun db:auth`
 
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { defineArgs, defineCommand, runCmd } from "@reliverse/rempts";
 import { execaCommand } from "execa";
-import fs from "@reliverse/relifso";
 import MagicString from "magic-string";
-import path from "@reliverse/pathkit";
 
 import { cmdAuthGenerate } from "~/app/cmds";
 

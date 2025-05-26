@@ -1,10 +1,10 @@
+import { dirname, join } from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
-import { relinka } from "@reliverse/relinka";
 import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { installDependencies } from "nypm";
 import { ofetch } from "ofetch";
 import pLimit from "p-limit";
-import { dirname, join } from "@reliverse/pathkit";
 import semver from "semver";
 import { glob } from "tinyglobby";
 import { fileURLToPath } from "url";
@@ -25,14 +25,14 @@ const __dirname = dirname(__filename);
 // ================================================
 
 /** Package-level metadata structure returned by JSR. */
-type PackageMeta = {
+interface PackageMeta {
   scope: string;
   name: string;
   versions: Record<string, { yanked?: boolean }>;
-};
+}
 
 /** Version-level metadata structure returned by JSR. */
-type VersionMeta = {
+interface VersionMeta {
   manifest: Record<
     string,
     {
@@ -42,7 +42,7 @@ type VersionMeta = {
   >;
   moduleGraph1?: Record<string, unknown>;
   exports?: Record<string, string>;
-};
+}
 
 // ================================================
 // HTTP & JSON Helpers

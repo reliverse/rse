@@ -1,10 +1,12 @@
-import path from "node:path";
 import { spinner } from "@clack/prompts";
 import consola from "consola";
 import { execa } from "execa";
+import path from "node:path";
 import pc from "picocolors";
-import type { ProjectConfig } from "../types";
-import { getPackageExecutionCommand } from "../utils/get-package-execution-command";
+
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
+
+import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command";
 
 export async function setupStarlight(config: ProjectConfig): Promise<void> {
   const { projectName, packageManager } = config;

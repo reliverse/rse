@@ -1,6 +1,6 @@
+import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
-import fs from "@reliverse/relifso";
 import ora from "ora";
 
 import {

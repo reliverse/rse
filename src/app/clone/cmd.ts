@@ -1,3 +1,5 @@
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import {
   defineCommand,
@@ -5,8 +7,6 @@ import {
   selectPrompt,
   inputPrompt,
 } from "@reliverse/rempts";
-import fs from "@reliverse/relifso";
-import path from "@reliverse/pathkit";
 
 import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload";
 

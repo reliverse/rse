@@ -1,15 +1,17 @@
-import path from "node:path";
 import { cancel, isCancel, log, spinner, text } from "@clack/prompts";
+import fs from "@reliverse/relifso";
 import consola from "consola";
 import { execa } from "execa";
-import fs from "@reliverse/relifso";
+import path from "node:path";
 import pc from "picocolors";
-import type { ProjectConfig } from "../types";
-import { commandExists } from "../utils/command-exists";
 
-type MongoDBConfig = {
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
+
+import { commandExists } from "~/providers/better-t-stack/utils/command-exists";
+
+interface MongoDBConfig {
   connectionString: string;
-};
+}
 
 async function checkAtlasCLI(): Promise<boolean> {
   const s = spinner();
@@ -23,7 +25,7 @@ async function checkAtlasCLI(): Promise<boolean> {
         : pc.yellow("MongoDB Atlas CLI not found"),
     );
     return exists;
-  } catch (error) {
+  } catch {
     s.stop(pc.red("Error checking for MongoDB Atlas CLI"));
     return false;
   }
@@ -106,7 +108,7 @@ async function writeEnvFile(projectDir: string, config?: MongoDBConfig) {
     }
 
     await fs.writeFile(envPath, envContent.trim());
-  } catch (error) {
+  } catch {
     consola.error("Failed to update environment configuration");
   }
 }
@@ -166,6 +168,8 @@ export async function setupMongoDBAtlas(config: ProjectConfig) {
     try {
       await writeEnvFile(projectDir);
       displayManualSetupInstructions();
-    } catch {}
+    } catch {
+      /* empty */
+    }
   }
 }

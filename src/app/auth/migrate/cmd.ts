@@ -1,19 +1,24 @@
+import { re } from "@reliverse/relico";
 import { pathExists } from "@reliverse/relifso";
-import { defineArgs, defineCommand, useSpinner } from "@reliverse/rempts";
+import {
+  confirmPrompt,
+  defineArgs,
+  defineCommand,
+  useSpinner,
+} from "@reliverse/rempts";
 import { logger } from "better-auth";
 import { getAdapter, getMigrations } from "better-auth/db";
-import chalk from "chalk";
 import path from "path";
 import { z } from "zod";
 
-import { configPath } from "~/app/auth/consts";
 import { getConfig } from "~/app/auth/(utils)/get-config";
+import { configPath } from "~/app/auth/consts";
 
-type MigrateActionOpts = {
+interface MigrateActionOpts {
   cwd: string;
   config: string;
   y: boolean;
-};
+}
 
 export async function migrateAction(opts: MigrateActionOpts) {
   const options = z
@@ -51,13 +56,13 @@ export async function migrateAction(opts: MigrateActionOpts) {
   if (db.id !== "kysely") {
     if (db.id === "prisma") {
       logger.error(
-        "The migrate command only works with the built-in Kysely adapter. For Prisma, run `npx @better-auth/cli generate` to create the schema, then use Prisma’s migrate or push to apply it.",
+        "The migrate command only works with the built-in Kysely adapter. For Prisma, run `npx @better-auth/cli generate` to create the schema, then use Prisma's migrate or push to apply it.",
       );
       process.exit(0);
     }
     if (db.id === "drizzle") {
       logger.error(
-        "The migrate command only works with the built-in Kysely adapter. For Drizzle, run `npx @better-auth/cli generate` to create the schema, then use Drizzle’s migrate or push to apply it.",
+        "The migrate command only works with the built-in Kysely adapter. For Drizzle, run `npx @better-auth/cli generate` to create the schema, then use Drizzle's migrate or push to apply it.",
       );
       process.exit(0);
     }
@@ -81,22 +86,21 @@ export async function migrateAction(opts: MigrateActionOpts) {
   for (const table of [...toBeCreated, ...toBeAdded]) {
     console.log(
       "->",
-      chalk.magenta(Object.keys(table.fields).join(", ")),
-      chalk.white("fields on"),
-      chalk.yellow(table.table),
-      chalk.white("table."),
+      re.magenta(Object.keys(table.fields).join(", ")),
+      re.white("fields on"),
+      re.yellow(table.table),
+      re.white("table."),
     );
   }
 
   let migrate = options.y;
   if (!migrate) {
-    const response = await prompts({
-      type: "confirm",
-      name: "migrate",
-      message: "Are you sure you want to run these migrations?",
-      initial: false,
+    const response = await confirmPrompt({
+      title: "migrate",
+      content: "Are you sure you want to run these migrations?",
+      defaultValue: false,
     });
-    migrate = response.migrate;
+    migrate = response;
   }
 
   if (!migrate) {

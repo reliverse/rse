@@ -1,8 +1,10 @@
-import path from "node:path";
 import fs from "@reliverse/relifso";
-import type { AvailableDependencies } from "../constants";
-import type { ProjectConfig } from "../types";
-import { addPackageDependency } from "../utils/add-package-deps";
+import path from "node:path";
+
+import type { AvailableDependencies } from "~/providers/better-t-stack/constants";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
+
+import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps";
 
 export async function setupExamples(config: ProjectConfig): Promise<void> {
   const { projectName, examples, frontend, backend } = config;
@@ -34,6 +36,7 @@ export async function setupExamples(config: ProjectConfig): Promise<void> {
       } else if (hasSvelte) {
         dependencies.push("@ai-sdk/svelte");
       } else {
+        /* empty */
       }
       await addPackageDependency({
         dependencies,

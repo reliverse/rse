@@ -1,12 +1,13 @@
-import { Link, Stack } from 'expo-router';
-import { Text } from 'react-native';
+import { Link, Stack } from "expo-router";
+import { Text } from "react-native";
 
-import { Container } from '@/components/container';
+// @ts-expect-error dler-remove-comment
+import { Container } from "@/components/container";
 
 export default function NotFoundScreen() {
   return (
     <>
-      <Stack.Screen options={{ title: 'Oops!' }} />
+      <Stack.Screen options={{ title: "Oops!" }} />
       <Container>
         <Text className="text-xl font-bold">This screen doesn't exist.</Text>
         <Link href="/" className="mt-4 pt-4">

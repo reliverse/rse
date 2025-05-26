@@ -1,8 +1,11 @@
 import { useChat } from "@ai-sdk/react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Send } from "lucide-react";
 import { useRef, useEffect } from "react";
+
+// @ts-expect-error dler-remove-comment
+import { Button } from "@/components/ui/button";
+// @ts-expect-error dler-remove-comment
+import { Input } from "@/components/ui/input";
 
 export default function AI() {
   const { messages, input, handleInputChange, handleSubmit } = useChat({

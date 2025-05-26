@@ -1,25 +1,25 @@
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, inputPrompt } from "@reliverse/rempts";
 import { generateText } from "ai";
 import { execaCommand } from "execa";
-import fs from "@reliverse/relifso";
-import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
 import { MODEL } from "~/libs/sdk/ai/ai-impl/ai-const";
 
-type AiGeneratedResult = {
+interface AiGeneratedResult {
   text: string;
-};
+}
 
-type ParsedAiOutput = {
+interface ParsedAiOutput {
   filePath: string;
   codeContent: string;
-};
+}
 
-type CommitOptions = {
+interface CommitOptions {
   commitMessage: string;
-};
+}
 
 // Fetches user's code prompt
 async function getUserPrompt(): Promise<string> {

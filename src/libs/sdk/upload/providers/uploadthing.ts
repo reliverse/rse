@@ -1,10 +1,10 @@
 import { UTApi } from "uploadthing/server";
 
-export type UploadedFile = {
+export interface UploadedFile {
   name: string;
   data: Buffer;
   type: string;
-};
+}
 
 export async function uploadToUploadthing(files: UploadedFile[]) {
   const apiKey = process.env.UPLOADTHING_API_KEY;

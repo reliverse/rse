@@ -1,5 +1,6 @@
 import { cancel, group } from "@clack/prompts";
 import pc from "picocolors";
+
 import type {
   ProjectAddons,
   ProjectApi,
@@ -12,7 +13,8 @@ import type {
   ProjectOrm,
   ProjectPackageManager,
   ProjectRuntime,
-} from "../types";
+} from "~/providers/better-t-stack/types";
+
 import { getAddonsChoice } from "./addons";
 import { getApiChoice } from "./api";
 import { getAuthChoice } from "./auth";
@@ -28,7 +30,7 @@ import { getPackageManagerChoice } from "./package-manager";
 import { getProjectName } from "./project-name";
 import { getRuntimeChoice } from "./runtime";
 
-type PromptGroupResults = {
+interface PromptGroupResults {
   projectName: string;
   frontend: ProjectFrontend[];
   backend: ProjectBackend;
@@ -43,7 +45,7 @@ type PromptGroupResults = {
   git: boolean;
   packageManager: ProjectPackageManager;
   install: boolean;
-};
+}
 
 export async function gatherConfig(
   flags: Partial<ProjectConfig>,

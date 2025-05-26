@@ -1,5 +1,5 @@
-import { defineCommand } from "@reliverse/rempts";
 import { relinka } from "@reliverse/relinka";
+import { defineCommand } from "@reliverse/rempts";
 
 import { cliConfigJsonc } from "~/libs/sdk/utils/rseConfig/cfg-details";
 import { generateSchemaFile } from "~/libs/sdk/utils/rseConfig/cfg-schema";

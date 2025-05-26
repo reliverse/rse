@@ -30,19 +30,19 @@ export function logVerbose(msg: string, data?: unknown): void {
 /**
  * Configuration data for a single project.
  */
-export type GenCfg = {
+export interface GenCfg {
   projectName: string;
   projectTemplate: string;
   getEnvExample: boolean;
   projectPath?: string;
-};
+}
 
 /**
  * Shape of the JSONC config file (wrapper around GenCfg[]).
  */
-export type GenCfgJsonc = {
+export interface GenCfgJsonc {
   genCfg: GenCfg[];
-};
+}
 
 /**
  * Gets the path to the env cache directory (used for storing .env.example files).

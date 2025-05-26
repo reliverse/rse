@@ -1,7 +1,7 @@
 import type { UpdateProjectRequestBody } from "@vercel/sdk/models/updateprojectop";
 
-import { multiselectPrompt } from "@reliverse/rempts";
 import { relinka } from "@reliverse/relinka";
+import { multiselectPrompt } from "@reliverse/rempts";
 import { projectsUpdateProject } from "@vercel/sdk/funcs/projectsUpdateProject";
 
 import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
@@ -108,10 +108,10 @@ export async function configureResources(
   }
 }
 
-export type ConfigurationOptions = {
+export interface ConfigurationOptions {
   options: string[];
   useSharedEnvVars: boolean;
-};
+}
 
 /**
  * Gets configuration options from user

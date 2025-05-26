@@ -1,6 +1,6 @@
+import path from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
-import path from "@reliverse/pathkit";
 
 import type { ParamsOmitReli } from "~/libs/sdk/sdk-types";
 

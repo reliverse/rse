@@ -1,5 +1,5 @@
-import { selectPrompt } from "@reliverse/rempts";
 import { relinka } from "@reliverse/relinka";
+import { selectPrompt } from "@reliverse/rempts";
 import { execa } from "execa";
 import { installDependencies } from "nypm";
 

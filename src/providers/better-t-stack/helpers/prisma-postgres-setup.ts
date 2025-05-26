@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */ // dler-remove-line
 import { cancel, isCancel, log, password, spinner } from "@clack/prompts";
 import fs from "@reliverse/relifso";
 import { consola } from "consola";
@@ -10,9 +11,9 @@ import type { ProjectPackageManager } from "~/providers/better-t-stack/types";
 import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps";
 import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command";
 
-type PrismaConfig = {
+interface PrismaConfig {
   databaseUrl: string;
-};
+}
 
 async function initPrismaDatabase(
   serverDir: string,
@@ -195,7 +196,9 @@ export async function setupPrismaPostgres(config: ProjectConfig) {
     try {
       await writeEnvFile(projectDir);
       displayManualSetupInstructions();
-    } catch {}
+    } catch {
+      /* empty */
+    }
 
     log.info("Setup completed with manual configuration required.");
   }

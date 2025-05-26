@@ -137,7 +137,7 @@ export async function updateReliverseMemory(
       .filter(([_, value]) => value !== null && value !== undefined)
       .map(([key, value]) => ({
         key: key as UserDataMemory,
-        value:  
+        value:
           typeof value === "object"
             ? JSON.stringify(value)
             : typeof value === "undefined"

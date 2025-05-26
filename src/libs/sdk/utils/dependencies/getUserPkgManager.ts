@@ -1,6 +1,6 @@
-import { execa } from "execa";
-import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { execa } from "execa";
 
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 export type DetectionSource =
@@ -12,16 +12,16 @@ export type DetectionSource =
   | "system"
   | "global";
 
-export type PkgManagerInfo = {
+export interface PkgManagerInfo {
   packageManager: PackageManager;
   source: DetectionSource;
   version?: string;
-};
+}
 
-export type DetectOptions = {
+export interface DetectOptions {
   cwd?: string;
   includeGlobalBun?: boolean;
-};
+}
 
 // Cache for detection results with more specific keys
 const cache = new Map<string>();

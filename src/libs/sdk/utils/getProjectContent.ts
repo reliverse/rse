@@ -7,10 +7,10 @@ import {
 } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 // Define a type that matches the boolean-based structure of requiredContent
-export type RequiredProjectContent = {
+export interface RequiredProjectContent {
   fileRseConfig: boolean;
   filePackageJson: boolean;
-};
+}
 
 /**
  * Gets information about the project content, separating required and optional elements.

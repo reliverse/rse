@@ -8,11 +8,11 @@ import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
 
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
-export type VercelTeam = {
+export interface VercelTeam {
   id: string;
   slug: string;
   name: string;
-};
+}
 
 /**
  * Gets the primary Vercel team details from memory or verifies and returns from API

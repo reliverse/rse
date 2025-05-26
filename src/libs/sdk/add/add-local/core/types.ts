@@ -1,6 +1,6 @@
 /**
  * Provides a standardized result structure for menu operations.
  */
-export type ShowMenuResult = {
+export interface ShowMenuResult {
   areDependenciesMissing: boolean;
-};
+}

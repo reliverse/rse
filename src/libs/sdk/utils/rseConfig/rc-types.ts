@@ -7,7 +7,7 @@ export type IterableError = Iterable<{
   message: string;
 }>;
 
-export type DetectedProject = {
+export interface DetectedProject {
   name: string;
   path: string;
   config: RseConfig;
@@ -17,4 +17,4 @@ export type DetectedProject = {
   };
   needsDepsInstall?: boolean;
   hasGit?: boolean;
-};
+}

@@ -1,10 +1,10 @@
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
 
-import { useLocalhost } from "~/libs/sdk/utils/rseConfig/cfg-details";
 import { showAnykeyPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt";
 import { auth } from "~/libs/sdk/login/login-impl";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { useLocalhost } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 export default defineCommand({
   meta: {

@@ -7,8 +7,8 @@ import { ensureOpenAIKey } from "~/libs/sdk/ai/ai-impl/ai-auth";
 import { AGENT_NAMES } from "~/libs/sdk/ai/ai-impl/ai-const";
 import { aiAgenticTool } from "~/libs/sdk/ai/ai-impl/ai-tools";
 import { aiMenu } from "~/libs/sdk/ai/ai-menu";
-import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({

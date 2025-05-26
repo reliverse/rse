@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query'
-const {$authClient} = useNuxtApp()
+import { useQuery } from "@tanstack/vue-query";
+const { $authClient } = useNuxtApp();
 
 definePageMeta({
-  middleware: ['auth']
-})
+  middleware: ["auth"],
+});
 
-const { $orpc } = useNuxtApp()
+const { $orpc } = useNuxtApp();
 
-const session = $authClient.useSession()
+const session = $authClient.useSession();
 
-const privateData = useQuery($orpc.privateData.queryOptions())
-
+const privateData = useQuery($orpc.privateData.queryOptions());
 </script>
 
 <template>

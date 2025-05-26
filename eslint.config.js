@@ -21,11 +21,7 @@ const config = tseslint.config(
   ...tseslint.configs.strictTypeChecked,
   ...tseslint.configs.stylisticTypeChecked,
   {
-    files: ["**/*.{js}"],
-    ...tseslint.configs.disableTypeChecked,
-  },
-  {
-    files: ["**/*.{js,ts}"],
+    files: ["**/*.{js,ts,tsx}"],
     languageOptions: {
       parserOptions: {
         projectService: true,
@@ -40,6 +36,12 @@ const config = tseslint.config(
     },
     rules: {
       "max-lines": ["error", 1300],
+      "no-useless-catch": "off",
+      "@typescript-eslint/no-floating-promises": "off",
+      "@typescript-eslint/unbound-method": "off",
+      "@typescript-eslint/prefer-for-of": "off",
+      "@typescript-eslint/no-inferrable-types": "off",
+      "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/no-unnecessary-template-expression": "off",
       "@typescript-eslint/await-thenable": "off",
       "@typescript-eslint/require-await": "off",
@@ -60,7 +62,6 @@ const config = tseslint.config(
       "@typescript-eslint/no-unsafe-return": "off",
       "@typescript-eslint/no-unsafe-argument": "off",
       "@typescript-eslint/no-unnecessary-type-assertion": "off",
-      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
       "@typescript-eslint/consistent-type-imports": [
         "warn",
         {
@@ -103,6 +104,17 @@ const config = tseslint.config(
         "warn",
         { allowSameFolder: true, rootDir: "src", prefix: "~" },
       ],
+    },
+  },
+  {
+    files: ["**/*.{js,jsx,cjs,mjs}"],
+    ...tseslint.configs.disableTypeChecked,
+  },
+  {
+    files: ["**/*.cjs"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+      "no-undef": "off",
     },
   },
 );

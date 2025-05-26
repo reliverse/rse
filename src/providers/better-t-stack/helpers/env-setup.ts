@@ -1,6 +1,9 @@
-import path from "node:path";
+/* eslint-disable @typescript-eslint/no-unused-vars */ // dler-remove-line
 import fs from "@reliverse/relifso";
-import type { ProjectConfig } from "../types";
+import path from "node:path";
+
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
+
 import { generateAuthSecret } from "./auth-setup";
 
 interface EnvVariable {

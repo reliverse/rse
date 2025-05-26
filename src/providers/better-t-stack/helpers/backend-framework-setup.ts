@@ -1,8 +1,9 @@
 import path from "node:path";
-import type { AvailableDependencies } from "../constants";
-import { addPackageDependency } from "../utils/add-package-deps";
 
-import type { ProjectConfig } from "../types";
+import type { AvailableDependencies } from "~/providers/better-t-stack/constants";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
+
+import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps";
 
 export async function setupBackendDependencies(
   config: ProjectConfig,

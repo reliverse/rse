@@ -236,12 +236,12 @@ type SupportedFrameworks =
   | "solid"
   | "nextjs";
 
-type Import = {
+interface Import {
   path: string;
   variables:
     | { asType?: boolean; name: string; as?: string }[]
     | { asType?: boolean; name: string; as?: string };
-};
+}
 
 const getDefaultAuthClientConfig = async ({
   auth_config_path,

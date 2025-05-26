@@ -1,28 +1,27 @@
 <script lang="ts">
-	import { authClient } from '$lib/auth-client';
-	import { goto } from '$app/navigation';
-	import { queryClient } from '$lib/orpc';
+import { authClient } from "$lib/auth-client";
+import { goto } from "$app/navigation";
+import { queryClient } from "$lib/orpc";
 
-	const sessionQuery = authClient.useSession();
+const sessionQuery = authClient.useSession();
 
-	async function handleSignOut() {
-		await authClient.signOut({
-		fetchOptions: {
-			onSuccess: () => {
-				queryClient.invalidateQueries();
-				goto('/');
-			},
-			onError: (error) => {
-				console.error('Sign out failed:', error);
-			}
-		}
-		});
-	}
+async function handleSignOut() {
+  await authClient.signOut({
+    fetchOptions: {
+      onSuccess: () => {
+        queryClient.invalidateQueries();
+        goto("/");
+      },
+      onError: (error) => {
+        console.error("Sign out failed:", error);
+      },
+    },
+  });
+}
 
-	function goToLogin() {
-		goto('/login');
-	}
-
+function goToLogin() {
+  goto("/login");
+}
 </script>
 
 <div class="relative">

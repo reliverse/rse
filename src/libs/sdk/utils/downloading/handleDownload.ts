@@ -24,11 +24,11 @@ import {
   UNKNOWN_VALUE,
 } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
-type UnghRepoResponse = {
+interface UnghRepoResponse {
   repo?: {
     pushedAt: string;
   };
-};
+}
 
 async function checkRepoVersion(
   repo: CloneOrTemplateRepo,

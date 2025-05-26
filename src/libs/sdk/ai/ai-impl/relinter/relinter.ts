@@ -17,13 +17,13 @@ import {
 /**
  * Describes a lint suggestion with file details and a recommended fix or note.
  */
-export type LintSuggestion = {
+export interface LintSuggestion {
   filePath: string;
   startLine: number;
   endLine: number;
   suggestion: string;
   severity: "error" | "warning" | "info";
-};
+}
 
 /**
  * Tracks file adjacency for detecting circular dependencies.

@@ -19,11 +19,11 @@ import { userDataTable } from "~/db/schema";
 
 import { KNOWN_SERVICES, type KeyType } from "./cef-keys";
 
-type EnvPaths = {
+interface EnvPaths {
   projectRoot: string;
   exampleEnvPath: string;
   envPath: string;
-};
+}
 
 function getEnvPaths(projectPath: string): EnvPaths {
   const projectRoot = path.resolve(projectPath);

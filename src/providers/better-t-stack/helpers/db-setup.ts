@@ -1,12 +1,12 @@
 import { spinner } from "@clack/prompts";
-import consola from "consola";
 import fs from "@reliverse/relifso";
+import consola from "consola";
 import path from "node:path";
 import pc from "picocolors";
 
-import type { ProjectConfig } from "~/cli/providers/better-t-stack/types";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
 
-import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps";
+import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps";
 
 import { setupMongoDBAtlas } from "./mongodb-atlas-setup";
 import { setupNeonPostgres } from "./neon-setup";

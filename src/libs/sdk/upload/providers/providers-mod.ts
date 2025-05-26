@@ -1,16 +1,16 @@
 import type { Buffer } from "buffer";
 
-import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 
 import { uploadToUploadcare } from "./uploadcare";
 import { uploadToUploadthing } from "./uploadthing";
 
-export type UploadFile = {
+export interface UploadFile {
   name: string;
   data: Buffer;
   type: string;
-};
+}
 
 export async function uploadToProvider(files: UploadFile[], provider?: string) {
   const defaultProvider = process.env.DEFAULT_UPLOAD_PROVIDER || "uploadthing";

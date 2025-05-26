@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,12 +8,15 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  // @ts-expect-error dler-remove-comment
 } from "@/components/ui/dropdown-menu";
+// @ts-expect-error dler-remove-comment
 import { authClient } from "@/lib/auth-client";
+
+// @ts-expect-error dler-remove-comment
 import { Button } from "./ui/button";
+// @ts-expect-error dler-remove-comment
 import { Skeleton } from "./ui/skeleton";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
 
 export default function UserMenu() {
   const router = useRouter();

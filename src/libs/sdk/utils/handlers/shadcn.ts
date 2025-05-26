@@ -1,7 +1,7 @@
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { execa } from "execa";
-import fs from "@reliverse/relifso";
-import path from "@reliverse/pathkit";
 
 import type { ShadcnConfig, Theme } from "~/types";
 
@@ -166,13 +166,13 @@ async function ensureComponentDependencies(
   }
 }
 
-type ComponentOptions = {
+interface ComponentOptions {
   yes?: boolean;
   overwrite?: boolean;
   cwd: string;
   all?: boolean;
   path?: string;
-};
+}
 
 export async function installComponent(
   cwd: string,

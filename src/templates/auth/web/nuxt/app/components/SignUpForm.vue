@@ -1,29 +1,29 @@
 <script setup lang="ts">
-import { z } from 'zod'
-import type { FormSubmitEvent } from '#ui/types'
-const {$authClient} = useNuxtApp()
+import { z } from "zod";
+import type { FormSubmitEvent } from "#ui/types";
+const { $authClient } = useNuxtApp();
 
-const emit = defineEmits(['switchToSignIn'])
+const emit = defineEmits(["switchToSignIn"]);
 
-const toast = useToast()
-const loading = ref(false)
+const toast = useToast();
+const loading = ref(false);
 
 const schema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
-})
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+});
 
-type Schema = z.output<typeof schema>
+type Schema = z.output<typeof schema>;
 
 const state = reactive({
-  name: '',
-  email: '',
-  password: '',
-})
+  name: "",
+  email: "",
+  password: "",
+});
 
-async function onSubmit (event: FormSubmitEvent<Schema>) {
-  loading.value = true
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  loading.value = true;
   try {
     await $authClient.signUp.email(
       {
@@ -33,18 +33,24 @@ async function onSubmit (event: FormSubmitEvent<Schema>) {
       },
       {
         onSuccess: () => {
-          toast.add({ title: 'Sign up successful' })
-          navigateTo('/dashboard', { replace: true })
+          toast.add({ title: "Sign up successful" });
+          navigateTo("/dashboard", { replace: true });
         },
         onError: (error) => {
-          toast.add({ title: 'Sign up failed', description: error.error.message })
+          toast.add({
+            title: "Sign up failed",
+            description: error.error.message,
+          });
         },
       },
-    )
+    );
   } catch (error: any) {
-     toast.add({ title: 'An unexpected error occurred', description: error.message || 'Please try again.' })
+    toast.add({
+      title: "An unexpected error occurred",
+      description: error.message || "Please try again.",
+    });
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 </script>

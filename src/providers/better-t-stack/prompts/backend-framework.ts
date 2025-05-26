@@ -1,7 +1,9 @@
 import { cancel, isCancel, select } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants";
-import type { ProjectBackend } from "../types";
+
+import type { ProjectBackend } from "~/providers/better-t-stack/types";
+
+import { DEFAULT_CONFIG } from "~/providers/better-t-stack/constants";
 
 export async function getBackendFrameworkChoice(
   backendFramework?: ProjectBackend,

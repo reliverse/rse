@@ -2,6 +2,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { Drawer } from "expo-router/drawer";
 
+// @ts-expect-error dler-remove-comment
 import { HeaderButton } from "@/components/header-button";
 
 const DrawerLayout = () => {
@@ -12,7 +13,7 @@ const DrawerLayout = () => {
         options={{
           headerTitle: "Home",
           drawerLabel: "Home",
-          drawerIcon: ({ size, color }) => (
+          drawerIcon: ({ size, color }: { size: number; color: string }) => (
             <Ionicons name="home-outline" size={size} color={color} />
           ),
         }}
@@ -22,7 +23,7 @@ const DrawerLayout = () => {
         options={{
           headerTitle: "Tabs",
           drawerLabel: "Tabs",
-          drawerIcon: ({ size, color }) => (
+          drawerIcon: ({ size, color }: { size: number; color: string }) => (
             <MaterialIcons name="border-bottom" size={size} color={color} />
           ),
           headerRight: () => (

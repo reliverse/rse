@@ -18,11 +18,11 @@ export type MainMenuChoice =
   | "exit"
   | "ai";
 
-type MainMenuOption = {
+interface MainMenuOption {
   label: string;
   value: MainMenuChoice;
   hint?: string;
-};
+}
 
 /**
  * Builds the main menu options based on dev mode, multi-rsegs, detected projects, etc.

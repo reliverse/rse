@@ -1,9 +1,10 @@
+import { existsSync } from "@reliverse/relifso";
 import {
   getAuthTables,
   type BetterAuthDbSchema,
   type FieldAttribute,
 } from "better-auth/db";
-import { existsSync } from "@reliverse/relifso";
+
 import type { SchemaGenerator } from "./types";
 
 export function convertToSnakeCase(str: string) {
@@ -172,7 +173,7 @@ function generateImport({
   databaseType,
   tables,
 }: { databaseType: "sqlite" | "mysql" | "pg"; tables: BetterAuthDbSchema }) {
-  let imports: string[] = [];
+  const imports: string[] = [];
 
   const hasBigint = Object.values(tables).some((table) =>
     Object.values(table.fields).some((field) => field.bigint),

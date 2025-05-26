@@ -7,10 +7,10 @@ export type CircularTrigger = (typeof CIRCULAR_TRIGGERS)[number];
 
 export type AiSdkAgent = (typeof AGENT_NAMES)[number];
 
-export type AIAgentOptions = {
+export interface AIAgentOptions {
   config: RseConfig;
   agent: AiSdkAgent;
   isKeyEnsured: boolean;
   memory?: ReliverseMemory;
   target?: string;
-};
+}

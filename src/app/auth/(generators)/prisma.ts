@@ -27,7 +27,7 @@ export const generatePrismaSchema: SchemaGenerator = async ({
   }
 
   // Create a map to store many-to-many relationships
-  const manyToManyRelations = new Map();
+  const manyToManyRelations = new Map<string, Set<string>>();
 
   // First pass: identify many-to-many relationships
   for (const table in tables) {
@@ -40,7 +40,7 @@ export const generatePrismaSchema: SchemaGenerator = async ({
           manyToManyRelations.set(referencedModel, new Set());
         }
         manyToManyRelations
-          .get(referencedModel)
+          .get(referencedModel)!
           .add(capitalizeFirstLetter(table));
       }
     }
@@ -169,7 +169,7 @@ export const generatePrismaSchema: SchemaGenerator = async ({
 
       // Add many-to-many fields
       if (manyToManyRelations.has(modelName)) {
-        for (const relatedModel of manyToManyRelations.get(modelName)) {
+        for (const relatedModel of manyToManyRelations.get(modelName)!) {
           const fieldName = `${relatedModel.toLowerCase()}s`;
           const existingField = builder.findByType("field", {
             name: fieldName,

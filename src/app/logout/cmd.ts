@@ -1,10 +1,10 @@
+import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, defineCommand } from "@reliverse/rempts";
 import { deleteLastLine, msg } from "@reliverse/rempts";
-import fs from "@reliverse/relifso";
 
-import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details";
 import { deleteMemory } from "~/libs/sdk/logout/logout-impl";
+import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 const isConfigExists = async () => {
   if (await fs.pathExists(memoryPath)) {

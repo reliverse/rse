@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { useChat } from '@ai-sdk/vue'
-import { nextTick, ref, watch } from 'vue'
+import { useChat } from "@ai-sdk/vue";
+import { nextTick, ref, watch } from "vue";
 
-const config = useRuntimeConfig()
-const serverUrl = config.public.serverURL
+const config = useRuntimeConfig();
+const serverUrl = config.public.serverURL;
 
 const { messages, input, handleSubmit } = useChat({
   api: `${serverUrl}/ai`,
-})
+});
 
-const messagesEndRef = ref<null | HTMLDivElement>(null)
+const messagesEndRef = ref<null | HTMLDivElement>(null);
 
 watch(messages, async () => {
-  await nextTick()
-  messagesEndRef.value?.scrollIntoView({ behavior: 'smooth' })
-})
+  await nextTick();
+  messagesEndRef.value?.scrollIntoView({ behavior: "smooth" });
+});
 
 function getMessageText(message: any) {
   return message.parts
-    .filter((part: any) => part.type === 'text')
+    .filter((part: any) => part.type === "text")
     .map((part: any) => part.text)
-    .join('')
+    .join("");
 }
 </script>
 

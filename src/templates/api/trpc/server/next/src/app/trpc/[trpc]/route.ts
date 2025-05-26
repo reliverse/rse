@@ -1,11 +1,10 @@
-// @ts-expect-error <dler-remove-me>
 import type { NextRequest } from "next/server";
 
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
-// @ts-expect-error <dler-remove-me>
+// @ts-expect-error dler-remove-comment
 import { createContext } from "~/lib/context";
-// @ts-expect-error <dler-remove-me>
+// @ts-expect-error dler-remove-comment
 import { appRouter } from "~/routers";
 
 function handler(req: NextRequest) {

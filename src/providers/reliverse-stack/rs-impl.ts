@@ -9,14 +9,11 @@ import {
 import type {
   ProjectArchitecture,
   ProjectSubcategory,
-  rseConfig,
+  RseConfig,
 } from "~/libs/sdk/utils/rseConfig/cfg-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import {
-  randomProjectFrameworkTitle,
-  getRandomMessage,
-} from "~/db/messages";
+import { randomProjectFrameworkTitle, getRandomMessage } from "~/db/messages";
 import { createWebProject } from "~/libs/sdk/init/use-template/cp-mod";
 import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 import { recommended } from "~/libs/sdk/utils/badgeNotifiers";
@@ -43,7 +40,9 @@ export type VSCodeRepoOption =
 /**
  * Possible template options for browser extensions
  */
-export type BrowserRepoOption = "rse/template-browser-extension" | "unknown";
+export type BrowserRepoOption =
+  | "reliverse/template-browser-extension"
+  | "unknown";
 
 /**
  * Asks the user for extension config via prompts
@@ -314,7 +313,7 @@ export async function optionCreateWebProject(
   memory: ReliverseMemory,
   config: RseConfig,
   isMultiConfig: boolean,
-  multireli: rseConfig[],
+  multireli: RseConfig[],
   skipPrompts: boolean,
 ): Promise<void> {
   if (isMultiConfig) {

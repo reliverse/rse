@@ -25,11 +25,11 @@ import { getVercelProjectDomain } from "./vercel/vercel-domain";
 /**
  * Result object from a GitHub setup attempt.
  */
-type GithubSetupResult = {
+interface GithubSetupResult {
   success: boolean;
   githubInstance?: InstanceGithub;
   username?: string;
-};
+}
 
 /**
  * Initializes the local git repository.

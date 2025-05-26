@@ -1,9 +1,9 @@
 import type { TSConfig } from "pkg-types";
 
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { destr } from "destr";
-import fs from "@reliverse/relifso";
-import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
 import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details";

@@ -1,5 +1,5 @@
-import { defineCommand } from "@reliverse/rempts";
 import { relinka } from "@reliverse/relinka";
+import { defineCommand } from "@reliverse/rempts";
 
 export default defineCommand({
   meta: {

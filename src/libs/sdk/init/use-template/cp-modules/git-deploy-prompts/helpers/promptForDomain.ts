@@ -1,8 +1,8 @@
 import { inputPrompt, selectPrompt } from "@reliverse/rempts";
 
-import { DEFAULT_DOMAIN } from "~/libs/sdk/utils/rseConfig/cfg-details";
 import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 import { recommended } from "~/libs/sdk/utils/badgeNotifiers";
+import { DEFAULT_DOMAIN } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 /**
  * Validates and formats a domain name

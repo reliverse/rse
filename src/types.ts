@@ -4,7 +4,7 @@ export type DatabasePostgresProvider = "neon" | "railway" | "vercel";
 
 export type DatabaseProvider = "postgres" | "sqlite" | "mysql";
 
-export type ColumnType = {
+export interface ColumnType {
   name: string;
   type: string;
   nullable: boolean;
@@ -15,24 +15,24 @@ export type ColumnType = {
     table: string;
     column: string;
   };
-};
+}
 
-export type TableSchema = {
+export interface TableSchema {
   name: string;
   columns: ColumnType[];
-};
+}
 
-export type SubOption = {
+export interface SubOption {
   label: string;
   value: string;
   providers?: DatabasePostgresProvider[];
-};
+}
 
-export type IntegrationOption = {
+export interface IntegrationOption {
   label: string;
   value: string;
   subOptions?: SubOption[];
-};
+}
 
 export type IntegrationCategory =
   | "database"
@@ -95,12 +95,12 @@ export type BiomeConfig = BaseConfig & {
 };
 
 // Common type for all configurations
-export type BaseConfig = {
+export interface BaseConfig {
   version: string;
   generatedAt: string;
-};
+}
 
-export type IntegrationConfig = {
+export interface IntegrationConfig {
   name: string;
   dependencies: string[];
   devDependencies?: string[];
@@ -108,9 +108,9 @@ export type IntegrationConfig = {
   scripts?: Record<string, string>;
   envVars?: Record<string, string>;
   postInstall?: (cwd: string) => Promise<void>;
-};
+}
 
-export type RemovalConfig = {
+export interface RemovalConfig {
   name: string;
   dependencies: string[];
   devDependencies: string[];
@@ -118,15 +118,15 @@ export type RemovalConfig = {
   directories: string[];
   scripts: string[];
   envVars: string[];
-};
+}
 
-export type NavigationEntry = {
+export interface NavigationEntry {
   items?: Record<string, NavigationEntry>;
   label?: string;
   link?: string;
-};
+}
 
-export type ShadcnConfig = {
+export interface ShadcnConfig {
   style: string;
   rsc: boolean;
   tsx: boolean;
@@ -145,12 +145,12 @@ export type ShadcnConfig = {
     hooks: string;
   };
   iconLibrary: string;
-};
+}
 
-export type Theme = {
+export interface Theme {
   name: string;
   colors: Record<string, string>;
-};
+}
 
 export type CamelCase<T extends string> = T extends `${infer U}${infer V}`
   ? `${Uppercase<U>}${V}`
@@ -170,7 +170,7 @@ export type IconName =
   | "terminal"
   | "user";
 
-export type NavItem = {
+export interface NavItem {
   description?: string;
   disabled?: boolean;
   external?: boolean;
@@ -178,32 +178,32 @@ export type NavItem = {
   icon?: IconName;
   label?: string;
   title: string;
-};
+}
 
 export type NavItemWithChildren = {
   items: NavItemWithChildren[];
 } & NavItem;
 
-export type PrismaField = {
+export interface PrismaField {
   name: string;
   type: string;
   isOptional: boolean;
   isList: boolean;
   attributes: Record<string, any>;
-};
+}
 
-export type PrismaModel = {
+export interface PrismaModel {
   name: string;
   fields: PrismaField[];
-};
+}
 
-export type ModernReplacement = {
+export interface ModernReplacement {
   pattern: RegExp;
   replacement: string;
   description: string;
-};
+}
 
-export type VSCodeSettings = {
+export interface VSCodeSettings {
   "editor.formatOnSave"?: boolean;
   "editor.defaultFormatter"?: string;
   "editor.codeActionsOnSave"?: Record<string, string>;
@@ -211,4 +211,4 @@ export type VSCodeSettings = {
   "eslint.rules.customizations"?: { rule: string; severity: string }[];
   "markdownlint.config"?: Record<string, boolean>;
   "typescript.enablePromptUseWorkspaceTsdk"?: boolean;
-};
+}

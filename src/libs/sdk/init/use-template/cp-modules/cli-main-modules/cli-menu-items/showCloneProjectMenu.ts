@@ -32,24 +32,24 @@ function normalizeGitHubUrl(url: string): string {
 /**
  * Data structure to hold the user's chosen repo and whether it was a custom entry.
  */
-type RepoPromptResult = {
+interface RepoPromptResult {
   repo: string;
   isCustom: boolean;
-};
+}
 
 /**
  * Data structure to hold multiple chosen repos and whether they were custom entries.
  */
-type MultiRepoPromptResult = {
+interface MultiRepoPromptResult {
   repos: string[];
   isCustomMap: Map<string, boolean>;
-};
+}
 
-type MenuOption = {
+interface MenuOption {
   label: string;
   value: string;
   hint?: string;
-};
+}
 
 /**
  * A collection of repository owners and their repositories

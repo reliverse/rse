@@ -1,8 +1,9 @@
-import path from "node:path";
-import consola from "consola";
 import fs from "@reliverse/relifso";
+import consola from "consola";
 import handlebars from "handlebars";
-import type { ProjectConfig } from "../types";
+import path from "node:path";
+
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
 
 /**
  * Processes a Handlebars template file and writes the output to the destination.

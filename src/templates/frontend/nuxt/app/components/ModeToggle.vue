@@ -1,14 +1,14 @@
 <script setup lang="ts">
-const colorMode = useColorMode()
+const colorMode = useColorMode();
 
 const isDark = computed({
-  get () {
-    return colorMode.value === 'dark'
+  get() {
+    return colorMode.value === "dark";
   },
-  set (value) {
-    colorMode.preference = value ? 'dark' : 'light'
-  }
-})
+  set(value) {
+    colorMode.preference = value ? "dark" : "light";
+  },
+});
 </script>
 
 <template>

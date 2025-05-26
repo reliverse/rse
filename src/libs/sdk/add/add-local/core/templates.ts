@@ -12,20 +12,20 @@ import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update";
 /**
  * Response type for UNGH API repository information
  */
-type UnghRepoResponse = {
+interface UnghRepoResponse {
   repo?: {
     pushedAt: string;
   };
-};
+}
 
 /**
  * Type for template update check results
  */
-export type TemplateUpdateInfo = {
+export interface TemplateUpdateInfo {
   hasUpdate: boolean;
   currentDate: string;
   latestDate: string | null;
-};
+}
 
 /**
  * Checks if a project template has an update available

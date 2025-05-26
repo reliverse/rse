@@ -1,7 +1,12 @@
-import { cancel, isCancel, log, select } from "@clack/prompts";
+import { cancel, isCancel, select } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants";
-import type { ProjectBackend, ProjectDatabase } from "../types";
+
+import type {
+  ProjectBackend,
+  ProjectDatabase,
+} from "~/providers/better-t-stack/types";
+
+import { DEFAULT_CONFIG } from "~/providers/better-t-stack/constants";
 
 export async function getDatabaseChoice(
   database?: ProjectDatabase,

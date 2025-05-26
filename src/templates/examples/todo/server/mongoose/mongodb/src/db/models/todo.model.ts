@@ -1,24 +1,27 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-const todoSchema = new Schema({
-  id: {
-    type: mongoose.Schema.Types.ObjectId,
-    auto: true,
+const todoSchema = new Schema(
+  {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      auto: true,
+    },
+    text: {
+      type: String,
+      required: true,
+    },
+    completed: {
+      type: Boolean,
+      default: false,
+    },
   },
-  text: {
-    type: String,
-    required: true,
+  {
+    collection: "todo",
   },
-  completed: {
-    type: Boolean,
-    default: false,
-  },
-}, {
-  collection: 'todo'
-});
+);
 
-const Todo = model('Todo', todoSchema);
+const Todo = model("Todo", todoSchema);
 
 export { Todo };

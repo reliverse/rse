@@ -12,8 +12,8 @@ import { ofetch } from "ofetch";
 import type { rseSchema } from "~/libs/sdk/utils/rseConfig/cfg-schema";
 import type { VSCodeRepoOption } from "~/providers/reliverse-stack/rs-impl";
 
-import { cliHomeRepos } from "~/libs/sdk/utils/rseConfig/cfg-details";
 import { experimental, recommended } from "~/libs/sdk/utils/badgeNotifiers";
+import { cliHomeRepos } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 import { setHiddenAttributeOnWindows } from "./filesysHelpers";
 import {
@@ -39,13 +39,13 @@ export type CategoryFromSchema = NonNullable<
   Static<(typeof rseSchema)["properties"]["projectCategory"]>
 >;
 
-export type CloneOrTemplateRepo = {
+export interface CloneOrTemplateRepo {
   id: RepoFromSchema;
   author: string;
   name: string;
   description: string;
   category: CategoryFromSchema;
-};
+}
 
 export type RepoOption = CloneOrTemplateRepo["id"] | "unknown";
 
@@ -181,7 +181,7 @@ export async function getRepoInfo(repoId: string): Promise<RepoInfo | null> {
 // Fetch Repository Data from UNGH API
 // ================================================
 
-type UnghRepoResponse = {
+interface UnghRepoResponse {
   repo: {
     stars: number;
     forks: number;
@@ -191,7 +191,7 @@ type UnghRepoResponse = {
     pushedAt: string;
     defaultBranch: string;
   };
-};
+}
 
 async function fetchRepoData(
   owner: string,

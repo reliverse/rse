@@ -1,5 +1,3 @@
-import os from "node:os";
-import path from "node:path";
 import {
   cancel,
   confirm,
@@ -9,23 +7,26 @@ import {
   spinner,
   text,
 } from "@clack/prompts";
+import fs from "@reliverse/relifso";
 import consola from "consola";
 import { $ } from "execa";
-import fs from "@reliverse/relifso";
+import os from "node:os";
+import path from "node:path";
 import pc from "picocolors";
-import { commandExists } from "../utils/command-exists";
 
-type TursoConfig = {
+import { commandExists } from "~/providers/better-t-stack/utils/command-exists";
+
+interface TursoConfig {
   dbUrl: string;
   authToken: string;
-};
+}
 
-type TursoGroup = {
+interface TursoGroup {
   name: string;
   locations: string;
   version: string;
   status: string;
-};
+}
 
 async function isTursoInstalled() {
   return commandExists("turso");
@@ -47,7 +48,7 @@ async function loginToTurso() {
     await $`turso auth login`;
     s.stop("Logged in to Turso successfully!");
     return true;
-  } catch (error) {
+  } catch {
     s.stop(pc.red("Failed to log in to Turso"));
   }
 }
@@ -89,10 +90,19 @@ async function getTursoGroups(): Promise<TursoGroup[]> {
       return [];
     }
 
-    const groups = lines.slice(1).map((line) => {
-      const [name, locations, version, status] = line.trim().split(/\s{2,}/);
-      return { name, locations, version, status };
-    });
+    const groups = lines
+      .slice(1)
+      .map((line) => {
+        const [name, locations, version, status] = line.trim().split(/\s{2,}/);
+        return { name, locations, version, status };
+      })
+      .filter(
+        (group): group is TursoGroup =>
+          group.name !== undefined &&
+          group.locations !== undefined &&
+          group.version !== undefined &&
+          group.status !== undefined,
+      );
 
     s.stop(`Found ${groups.length} Turso groups`);
     return groups;
@@ -111,8 +121,8 @@ async function selectTursoGroup(): Promise<string | null> {
   }
 
   if (groups.length === 1) {
-    log.info(`Using the only available group: ${pc.blue(groups[0].name)}`);
-    return groups[0].name;
+    log.info(`Using the only available group: ${pc.blue(groups[0]!.name)}`);
+    return groups[0]!.name;
   }
 
   const groupOptions = groups.map((group) => ({
@@ -166,7 +176,7 @@ async function createTursoDatabase(dbName: string, groupName: string | null) {
       dbUrl: dbUrl.trim(),
       authToken: authToken.trim(),
     };
-  } catch (error) {
+  } catch {
     s.stop(pc.red("Failed to retrieve database connection details"));
   }
 }
@@ -195,19 +205,19 @@ DATABASE_URL=your_database_url
 DATABASE_AUTH_TOKEN=your_auth_token`);
 }
 
-import type { ProjectConfig } from "../types";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
 
 export async function setupTurso(config: ProjectConfig): Promise<void> {
   const { projectName, orm } = config;
   const projectDir = path.resolve(process.cwd(), projectName);
-  const isDrizzle = orm === "drizzle";
+  const _isDrizzle = orm === "drizzle";
   const setupSpinner = spinner();
   setupSpinner.start("Setting up Turso database");
 
   try {
     const platform = os.platform();
     const isMac = platform === "darwin";
-    const isLinux = platform === "linux";
+    const _isLinux = platform === "linux";
     const isWindows = platform === "win32";
 
     if (isWindows) {
@@ -282,6 +292,7 @@ export async function setupTurso(config: ProjectConfig): Promise<void> {
           log.warn(pc.yellow(`Database "${pc.red(dbName)}" already exists`));
           suggestedName = `${dbName}-${Math.floor(Math.random() * 1000)}`;
         } else {
+          /* empty */
         }
       }
     }

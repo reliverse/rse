@@ -1,13 +1,18 @@
 import { cancel, isCancel, multiselect } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants";
-import type { ProjectAddons, ProjectFrontend } from "../types";
 
-type AddonOption = {
+import type {
+  ProjectAddons,
+  ProjectFrontend,
+} from "~/providers/better-t-stack/types";
+
+import { DEFAULT_CONFIG } from "~/providers/better-t-stack/constants";
+
+interface AddonOption {
   value: ProjectAddons;
   label: string;
   hint: string;
-};
+}
 
 export async function getAddonsChoice(
   addons?: ProjectAddons[],

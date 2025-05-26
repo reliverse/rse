@@ -72,7 +72,7 @@ export type {
 } from "./ai/ai-impl/ai-types.js";
 export type { ProjectSelectionResult } from "./init/init-utils.js";
 
-export type AppParams = {
+export interface AppParams {
   projectName: string;
   cwd: string;
   isDev: boolean;
@@ -80,7 +80,7 @@ export type AppParams = {
   config: RseConfig;
   multireli: RseConfig[];
   skipPrompts: boolean;
-};
+}
 
 export type ParamsOmitSkipPN = Omit<AppParams, "skipPrompts" | "projectName">;
 export type ParamsOmitReli = Omit<AppParams, "multireli">;
@@ -88,15 +88,15 @@ export type ParamsOmitReli = Omit<AppParams, "multireli">;
 /**
  * Minimal object describing essential project info after initialization
  */
-export type ProjectConfigReturn = {
+export interface ProjectConfigReturn {
   frontendUsername: string;
   projectName: string;
   primaryDomain: string;
-};
+}
 
-export type GitModParams = {
+export interface GitModParams {
   cwd: string;
   isDev: boolean;
   projectPath: string;
   projectName: string;
-};
+}

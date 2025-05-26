@@ -1,6 +1,7 @@
-import path from "node:path";
-import consola from "consola";
 import fs from "@reliverse/relifso";
+import consola from "consola";
+import path from "node:path";
+
 import type {
   ProjectAddons,
   ProjectConfig,
@@ -8,7 +9,7 @@ import type {
   ProjectFrontend,
   ProjectOrm,
   ProjectRuntime,
-} from "../types";
+} from "~/providers/better-t-stack/types";
 
 export async function createReadme(projectDir: string, options: ProjectConfig) {
   const readmePath = path.join(projectDir, "README.md");
@@ -66,6 +67,7 @@ This project was created with [Better-T-Stack](https://github.com/AmanVarshney01
               : hasNuxt
                 ? "Nuxt"
                 : ""
+    // @ts-expect-error TODO: fix ts
   }, ${backend[0].toUpperCase() + backend.slice(1)}, tRPC, and more.
 
 ## Features
@@ -144,6 +146,7 @@ ${
     ? "│   ├── docs/        # Documentation site (Astro Starlight)\n"
     : ""
 }│   └── server/      # Backend API (${
+    // @ts-expect-error TODO: fix ts
     backend[0].toUpperCase() + backend.slice(1)
   }, tRPC)
 \`\`\`
@@ -335,10 +338,10 @@ function generateScriptsList(
   packageManagerRunCmd: string,
   database: ProjectDatabase,
   orm: ProjectOrm,
-  auth: boolean,
+  _auth: boolean,
   hasNative: boolean,
   addons: ProjectAddons[],
-  backend: string,
+  _backend: string,
 ): string {
   let scripts = `- \`${packageManagerRunCmd} dev\`: Start all applications in development mode
 - \`${packageManagerRunCmd} build\`: Build all applications

@@ -1,9 +1,9 @@
 import { cancel, isCancel, select } from "@clack/prompts";
 import pc from "picocolors";
 
-import type { ProjectPackageManager } from "~/cli/providers/better-t-stack/types";
+import type { ProjectPackageManager } from "~/providers/better-t-stack/types";
 
-import { getUserPkgManager } from "~/cli/providers/better-t-stack/utils/get-package-manager";
+import { getUserPkgManager } from "~/providers/better-t-stack/utils/get-package-manager";
 
 export async function getPackageManagerChoice(
   packageManager?: ProjectPackageManager,

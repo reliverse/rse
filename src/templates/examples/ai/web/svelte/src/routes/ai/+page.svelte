@@ -1,22 +1,21 @@
 <script lang="ts">
-	import { PUBLIC_SERVER_URL } from '$env/static/public';
-	import { Chat } from '@ai-sdk/svelte';
+import { PUBLIC_SERVER_URL } from "$env/static/public";
+import { Chat } from "@ai-sdk/svelte";
 
-	const chat = new Chat({
-		api: `${PUBLIC_SERVER_URL}/ai`,
-	});
+const chat = new Chat({
+  api: `${PUBLIC_SERVER_URL}/ai`,
+});
 
-	let messagesEndElement: HTMLDivElement | null = null;
+let messagesEndElement: HTMLDivElement | null = null;
 
-	$effect(() => {
-		const messageCount = chat.messages.length;
-		if (messageCount > 0) {
-			setTimeout(() => {
-				messagesEndElement?.scrollIntoView({ behavior: 'smooth' });
-			}, 0);
-		}
-	});
-
+$effect(() => {
+  const messageCount = chat.messages.length;
+  if (messageCount > 0) {
+    setTimeout(() => {
+      messagesEndElement?.scrollIntoView({ behavior: "smooth" });
+    }, 0);
+  }
+});
 </script>
 
 <div class="mx-auto grid h-full w-full max-w-2xl grid-rows-[1fr_auto] overflow-hidden p-4">

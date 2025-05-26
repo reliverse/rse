@@ -1,7 +1,9 @@
 import { cancel, isCancel, multiselect, select } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants";
-import type { ProjectFrontend } from "../types";
+
+import type { ProjectFrontend } from "~/providers/better-t-stack/types";
+
+import { DEFAULT_CONFIG } from "~/providers/better-t-stack/constants";
 
 export async function getFrontendChoice(
   frontendOptions?: ProjectFrontend[],

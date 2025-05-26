@@ -1,12 +1,19 @@
-import { authClient } from "@/lib/auth-client";
 import { useForm } from "@tanstack/react-form";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
+
+// @ts-expect-error dler-remove-comment
+import { authClient } from "@/lib/auth-client";
+
+// @ts-expect-error dler-remove-comment
 import Loader from "./loader";
+// @ts-expect-error dler-remove-comment
 import { Button } from "./ui/button";
+// @ts-expect-error dler-remove-comment
 import { Input } from "./ui/input";
+// @ts-expect-error dler-remove-comment
 import { Label } from "./ui/label";
-import { useRouter } from "next/navigation";
 
 export default function SignUpForm({
   onSwitchToSignIn,
@@ -34,7 +41,7 @@ export default function SignUpForm({
             router.push("/dashboard");
             toast.success("Sign up successful");
           },
-          onError: (error) => {
+          onError: (error: { error: { message: string } }) => {
             toast.error(error.error.message);
           },
         },
@@ -75,7 +82,9 @@ export default function SignUpForm({
                   name={field.name}
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(e: { target: { value: string } }) =>
+                    field.handleChange(e.target.value)
+                  }
                 />
                 {field.state.meta.errors.map((error) => (
                   <p key={error?.message} className="text-red-500">
@@ -98,7 +107,9 @@ export default function SignUpForm({
                   type="email"
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(e: { target: { value: string } }) =>
+                    field.handleChange(e.target.value)
+                  }
                 />
                 {field.state.meta.errors.map((error) => (
                   <p key={error?.message} className="text-red-500">
@@ -121,7 +132,9 @@ export default function SignUpForm({
                   type="password"
                   value={field.state.value}
                   onBlur={field.handleBlur}
-                  onChange={(e) => field.handleChange(e.target.value)}
+                  onChange={(e: { target: { value: string } }) =>
+                    field.handleChange(e.target.value)
+                  }
                 />
                 {field.state.meta.errors.map((error) => (
                   <p key={error?.message} className="text-red-500">

@@ -14,7 +14,8 @@
       "dist-libs/",
       "tests-runtime/",
       "bun.lock",
-      "relinter-test-*.ts"
+      "relinter-test-*.ts",
+      "src/**/*.svelte"
     ]
   },
   "formatter": {
@@ -43,6 +44,7 @@
         "useSemanticElements": "off"
       },
       "complexity": {
+        "noUselessCatch": "off",
         "noBannedTypes": "off",
         "noForEach": "off",
         "noUselessLoneBlockStatements": "off",

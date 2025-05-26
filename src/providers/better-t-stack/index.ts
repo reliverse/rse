@@ -1,14 +1,12 @@
-import path from "node:path";
+/* eslint-disable @typescript-eslint/no-unused-vars */ // dler-remove-line
 import { cancel, intro, log, outro } from "@clack/prompts";
-import { consola } from "consola";
 import fs from "@reliverse/relifso";
+import { consola } from "consola";
+import path from "node:path";
 import pc from "picocolors";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { DEFAULT_CONFIG } from "./constants";
-import { createProject } from "./helpers/create-project";
-import { gatherConfig } from "./prompts/config-prompts";
-import { getProjectName } from "./prompts/project-name";
+
 import type {
   ProjectAddons,
   ProjectApi,
@@ -23,6 +21,11 @@ import type {
   ProjectRuntime,
   YargsArgv,
 } from "./types";
+
+import { DEFAULT_CONFIG } from "./constants";
+import { createProject } from "./helpers/create-project";
+import { gatherConfig } from "./prompts/config-prompts";
+import { getProjectName } from "./prompts/project-name";
 import { displayConfig } from "./utils/display-config";
 import { generateReproducibleCommand } from "./utils/generate-reproducible-command";
 import { getLatestCLIVersion } from "./utils/get-latest-cli-version";
@@ -240,7 +243,7 @@ function processAndValidateFlags(
   projectDirectory?: string,
 ): Partial<ProjectConfig> {
   const config: Partial<ProjectConfig> = {};
-  const providedFlags: Set<string> = new Set(
+  const providedFlags = new Set<string>(
     Object.keys(options).filter((key) => key !== "_" && key !== "$0"),
   );
 
@@ -660,6 +663,7 @@ main().catch((err) => {
       consola.error(err.message);
       consola.error(err.stack);
     } else {
+      /* empty */
     }
   } else {
     console.error(err);

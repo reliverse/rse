@@ -4,12 +4,7 @@ import { generate } from "random-words";
 
 import type { ParamsOmitSkipPN } from "~/libs/sdk/sdk-types";
 
-import {
-  ad,
-  getRandomMessage,
-  getWelcomeTitle,
-  premium,
-} from "~/db/messages";
+import { ad, getRandomMessage, getWelcomeTitle, premium } from "~/db/messages";
 import { aiMenu } from "~/libs/sdk/ai/ai-menu";
 import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl";
 import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu";

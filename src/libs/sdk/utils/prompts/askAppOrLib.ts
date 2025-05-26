@@ -1,5 +1,5 @@
-import { selectPrompt } from "@reliverse/rempts";
 import { re } from "@reliverse/relico";
+import { selectPrompt } from "@reliverse/rempts";
 
 const KNOWN_APPS = ["relivator"];
 const KNOWN_LIBS = ["recme", "reinit"];

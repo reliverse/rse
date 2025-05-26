@@ -7,19 +7,19 @@ import { execa } from "execa";
 import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 import { checkScriptExists } from "~/libs/sdk/utils/pkgJsonHelpers";
 
-export type ScriptStatus = {
+export interface ScriptStatus {
   dbPush: boolean;
   dbGenerate: boolean;
   dbMigrate: boolean;
   dbSeed: boolean;
   check: boolean;
-};
+}
 
-type ScriptOption = {
+interface ScriptOption {
   label: string;
   value: string;
   hint: string;
-};
+}
 
 const SCRIPT_DEFINITIONS = {
   latest: {

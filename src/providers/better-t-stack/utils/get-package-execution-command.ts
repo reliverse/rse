@@ -1,4 +1,4 @@
-import type { ProjectPackageManager } from "../types";
+import type { ProjectPackageManager } from "~/providers/better-t-stack/types";
 
 /**
  * Returns the appropriate command for running a package without installing it globally,

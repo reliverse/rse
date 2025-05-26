@@ -5,9 +5,9 @@ import type {
   ProjectApi,
   ProjectBackend,
   ProjectFrontend,
-} from "~/cli/providers/better-t-stack/types";
+} from "~/providers/better-t-stack/types";
 
-import { DEFAULT_CONFIG } from "~/cli/providers/better-t-stack/constants";
+import { DEFAULT_CONFIG } from "~/providers/better-t-stack/constants";
 
 export async function getApiChoice(
   Api?: ProjectApi,

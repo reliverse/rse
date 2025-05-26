@@ -1,21 +1,21 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-	import { authClient } from '$lib/auth-client';
-	import { orpc } from '$lib/orpc';
-	import { createQuery } from '@tanstack/svelte-query';
-	import { get } from 'svelte/store';
+import { onMount } from "svelte";
+import { goto } from "$app/navigation";
+import { authClient } from "$lib/auth-client";
+import { orpc } from "$lib/orpc";
+import { createQuery } from "@tanstack/svelte-query";
+import { get } from "svelte/store";
 
-	const sessionQuery = authClient.useSession();
+const sessionQuery = authClient.useSession();
 
-	const privateDataQuery = createQuery(orpc.privateData.queryOptions());
+const privateDataQuery = createQuery(orpc.privateData.queryOptions());
 
-	onMount(() => {
-		const { data: session, isPending } = get(sessionQuery);
-		if (!session && !isPending) {
-			goto('/login');
-		}
-	});
+onMount(() => {
+  const { data: session, isPending } = get(sessionQuery);
+  if (!session && !isPending) {
+    goto("/login");
+  }
+});
 </script>
 
 {#if $sessionQuery.isPending}

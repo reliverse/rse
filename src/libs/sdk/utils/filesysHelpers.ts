@@ -1,6 +1,6 @@
 import { ensuredir } from "@reliverse/relifso";
-import { relinka } from "@reliverse/relinka";
 import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { exec } from "node:child_process";
 import { promisify } from "node:util";
 

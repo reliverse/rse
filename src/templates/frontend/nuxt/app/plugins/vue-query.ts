@@ -1,44 +1,48 @@
 import type {
   DehydratedState,
   VueQueryPluginOptions,
-} from '@tanstack/vue-query'
+} from "@tanstack/vue-query";
+
 import {
   dehydrate,
   hydrate,
   QueryCache,
   QueryClient,
   VueQueryPlugin,
-} from '@tanstack/vue-query'
+} from "@tanstack/vue-query";
 
+// @ts-expect-error dler-remove-comment
 export default defineNuxtPlugin((nuxt) => {
-  const vueQueryState = useState<DehydratedState | null>('vue-query')
+  // @ts-expect-error dler-remove-comment
+  const vueQueryState = useState<DehydratedState | null>("vue-query");
 
-  const toast = useToast()
+  // @ts-expect-error dler-remove-comment
+  const toast = useToast();
 
   const queryClient = new QueryClient({
     queryCache: new QueryCache({
       onError: (error) => {
-        console.log(error)
+        console.log(error);
         toast.add({
-          title: 'Error',
-          description: error?.message || 'An unexpected error occurred.',
-        })
+          title: "Error",
+          description: error?.message || "An unexpected error occurred.",
+        });
       },
     }),
-  })
-  const options: VueQueryPluginOptions = { queryClient }
+  });
+  const options: VueQueryPluginOptions = { queryClient };
 
-  nuxt.vueApp.use(VueQueryPlugin, options)
+  nuxt.vueApp.use(VueQueryPlugin, options);
 
   if (import.meta.server) {
-    nuxt.hooks.hook('app:rendered', () => {
-      vueQueryState.value = dehydrate(queryClient)
-    })
+    nuxt.hooks.hook("app:rendered", () => {
+      vueQueryState.value = dehydrate(queryClient);
+    });
   }
 
   if (import.meta.client) {
-    nuxt.hooks.hook('app:created', () => {
-      hydrate(queryClient, vueQueryState.value)
-    })
+    nuxt.hooks.hook("app:created", () => {
+      hydrate(queryClient, vueQueryState.value);
+    });
   }
-})
+});

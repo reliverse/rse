@@ -1,7 +1,7 @@
-import { ensuredir } from "@reliverse/relifso";
-import { Type, type Static } from "@sinclair/typebox";
-import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
+import { ensuredir } from "@reliverse/relifso";
+import fs from "@reliverse/relifso";
+import { Type, type Static } from "@sinclair/typebox";
 
 import {
   cliHomeRepos,

@@ -1,3 +1,5 @@
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import {
   multiselectPrompt,
@@ -5,8 +7,6 @@ import {
   selectPrompt,
 } from "@reliverse/rempts";
 import { destr } from "destr";
-import fs from "@reliverse/relifso";
-import path from "@reliverse/pathkit";
 
 import type { BaseConfig } from "~/types";
 

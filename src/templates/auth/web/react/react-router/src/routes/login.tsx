@@ -1,6 +1,9 @@
-import SignInForm from "@/components/sign-in-form";
-import SignUpForm from "@/components/sign-up-form";
 import { useState } from "react";
+
+// @ts-expect-error dler-remove-comment
+import SignInForm from "@/components/sign-in-form";
+// @ts-expect-error dler-remove-comment
+import SignUpForm from "@/components/sign-up-form";
 
 export default function Login() {
   const [showSignIn, setShowSignIn] = useState(false);

@@ -2,11 +2,11 @@ import { relinka } from "@reliverse/relinka";
 import { defineCommand, selectPrompt } from "@reliverse/rempts";
 import { execaCommand } from "execa";
 
-import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details";
 import {
   getAllPkgManagers,
   type PackageManager,
 } from "~/libs/sdk/utils/dependencies/getUserPkgManager";
+import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 async function getPmOptions() {

@@ -42,10 +42,10 @@ const EXIT_OPTION = "exit";
 /**
  * Defines what is returned when selecting or creating a project.
  */
-export type ProjectSelectionResult = {
+export interface ProjectSelectionResult {
   projectPath: string;
   wasNewlyCreated: boolean;
-};
+}
 
 /**
  * Constructs the menu options for selecting an existing project
@@ -246,7 +246,7 @@ export async function showExistingProjectMenu(
     const { requiredContent, optionalContent } = await getProjectContent(cwd);
     const { depsMissing } = await checkMissingDependencies(
       cwd,
-      requiredContent,
+      requiredContent as unknown as Record<string, boolean>,
       optionalContent,
     );
 

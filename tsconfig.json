@@ -29,6 +29,12 @@
     "noPropertyAccessFromIndexSignature": false
   },
 
-  "include": [".*/**/*.ts", "**/*.ts", "**/*.js"],
-  "exclude": ["node_modules", "dist*"]
+  "include": [
+    ".*/**/*.ts",
+    "**/*.ts",
+    "**/*.js",
+    "src/templates/**/*.tsx",
+    "src/templates/**/*.mjs"
+  ],
+  "exclude": ["node_modules", "dist*", "src/templates/**/*.cjs"]
 }

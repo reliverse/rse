@@ -1,8 +1,10 @@
-import path from "node:path";
-import { cancel, log, spinner } from "@clack/prompts";
+import { cancel, log } from "@clack/prompts";
 import fs from "@reliverse/relifso";
+import path from "node:path";
 import pc from "picocolors";
-import type { ProjectConfig } from "../types";
+
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
+
 import { setupAddons } from "./addons-setup";
 import { setupApi } from "./api-setup";
 import { setupAuth } from "./auth-setup";
@@ -13,10 +15,7 @@ import { setupEnvironmentVariables } from "./env-setup";
 import { setupExamples } from "./examples-setup";
 import { installDependencies } from "./install-dependencies";
 import { displayPostInstallInstructions } from "./post-installation";
-import {
-  initializeGit,
-  updatePackageConfigurations,
-} from "./project-config";
+import { initializeGit, updatePackageConfigurations } from "./project-config";
 import { setupRuntime } from "./runtime-setup";
 import {
   copyBaseTemplate,

@@ -1,6 +1,6 @@
+import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { exec } from "node:child_process";
-import path from "@reliverse/pathkit";
 
 // Function to uninstall dependencies
 export async function uninstallDependencies(

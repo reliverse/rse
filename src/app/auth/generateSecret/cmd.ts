@@ -6,7 +6,7 @@ import { generateSecretHash } from "~/app/auth/(utils)/generate-secret";
 
 export default defineCommand({
   meta: {
-    name: "secret",
+    name: "generateSecret",
     version: "1.1.2",
   },
   args: defineArgs({}),

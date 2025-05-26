@@ -1,13 +1,18 @@
 import fs from "@reliverse/relifso";
 import path from "node:path";
 
-import type { ProjectConfig } from "~/cli/providers/better-t-stack/types";
-import type { ProjectFrontend } from "~/cli/providers/better-t-stack/types";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
+import type { ProjectFrontend } from "~/providers/better-t-stack/types";
 
-import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps";
+import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps";
 
 import { setupStarlight } from "./starlight-setup";
 import { setupTauri } from "./tauri-setup";
+
+interface PackageJson {
+  scripts?: Record<string, string>;
+  "lint-staged"?: Record<string, string[]>;
+}
 
 export async function setupAddons(config: ProjectConfig) {
   const { projectName, addons, frontend } = config;
@@ -66,7 +71,7 @@ async function setupBiome(projectDir: string) {
 
   const packageJsonPath = path.join(projectDir, "package.json");
   if (await fs.pathExists(packageJsonPath)) {
-    const packageJson = await fs.readJson(packageJsonPath);
+    const packageJson = (await fs.readJson(packageJsonPath)) as PackageJson;
 
     packageJson.scripts = {
       ...packageJson.scripts,
@@ -85,7 +90,7 @@ async function setupHusky(projectDir: string) {
 
   const packageJsonPath = path.join(projectDir, "package.json");
   if (await fs.pathExists(packageJsonPath)) {
-    const packageJson = await fs.readJson(packageJsonPath);
+    const packageJson = (await fs.readJson(packageJsonPath)) as PackageJson;
 
     packageJson.scripts = {
       ...packageJson.scripts,
@@ -122,7 +127,9 @@ async function setupPwa(projectDir: string, frontends: ProjectFrontend[]) {
 
   const clientPackageJsonPath = path.join(clientPackageDir, "package.json");
   if (await fs.pathExists(clientPackageJsonPath)) {
-    const packageJson = await fs.readJson(clientPackageJsonPath);
+    const packageJson = (await fs.readJson(
+      clientPackageJsonPath,
+    )) as PackageJson;
 
     packageJson.scripts = {
       ...packageJson.scripts,

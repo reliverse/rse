@@ -1,5 +1,6 @@
 import { Tabs } from "expo-router";
 
+// @ts-expect-error dler-remove-comment
 import { TabBarIcon } from "@/components/tabbar-icon";
 
 export default function TabLayout() {

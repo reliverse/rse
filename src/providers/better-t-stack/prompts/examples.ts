@@ -1,12 +1,14 @@
-import { cancel, isCancel, log, multiselect } from "@clack/prompts";
+import { cancel, isCancel, multiselect } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants";
+
 import type {
   ProjectBackend,
   ProjectDatabase,
   ProjectExamples,
   ProjectFrontend,
-} from "../types";
+} from "~/providers/better-t-stack/types";
+
+import { DEFAULT_CONFIG } from "~/providers/better-t-stack/constants";
 
 export async function getExamplesChoice(
   examples?: ProjectExamples[],

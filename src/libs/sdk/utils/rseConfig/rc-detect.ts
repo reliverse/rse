@@ -8,10 +8,9 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { readPackageJSON, type PackageJson } from "pkg-types";
 
-import type { ProjectFramework } from "./cfg-types";
-
 import { getProjectContent } from "~/libs/sdk/utils/getProjectContent";
 
+import type { ProjectFramework } from "./cfg-types";
 import type { DetectedProject } from "./rc-types";
 
 import { PROJECT_FRAMEWORK_FILES } from "./rc-const";

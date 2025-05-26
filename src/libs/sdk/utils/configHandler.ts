@@ -1,7 +1,7 @@
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { parseJSONC } from "confbox";
-import fs from "@reliverse/relifso";
-import path from "@reliverse/pathkit";
 
 import type { BiomeConfig, BiomeConfigResult } from "~/types";
 

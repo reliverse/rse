@@ -1,17 +1,17 @@
 import { uploadDirect } from "@uploadcare/upload-client";
 
-export type UploadedUCFile = {
+export interface UploadedUCFile {
   name: string;
   data: Buffer;
   type: string;
-};
+}
 
-type UCResult = {
+interface UCResult {
   url: string;
   uuid: string;
   size: number;
   name: string;
-};
+}
 
 export async function uploadToUploadcare(files: UploadedUCFile[]) {
   const publicKey = process.env.UPLOADCARE_PUBLIC_KEY;

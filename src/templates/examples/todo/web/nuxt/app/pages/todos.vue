@@ -1,41 +1,47 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query'
+import { ref } from "vue";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 
-const { $orpc } = useNuxtApp()
+const { $orpc } = useNuxtApp();
 
-const newTodoText = ref('')
-const queryClient = useQueryClient()
+const newTodoText = ref("");
+const queryClient = useQueryClient();
 
-const todos = useQuery($orpc.todo.getAll.queryOptions())
+const todos = useQuery($orpc.todo.getAll.queryOptions());
 
-const createMutation = useMutation($orpc.todo.create.mutationOptions({
-  onSuccess: () => {
-    queryClient.invalidateQueries()
-    newTodoText.value = ''
-  }
-}))
+const createMutation = useMutation(
+  $orpc.todo.create.mutationOptions({
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+      newTodoText.value = "";
+    },
+  }),
+);
 
-const toggleMutation = useMutation($orpc.todo.toggle.mutationOptions({
-  onSuccess: () => queryClient.invalidateQueries()
-}))
+const toggleMutation = useMutation(
+  $orpc.todo.toggle.mutationOptions({
+    onSuccess: () => queryClient.invalidateQueries(),
+  }),
+);
 
-const deleteMutation = useMutation($orpc.todo.delete.mutationOptions({
-  onSuccess: () => queryClient.invalidateQueries()
-}))
+const deleteMutation = useMutation(
+  $orpc.todo.delete.mutationOptions({
+    onSuccess: () => queryClient.invalidateQueries(),
+  }),
+);
 
 function handleAddTodo() {
   if (newTodoText.value.trim()) {
-    createMutation.mutate({ text: newTodoText.value })
+    createMutation.mutate({ text: newTodoText.value });
   }
 }
 
 function handleToggleTodo(id: number, completed: boolean) {
-  toggleMutation.mutate({ id, completed: !completed })
+  toggleMutation.mutate({ id, completed: !completed });
 }
 
 function handleDeleteTodo(id: number) {
-  deleteMutation.mutate({ id })
+  deleteMutation.mutate({ id });
 }
 </script>
 

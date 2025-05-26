@@ -31,7 +31,7 @@ const execAsync = promisify(exec);
 /**
  * Defines the options for downloading a project from a remote repository.
  */
-type DownloadRepoOptions = {
+interface DownloadRepoOptions {
   repoURL: string;
   projectName: string;
   isDev: boolean;
@@ -50,33 +50,33 @@ type DownloadRepoOptions = {
   fastCloneSource?: string;
   isTemplateDownload: boolean;
   cache?: boolean;
-};
+}
 
 /**
  * Minimal structure containing repository metadata needed for download operations.
  */
-type RepoInfo = {
+interface RepoInfo {
   name: string;
   version: string;
   gitUrl?: string;
   subdir?: string;
   defaultDir?: string;
   headers?: Record<string, string>;
-};
+}
 
 type GitProvider = "github" | "gitlab" | "bitbucket" | "sourcehut";
 
 /**
  * Represents the result of a successful download operation.
  */
-export type DownloadResult = {
+export interface DownloadResult {
   source: string;
   dir: string;
   time?: number;
   size?: number;
   sizePretty?: string;
   concurrency?: number;
-};
+}
 
 /**
  * Recursively calculates the total size of a folder in bytes.

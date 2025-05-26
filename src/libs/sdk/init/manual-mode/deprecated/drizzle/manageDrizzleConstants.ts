@@ -1,4 +1,4 @@
-import type { DatabaseProvider } from "~/types.js";
+import type { DatabaseProvider } from "~/types";
 
 export const COLUMN_TYPES: Record<DatabaseProvider, string[]> = {
   postgres: [

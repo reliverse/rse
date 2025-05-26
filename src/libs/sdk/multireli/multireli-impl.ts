@@ -4,11 +4,11 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 
-import { initGithubSDK } from "~/libs/sdk/utils/instanceGithub.js";
-import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend.js";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
-import { homeDir } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod.js";
+import { initGithubSDK } from "~/libs/sdk/utils/instanceGithub";
+import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { homeDir } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 
 /**
  * Determines if we log additional debug info.

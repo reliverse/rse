@@ -8,7 +8,7 @@ import {
 import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 
-import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload.js";
+import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload";
 
 export default defineCommand({
   meta: {

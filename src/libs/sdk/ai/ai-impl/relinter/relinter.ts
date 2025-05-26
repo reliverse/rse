@@ -5,14 +5,14 @@ import { confirmPrompt } from "@reliverse/rempts";
 import { generateText } from "ai";
 import { countTokens } from "gpt-tokenizer/model/gpt-4o-mini";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
 import {
   CIRCULAR_TRIGGERS,
   MAX_TOKENS,
   MODEL,
   MODEL_NAME,
-} from "~/libs/sdk/ai/ai-impl/ai-const.js";
+} from "~/libs/sdk/ai/ai-impl/ai-const";
 
 /**
  * Describes a lint suggestion with file details and a recommended fix or note.

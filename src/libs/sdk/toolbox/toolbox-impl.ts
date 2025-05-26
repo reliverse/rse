@@ -3,21 +3,21 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 
-import type { ParamsOmitReli } from "~/libs/sdk/sdk-types.js";
-import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { ParamsOmitReli } from "~/libs/sdk/sdk-types";
+import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { composeEnvFile } from "~/libs/sdk/init/use-template/cp-modules/compose-env-file/cef-mod.js";
-import { promptGitDeploy } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/gdp-mod.js";
-import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
-import { downloadRepo } from "~/libs/sdk/utils/downloading/downloadRepo.js";
-import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName.js";
-import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend.js";
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { cd, pwd, rm } from "~/libs/sdk/utils/terminalHelpers.js";
+import { composeEnvFile } from "~/libs/sdk/init/use-template/cp-modules/compose-env-file/cef-mod";
+import { promptGitDeploy } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/gdp-mod";
+import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
+import { downloadRepo } from "~/libs/sdk/utils/downloading/downloadRepo";
+import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
+import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { cd, pwd, rm } from "~/libs/sdk/utils/terminalHelpers";
 
-import { openVercelTools } from "./toolbox-vercel.js";
+import { openVercelTools } from "./toolbox-vercel";
 
 export async function rmTestsRuntime(cwd: string) {
   const TestsRuntimePath = path.join(cwd, "tests-runtime");

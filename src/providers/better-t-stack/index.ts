@@ -5,10 +5,10 @@ import fs from "@reliverse/relifso";
 import pc from "picocolors";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
-import { DEFAULT_CONFIG } from "./constants.js";
-import { createProject } from "./helpers/create-project.js";
-import { gatherConfig } from "./prompts/config-prompts.js";
-import { getProjectName } from "./prompts/project-name.js";
+import { DEFAULT_CONFIG } from "./constants";
+import { createProject } from "./helpers/create-project";
+import { gatherConfig } from "./prompts/config-prompts";
+import { getProjectName } from "./prompts/project-name";
 import type {
   ProjectAddons,
   ProjectApi,
@@ -22,11 +22,11 @@ import type {
   ProjectPackageManager,
   ProjectRuntime,
   YargsArgv,
-} from "./types.js";
-import { displayConfig } from "./utils/display-config.js";
-import { generateReproducibleCommand } from "./utils/generate-reproducible-command.js";
-import { getLatestCLIVersion } from "./utils/get-latest-cli-version.js";
-import { renderTitle } from "./utils/render-title.js";
+} from "./types";
+import { displayConfig } from "./utils/display-config";
+import { generateReproducibleCommand } from "./utils/generate-reproducible-command";
+import { getLatestCLIVersion } from "./utils/get-latest-cli-version";
+import { renderTitle } from "./utils/render-title";
 
 const exit = () => process.exit(0);
 process.on("SIGINT", exit);

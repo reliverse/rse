@@ -2,9 +2,9 @@ import fs from "@reliverse/relifso";
 import { globby } from "globby";
 import path from "node:path";
 
-import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
 
-import { PKG_ROOT } from "~/providers/better-t-stack/constants.js";
+import { PKG_ROOT } from "~/providers/better-t-stack/constants";
 import { processTemplate } from "~/providers/better-t-stack/utils/template-processor";
 
 async function processAndCopyFiles(

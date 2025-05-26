@@ -1,7 +1,7 @@
 import { logger, type Adapter, type BetterAuthOptions } from "better-auth";
-import { generateDrizzleSchema } from "./drizzle.js";
-import { generatePrismaSchema } from "./prisma.js";
-import { generateMigrations } from "./kysely.js";
+import { generateDrizzleSchema } from "./drizzle";
+import { generatePrismaSchema } from "./prisma";
+import { generateMigrations } from "./kysely";
 
 export const adapters = {
   prisma: generatePrismaSchema,

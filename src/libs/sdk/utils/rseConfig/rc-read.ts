@@ -9,15 +9,15 @@ import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
 import { pathToFileURL } from "url";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import type { IterableError } from "./rc-types.js";
+import type { IterableError } from "./rc-types";
 
-import { rseSchema } from "./cfg-schema.js";
-import { writeRseConfig } from "./rc-create.js";
-import { repairAndParseJSON } from "./rc-repair.js";
-import { mergeWithDefaults } from "./rc-update.js";
-import { getBackupAndTempPaths } from "./rc-utils.js";
+import { rseSchema } from "./cfg-schema";
+import { writeRseConfig } from "./rc-create";
+import { repairAndParseJSON } from "./rc-repair";
+import { mergeWithDefaults } from "./rc-update";
+import { getBackupAndTempPaths } from "./rc-utils";
 
 /**
  * Parses the config file and validates it against the schema.

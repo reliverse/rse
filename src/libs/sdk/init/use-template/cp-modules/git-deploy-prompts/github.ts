@@ -2,14 +2,14 @@ import { RequestError } from "@octokit/request-error";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
-import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { cd } from "~/libs/sdk/utils/terminalHelpers.js";
+import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
+import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { cd } from "~/libs/sdk/utils/terminalHelpers";
 
-import { initGitDir } from "./git.js";
-import { setupGitRemote } from "./utils-git-github.js";
+import { initGitDir } from "./git";
+import { setupGitRemote } from "./utils-git-github";
 
 export async function checkGithubRepoOwnership(
   githubInstance: InstanceGithub,

@@ -7,19 +7,19 @@ import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 import { simpleGit } from "simple-git";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { GitModParams } from "~/libs/sdk/sdk-types.js";
-import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
-import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { GitModParams } from "~/libs/sdk/sdk-types";
+import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
+import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { getEffectiveDir } from "~/libs/sdk/utils/getEffectiveDir.js";
-import { cd, pwd } from "~/libs/sdk/utils/terminalHelpers.js";
+import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { getEffectiveDir } from "~/libs/sdk/utils/getEffectiveDir";
+import { cd, pwd } from "~/libs/sdk/utils/terminalHelpers";
 
-import { checkGithubRepoOwnership, createGithubRepo } from "./github.js";
-import { isDirHasGit } from "./utils-git-github.js";
-import { handleExistingRepo } from "./utils-repo-exists.js";
+import { checkGithubRepoOwnership, createGithubRepo } from "./github";
+import { isDirHasGit } from "./utils-git-github";
+import { handleExistingRepo } from "./utils-repo-exists";
 
 /* -----------------------------------------------------------------------------
  * Utility Functions

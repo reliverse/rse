@@ -6,7 +6,7 @@ import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
-import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 const RUNTIME_REPLACEMENTS = {
   bun: {

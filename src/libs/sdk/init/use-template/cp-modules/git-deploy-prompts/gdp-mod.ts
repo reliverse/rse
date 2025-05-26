@@ -1,26 +1,26 @@
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 
-import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
-import type { DeploymentService } from "~/types.js";
+import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
+import type { DeploymentService } from "~/types";
 
-import { decide } from "~/libs/sdk/utils/decideHelper.js";
+import { decide } from "~/libs/sdk/utils/decideHelper";
 import {
   initGithubSDK,
   type InstanceGithub,
-} from "~/libs/sdk/utils/instanceGithub.js";
-import { initVercelSDK } from "~/libs/sdk/utils/instanceVercel.js";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
+} from "~/libs/sdk/utils/instanceGithub";
+import { initVercelSDK } from "~/libs/sdk/utils/instanceVercel";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
-import { deployProject } from "./deploy.js";
-import { handleGithubRepo, initGitDir } from "./git.js";
-import { isSpecialDomain } from "./helpers/domainHelpers.js";
-import { ensureDbInitialized } from "./helpers/handlePkgJsonScripts.js";
-import { promptForDomain } from "./helpers/promptForDomain.js";
-import { checkVercelDeployment } from "./vercel/vercel-check.js";
-import { getVercelProjectDomain } from "./vercel/vercel-domain.js";
+import { deployProject } from "./deploy";
+import { handleGithubRepo, initGitDir } from "./git";
+import { isSpecialDomain } from "./helpers/domainHelpers";
+import { ensureDbInitialized } from "./helpers/handlePkgJsonScripts";
+import { promptForDomain } from "./helpers/promptForDomain";
+import { checkVercelDeployment } from "./vercel/vercel-check";
+import { getVercelProjectDomain } from "./vercel/vercel-domain";
 
 /**
  * Result object from a GitHub setup attempt.

@@ -1,14 +1,14 @@
-import type { UpdateProjectRequestBody } from "@vercel/sdk/models/updateprojectop.js";
+import type { UpdateProjectRequestBody } from "@vercel/sdk/models/updateprojectop";
 
 import { multiselectPrompt } from "@reliverse/rempts";
 import { relinka } from "@reliverse/relinka";
-import { projectsUpdateProject } from "@vercel/sdk/funcs/projectsUpdateProject.js";
+import { projectsUpdateProject } from "@vercel/sdk/funcs/projectsUpdateProject";
 
-import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
+import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
 
-import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
+import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 
-import { withRateLimit } from "./vercel-api.js";
+import { withRateLimit } from "./vercel-api";
 
 /**
  * Updates a Vercel project with the given configuration

@@ -12,7 +12,7 @@ import {
   selectSidebarPrompt,
   THEMES,
   updateComponent,
-} from "~/libs/sdk/utils/handlers/shadcn.js";
+} from "~/libs/sdk/utils/handlers/shadcn";
 
 export async function manageShadcn(projectPath: string) {
   const shadcnConfig = await readShadcnConfig(projectPath);

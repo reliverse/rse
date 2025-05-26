@@ -1,10 +1,10 @@
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
 
-import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl.js";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod.js";
-import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers.js";
+import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
+import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({
   meta: {
@@ -32,7 +32,7 @@ export default defineCommand({
   },
   subCommands: {
     rule: () =>
-      import("~/libs/sdk/add/add-rule/add-rule-mod.js").then((r) => r.default),
+      import("~/libs/sdk/add/add-rule/add-rule-mod").then((r) => r.default),
   },
   run: async ({ args }) => {
     const isDev = args.dev;

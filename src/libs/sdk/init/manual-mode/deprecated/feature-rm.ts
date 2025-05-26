@@ -1,4 +1,4 @@
-import type { RemovalConfig } from "~/types.js";
+import type { RemovalConfig } from "~/types";
 
 export const REMOVAL_CONFIGS: Record<string, RemovalConfig> = {
   database: {

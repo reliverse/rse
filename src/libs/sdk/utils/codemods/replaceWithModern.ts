@@ -3,7 +3,7 @@ import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
-import type { ModernReplacement } from "~/types.js";
+import type { ModernReplacement } from "~/types";
 
 const MODERN_REPLACEMENTS: ModernReplacement[] = [
   // File System

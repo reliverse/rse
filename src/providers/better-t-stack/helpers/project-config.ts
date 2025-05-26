@@ -4,7 +4,7 @@ import { $, execa } from "execa";
 import path from "node:path";
 import pc from "picocolors";
 
-import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
 
 export async function updatePackageConfigurations(
   projectDir: string,

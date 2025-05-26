@@ -11,15 +11,15 @@ import { setTimeout } from "node:timers";
 import open from "open";
 import url from "url";
 
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import {
   cliDomainDocs,
   memoryPath,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { showAnykeyPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt.js";
-import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update.js";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { showAnykeyPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt";
+import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 /**
  * Custom error for when a user cancels the process.

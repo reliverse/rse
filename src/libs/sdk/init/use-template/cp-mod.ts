@@ -2,26 +2,26 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/sdk-types.js";
-import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { RseConfig } from "~/libs/sdk/sdk-types";
+import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { getRseConfigPath } from "~/libs/sdk/sdk-mod.js";
-import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload.js";
-import { generateProjectConfigs } from "~/libs/sdk/utils/handlers/generateProjectConfigs.js";
-import { isMultireliProject } from "~/libs/sdk/utils/multireliHelpers.js";
-import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod.js";
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update.js";
+import { getRseConfigPath } from "~/libs/sdk/sdk-mod";
+import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload";
+import { generateProjectConfigs } from "~/libs/sdk/utils/handlers/generateProjectConfigs";
+import { isMultireliProject } from "~/libs/sdk/utils/multireliHelpers";
+import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update";
 
 import {
   initializeProjectConfig,
   setupI18nSupport,
   handleDependencies,
   showSuccessAndNextSteps,
-} from "./cp-impl.js";
-import { composeEnvFile } from "./cp-modules/compose-env-file/cef-mod.js";
-import { promptGitDeploy } from "./cp-modules/git-deploy-prompts/gdp-mod.js";
+} from "./cp-impl";
+import { composeEnvFile } from "./cp-modules/compose-env-file/cef-mod";
+import { promptGitDeploy } from "./cp-modules/git-deploy-prompts/gdp-mod";
 
 /**
  * Creates a new web project from a template.

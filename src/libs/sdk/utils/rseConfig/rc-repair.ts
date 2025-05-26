@@ -12,11 +12,11 @@ import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
 import { jsonrepair } from "jsonrepair";
 
-import { rseSchema } from "./cfg-schema.js";
-import { type RseConfig } from "./cfg-types.js";
-import { DEFAULT_CONFIG } from "./rc-const.js";
-import { writeRseConfig } from "./rc-create.js";
-import { cleanGitHubUrl } from "./rc-utils.js";
+import { rseSchema } from "./cfg-schema";
+import { type RseConfig } from "./cfg-types";
+import { DEFAULT_CONFIG } from "./rc-const";
+import { writeRseConfig } from "./rc-create";
+import { cleanGitHubUrl } from "./rc-utils";
 
 // Uses jsonrepair to fix broken JSON then parses it.
 export function repairAndParseJSON(raw: string): any {

@@ -1,13 +1,13 @@
 import { inputPrompt, selectPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
+import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 
-import { ensureOpenAIKey } from "./ai-impl/ai-auth.js";
-import { aiChat } from "./ai-impl/ai-chat.js";
-import { agentRelinter } from "./ai-impl/relinter/relinter.js";
+import { ensureOpenAIKey } from "./ai-impl/ai-auth";
+import { aiChat } from "./ai-impl/ai-chat";
+import { agentRelinter } from "./ai-impl/relinter/relinter";
 
 const RANDOM_HINTS = [
   "You can always exit by typing thing like 'bye', 'exit', or just by pressing Ctrl+C.",

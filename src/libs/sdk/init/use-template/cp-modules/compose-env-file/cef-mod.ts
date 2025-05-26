@@ -3,9 +3,9 @@ import { relinka } from "@reliverse/relinka";
 import { selectPrompt, inputPrompt } from "@reliverse/rempts";
 import { execa } from "execa";
 
-import type { RseConfig } from "~/libs/sdk/sdk-types.js";
+import type { RseConfig } from "~/libs/sdk/sdk-types";
 
-import { cliDomainEnv } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { cliDomainEnv } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 import {
   promptAndSetMissingValues,
@@ -16,7 +16,7 @@ import {
   getMissingKeys,
   getEnvPath,
   copyFromExisting,
-} from "./cef-impl.js";
+} from "./cef-impl";
 
 export async function composeEnvFile(
   projectPath: string,

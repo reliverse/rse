@@ -8,13 +8,13 @@ import { destr } from "destr";
 import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 
-import type { BaseConfig } from "~/types.js";
+import type { BaseConfig } from "~/types";
 
-import { removeComments } from "~/libs/sdk/utils/codemods/removeComments.js";
-import { getUnusedDependencies } from "~/libs/sdk/utils/codemods/removeUnusedDeps.js";
-import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read.js";
+import { removeComments } from "~/libs/sdk/utils/codemods/removeComments";
+import { getUnusedDependencies } from "~/libs/sdk/utils/codemods/removeUnusedDeps";
+import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read";
 
-import { uninstallDependencies } from "./dependencies.js";
+import { uninstallDependencies } from "./dependencies";
 
 type KnipConfig = BaseConfig & {
   $schema: string;

@@ -2,7 +2,7 @@ import path from "node:path";
 import consola from "consola";
 import fs from "@reliverse/relifso";
 import handlebars from "handlebars";
-import type { ProjectConfig } from "../types.js";
+import type { ProjectConfig } from "../types";
 
 /**
  * Processes a Handlebars template file and writes the output to the destination.

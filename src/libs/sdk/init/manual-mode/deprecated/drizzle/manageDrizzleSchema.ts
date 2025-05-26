@@ -10,7 +10,7 @@ import {
   renameTable,
   manageRelations,
   detectDatabaseProvider,
-} from "./manageDrizzleSchemaUtils.js";
+} from "./manageDrizzleSchemaUtils";
 
 export async function manageDrizzleSchema(cwd: string, isDev: boolean) {
   const singleSchemaDir = isDev

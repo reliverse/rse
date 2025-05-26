@@ -1,8 +1,8 @@
 import { defineCommand } from "@reliverse/rempts";
 import { relinka } from "@reliverse/relinka";
 
-import { cliConfigJsonc } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { generateSchemaFile } from "~/libs/sdk/utils/rseConfig/cfg-schema.js";
+import { cliConfigJsonc } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { generateSchemaFile } from "~/libs/sdk/utils/rseConfig/cfg-schema";
 
 export default defineCommand({
   meta: {

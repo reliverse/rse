@@ -1,8 +1,8 @@
-import type { ShowMenuResult } from "~/libs/sdk/add/add-local/core/types.js";
-import type { ParamsOmitReli } from "~/libs/sdk/sdk-types.js";
+import type { ShowMenuResult } from "~/libs/sdk/add/add-local/core/types";
+import type { ParamsOmitReli } from "~/libs/sdk/sdk-types";
 
-import { getProjectContent } from "~/libs/sdk/utils/getProjectContent.js";
-import { setupDevModeIfNeeded } from "~/libs/sdk/utils/testsRuntime.js";
+import { getProjectContent } from "~/libs/sdk/utils/getProjectContent";
+import { setupDevModeIfNeeded } from "~/libs/sdk/utils/testsRuntime";
 
 import {
   determineProjectStatus,
@@ -10,7 +10,7 @@ import {
   handleIncompleteProject,
   handleNewProject,
   handleProjectSelectionMenu,
-} from "./init-utils.js";
+} from "./init-utils";
 
 /**
  * Main entry point for the manual builder menu.

@@ -4,16 +4,16 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { eq } from "drizzle-orm";
 
-import { db } from "~/db/client.js";
-import { encrypt, decrypt } from "~/db/config.js";
-import { configKeysTable, userDataTable } from "~/db/schema.js";
-import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { db } from "~/db/client";
+import { encrypt, decrypt } from "~/db/config";
+import { configKeysTable, userDataTable } from "~/db/schema";
+import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 import type {
   EncryptedDataMemory,
   ReliverseMemory,
   UserDataMemory,
-} from "./schemaMemory.js";
+} from "./schemaMemory";
 
 export async function getReliverseMemory(): Promise<ReliverseMemory> {
   // Ensure directory exists

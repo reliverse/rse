@@ -8,15 +8,15 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { readPackageJSON, type PackageJson } from "pkg-types";
 
-import type { ProjectFramework } from "./cfg-types.js";
+import type { ProjectFramework } from "./cfg-types";
 
-import { getProjectContent } from "~/libs/sdk/utils/getProjectContent.js";
+import { getProjectContent } from "~/libs/sdk/utils/getProjectContent";
 
-import type { DetectedProject } from "./rc-types.js";
+import type { DetectedProject } from "./rc-types";
 
-import { PROJECT_FRAMEWORK_FILES } from "./rc-const.js";
-import { getRseConfigPath } from "./rc-path.js";
-import { readRseConfig } from "./rc-read.js";
+import { PROJECT_FRAMEWORK_FILES } from "./rc-const";
+import { getRseConfigPath } from "./rc-path";
+import { readRseConfig } from "./rc-read";
 
 export async function detectProjectFramework(
   projectPath: string,

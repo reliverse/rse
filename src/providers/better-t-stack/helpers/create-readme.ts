@@ -8,7 +8,7 @@ import type {
   ProjectFrontend,
   ProjectOrm,
   ProjectRuntime,
-} from "../types.js";
+} from "../types";
 
 export async function createReadme(projectDir: string, options: ProjectConfig) {
   const readmePath = path.join(projectDir, "README.md");

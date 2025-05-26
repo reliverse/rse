@@ -1,7 +1,7 @@
 import fs from "@reliverse/relifso";
 import path from "node:path";
 
-import { PKG_ROOT } from "~/cli/providers/better-t-stack/constants.js";
+import { PKG_ROOT } from "~/cli/providers/better-t-stack/constants";
 
 export const getLatestCLIVersion = () => {
   const packageJsonPath = path.join(PKG_ROOT, "package.json");

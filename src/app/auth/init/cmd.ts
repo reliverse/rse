@@ -20,13 +20,13 @@ import path from "path";
 import semver from "semver";
 import { z } from "zod";
 
-import { generateAuthConfig } from "~/app/auth/(generators)/auth-config.js";
-import { checkPackageManagers } from "~/app/auth/(utils)/check-package-managers.js";
-import { formatMilliseconds } from "~/app/auth/(utils)/format-ms.js";
-import { generateSecretHash } from "~/app/auth/(utils)/generate-secret.js";
-import { getPackageInfo } from "~/app/auth/(utils)/get-package-info.js";
-import { getTsconfigInfo } from "~/app/auth/(utils)/get-tsconfig-info.js";
-import { installDependencies } from "~/app/auth/(utils)/install-dependencies.js";
+import { generateAuthConfig } from "~/app/auth/(generators)/auth-config";
+import { checkPackageManagers } from "~/app/auth/(utils)/check-package-managers";
+import { formatMilliseconds } from "~/app/auth/(utils)/format-ms";
+import { generateSecretHash } from "~/app/auth/(utils)/generate-secret";
+import { getPackageInfo } from "~/app/auth/(utils)/get-package-info";
+import { getTsconfigInfo } from "~/app/auth/(utils)/get-tsconfig-info";
+import { installDependencies } from "~/app/auth/(utils)/install-dependencies";
 
 /**
  * Should only use any database that is core DBs, and supports the Better Auth CLI generate functionality.

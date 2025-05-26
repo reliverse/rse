@@ -1,7 +1,7 @@
 import { cancel, confirm, isCancel, log } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants.js";
-import type { ProjectBackend } from "../types.js";
+import { DEFAULT_CONFIG } from "../constants";
+import type { ProjectBackend } from "../types";
 
 export async function getAuthChoice(
   auth: boolean | undefined,

@@ -1,4 +1,4 @@
-import { type SupportedDatabases, type SupportedPlugin } from "../init/cmd.js";
+import { type SupportedDatabases, type SupportedPlugin } from "../init/cmd";
 import { logger } from "better-auth";
 import { type spinner as clackSpinner } from "@clack/prompts";
 

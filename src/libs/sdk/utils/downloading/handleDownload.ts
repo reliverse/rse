@@ -4,13 +4,13 @@ import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 import { ofetch } from "ofetch";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
 import {
   downloadRepo,
   type DownloadResult,
-} from "~/libs/sdk/utils/downloading/downloadRepo.js";
-import { setHiddenAttributeOnWindows } from "~/libs/sdk/utils/filesysHelpers.js";
+} from "~/libs/sdk/utils/downloading/downloadRepo";
+import { setHiddenAttributeOnWindows } from "~/libs/sdk/utils/filesysHelpers";
 import {
   REPO_TEMPLATES,
   saveRepoToDevice,
@@ -18,11 +18,11 @@ import {
   type RepoFromSchema,
   type CategoryFromSchema,
   type CloneOrTemplateRepo,
-} from "~/libs/sdk/utils/projectRepository.js";
+} from "~/libs/sdk/utils/projectRepository";
 import {
   cliHomeRepos,
   UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 type UnghRepoResponse = {
   repo?: {

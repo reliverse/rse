@@ -3,9 +3,9 @@ import { execa } from "execa";
 import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 
-import type { ShadcnConfig, Theme } from "~/types.js";
+import type { ShadcnConfig, Theme } from "~/types";
 
-import { pmx } from "~/libs/sdk/utils/getPackageManager.js";
+import { pmx } from "~/libs/sdk/utils/getPackageManager";
 
 const COMPONENT_DEPENDENCIES: Record<string, string[]> = {
   "alert-dialog": ["button"],

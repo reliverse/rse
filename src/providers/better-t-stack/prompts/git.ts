@@ -1,7 +1,7 @@
 import { cancel, confirm, isCancel } from "@clack/prompts";
 import pc from "picocolors";
 
-import { DEFAULT_CONFIG } from "~/cli/providers/better-t-stack/constants.js";
+import { DEFAULT_CONFIG } from "~/cli/providers/better-t-stack/constants";
 
 export async function getGitChoice(git?: boolean): Promise<boolean> {
   if (git !== undefined) return git;

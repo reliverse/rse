@@ -5,13 +5,13 @@
 
 import { isBunPM, runtimeInfo } from "@reliverse/runtime";
 
-import type { ProjectFramework, RseConfig } from "./cfg-types.js";
+import type { ProjectFramework, RseConfig } from "./cfg-types";
 
 import {
   DEFAULT_DOMAIN,
   RSE_SCHEMA_URL,
   UNKNOWN_VALUE,
-} from "./cfg-details.js";
+} from "./cfg-details";
 
 export const DEFAULT_CONFIG: RseConfig = {
   $schema: RSE_SCHEMA_URL,

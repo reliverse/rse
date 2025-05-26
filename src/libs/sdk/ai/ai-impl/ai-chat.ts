@@ -4,10 +4,10 @@ import { re } from "@reliverse/relico";
 import { inputPrompt, msg } from "@reliverse/rempts";
 import { streamText } from "ai";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { EXIT_KEYWORDS, MODEL } from "./ai-const.js";
-import { agentRelinter } from "./relinter/relinter.js";
+import { EXIT_KEYWORDS, MODEL } from "./ai-const";
+import { agentRelinter } from "./relinter/relinter";
 
 /**
  * Represents the structured result of user input parsing.

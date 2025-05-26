@@ -2,7 +2,7 @@ import { ensuredir } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import path from "@reliverse/pathkit";
 
-import type { ParamsOmitReli } from "~/libs/sdk/sdk-types.js";
+import type { ParamsOmitReli } from "~/libs/sdk/sdk-types";
 
 /**
  * Sets up the dev environment if the isDev flag is true.

@@ -7,9 +7,9 @@ import { tsconfigJson } from "@reliverse/dler-sdk";
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 
-import { askRseConfigType } from "~/libs/sdk/utils/prompts/askRseConfigType.js";
+import { askRseConfigType } from "~/libs/sdk/utils/prompts/askRseConfigType";
 
-import { cliConfigTs, cliConfigJsonc } from "./cfg-details.js";
+import { cliConfigTs, cliConfigJsonc } from "./cfg-details";
 
 // Cache the result per project path so the prompt is only shown once.
 const configPathCache = new Map<

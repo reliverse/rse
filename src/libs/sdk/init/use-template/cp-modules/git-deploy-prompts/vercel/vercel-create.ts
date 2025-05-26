@@ -1,25 +1,25 @@
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
-import { projectsAddProjectDomain } from "@vercel/sdk/funcs/projectsAddProjectDomain.js";
-import { projectsCreateProject } from "@vercel/sdk/funcs/projectsCreateProject.js";
+import { projectsAddProjectDomain } from "@vercel/sdk/funcs/projectsAddProjectDomain";
+import { projectsCreateProject } from "@vercel/sdk/funcs/projectsCreateProject";
 
-import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
-import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
+import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { isSpecialDomain } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/helpers/domainHelpers.js";
-import { updateReliverseMemory } from "~/libs/sdk/sdk-mod.js";
+import { isSpecialDomain } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/helpers/domainHelpers";
+import { updateReliverseMemory } from "~/libs/sdk/sdk-mod";
 
-import { withRateLimit } from "./vercel-api.js";
+import { withRateLimit } from "./vercel-api";
 import {
   configureBranchProtection,
   configureResources,
   enableAnalytics,
   getConfigurationOptions,
-} from "./vercel-config.js";
-import { createInitialVercelDeployment } from "./vercel-deploy.js";
-import { addEnvVarsToVercelProject } from "./vercel-env.js";
-import { detectFramework, verifyDomain } from "./vercel-utils.js";
+} from "./vercel-config";
+import { createInitialVercelDeployment } from "./vercel-deploy";
+import { addEnvVarsToVercelProject } from "./vercel-env";
+import { detectFramework, verifyDomain } from "./vercel-utils";
 
 /**
  * Creates a new Vercel project.

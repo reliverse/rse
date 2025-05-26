@@ -1,11 +1,11 @@
 import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 import { relinka } from "@reliverse/relinka";
 
-import type { IntegrationCategory, IntegrationOptions } from "~/types.js";
+import type { IntegrationCategory, IntegrationOptions } from "~/types";
 
-import { installIntegration, removeIntegration } from "./editor-mod.js";
-import { INTEGRATION_CONFIGS } from "./feature-add.js";
-import { REMOVAL_CONFIGS } from "./feature-rm.js";
+import { installIntegration, removeIntegration } from "./editor-mod";
+import { INTEGRATION_CONFIGS } from "./feature-add";
+import { REMOVAL_CONFIGS } from "./feature-rm";
 
 export async function handleIntegrations(cwd: string, isDev: boolean) {
   const integrationOptions: IntegrationOptions = {

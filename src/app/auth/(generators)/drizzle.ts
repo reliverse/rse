@@ -4,7 +4,7 @@ import {
   type FieldAttribute,
 } from "better-auth/db";
 import { existsSync } from "@reliverse/relifso";
-import type { SchemaGenerator } from "./types.js";
+import type { SchemaGenerator } from "./types";
 
 export function convertToSnakeCase(str: string) {
   return str.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);

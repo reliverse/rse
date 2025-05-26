@@ -1,7 +1,7 @@
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
 
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 export default defineCommand({
   meta: {

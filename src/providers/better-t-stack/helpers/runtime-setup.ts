@@ -4,9 +4,9 @@ import path from "node:path";
 import type {
   ProjectBackend,
   ProjectConfig,
-} from "~/providers/better-t-stack/types.js";
+} from "~/providers/better-t-stack/types";
 
-import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps.js";
+import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps";
 
 export async function setupRuntime(config: ProjectConfig): Promise<void> {
   const { projectName, runtime, backend } = config;

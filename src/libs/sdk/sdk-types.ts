@@ -1,5 +1,5 @@
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 export type {
   RepoFromSchema,

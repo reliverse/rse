@@ -1,7 +1,7 @@
 import { cancel, isCancel, select } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants.js";
-import type { ProjectBackend } from "../types.js";
+import { DEFAULT_CONFIG } from "../constants";
+import type { ProjectBackend } from "../types";
 
 export async function getBackendFrameworkChoice(
   backendFramework?: ProjectBackend,

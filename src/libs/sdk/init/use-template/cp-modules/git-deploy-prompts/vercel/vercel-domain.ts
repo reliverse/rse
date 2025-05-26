@@ -1,7 +1,7 @@
 import { relinka } from "@reliverse/relinka";
-import { projectsGetProjectDomains } from "@vercel/sdk/funcs/projectsGetProjectDomains.js";
+import { projectsGetProjectDomains } from "@vercel/sdk/funcs/projectsGetProjectDomains";
 
-import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
+import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
 
 export async function getVercelProjectDomain(
   vercelInstance: InstanceVercel,

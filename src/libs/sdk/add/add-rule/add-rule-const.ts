@@ -1,8 +1,8 @@
 import path from "@reliverse/pathkit";
 
-import { homeDir } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { homeDir } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
-import type { RuleRepo } from "./add-rule-types.js";
+import type { RuleRepo } from "./add-rule-types";
 
 // ----------------------
 // Constants & Micro Helpers

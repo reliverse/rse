@@ -1,19 +1,19 @@
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, multiselectPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { MonorepoType } from "~/types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { MonorepoType } from "~/types";
 
-import { convertCjsToEsm } from "~/libs/sdk/utils/codemods/convertCjsToEsm.js";
-import { convertTypeDefinitions } from "~/libs/sdk/utils/codemods/convertDefinitions.js";
-import { convertImportStyle } from "~/libs/sdk/utils/codemods/convertImportStyle.js";
-import { convertJsToTs } from "~/libs/sdk/utils/codemods/convertJsToTs.js";
-import { convertQuoteStyle } from "~/libs/sdk/utils/codemods/convertQuoteStyle.js";
-import { convertRuntime } from "~/libs/sdk/utils/codemods/convertRuntime.js";
-import { convertToMonorepo } from "~/libs/sdk/utils/codemods/convertToMonorepo.js";
-import { replaceImportSymbol } from "~/libs/sdk/utils/codemods/replaceImportSymbol.js";
-import { replaceWithModern } from "~/libs/sdk/utils/codemods/replaceWithModern.js";
-import { cliConfigJsonc } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { convertCjsToEsm } from "~/libs/sdk/utils/codemods/convertCjsToEsm";
+import { convertTypeDefinitions } from "~/libs/sdk/utils/codemods/convertDefinitions";
+import { convertImportStyle } from "~/libs/sdk/utils/codemods/convertImportStyle";
+import { convertJsToTs } from "~/libs/sdk/utils/codemods/convertJsToTs";
+import { convertQuoteStyle } from "~/libs/sdk/utils/codemods/convertQuoteStyle";
+import { convertRuntime } from "~/libs/sdk/utils/codemods/convertRuntime";
+import { convertToMonorepo } from "~/libs/sdk/utils/codemods/convertToMonorepo";
+import { replaceImportSymbol } from "~/libs/sdk/utils/codemods/replaceImportSymbol";
+import { replaceWithModern } from "~/libs/sdk/utils/codemods/replaceWithModern";
+import { cliConfigJsonc } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 export async function handleCodemods(rules: RseConfig, cwd: string) {
   if (!rules.codeStyle || !rules.preferredLibraries) {

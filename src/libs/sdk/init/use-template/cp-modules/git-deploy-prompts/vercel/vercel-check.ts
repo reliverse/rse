@@ -1,6 +1,6 @@
 import { relinka } from "@reliverse/relinka";
 
-import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
+import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
 
 /**
  * Checks whether there is an existing deployment for the given project.

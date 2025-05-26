@@ -2,14 +2,14 @@ import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { Type } from "@sinclair/typebox";
 
-import type { RseConfig } from "./cfg-types.js";
+import type { RseConfig } from "./cfg-types";
 
 import {
   cliDomainDocs,
   RSE_SCHEMA_DEV,
   RSE_SCHEMA_URL,
   UNKNOWN_VALUE,
-} from "./cfg-details.js";
+} from "./cfg-details";
 
 const unknownLiteral = Type.Literal("unknown");
 

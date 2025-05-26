@@ -6,7 +6,7 @@ import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 import { glob } from "tinyglobby";
 
-import { MODEL } from "~/libs/sdk/ai/ai-impl/ai-const.js";
+import { MODEL } from "~/libs/sdk/ai/ai-impl/ai-const";
 
 type AiGeneratedResult = {
   text: string;

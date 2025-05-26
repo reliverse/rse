@@ -4,8 +4,8 @@ import { multiselectPrompt } from "@reliverse/rempts";
 import { msg } from "@reliverse/rempts";
 import { execa } from "execa";
 
-import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
-import { checkScriptExists } from "~/libs/sdk/utils/pkgJsonHelpers.js";
+import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
+import { checkScriptExists } from "~/libs/sdk/utils/pkgJsonHelpers";
 
 export type ScriptStatus = {
   dbPush: boolean;

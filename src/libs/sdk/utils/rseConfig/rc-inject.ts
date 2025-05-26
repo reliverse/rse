@@ -5,9 +5,9 @@
 
 import MagicString from "magic-string";
 
-import type { RseConfig } from "./cfg-types.js";
+import type { RseConfig } from "./cfg-types";
 
-import { cliDomainDocs, cliName, cliVersion } from "./cfg-details.js";
+import { cliDomainDocs, cliName, cliVersion } from "./cfg-details";
 
 export function injectSectionComments(fileContent: string): string {
   const ms = new MagicString(fileContent);

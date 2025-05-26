@@ -1,7 +1,7 @@
 import { cancel, isCancel, multiselect, select } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants.js";
-import type { ProjectFrontend } from "../types.js";
+import { DEFAULT_CONFIG } from "../constants";
+import type { ProjectFrontend } from "../types";
 
 export async function getFrontendChoice(
   frontendOptions?: ProjectFrontend[],

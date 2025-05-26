@@ -3,7 +3,7 @@ import { spinner } from "@clack/prompts";
 import consola from "consola";
 import { execa } from "execa";
 import pc from "picocolors";
-import type { ProjectConfig } from "../types.js";
+import type { ProjectConfig } from "../types";
 import { getPackageExecutionCommand } from "../utils/get-package-execution-command";
 
 export async function setupStarlight(config: ProjectConfig): Promise<void> {

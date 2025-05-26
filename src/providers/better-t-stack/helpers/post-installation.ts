@@ -5,10 +5,10 @@ import type {
   ProjectDatabase,
   ProjectOrm,
   ProjectRuntime,
-} from "~/providers/better-t-stack/types.js";
-import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
+} from "~/providers/better-t-stack/types";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
 
-import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command.js";
+import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command";
 
 export function displayPostInstallInstructions(
   config: ProjectConfig & { depsInstalled: boolean },

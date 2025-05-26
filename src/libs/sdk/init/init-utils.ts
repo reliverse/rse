@@ -5,35 +5,35 @@ import { relinka } from "@reliverse/relinka";
 import { nextStepsPrompt, selectPrompt } from "@reliverse/rempts";
 import { simpleGit, type SimpleGit } from "simple-git";
 
-import type { ShowMenuResult } from "~/libs/sdk/add/add-local/core/types.js";
-import type { ProjectFramework } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { ShowMenuResult } from "~/libs/sdk/add/add-local/core/types";
+import type { ProjectFramework } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { checkMissingDependencies } from "~/libs/sdk/add/add-local/core/deps.js";
-import { getPromptContent } from "~/libs/sdk/add/add-local/core/prompts.js";
+import { checkMissingDependencies } from "~/libs/sdk/add/add-local/core/deps";
+import { getPromptContent } from "~/libs/sdk/add/add-local/core/prompts";
 import {
   getTemplateUpdateInfo,
   updateProjectTemplateDate,
   type TemplateUpdateInfo,
-} from "~/libs/sdk/add/add-local/core/templates.js";
-import { createPackageJSON } from "~/libs/sdk/utils/createPackageJSON.js";
-import { createTSConfig } from "~/libs/sdk/utils/createTSConfig.js";
-import { isDirectoryEmpty } from "~/libs/sdk/utils/filesysHelpers.js";
+} from "~/libs/sdk/add/add-local/core/templates";
+import { createPackageJSON } from "~/libs/sdk/utils/createPackageJSON";
+import { createTSConfig } from "~/libs/sdk/utils/createTSConfig";
+import { isDirectoryEmpty } from "~/libs/sdk/utils/filesysHelpers";
 import {
   getProjectContent,
   type RequiredProjectContent,
-} from "~/libs/sdk/utils/getProjectContent.js";
-import { askAppOrLib } from "~/libs/sdk/utils/prompts/askAppOrLib.js";
-import { askInstallDeps } from "~/libs/sdk/utils/prompts/askInstallDeps.js";
-import { askOpenInIDE } from "~/libs/sdk/utils/prompts/askOpenInIDE.js";
-import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName.js";
-import { shouldInitGit } from "~/libs/sdk/utils/prompts/shouldInitGit.js";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
-import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect.js";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod.js";
-import { findTsconfigUp } from "~/libs/sdk/utils/tsconfigHelpers.js";
+} from "~/libs/sdk/utils/getProjectContent";
+import { askAppOrLib } from "~/libs/sdk/utils/prompts/askAppOrLib";
+import { askInstallDeps } from "~/libs/sdk/utils/prompts/askInstallDeps";
+import { askOpenInIDE } from "~/libs/sdk/utils/prompts/askOpenInIDE";
+import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
+import { shouldInitGit } from "~/libs/sdk/utils/prompts/shouldInitGit";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect";
+import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
+import { findTsconfigUp } from "~/libs/sdk/utils/tsconfigHelpers";
 
-import { promptGitDeploy } from "./use-template/cp-modules/git-deploy-prompts/gdp-mod.js";
-import { initializeGitRepo } from "./use-template/cp-modules/git-deploy-prompts/git.js";
+import { promptGitDeploy } from "./use-template/cp-modules/git-deploy-prompts/gdp-mod";
+import { initializeGitRepo } from "./use-template/cp-modules/git-deploy-prompts/git";
 
 /** Constants for menu option values */
 const NEW_PROJECT_OPTION = "new-project";

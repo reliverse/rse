@@ -3,7 +3,7 @@ import { expect, test, describe, beforeEach, afterEach } from "bun:test";
 import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 
-import { setHiddenAttributeOnWindows, isHidden } from "./filesysHelpers.js";
+import { setHiddenAttributeOnWindows, isHidden } from "./filesysHelpers";
 
 let TEST_DIR = path.join(process.cwd(), "test-hidden-dir");
 

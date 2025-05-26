@@ -5,10 +5,10 @@ import { execa } from "execa";
 import path from "node:path";
 import pc from "picocolors";
 
-import type { ProjectConfig } from "~/cli/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/cli/providers/better-t-stack/types";
 
-import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps.js";
-import { getPackageExecutionCommand } from "~/cli/providers/better-t-stack/utils/get-package-execution-command.js";
+import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps";
+import { getPackageExecutionCommand } from "~/cli/providers/better-t-stack/utils/get-package-execution-command";
 
 export async function setupTauri(config: ProjectConfig): Promise<void> {
   const { projectName, packageManager, frontend } = config;

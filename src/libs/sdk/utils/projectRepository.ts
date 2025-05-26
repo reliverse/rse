@@ -9,13 +9,13 @@ import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
 import { ofetch } from "ofetch";
 
-import type { rseSchema } from "~/libs/sdk/utils/rseConfig/cfg-schema.js";
-import type { VSCodeRepoOption } from "~/providers/reliverse-stack/rs-impl.js";
+import type { rseSchema } from "~/libs/sdk/utils/rseConfig/cfg-schema";
+import type { VSCodeRepoOption } from "~/providers/reliverse-stack/rs-impl";
 
-import { cliHomeRepos } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { experimental, recommended } from "~/libs/sdk/utils/badgeNotifiers.js";
+import { cliHomeRepos } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { experimental, recommended } from "~/libs/sdk/utils/badgeNotifiers";
 
-import { setHiddenAttributeOnWindows } from "./filesysHelpers.js";
+import { setHiddenAttributeOnWindows } from "./filesysHelpers";
 import {
   DEFAULT_REPOS_CONFIG,
   type RepoInfo,
@@ -23,7 +23,7 @@ import {
   reposSchema,
   generateReposJsonSchema,
   shouldRegenerateSchema,
-} from "./schemaTemplate.js";
+} from "./schemaTemplate";
 
 // ================================================
 // Type Definitions

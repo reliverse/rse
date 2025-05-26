@@ -3,12 +3,12 @@ import { relinka } from "@reliverse/relinka";
 import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 
-import type { ColumnType, DatabaseProvider, TableSchema } from "~/types.js";
+import type { ColumnType, DatabaseProvider, TableSchema } from "~/types";
 
-import { installIntegration } from "~/libs/sdk/init/manual-mode/deprecated/editor-mod.js";
-import { INTEGRATION_CONFIGS } from "~/libs/sdk/init/manual-mode/deprecated/feature-add.js";
+import { installIntegration } from "~/libs/sdk/init/manual-mode/deprecated/editor-mod";
+import { INTEGRATION_CONFIGS } from "~/libs/sdk/init/manual-mode/deprecated/feature-add";
 
-import { COLUMN_TYPES } from "./manageDrizzleConstants.js";
+import { COLUMN_TYPES } from "./manageDrizzleConstants";
 
 export async function detectDatabaseProvider(
   cwd: string,

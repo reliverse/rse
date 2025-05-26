@@ -3,12 +3,12 @@ import { Octokit } from "@octokit/rest";
 import { relinka } from "@reliverse/relinka";
 import { inputPrompt } from "@reliverse/rempts";
 
-import { askUsernameGithub } from "~/libs/sdk/utils/prompts/askUsernameGithub.js";
-import { cliVersion } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { askUsernameGithub } from "~/libs/sdk/utils/prompts/askUsernameGithub";
+import { cliVersion } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
-import type { ReliverseMemory } from "./schemaMemory.js";
+import type { ReliverseMemory } from "./schemaMemory";
 
-import { updateReliverseMemory } from "./reliverseMemory.js";
+import { updateReliverseMemory } from "./reliverseMemory";
 
 // A custom Octokit with REST endpoint methods.
 export const OctokitWithRest = Octokit.plugin(restEndpointMethods);

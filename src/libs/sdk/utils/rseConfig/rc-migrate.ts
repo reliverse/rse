@@ -2,9 +2,9 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { parseJSONC } from "confbox";
 
-import type { RseConfig } from "./cfg-types.js";
+import type { RseConfig } from "./cfg-types";
 
-import { updateRseConfig } from "./rc-update.js";
+import { updateRseConfig } from "./rc-update";
 
 /**
  * Migrates an external rseg file into the current project config.

@@ -21,9 +21,9 @@ import {
   logVerbose,
   type GenCfg,
   type GenCfgJsonc,
-} from "~/libs/sdk/multireli/multireli-impl.js";
-import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { generateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-create.js";
+} from "~/libs/sdk/multireli/multireli-impl";
+import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { generateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-create";
 
 /**
  * Generates rse config files for multiple projects

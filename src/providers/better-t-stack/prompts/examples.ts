@@ -1,12 +1,12 @@
 import { cancel, isCancel, log, multiselect } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants.js";
+import { DEFAULT_CONFIG } from "../constants";
 import type {
   ProjectBackend,
   ProjectDatabase,
   ProjectExamples,
   ProjectFrontend,
-} from "../types.js";
+} from "../types";
 
 export async function getExamplesChoice(
   examples?: ProjectExamples[],

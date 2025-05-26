@@ -6,16 +6,16 @@ import { ofetch } from "ofetch";
 import pMap from "p-map";
 import path from "@reliverse/pathkit";
 
-import { getMaxHeightSize } from "~/libs/sdk/utils/microHelpers.js";
+import { getMaxHeightSize } from "~/libs/sdk/utils/microHelpers";
 
-import type { UnghRepoResponse } from "./add-rule-types.js";
+import type { UnghRepoResponse } from "./add-rule-types";
 
 import {
   DEFAULT_BRANCH,
   getRepoCacheDir,
   RULE_FILE_EXTENSION,
   RULES_REPOS,
-} from "./add-rule-const.js";
+} from "./add-rule-const";
 
 // ----------------------
 // Utility Functions

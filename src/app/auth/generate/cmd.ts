@@ -9,7 +9,7 @@ import prompts from "prompts";
 import yoctoSpinner from "yocto-spinner";
 import { z } from "zod";
 
-import { getGenerator } from "~/app/auth/generators.js";
+import { getGenerator } from "~/app/auth/generators";
 import { getConfig } from "~/app/auth/utils/get-config";
 
 export async function generateAction(opts: any) {

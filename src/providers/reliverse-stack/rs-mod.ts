@@ -4,29 +4,29 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 
-import type { AppParams } from "~/libs/sdk/sdk-types.js";
-import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
+import type { AppParams } from "~/libs/sdk/sdk-types";
+import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
 import type {
   ProjectCategory,
   RseConfig,
-} from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { getRandomMessage } from "~/db/messages.js";
-import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu.js";
-import { createMobileProject } from "~/libs/sdk/init/use-template/cp-mod.js";
-import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
+import { getRandomMessage } from "~/db/messages";
+import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu";
+import { createMobileProject } from "~/libs/sdk/init/use-template/cp-mod";
+import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 import {
   endTitle,
   UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect";
 
 import {
   optionCreateBrowserExtension,
   optionCreateVSCodeExtension,
   optionCreateWebProject,
-} from "./rs-impl.js";
+} from "./rs-impl";
 
 async function handleProjectCategory(params: AppParams) {
   const { cwd, isDev, memory, config, multireli, skipPrompts } = params;

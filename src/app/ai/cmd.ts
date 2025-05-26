@@ -1,15 +1,15 @@
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
 
-import type { AiSdkAgent } from "~/libs/sdk/ai/ai-impl/ai-types.js";
+import type { AiSdkAgent } from "~/libs/sdk/ai/ai-impl/ai-types";
 
-import { ensureOpenAIKey } from "~/libs/sdk/ai/ai-impl/ai-auth.js";
-import { AGENT_NAMES } from "~/libs/sdk/ai/ai-impl/ai-const.js";
-import { aiAgenticTool } from "~/libs/sdk/ai/ai-impl/ai-tools.js";
-import { aiMenu } from "~/libs/sdk/ai/ai-menu.js";
-import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read.js";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
-import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers.js";
+import { ensureOpenAIKey } from "~/libs/sdk/ai/ai-impl/ai-auth";
+import { AGENT_NAMES } from "~/libs/sdk/ai/ai-impl/ai-const";
+import { aiAgenticTool } from "~/libs/sdk/ai/ai-impl/ai-tools";
+import { aiMenu } from "~/libs/sdk/ai/ai-menu";
+import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({
   meta: {

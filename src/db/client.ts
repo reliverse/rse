@@ -6,7 +6,7 @@ import { drizzle } from "drizzle-orm/libsql/node";
 import {
   memoryPath,
   cliHomeDir,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 // Ensure the directory exists
 await ensuredir(cliHomeDir);

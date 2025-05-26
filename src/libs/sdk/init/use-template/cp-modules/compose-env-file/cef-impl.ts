@@ -11,13 +11,13 @@ import { ofetch } from "ofetch";
 import open from "open";
 import { getRandomValues } from "uncrypto";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { db } from "~/db/client.js";
-import { encrypt, decrypt } from "~/db/config.js";
-import { userDataTable } from "~/db/schema.js";
+import { db } from "~/db/client";
+import { encrypt, decrypt } from "~/db/config";
+import { userDataTable } from "~/db/schema";
 
-import { KNOWN_SERVICES, type KeyType } from "./cef-keys.js";
+import { KNOWN_SERVICES, type KeyType } from "./cef-keys";
 
 type EnvPaths = {
   projectRoot: string;

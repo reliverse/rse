@@ -5,7 +5,7 @@ import { experimental_generateImage as generateImage } from "ai";
 import { Buffer } from "buffer";
 import ora from "ora";
 
-import { uploadToProvider } from "~/libs/sdk/upload/providers/providers-mod.js";
+import { uploadToProvider } from "~/libs/sdk/upload/providers/providers-mod";
 
 export default defineCommand({
   meta: {

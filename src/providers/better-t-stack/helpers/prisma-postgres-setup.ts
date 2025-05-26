@@ -5,7 +5,7 @@ import { execa } from "execa";
 import path from "node:path";
 import pc from "picocolors";
 
-import type { ProjectPackageManager } from "~/providers/better-t-stack/types.js";
+import type { ProjectPackageManager } from "~/providers/better-t-stack/types";
 
 import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps";
 import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command";
@@ -153,7 +153,7 @@ export default prisma;
   }
 }
 
-import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
 
 export async function setupPrismaPostgres(config: ProjectConfig) {
   const { projectName, packageManager } = config;

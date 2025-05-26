@@ -6,7 +6,7 @@ import path from "@reliverse/pathkit";
 import {
   cliHomeRepos,
   cliVersion,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 // Import package.json with type assertion
 // import pkg from "../../package.json" assert { type: "json" };

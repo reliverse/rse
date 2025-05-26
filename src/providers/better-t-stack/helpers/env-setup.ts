@@ -1,7 +1,7 @@
 import path from "node:path";
 import fs from "@reliverse/relifso";
-import type { ProjectConfig } from "../types.js";
-import { generateAuthSecret } from "./auth-setup.js";
+import type { ProjectConfig } from "../types";
+import { generateAuthSecret } from "./auth-setup";
 
 interface EnvVariable {
   key: string;

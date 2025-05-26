@@ -15,7 +15,7 @@ import {
   cliConfigTsTmp,
   cliConfigJsoncBak,
   cliConfigJsoncTmp,
-} from "./cfg-details.js";
+} from "./cfg-details";
 
 /**
  * Cleans GitHub repository URLs by removing git+ prefix and .git suffix.

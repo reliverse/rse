@@ -2,31 +2,31 @@ import { selectPrompt } from "@reliverse/rempts";
 import { deleteLastLine } from "@reliverse/rempts";
 import { generate } from "random-words";
 
-import type { ParamsOmitSkipPN } from "~/libs/sdk/sdk-types.js";
+import type { ParamsOmitSkipPN } from "~/libs/sdk/sdk-types";
 
 import {
   ad,
   getRandomMessage,
   getWelcomeTitle,
   premium,
-} from "~/db/messages.js";
-import { aiMenu } from "~/libs/sdk/ai/ai-menu.js";
-import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl.js";
-import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu.js";
-import { getMainMenuOptions } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/cli-menu-items/getMainMenuOptions.js";
-import { showCloneProjectMenu } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/cli-menu-items/showCloneProjectMenu.js";
-import { showEndPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showStartEndPrompt.js";
-import { showDevToolsMenu } from "~/libs/sdk/toolbox/toolbox-impl.js";
-import { showNativeCliMenu } from "~/libs/sdk/utils/native-cli/nc-mod.js";
+} from "~/db/messages";
+import { aiMenu } from "~/libs/sdk/ai/ai-menu";
+import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl";
+import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu";
+import { getMainMenuOptions } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/cli-menu-items/getMainMenuOptions";
+import { showCloneProjectMenu } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/cli-menu-items/showCloneProjectMenu";
+import { showEndPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showStartEndPrompt";
+import { showDevToolsMenu } from "~/libs/sdk/toolbox/toolbox-impl";
+import { showNativeCliMenu } from "~/libs/sdk/utils/native-cli/nc-mod";
 import {
   cliJsrPath,
   UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { detectProject } from "~/libs/sdk/utils/rseConfig/rc-detect.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { detectProject } from "~/libs/sdk/utils/rseConfig/rc-detect";
 import {
   showNewProjectMenu,
   showOpenProjectMenu,
-} from "~/providers/reliverse-stack/rs-mod.js";
+} from "~/providers/reliverse-stack/rs-mod";
 
 export async function app(params: ParamsOmitSkipPN) {
   const { cwd, isDev, multireli, memory, config } = params;

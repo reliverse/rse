@@ -9,22 +9,22 @@ import { getUserPkgManager, runtimeInfo } from "@reliverse/runtime";
 import { safeDestr } from "destr";
 import { readPackageJSON, type PackageJson } from "pkg-types";
 
-import { getBiomeConfig } from "~/libs/sdk/utils/configHandler.js";
+import { getBiomeConfig } from "~/libs/sdk/utils/configHandler";
 
-import type { RseConfig } from "./cfg-types.js";
+import type { RseConfig } from "./cfg-types";
 
 import {
   DEFAULT_DOMAIN,
   UNKNOWN_VALUE,
   cliName,
   cliDomainDocs,
-} from "./cfg-details.js";
-import { DEFAULT_CONFIG } from "./rc-const.js";
+} from "./cfg-details";
+import { DEFAULT_CONFIG } from "./rc-const";
 import {
   detectFeatures,
   detectProjectFramework,
   getPackageJsonSafe,
-} from "./rc-detect.js";
+} from "./rc-detect";
 
 /**
  * Generating a Default Config and Merging with Detected Data

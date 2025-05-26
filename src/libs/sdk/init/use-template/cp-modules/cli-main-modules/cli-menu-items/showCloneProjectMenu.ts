@@ -6,14 +6,14 @@ import {
   multiselectPrompt,
 } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { getUserPkgManager } from "~/libs/sdk/utils/dependencies/getUserPkgManager.js";
-import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload.js";
-import { ensureGithubToken } from "~/libs/sdk/utils/instanceGithub.js";
-import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName.js";
-import { cd } from "~/libs/sdk/utils/terminalHelpers.js";
+import { getUserPkgManager } from "~/libs/sdk/utils/dependencies/getUserPkgManager";
+import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload";
+import { ensureGithubToken } from "~/libs/sdk/utils/instanceGithub";
+import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
+import { cd } from "~/libs/sdk/utils/terminalHelpers";
 
 /**
  * Normalizes a GitHub repository URL to the format "owner/repo"

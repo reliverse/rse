@@ -1,6 +1,6 @@
 import type { Static } from "@sinclair/typebox";
 
-import type { rseSchema } from "./cfg-schema.js";
+import type { rseSchema } from "./cfg-schema";
 
 export type RseConfig = Static<typeof rseSchema>;
 

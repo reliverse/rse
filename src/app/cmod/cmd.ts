@@ -4,7 +4,7 @@ import { defineCommand } from "@reliverse/rempts";
 import chalk from "chalk";
 import { prompt } from "enquirer";
 
-import { runCodemods } from "~/libs/sdk/cmod/cmod-impl.js";
+import { runCodemods } from "~/libs/sdk/cmod/cmod-impl";
 
 /**
  * A small sample set of codemods we currently show the user in interactive mode.

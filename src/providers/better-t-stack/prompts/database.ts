@@ -1,7 +1,7 @@
 import { cancel, isCancel, log, select } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants.js";
-import type { ProjectBackend, ProjectDatabase } from "../types.js";
+import { DEFAULT_CONFIG } from "../constants";
+import type { ProjectBackend, ProjectDatabase } from "../types";
 
 export async function getDatabaseChoice(
   database?: ProjectDatabase,

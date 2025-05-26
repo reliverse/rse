@@ -8,12 +8,12 @@ import { relinka } from "@reliverse/relinka";
 import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
 
-import { rseSchema } from "./cfg-schema.js";
-import { type RseConfig } from "./cfg-types.js";
-import { DEFAULT_CONFIG } from "./rc-const.js";
-import { writeRseConfig } from "./rc-create.js";
-import { getRseConfigPath } from "./rc-path.js";
-import { getBackupAndTempPaths } from "./rc-utils.js";
+import { rseSchema } from "./cfg-schema";
+import { type RseConfig } from "./cfg-types";
+import { DEFAULT_CONFIG } from "./rc-const";
+import { writeRseConfig } from "./rc-create";
+import { getRseConfigPath } from "./rc-path";
+import { getBackupAndTempPaths } from "./rc-utils";
 
 /**
  * Deep merges two objects recursively while preserving nested structures.

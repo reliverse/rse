@@ -14,14 +14,14 @@ import {
   getRepoCacheDir,
   RULE_FILE_EXTENSION,
   RULES_REPOS,
-} from "./add-rule-const.js";
+} from "./add-rule-const";
 import {
   convertTsToMdc,
   downloadRules,
   handleRuleUpdates,
   hasInstalledRules,
   installRules,
-} from "./add-rule-utils.js";
+} from "./add-rule-utils";
 
 /**
  * Called when the user passes `--get <names>` or `--get all`.

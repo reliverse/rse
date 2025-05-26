@@ -6,7 +6,7 @@ import chalk from "chalk";
 import path from "path";
 import { z } from "zod";
 
-import { configPath } from "~/app/auth/consts.js";
+import { configPath } from "~/app/auth/consts";
 import { getConfig } from "~/app/auth/(utils)/get-config";
 
 type MigrateActionOpts = {

@@ -2,14 +2,14 @@
 
 import { Command } from "commander";
 
-import { generate } from "./commands/generate.js";
-import { init } from "./commands/init.js";
+import { generate } from "./commands/generate";
+import { init } from "./commands/init";
 
 import "dotenv/config";
 
-import { migrate } from "./commands/migrate.js";
-import { generateSecret } from "./commands/secret.js";
-import { getPackageInfo } from "./utils/get-package-info.js";
+import { migrate } from "./commands/migrate";
+import { generateSecret } from "./commands/secret";
+import { getPackageInfo } from "./utils/get-package-info";
 // handle exit
 process.on("SIGINT", () => process.exit(0));
 process.on("SIGTERM", () => process.exit(0));

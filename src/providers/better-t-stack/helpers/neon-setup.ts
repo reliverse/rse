@@ -5,9 +5,9 @@ import { execa } from "execa";
 import path from "node:path";
 import pc from "picocolors";
 
-import type { ProjectPackageManager } from "~/providers/better-t-stack/types.js";
+import type { ProjectPackageManager } from "~/providers/better-t-stack/types";
 
-import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command.js";
+import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command";
 
 type NeonConfig = {
   connectionString: string;
@@ -136,7 +136,7 @@ function displayManualSetupInstructions() {
 DATABASE_URL="your_connection_string"`);
 }
 
-import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/providers/better-t-stack/types";
 
 export async function setupNeonPostgres(config: ProjectConfig): Promise<void> {
   const { projectName, packageManager } = config;

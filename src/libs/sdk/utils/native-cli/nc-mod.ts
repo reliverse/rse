@@ -1,7 +1,7 @@
 import { confirmPrompt } from "@reliverse/rempts";
 import fs from "@reliverse/relifso";
 
-import { downloadJsrDist } from "./nc-impl.js";
+import { downloadJsrDist } from "./nc-impl";
 
 export async function showNativeCliMenu({ outputDir }: { outputDir: string }) {
   // @see https://jsr.io/@rse

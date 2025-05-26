@@ -1,22 +1,22 @@
 import type {
   GetProjectsFramework,
   GetProjectsTarget1,
-} from "@vercel/sdk/models/getprojectsop.js";
+} from "@vercel/sdk/models/getprojectsop";
 
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
-import { projectsGetProjectDomain } from "@vercel/sdk/funcs/projectsGetProjectDomain.js";
+import { projectsGetProjectDomain } from "@vercel/sdk/funcs/projectsGetProjectDomain";
 
-import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
+import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
-import type { VercelTeam } from "./vercel-team.js";
+import type { VercelTeam } from "./vercel-team";
 
-import { getVercelTeams, verifyTeam } from "./vercel-team.js";
+import { getVercelTeams, verifyTeam } from "./vercel-team";
 
 type VercelFramework = GetProjectsFramework;
 

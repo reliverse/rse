@@ -3,9 +3,9 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { readPackageJSON, writePackageJSON } from "pkg-types";
 
-import type { MonorepoType } from "~/types.js";
+import type { MonorepoType } from "~/types";
 
-import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 const MONOREPO_CONFIGS = {
   turborepo: {

@@ -2,12 +2,12 @@ import { relinka } from "@reliverse/relinka";
 import { defineCommand, selectPrompt } from "@reliverse/rempts";
 import { execaCommand } from "execa";
 
-import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details";
 import {
   getAllPkgManagers,
   type PackageManager,
-} from "~/libs/sdk/utils/dependencies/getUserPkgManager.js";
-import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers.js";
+} from "~/libs/sdk/utils/dependencies/getUserPkgManager";
+import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 async function getPmOptions() {
   const projectPath = getCurrentWorkingDirectory();

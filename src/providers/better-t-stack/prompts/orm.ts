@@ -1,7 +1,13 @@
 import { cancel, isCancel, log, select } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants.js";
-import type { ProjectBackend, ProjectDatabase, ProjectOrm } from "../types.js";
+
+import type {
+  ProjectBackend,
+  ProjectDatabase,
+  ProjectOrm,
+} from "~/providers/better-t-stack/types";
+
+import { DEFAULT_CONFIG } from "~/providers/better-t-stack/constants";
 
 const ormOptions = {
   prisma: {

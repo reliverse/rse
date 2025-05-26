@@ -65,7 +65,7 @@ await runMain(mainCommand, {
 
 /* import { defineCommand, errorHandler, runMain } from "@reliverse/rempts";
 
-import { cliDomainDocs, cliVersion } from "./libs/cfg/constants/cfg-details.js";
+import { cliDomainDocs, cliVersion } from "./libs/cfg/constants/cfg-details";
 
 const main = defineCommand({
   meta: {
@@ -74,23 +74,23 @@ const main = defineCommand({
     description: cliDomainDocs,
   },
   subCommands: {
-    cli: () => import("./cli/cli-mod.js").then((r) => r.default),
-    add: () => import("./cli/args/arg-add.js").then((r) => r.default),
-    ai: () => import("./cli/args/arg-ai.js").then((r) => r.default),
-    clone: () => import("./cli/args/arg-clone.js").then((r) => r.default),
-    cmod: () => import("./cli/args/arg-cmod.js").then((r) => r.default),
-    env: () => import("./cli/args/arg-env.js").then((r) => r.default),
-    help: () => import("./cli/args/arg-help.js").then((r) => r.default),
-    init: () => import("./cli/args/arg-init.js").then((r) => r.default),
-    login: () => import("./cli/args/arg-login.js").then((r) => r.default),
-    logout: () => import("./cli/args/arg-logout.js").then((r) => r.default),
-    memory: () => import("./cli/args/arg-memory.js").then((r) => r.default),
+    cli: () => import("./cli/cli-mod").then((r) => r.default),
+    add: () => import("./cli/args/arg-add").then((r) => r.default),
+    ai: () => import("./cli/args/arg-ai").then((r) => r.default),
+    clone: () => import("./cli/args/arg-clone").then((r) => r.default),
+    cmod: () => import("./cli/args/arg-cmod").then((r) => r.default),
+    env: () => import("./cli/args/arg-env").then((r) => r.default),
+    help: () => import("./cli/args/arg-help").then((r) => r.default),
+    init: () => import("./cli/args/arg-init").then((r) => r.default),
+    login: () => import("./cli/args/arg-login").then((r) => r.default),
+    logout: () => import("./cli/args/arg-logout").then((r) => r.default),
+    memory: () => import("./cli/args/arg-memory").then((r) => r.default),
     multireli: () =>
-      import("./cli/args/arg-multireli.js").then((r) => r.default),
-    schema: () => import("./cli/args/arg-schema.js").then((r) => r.default),
-    studio: () => import("./cli/args/arg-studio.js").then((r) => r.default),
-    update: () => import("./cli/args/arg-update.js").then((r) => r.default),
-    upload: () => import("./cli/args/arg-upload.js").then((r) => r.default),
+      import("./cli/args/arg-multireli").then((r) => r.default),
+    schema: () => import("./cli/args/arg-schema").then((r) => r.default),
+    studio: () => import("./cli/args/arg-studio").then((r) => r.default),
+    update: () => import("./cli/args/arg-update").then((r) => r.default),
+    upload: () => import("./cli/args/arg-upload").then((r) => r.default),
   },
 });
 

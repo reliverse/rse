@@ -1,10 +1,10 @@
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 
-import { composeEnvFile } from "~/libs/sdk/init/use-template/cp-modules/compose-env-file/cef-mod.js";
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod.js";
-import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers.js";
+import { composeEnvFile } from "~/libs/sdk/init/use-template/cp-modules/compose-env-file/cef-mod";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
+import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export async function envArgImpl(isDev: boolean, pathToProject?: string) {
   try {

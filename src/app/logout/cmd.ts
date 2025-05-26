@@ -3,8 +3,8 @@ import { confirmPrompt, defineCommand } from "@reliverse/rempts";
 import { deleteLastLine, msg } from "@reliverse/rempts";
 import fs from "@reliverse/relifso";
 
-import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { deleteMemory } from "~/libs/sdk/logout/logout-impl.js";
+import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { deleteMemory } from "~/libs/sdk/logout/logout-impl";
 
 const isConfigExists = async () => {
   if (await fs.pathExists(memoryPath)) {

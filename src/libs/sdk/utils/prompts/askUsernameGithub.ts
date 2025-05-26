@@ -1,9 +1,9 @@
 import { relinka } from "@reliverse/relinka";
 import { inputPrompt } from "@reliverse/rempts";
 
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
+import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 export async function askUsernameGithub(
   memory: ReliverseMemory,

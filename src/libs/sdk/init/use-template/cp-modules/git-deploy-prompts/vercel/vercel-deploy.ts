@@ -1,18 +1,18 @@
 import { relinka, relinkaAsync } from "@reliverse/relinka";
-import { deploymentsCreateDeployment } from "@vercel/sdk/funcs/deploymentsCreateDeployment.js";
-import { deploymentsGetDeployment } from "@vercel/sdk/funcs/deploymentsGetDeployment.js";
-import { deploymentsGetDeploymentEvents } from "@vercel/sdk/funcs/deploymentsGetDeploymentEvents.js";
+import { deploymentsCreateDeployment } from "@vercel/sdk/funcs/deploymentsCreateDeployment";
+import { deploymentsGetDeployment } from "@vercel/sdk/funcs/deploymentsGetDeployment";
+import { deploymentsGetDeploymentEvents } from "@vercel/sdk/funcs/deploymentsGetDeploymentEvents";
 import { simpleGit } from "simple-git";
 
-import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
+import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
 
-import type { DeploymentLog, VercelDeploymentConfig } from "./vercel-types.js";
+import type { DeploymentLog, VercelDeploymentConfig } from "./vercel-types";
 
-import { withRateLimit } from "./vercel-api.js";
-import { getPrimaryVercelTeam } from "./vercel-team.js";
+import { withRateLimit } from "./vercel-api";
+import { getPrimaryVercelTeam } from "./vercel-team";
 
 /**
  * Monitors the deployment logs until the deployment reaches a READY state.

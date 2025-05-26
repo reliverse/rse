@@ -1,4 +1,4 @@
-import type { RseConfig } from "./cfg-types.js";
+import type { RseConfig } from "./cfg-types";
 
 export type IterableError = Iterable<{
   schema: unknown;

@@ -2,13 +2,13 @@ import { re } from "@reliverse/relico";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 
-import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub.js";
-import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
-import type { DeploymentService } from "~/types.js";
+import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
+import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
+import type { DeploymentService } from "~/types";
 
-import { prepareVercelProjectCreation } from "./vercel/vercel-create.js";
+import { prepareVercelProjectCreation } from "./vercel/vercel-create";
 
 export async function selectDeploymentService(
   config: RseConfig,

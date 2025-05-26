@@ -5,7 +5,7 @@ import { ensuredir } from "@reliverse/relifso";
 import { defineCommand } from "@reliverse/rempts";
 import os from "os";
 
-import { showRulesMenu, handleDirectRules } from "./add-rule-impl.js";
+import { showRulesMenu, handleDirectRules } from "./add-rule-impl";
 
 export default defineCommand({
   meta: {

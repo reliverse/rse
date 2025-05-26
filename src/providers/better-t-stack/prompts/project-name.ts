@@ -3,7 +3,7 @@ import fs from "@reliverse/relifso";
 import path from "node:path";
 import pc from "picocolors";
 
-import { DEFAULT_CONFIG } from "~/cli/providers/better-t-stack/constants.js";
+import { DEFAULT_CONFIG } from "~/cli/providers/better-t-stack/constants";
 
 const INVALID_CHARS = ["<", ">", ":", '"', "|", "?", "*"];
 const MAX_LENGTH = 255;

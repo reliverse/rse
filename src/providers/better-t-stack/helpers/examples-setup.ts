@@ -1,7 +1,7 @@
 import path from "node:path";
 import fs from "@reliverse/relifso";
-import type { AvailableDependencies } from "../constants.js";
-import type { ProjectConfig } from "../types.js";
+import type { AvailableDependencies } from "../constants";
+import type { ProjectConfig } from "../types";
 import { addPackageDependency } from "../utils/add-package-deps";
 
 export async function setupExamples(config: ProjectConfig): Promise<void> {

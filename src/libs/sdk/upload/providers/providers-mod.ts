@@ -3,8 +3,8 @@ import type { Buffer } from "buffer";
 import fs from "@reliverse/relifso";
 import path from "@reliverse/pathkit";
 
-import { uploadToUploadcare } from "./uploadcare.js";
-import { uploadToUploadthing } from "./uploadthing.js";
+import { uploadToUploadcare } from "./uploadcare";
+import { uploadToUploadthing } from "./uploadthing";
 
 export type UploadFile = {
   name: string;

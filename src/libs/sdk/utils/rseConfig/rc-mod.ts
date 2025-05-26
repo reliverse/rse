@@ -2,20 +2,20 @@ import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
 import {
   UNKNOWN_VALUE,
   RSE_SCHEMA_DEV,
   cliConfigJsonc,
   cliConfigTs,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
 
-import { DEFAULT_CONFIG } from "./rc-const.js";
-import { createRseConfig } from "./rc-create.js";
-import { getRseConfigPath } from "./rc-path.js";
-import { readRseConfig } from "./rc-read.js";
-import { parseAndFixRseConfig } from "./rc-repair.js";
+import { DEFAULT_CONFIG } from "./rc-const";
+import { createRseConfig } from "./rc-create";
+import { getRseConfigPath } from "./rc-path";
+import { readRseConfig } from "./rc-read";
+import { parseAndFixRseConfig } from "./rc-repair";
 
 /* ------------------------------------------------------------------
  * The Core Logic: Handle or Verify Config + MULTI-CONFIG

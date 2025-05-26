@@ -16,21 +16,21 @@ import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 import {
   randomProjectFrameworkTitle,
   getRandomMessage,
-} from "~/db/messages.js";
-import { createWebProject } from "~/libs/sdk/init/use-template/cp-mod.js";
-import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
-import { recommended } from "~/libs/sdk/utils/badgeNotifiers.js";
+} from "~/db/messages";
+import { createWebProject } from "~/libs/sdk/init/use-template/cp-mod";
+import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
+import { recommended } from "~/libs/sdk/utils/badgeNotifiers";
 import {
   TEMP_BROWSER_TEMPLATE_OPTIONS,
   TEMP_VSCODE_TEMPLATE_OPTIONS,
   TEMP_FULLSTACK_WEBSITE_TEMPLATE_OPTIONS,
   type RepoOption,
   TEMP_SEPARATED_WEBSITE_TEMPLATE_OPTIONS,
-} from "~/libs/sdk/utils/projectRepository.js";
+} from "~/libs/sdk/utils/projectRepository";
 import {
   endTitle,
   UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 /**
  * Possible template options for VS Code extensions

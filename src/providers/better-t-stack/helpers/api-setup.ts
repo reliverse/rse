@@ -1,13 +1,13 @@
 import fs from "@reliverse/relifso";
 import path from "node:path";
 
-import type { AvailableDependencies } from "~/providers/better-t-stack/constants.js";
+import type { AvailableDependencies } from "~/providers/better-t-stack/constants";
 import type {
   ProjectConfig,
   ProjectFrontend,
-} from "~/providers/better-t-stack/types.js";
+} from "~/providers/better-t-stack/types";
 
-import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps.js";
+import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps";
 
 export async function setupApi(config: ProjectConfig): Promise<void> {
   const { api, projectName, frontend, backend, packageManager } = config;

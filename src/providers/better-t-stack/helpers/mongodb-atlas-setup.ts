@@ -4,7 +4,7 @@ import consola from "consola";
 import { execa } from "execa";
 import fs from "@reliverse/relifso";
 import pc from "picocolors";
-import type { ProjectConfig } from "../types.js";
+import type { ProjectConfig } from "../types";
 import { commandExists } from "../utils/command-exists";
 
 type MongoDBConfig = {

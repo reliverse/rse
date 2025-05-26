@@ -4,7 +4,7 @@ import path from "node:path";
 import {
   type AvailableDependencies,
   dependencyVersionMap,
-} from "~/providers/better-t-stack/constants.js";
+} from "~/providers/better-t-stack/constants";
 
 export const addPackageDependency = async (opts: {
   dependencies?: AvailableDependencies[];

@@ -2,38 +2,38 @@ import { re } from "@reliverse/relico";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt, inputPrompt } from "@reliverse/rempts";
 
-import type { DetectedProject, RseConfig } from "~/libs/sdk/sdk-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { DetectedProject, RseConfig } from "~/libs/sdk/sdk-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { useLanguine } from "~/libs/sdk/add/add-local/i18n/languine.js";
-import { envArgImpl } from "~/libs/sdk/env/env-impl.js";
-import { deployProject } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/deploy.js";
+import { useLanguine } from "~/libs/sdk/add/add-local/i18n/languine";
+import { envArgImpl } from "~/libs/sdk/env/env-impl";
+import { deployProject } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/deploy";
 import {
   createCommit,
   handleGithubRepo,
   initGitDir,
   pushGitCommits,
-} from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/git.js";
-import { checkGithubRepoOwnership } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/github.js";
-import { ensureDbInitialized } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/helpers/handlePkgJsonScripts.js";
-import { checkVercelDeployment } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-check.js";
-import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
+} from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/git";
+import { checkGithubRepoOwnership } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/github";
+import { ensureDbInitialized } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/helpers/handlePkgJsonScripts";
+import { checkVercelDeployment } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-check";
+import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 import {
   convertDatabaseProvider,
   convertPrismaToDrizzle,
-} from "~/libs/sdk/utils/codemods/convertDatabase.js";
-import { getProjectContent } from "~/libs/sdk/utils/getProjectContent.js";
-import { handleCleanup } from "~/libs/sdk/utils/handlers/handleCleanup.js";
-import { handleCodemods } from "~/libs/sdk/utils/handlers/handleCodemods.js";
-import { initGithubSDK } from "~/libs/sdk/utils/instanceGithub.js";
-import { initVercelSDK } from "~/libs/sdk/utils/instanceVercel.js";
-import { checkScriptExists } from "~/libs/sdk/utils/pkgJsonHelpers.js";
-import { askInstallDeps } from "~/libs/sdk/utils/prompts/askInstallDeps.js";
-import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend.js";
+} from "~/libs/sdk/utils/codemods/convertDatabase";
+import { getProjectContent } from "~/libs/sdk/utils/getProjectContent";
+import { handleCleanup } from "~/libs/sdk/utils/handlers/handleCleanup";
+import { handleCodemods } from "~/libs/sdk/utils/handlers/handleCodemods";
+import { initGithubSDK } from "~/libs/sdk/utils/instanceGithub";
+import { initVercelSDK } from "~/libs/sdk/utils/instanceVercel";
+import { checkScriptExists } from "~/libs/sdk/utils/pkgJsonHelpers";
+import { askInstallDeps } from "~/libs/sdk/utils/prompts/askInstallDeps";
+import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend";
 
-import { manageDrizzleSchema } from "./drizzle/manageDrizzleSchema.js";
-import { handleIntegrations } from "./editor-impl.js";
-import { manageShadcn } from "./shadcn/shadcn-mod.js";
+import { manageDrizzleSchema } from "./drizzle/manageDrizzleSchema";
+import { handleIntegrations } from "./editor-impl";
+import { manageShadcn } from "./shadcn/shadcn-mod";
 
 type ProjectMenuOption =
   | "git-deploy"

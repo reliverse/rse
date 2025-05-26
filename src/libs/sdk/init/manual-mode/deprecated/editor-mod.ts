@@ -7,7 +7,7 @@ import { relinka } from "@reliverse/relinka";
 import { execa } from "execa";
 import { readPackageJSON, writePackageJSON } from "pkg-types";
 
-import type { IntegrationConfig, RemovalConfig } from "~/types.js";
+import type { IntegrationConfig, RemovalConfig } from "~/types";
 
 enum PackageManager {
   Bun = "bun",

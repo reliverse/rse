@@ -1,8 +1,8 @@
 import path from "node:path";
-import type { AvailableDependencies } from "../constants.js";
+import type { AvailableDependencies } from "../constants";
 import { addPackageDependency } from "../utils/add-package-deps";
 
-import type { ProjectConfig } from "../types.js";
+import type { ProjectConfig } from "../types";
 
 export async function setupBackendDependencies(
   config: ProjectConfig,

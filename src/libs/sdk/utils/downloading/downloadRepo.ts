@@ -12,19 +12,19 @@ import { simpleGit } from "simple-git";
 import { extract } from "tar";
 import { promisify } from "util";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { initGitDir } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/git.js";
+import { initGitDir } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/git";
 import {
   rmEnsureDir,
   setHiddenAttributeOnWindows,
-} from "~/libs/sdk/utils/filesysHelpers.js";
+} from "~/libs/sdk/utils/filesysHelpers";
 import {
   cliConfigJsonc,
   cliConfigTs,
   cliHomeRepos,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path";
 
 const execAsync = promisify(exec);
 

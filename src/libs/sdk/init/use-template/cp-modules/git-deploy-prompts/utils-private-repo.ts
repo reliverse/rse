@@ -8,14 +8,14 @@ import tar from "tar-stream";
 import { promisify } from "util";
 import { gzip } from "zlib";
 
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { setHiddenAttributeOnWindows } from "~/libs/sdk/utils/filesysHelpers.js";
+import { setHiddenAttributeOnWindows } from "~/libs/sdk/utils/filesysHelpers";
 import {
   cliConfigJsonc,
   cliConfigJsoncTmp,
   cliHomeTmp,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 const gzipAsync = promisify(gzip);
 

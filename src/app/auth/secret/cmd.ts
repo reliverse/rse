@@ -2,7 +2,7 @@ import { re } from "@reliverse/relico";
 import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
 
-import { generateSecretHash } from "~/app/auth/(utils)/generate-secret.js";
+import { generateSecretHash } from "~/app/auth/(utils)/generate-secret";
 
 export default defineCommand({
   meta: {

@@ -6,8 +6,8 @@ import ora from "ora";
 import {
   readFilesFromPaths,
   uploadToProvider,
-} from "~/libs/sdk/upload/providers/providers-mod.js";
-import { formatBytes } from "~/libs/sdk/upload/upload-utils.js";
+} from "~/libs/sdk/upload/providers/providers-mod";
+import { formatBytes } from "~/libs/sdk/upload/upload-utils";
 
 export default defineCommand({
   meta: {

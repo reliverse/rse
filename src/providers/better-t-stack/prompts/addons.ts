@@ -1,7 +1,7 @@
 import { cancel, isCancel, multiselect } from "@clack/prompts";
 import pc from "picocolors";
-import { DEFAULT_CONFIG } from "../constants.js";
-import type { ProjectAddons, ProjectFrontend } from "../types.js";
+import { DEFAULT_CONFIG } from "../constants";
+import type { ProjectAddons, ProjectFrontend } from "../types";
 
 type AddonOption = {
   value: ProjectAddons;

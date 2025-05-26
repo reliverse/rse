@@ -1,14 +1,14 @@
 import { confirmPrompt } from "@reliverse/rempts";
 import { relinka } from "@reliverse/relinka";
 import { re } from "@reliverse/relico";
-import { projectsCreateProjectEnv } from "@vercel/sdk/funcs/projectsCreateProjectEnv.js";
+import { projectsCreateProjectEnv } from "@vercel/sdk/funcs/projectsCreateProjectEnv";
 
-import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
+import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
 
-import type { DeploymentOptions, EnvVar } from "./vercel-types.js";
+import type { DeploymentOptions, EnvVar } from "./vercel-types";
 
-import { getVercelEnvVar, withRateLimit } from "./vercel-api.js";
-import { getEnvVars } from "./vercel-utils.js";
+import { getVercelEnvVar, withRateLimit } from "./vercel-api";
+import { getEnvVars } from "./vercel-utils";
 
 export async function addEnvVarsToVercelProject(
   vercelInstance: InstanceVercel,

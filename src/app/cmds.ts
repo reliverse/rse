@@ -2,5 +2,5 @@
 
 export async function cmdAuthGenerate() {
   // @ts-expect-error TODO: temp
-  return (await import("./auth/generate/cmd.js")).default;
+  return (await import("./auth/generate/cmd")).default;
 }

@@ -1,10 +1,10 @@
 import { inputPrompt } from "@reliverse/rempts";
 
-import type { AIAgentOptions } from "./ai-types.js";
+import type { AIAgentOptions } from "./ai-types";
 
-import { ensureOpenAIKey } from "./ai-auth.js";
-import { AGENT_NAMES } from "./ai-const.js";
-import { agentRelinter } from "./relinter/relinter.js";
+import { ensureOpenAIKey } from "./ai-auth";
+import { AGENT_NAMES } from "./ai-const";
+import { agentRelinter } from "./relinter/relinter";
 
 /**
  * Invokes a specific agent based on provided options.

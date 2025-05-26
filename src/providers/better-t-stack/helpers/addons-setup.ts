@@ -1,13 +1,13 @@
 import fs from "@reliverse/relifso";
 import path from "node:path";
 
-import type { ProjectConfig } from "~/cli/providers/better-t-stack/types.js";
-import type { ProjectFrontend } from "~/cli/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/cli/providers/better-t-stack/types";
+import type { ProjectFrontend } from "~/cli/providers/better-t-stack/types";
 
-import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps.js";
+import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps";
 
-import { setupStarlight } from "./starlight-setup.js";
-import { setupTauri } from "./tauri-setup.js";
+import { setupStarlight } from "./starlight-setup";
+import { setupTauri } from "./tauri-setup";
 
 export async function setupAddons(config: ProjectConfig) {
   const { projectName, addons, frontend } = config;

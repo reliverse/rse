@@ -12,21 +12,21 @@ import type {
   ProjectOrm,
   ProjectPackageManager,
   ProjectRuntime,
-} from "../types.js";
-import { getAddonsChoice } from "./addons.js";
-import { getApiChoice } from "./api.js";
-import { getAuthChoice } from "./auth.js";
-import { getBackendFrameworkChoice } from "./backend-framework.js";
-import { getDatabaseChoice } from "./database.js";
-import { getDBSetupChoice } from "./db-setup.js";
-import { getExamplesChoice } from "./examples.js";
-import { getFrontendChoice } from "./frontend-option.js";
-import { getGitChoice } from "./git.js";
-import { getinstallChoice } from "./install.js";
-import { getORMChoice } from "./orm.js";
-import { getPackageManagerChoice } from "./package-manager.js";
-import { getProjectName } from "./project-name.js";
-import { getRuntimeChoice } from "./runtime.js";
+} from "../types";
+import { getAddonsChoice } from "./addons";
+import { getApiChoice } from "./api";
+import { getAuthChoice } from "./auth";
+import { getBackendFrameworkChoice } from "./backend-framework";
+import { getDatabaseChoice } from "./database";
+import { getDBSetupChoice } from "./db-setup";
+import { getExamplesChoice } from "./examples";
+import { getFrontendChoice } from "./frontend-option";
+import { getGitChoice } from "./git";
+import { getinstallChoice } from "./install";
+import { getORMChoice } from "./orm";
+import { getPackageManagerChoice } from "./package-manager";
+import { getProjectName } from "./project-name";
+import { getRuntimeChoice } from "./runtime";
 
 type PromptGroupResults = {
   projectName: string;

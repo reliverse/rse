@@ -2,7 +2,7 @@ import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 import { execa } from "execa";
 
-import { isVSCodeInstalled } from "~/libs/sdk/utils/handlers/isAppInstalled.js";
+import { isVSCodeInstalled } from "~/libs/sdk/utils/handlers/isAppInstalled";
 
 export async function askOpenInIDE({
   isDev,

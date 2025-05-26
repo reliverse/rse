@@ -2,22 +2,22 @@ import path from "node:path";
 import { cancel, log, spinner } from "@clack/prompts";
 import fs from "@reliverse/relifso";
 import pc from "picocolors";
-import type { ProjectConfig } from "../types.js";
-import { setupAddons } from "./addons-setup.js";
-import { setupApi } from "./api-setup.js";
-import { setupAuth } from "./auth-setup.js";
-import { setupBackendDependencies } from "./backend-framework-setup.js";
-import { createReadme } from "./create-readme.js";
-import { setupDatabase } from "./db-setup.js";
-import { setupEnvironmentVariables } from "./env-setup.js";
-import { setupExamples } from "./examples-setup.js";
-import { installDependencies } from "./install-dependencies.js";
-import { displayPostInstallInstructions } from "./post-installation.js";
+import type { ProjectConfig } from "../types";
+import { setupAddons } from "./addons-setup";
+import { setupApi } from "./api-setup";
+import { setupAuth } from "./auth-setup";
+import { setupBackendDependencies } from "./backend-framework-setup";
+import { createReadme } from "./create-readme";
+import { setupDatabase } from "./db-setup";
+import { setupEnvironmentVariables } from "./env-setup";
+import { setupExamples } from "./examples-setup";
+import { installDependencies } from "./install-dependencies";
+import { displayPostInstallInstructions } from "./post-installation";
 import {
   initializeGit,
   updatePackageConfigurations,
-} from "./project-config.js";
-import { setupRuntime } from "./runtime-setup.js";
+} from "./project-config";
+import { setupRuntime } from "./runtime-setup";
 import {
   copyBaseTemplate,
   handleExtras,
@@ -27,7 +27,7 @@ import {
   setupDbOrmTemplates,
   setupExamplesTemplate,
   setupFrontendTemplates,
-} from "./template-manager.js";
+} from "./template-manager";
 
 export async function createProject(options: ProjectConfig) {
   const projectDir = path.resolve(process.cwd(), options.projectName);

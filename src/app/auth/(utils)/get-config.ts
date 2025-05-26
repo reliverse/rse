@@ -10,8 +10,8 @@ import { BetterAuthError } from "better-auth";
 import { loadConfig } from "c12";
 import path from "path";
 
-import { addSvelteKitEnvModules } from "./add-svelte-kit-env-modules.js";
-import { getTsconfigInfo } from "./get-tsconfig-info.js";
+import { addSvelteKitEnvModules } from "./add-svelte-kit-env-modules";
+import { getTsconfigInfo } from "./get-tsconfig-info";
 
 let possiblePaths = [
   "auth.ts",

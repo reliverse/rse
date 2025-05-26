@@ -195,7 +195,7 @@ DATABASE_URL=your_database_url
 DATABASE_AUTH_TOKEN=your_auth_token`);
 }
 
-import type { ProjectConfig } from "../types.js";
+import type { ProjectConfig } from "../types";
 
 export async function setupTurso(config: ProjectConfig): Promise<void> {
   const { projectName, orm } = config;

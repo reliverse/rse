@@ -4,14 +4,14 @@ import fs from "@reliverse/relifso";
 import path from "node:path";
 import pc from "picocolors";
 
-import type { ProjectConfig } from "~/cli/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/cli/providers/better-t-stack/types";
 
-import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps.js";
+import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps";
 
-import { setupMongoDBAtlas } from "./mongodb-atlas-setup.js";
-import { setupNeonPostgres } from "./neon-setup.js";
-import { setupPrismaPostgres } from "./prisma-postgres-setup.js";
-import { setupTurso } from "./turso-setup.js";
+import { setupMongoDBAtlas } from "./mongodb-atlas-setup";
+import { setupNeonPostgres } from "./neon-setup";
+import { setupPrismaPostgres } from "./prisma-postgres-setup";
+import { setupTurso } from "./turso-setup";
 
 export async function setupDatabase(config: ProjectConfig): Promise<void> {
   const { projectName, database, orm, dbSetup, backend } = config;

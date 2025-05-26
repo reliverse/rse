@@ -1,7 +1,7 @@
 import { relinka } from "@reliverse/relinka";
 import fs from "@reliverse/relifso";
 
-import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 export async function deleteMemory() {
   relinka("verbose", `Deleting config file: ${memoryPath}`);

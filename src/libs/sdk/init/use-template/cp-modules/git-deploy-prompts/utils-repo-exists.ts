@@ -1,17 +1,17 @@
 import { relinka } from "@reliverse/relinka";
 import { simpleGit } from "simple-git";
 
-import type { GitModParams } from "~/libs/sdk/sdk-types.js";
-import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { GitModParams } from "~/libs/sdk/sdk-types";
+import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { getEffectiveDir } from "~/libs/sdk/utils/getEffectiveDir.js";
-import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod.js";
-import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { migrateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-migrate.js";
+import { getEffectiveDir } from "~/libs/sdk/utils/getEffectiveDir";
+import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod";
+import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { migrateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-migrate";
 
-import { handleExistingRepoContent } from "./utils-private-repo.js";
+import { handleExistingRepoContent } from "./utils-private-repo";
 
 export async function handleExistingRepo(
   params: GitModParams & {

@@ -5,7 +5,7 @@ import { getAuthTables, type FieldType } from "better-auth/db";
 import fs from "fs/promises";
 import path from "path";
 
-import type { SchemaGenerator } from "./types.js";
+import type { SchemaGenerator } from "./types";
 
 export const generatePrismaSchema: SchemaGenerator = async ({
   adapter,

@@ -3,9 +3,9 @@ import { inputPrompt } from "@reliverse/rempts";
 import dotenv from "dotenv";
 import { ofetch } from "ofetch";
 
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory.js";
+import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 dotenv.config();
 

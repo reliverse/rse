@@ -4,9 +4,9 @@ import pc from "picocolors";
 import type {
   ProjectBackend,
   ProjectRuntime,
-} from "~/cli/providers/better-t-stack/types.js";
+} from "~/cli/providers/better-t-stack/types";
 
-import { DEFAULT_CONFIG } from "~/cli/providers/better-t-stack/constants.js";
+import { DEFAULT_CONFIG } from "~/cli/providers/better-t-stack/constants";
 
 export async function getRuntimeChoice(
   runtime?: ProjectRuntime,

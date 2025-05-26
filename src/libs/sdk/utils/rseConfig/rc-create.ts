@@ -11,34 +11,34 @@ import { Value } from "@sinclair/typebox/value";
 import { execaCommand } from "execa";
 import { addDevDependency } from "nypm";
 
-import type { DeploymentService } from "~/types.js";
+import type { DeploymentService } from "~/types";
 
-import type { RseConfig } from "./cfg-types.js";
+import type { RseConfig } from "./cfg-types";
 
-import { PROJECT_ROOT, cliDomainDocs } from "./cfg-details.js";
+import { PROJECT_ROOT, cliDomainDocs } from "./cfg-details";
 import {
   UNKNOWN_VALUE,
   cliName,
   DEFAULT_DOMAIN,
   RSE_SCHEMA_DEV,
-} from "./cfg-details.js";
-import { rseSchema } from "./cfg-schema.js";
-import { DEFAULT_CONFIG } from "./rc-const.js";
+} from "./cfg-details";
+import { rseSchema } from "./cfg-schema";
+import { DEFAULT_CONFIG } from "./rc-const";
 import {
   generateDefaultRulesForProject,
   getDefaultRseConfig,
-} from "./rc-default.js";
-import { getPackageJson, detectFeatures } from "./rc-detect.js";
-import { injectSectionComments } from "./rc-inject.js";
-import { getRseConfigPath } from "./rc-path.js";
-import { readRseConfig } from "./rc-read.js";
+} from "./rc-default";
+import { getPackageJson, detectFeatures } from "./rc-detect";
+import { injectSectionComments } from "./rc-inject";
+import { getRseConfigPath } from "./rc-path";
+import { readRseConfig } from "./rc-read";
 import {
   objectToCodeString,
   atomicWriteFile,
   cleanGitHubUrl,
   getBackupAndTempPaths,
   updateTsConfigInclude,
-} from "./rc-utils.js";
+} from "./rc-utils";
 
 /**
  * Writes the given rseConfig to the specified config file (TypeScript or JSONC).

@@ -1,11 +1,11 @@
 import { Value } from "@sinclair/typebox/value";
 import { loadConfig, watchConfig } from "c12";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { rseSchema } from "~/libs/sdk/utils/rseConfig/cfg-schema.js";
+import { rseSchema } from "~/libs/sdk/utils/rseConfig/cfg-schema";
 
-import { DEFAULT_CONFIG } from "./rc-const.js";
+import { DEFAULT_CONFIG } from "./rc-const";
 
 /**
  * Loads the rseg using c12. Merges:

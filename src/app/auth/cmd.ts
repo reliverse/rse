@@ -14,9 +14,9 @@ import fs from "@reliverse/relifso";
 import MagicString from "magic-string";
 import path from "@reliverse/pathkit";
 
-import { cmdAuthGenerate } from "~/app/cmds.js";
+import { cmdAuthGenerate } from "~/app/cmds";
 
-import { configPath, schemaPath } from "./consts.js";
+import { configPath, schemaPath } from "./consts";
 
 const notice = `/**
  * THIS FILE IS AUTO-GENERATED - DO NOT EDIT DIRECTLY

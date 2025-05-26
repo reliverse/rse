@@ -3,9 +3,9 @@ import fs from "@reliverse/relifso";
 import path from "node:path";
 import pc from "picocolors";
 
-import type { ProjectConfig } from "~/cli/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/cli/providers/better-t-stack/types";
 
-import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps.js";
+import { addPackageDependency } from "~/cli/providers/better-t-stack/utils/add-package-deps";
 
 export async function setupAuth(config: ProjectConfig): Promise<void> {
   const { projectName, auth, frontend, backend } = config;

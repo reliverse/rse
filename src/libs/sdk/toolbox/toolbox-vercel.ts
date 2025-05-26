@@ -1,4 +1,4 @@
-import type { GetProjectsResponseBody } from "@vercel/sdk/models/getprojectsop.js";
+import type { GetProjectsResponseBody } from "@vercel/sdk/models/getprojectsop";
 
 import { relinka } from "@reliverse/relinka";
 import {
@@ -6,18 +6,18 @@ import {
   selectPrompt,
   confirmPrompt,
 } from "@reliverse/rempts";
-import { projectsDeleteProject } from "@vercel/sdk/funcs/projectsDeleteProject.js";
-import { projectsGetProjects } from "@vercel/sdk/funcs/projectsGetProjects.js";
+import { projectsDeleteProject } from "@vercel/sdk/funcs/projectsDeleteProject";
+import { projectsGetProjects } from "@vercel/sdk/funcs/projectsGetProjects";
 
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { withRateLimit } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-api.js";
-import { getPrimaryVercelTeam } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-team.js";
+import { withRateLimit } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-api";
+import { getPrimaryVercelTeam } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-team";
 import {
   initVercelSDK,
   type InstanceVercel,
-} from "~/libs/sdk/utils/instanceVercel.js";
-import { getMaxHeightSize, sleep } from "~/libs/sdk/utils/microHelpers.js";
+} from "~/libs/sdk/utils/instanceVercel";
+import { getMaxHeightSize, sleep } from "~/libs/sdk/utils/microHelpers";
 
 /**
  * Initializes Vercel tools and routes the selected option.

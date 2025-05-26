@@ -1,6 +1,6 @@
 import { cancel, isCancel, log, select } from "@clack/prompts";
 import pc from "picocolors";
-import type { ProjectBackend, ProjectDBSetup, ProjectOrm } from "../types.js";
+import type { ProjectBackend, ProjectDBSetup, ProjectOrm } from "../types";
 
 export async function getDBSetupChoice(
   databaseType: string,

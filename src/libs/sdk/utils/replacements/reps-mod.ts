@@ -5,12 +5,12 @@ import { destr } from "destr";
 import { readPackageJSON } from "pkg-types";
 import { glob } from "tinyglobby";
 
-import type { ProjectConfigReturn } from "~/libs/sdk/sdk-types.js";
-import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types.js";
+import type { ProjectConfigReturn } from "~/libs/sdk/sdk-types";
+import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
+import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { extractRepoInfo, replaceStringsInFiles } from "./reps-impl.js";
-import { CommonPatterns, HardcodedStrings } from "./reps-keys.js";
+import { extractRepoInfo, replaceStringsInFiles } from "./reps-impl";
+import { CommonPatterns, HardcodedStrings } from "./reps-keys";
 
 /**
  * Gets all package names from package.json dependencies

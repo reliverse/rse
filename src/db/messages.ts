@@ -1,6 +1,6 @@
 import { re } from "@reliverse/relico";
 
-import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 export const randomWelcomeMessages = (username: string) => [
   `Welcome back, ${username}! Ready to pick up where you left off?`,

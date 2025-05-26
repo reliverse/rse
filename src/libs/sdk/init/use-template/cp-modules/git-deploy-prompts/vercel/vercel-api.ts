@@ -1,9 +1,9 @@
 import { relinka } from "@reliverse/relinka";
-import { projectsGetProjectEnv } from "@vercel/sdk/funcs/projectsGetProjectEnv.js";
+import { projectsGetProjectEnv } from "@vercel/sdk/funcs/projectsGetProjectEnv";
 
-import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel.js";
+import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
 
-import type { EnvVar } from "./vercel-types.js";
+import type { EnvVar } from "./vercel-types";
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 5000;

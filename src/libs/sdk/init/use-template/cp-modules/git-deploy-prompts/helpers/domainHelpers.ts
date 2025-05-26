@@ -1,4 +1,4 @@
-import { rseOrgBase } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
+import { rseOrgBase } from "~/libs/sdk/utils/rseConfig/cfg-details";
 
 const specialDomains = [
   // Vercel domains

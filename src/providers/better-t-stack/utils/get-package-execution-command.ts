@@ -1,4 +1,4 @@
-import type { ProjectPackageManager } from "../types.js";
+import type { ProjectPackageManager } from "../types";
 
 /**
  * Returns the appropriate command for running a package without installing it globally,

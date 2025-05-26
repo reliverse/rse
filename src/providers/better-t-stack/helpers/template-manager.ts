@@ -1,10 +1,11 @@
-import path from "node:path";
 import fs from "@reliverse/relifso";
 import { globby } from "globby";
-import pc from "picocolors";
-import { PKG_ROOT } from "../constants.js";
-import type { ProjectConfig } from "../types.js";
-import { processTemplate } from "../utils/template-processor";
+import path from "node:path";
+
+import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
+
+import { PKG_ROOT } from "~/providers/better-t-stack/constants.js";
+import { processTemplate } from "~/providers/better-t-stack/utils/template-processor";
 
 async function processAndCopyFiles(
   sourcePattern: string | string[],
@@ -48,7 +49,9 @@ async function processAndCopyFiles(
       } else {
         await fs.copy(srcPath, destPath, { overwrite: true });
       }
-    } catch (error) {}
+    } catch {
+      /* empty */
+    }
   }
 }
 
@@ -84,7 +87,6 @@ export async function setupFrontendTemplates(
       );
       if (await fs.pathExists(webBaseDir)) {
         await processAndCopyFiles("**/*", webBaseDir, webAppDir, context);
-      } else {
       }
       const reactFramework = context.frontend.find((f) =>
         ["tanstack-router", "react-router", "tanstack-start", "next"].includes(
@@ -103,7 +105,6 @@ export async function setupFrontendTemplates(
             webAppDir,
             context,
           );
-        } else {
         }
         if (!isConvex && context.api !== "none") {
           const apiWebBaseDir = path.join(
@@ -117,7 +118,6 @@ export async function setupFrontendTemplates(
               webAppDir,
               context,
             );
-          } else {
           }
         }
       }
@@ -125,7 +125,6 @@ export async function setupFrontendTemplates(
       const nuxtBaseDir = path.join(PKG_ROOT, "templates/frontend/nuxt");
       if (await fs.pathExists(nuxtBaseDir)) {
         await processAndCopyFiles("**/*", nuxtBaseDir, webAppDir, context);
-      } else {
       }
       if (!isConvex && context.api !== "none") {
         const apiWebNuxtDir = path.join(
@@ -134,14 +133,12 @@ export async function setupFrontendTemplates(
         );
         if (await fs.pathExists(apiWebNuxtDir)) {
           await processAndCopyFiles("**/*", apiWebNuxtDir, webAppDir, context);
-        } else {
         }
       }
     } else if (hasSvelteWeb) {
       const svelteBaseDir = path.join(PKG_ROOT, "templates/frontend/svelte");
       if (await fs.pathExists(svelteBaseDir)) {
         await processAndCopyFiles("**/*", svelteBaseDir, webAppDir, context);
-      } else {
       }
       if (!isConvex && context.api === "orpc") {
         const apiWebSvelteDir = path.join(
@@ -155,7 +152,6 @@ export async function setupFrontendTemplates(
             webAppDir,
             context,
           );
-        } else {
         }
       }
     }
@@ -168,7 +164,6 @@ export async function setupFrontendTemplates(
     const nativeBaseDir = path.join(PKG_ROOT, "templates/frontend/native");
     if (await fs.pathExists(nativeBaseDir)) {
       await processAndCopyFiles("**/*", nativeBaseDir, nativeAppDir, context);
-    } else {
     }
 
     if (!isConvex && (context.api === "trpc" || context.api === "orpc")) {
@@ -183,7 +178,6 @@ export async function setupFrontendTemplates(
           nativeAppDir,
           context,
         );
-      } else {
       }
     }
   }
@@ -209,7 +203,6 @@ export async function setupBackendFramework(
         convexBackendDestDir,
         context,
       );
-    } else {
     }
 
     const serverAppDir = path.join(projectDir, "apps/server");
@@ -228,7 +221,6 @@ export async function setupBackendFramework(
   );
   if (await fs.pathExists(serverBaseDir)) {
     await processAndCopyFiles("**/*", serverBaseDir, serverAppDir, context);
-  } else {
   }
 
   const frameworkSrcDir = path.join(
@@ -243,7 +235,6 @@ export async function setupBackendFramework(
       context,
       true,
     );
-  } else {
   }
 
   if (context.api !== "none") {
@@ -259,7 +250,6 @@ export async function setupBackendFramework(
         context,
         true,
       );
-    } else {
     }
 
     const apiServerFrameworkDir = path.join(
@@ -274,7 +264,6 @@ export async function setupBackendFramework(
         context,
         true,
       );
-    } else {
     }
   }
 }
@@ -300,7 +289,6 @@ export async function setupDbOrmTemplates(
 
   if (await fs.pathExists(dbOrmSrcDir)) {
     await processAndCopyFiles("**/*", dbOrmSrcDir, serverAppDir, context);
-  } else {
   }
 }
 
@@ -334,7 +322,6 @@ export async function setupAuthTemplate(
         serverAppDir,
         context,
       );
-    } else {
     }
 
     if (context.backend === "next") {
@@ -349,7 +336,6 @@ export async function setupAuthTemplate(
           serverAppDir,
           context,
         );
-      } else {
       }
     }
 
@@ -375,7 +361,6 @@ export async function setupAuthTemplate(
       }
       if (authDbSrc && (await fs.pathExists(authDbSrc))) {
         await processAndCopyFiles("**/*", authDbSrc, serverAppDir, context);
-      } else if (authDbSrc) {
       }
     }
   }
@@ -388,7 +373,6 @@ export async function setupAuthTemplate(
       );
       if (await fs.pathExists(authWebBaseSrc)) {
         await processAndCopyFiles("**/*", authWebBaseSrc, webAppDir, context);
-      } else {
       }
       const reactFramework = context.frontend.find((f) =>
         ["tanstack-router", "react-router", "tanstack-start", "next"].includes(
@@ -407,14 +391,12 @@ export async function setupAuthTemplate(
             webAppDir,
             context,
           );
-        } else {
         }
       }
     } else if (hasNuxtWeb) {
       const authWebNuxtSrc = path.join(PKG_ROOT, "templates/auth/web/nuxt");
       if (await fs.pathExists(authWebNuxtSrc)) {
         await processAndCopyFiles("**/*", authWebNuxtSrc, webAppDir, context);
-      } else {
       }
     } else if (hasSvelteWeb) {
       if (context.api === "orpc") {
@@ -429,7 +411,6 @@ export async function setupAuthTemplate(
             webAppDir,
             context,
           );
-        } else {
         }
       }
     }
@@ -439,7 +420,6 @@ export async function setupAuthTemplate(
     const authNativeSrc = path.join(PKG_ROOT, "templates/auth/native");
     if (await fs.pathExists(authNativeSrc)) {
       await processAndCopyFiles("**/*", authNativeSrc, nativeAppDir, context);
-    } else {
     }
   }
 }
@@ -466,7 +446,6 @@ export async function setupAddonsTemplate(
 
     if (await fs.pathExists(addonSrcDir)) {
       await processAndCopyFiles("**/*", addonSrcDir, addonDestDir, context);
-    } else {
     }
   }
 }
@@ -592,7 +571,6 @@ export async function setupExamplesTemplate(
                 context,
                 false,
               );
-            } else {
             }
           }
         }
@@ -606,7 +584,6 @@ export async function setupExamplesTemplate(
             context,
             false,
           );
-        } else {
         }
       } else if (hasSvelteWeb) {
         const exampleWebSvelteSrc = path.join(exampleBaseDir, "web/svelte");
@@ -618,7 +595,6 @@ export async function setupExamplesTemplate(
             context,
             false,
           );
-        } else {
         }
       }
     }

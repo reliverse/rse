@@ -1,10 +1,11 @@
-import { createAuthClient } from "better-auth/react";
 import { expoClient } from "@better-auth/expo/client";
+import { createAuthClient } from "better-auth/react";
 import * as SecureStore from "expo-secure-store";
 
 export const authClient = createAuthClient({
   baseURL: process.env.EXPO_PUBLIC_SERVER_URL,
   plugins: [
+    // @ts-expect-error TODO: fix ts
     expoClient({
       storagePrefix: "my-better-t-app",
       storage: SecureStore,

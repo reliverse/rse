@@ -1,8 +1,13 @@
-import path from "node:path";
 import fs from "@reliverse/relifso";
-import type { AvailableDependencies } from "../constants.js";
-import type { ProjectConfig, ProjectFrontend } from "../types.js";
-import { addPackageDependency } from "../utils/add-package-deps";
+import path from "node:path";
+
+import type { AvailableDependencies } from "~/providers/better-t-stack/constants.js";
+import type {
+  ProjectConfig,
+  ProjectFrontend,
+} from "~/providers/better-t-stack/types.js";
+
+import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps.js";
 
 export async function setupApi(config: ProjectConfig): Promise<void> {
   const { api, projectName, frontend, backend, packageManager } = config;
@@ -47,6 +52,7 @@ export async function setupApi(config: ProjectConfig): Promise<void> {
         }
       }
     } else {
+      /* empty */
     }
 
     if (webDirExists) {
@@ -136,8 +142,11 @@ export async function setupApi(config: ProjectConfig): Promise<void> {
             devDependencies: reactQueryDevDeps,
             projectDir: webDir,
           });
-        } catch (error) {}
+        } catch {
+          /* empty */
+        }
       } else {
+        /* empty */
       }
     }
 
@@ -149,8 +158,11 @@ export async function setupApi(config: ProjectConfig): Promise<void> {
             dependencies: reactQueryDeps,
             projectDir: nativeDir,
           });
-        } catch (error) {}
+        } catch {
+          /* empty */
+        }
       } else {
+        /* empty */
       }
     }
   }
@@ -172,8 +184,11 @@ export async function setupApi(config: ProjectConfig): Promise<void> {
             dependencies: webDepsToAdd,
             projectDir: webDir,
           });
-        } catch (error) {}
+        } catch {
+          /* empty */
+        }
       } else {
+        /* empty */
       }
     }
 
@@ -185,8 +200,11 @@ export async function setupApi(config: ProjectConfig): Promise<void> {
             dependencies: ["convex"],
             projectDir: nativeDir,
           });
-        } catch (error) {}
+        } catch {
+          /* empty */
+        }
       } else {
+        /* empty */
       }
     }
 
@@ -199,7 +217,9 @@ export async function setupApi(config: ProjectConfig): Promise<void> {
       depVersion: string,
     ) => {
       try {
-        const pkgJson = await fs.readJson(pkgJsonPath);
+        const pkgJson = (await fs.readJson(pkgJsonPath)) as {
+          dependencies?: Record<string, string>;
+        };
         if (!pkgJson.dependencies) {
           pkgJson.dependencies = {};
         }
@@ -207,8 +227,11 @@ export async function setupApi(config: ProjectConfig): Promise<void> {
           pkgJson.dependencies[depName] = depVersion;
           await fs.writeJson(pkgJsonPath, pkgJson, { spaces: 2 });
         } else {
+          /* empty */
         }
-      } catch (error) {}
+      } catch {
+        /* empty */
+      }
     };
 
     if (webDirExists) {
@@ -220,6 +243,7 @@ export async function setupApi(config: ProjectConfig): Promise<void> {
           backendWorkspaceVersion,
         );
       } else {
+        /* empty */
       }
     }
 
@@ -232,6 +256,7 @@ export async function setupApi(config: ProjectConfig): Promise<void> {
           backendWorkspaceVersion,
         );
       } else {
+        /* empty */
       }
     }
   }

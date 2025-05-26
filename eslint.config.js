@@ -40,6 +40,7 @@ const config = tseslint.config(
     },
     rules: {
       "max-lines": ["error", 1300],
+      "@typescript-eslint/no-unnecessary-template-expression": "off",
       "@typescript-eslint/await-thenable": "off",
       "@typescript-eslint/require-await": "off",
       "@typescript-eslint/no-dynamic-delete": "off",

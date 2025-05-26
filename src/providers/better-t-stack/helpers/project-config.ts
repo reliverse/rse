@@ -1,10 +1,10 @@
 import { log } from "@clack/prompts";
-import { $, execa } from "execa";
 import fs from "@reliverse/relifso";
+import { $, execa } from "execa";
 import path from "node:path";
 import pc from "picocolors";
 
-import type { ProjectConfig } from "~/cli/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
 
 export async function updatePackageConfigurations(
   projectDir: string,
@@ -25,7 +25,13 @@ async function updateRootPackageJson(
   const rootPackageJsonPath = path.join(projectDir, "package.json");
   if (!(await fs.pathExists(rootPackageJsonPath))) return;
 
-  const packageJson = await fs.readJson(rootPackageJsonPath);
+  const packageJson = (await fs.readJson(rootPackageJsonPath)) as {
+    name?: string;
+    scripts?: Record<string, string>;
+    workspaces?: string[];
+    packageManager?: string;
+    "lint-staged"?: Record<string, string[]>;
+  };
   packageJson.name = options.projectName;
 
   if (!packageJson.scripts) {
@@ -218,7 +224,9 @@ async function updateServerPackageJson(
 
   if (!(await fs.pathExists(serverPackageJsonPath))) return;
 
-  const serverPackageJson = await fs.readJson(serverPackageJsonPath);
+  const serverPackageJson = (await fs.readJson(serverPackageJsonPath)) as {
+    scripts?: Record<string, string>;
+  };
 
   if (!serverPackageJson.scripts) {
     serverPackageJson.scripts = {};
@@ -259,7 +267,10 @@ async function updateConvexPackageJson(
 
   if (!(await fs.pathExists(convexPackageJsonPath))) return;
 
-  const convexPackageJson = await fs.readJson(convexPackageJsonPath);
+  const convexPackageJson = (await fs.readJson(convexPackageJsonPath)) as {
+    name?: string;
+    scripts?: Record<string, string>;
+  };
   convexPackageJson.name = `@${options.projectName}/backend`;
 
   if (!convexPackageJson.scripts) {

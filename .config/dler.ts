@@ -13,7 +13,7 @@ export default defineConfig({
 
   // Common configuration
   commonPubPause: true,
-  commonPubRegistry: "npm", // TODO: switch to "npm-jsr" when `libPubRegistry` is implemented (in @reliverse/dler)
+  commonPubRegistry: "npm-jsr",
   commonVerbose: false,
 
   // Core configuration

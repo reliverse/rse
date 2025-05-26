@@ -6,7 +6,7 @@ import pc from "picocolors";
 import type {
   ProjectAddons,
   ProjectPackageManager,
-} from "~/cli/providers/better-t-stack/types.js";
+} from "~/providers/better-t-stack/types.js";
 
 export async function installDependencies({
   projectDir,

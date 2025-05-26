@@ -1,12 +1,14 @@
-import path from "node:path";
 import { cancel, isCancel, log, password, spinner } from "@clack/prompts";
+import fs from "@reliverse/relifso";
 import { consola } from "consola";
 import { execa } from "execa";
-import fs from "@reliverse/relifso";
+import path from "node:path";
 import pc from "picocolors";
-import type { ProjectPackageManager } from "../types.js";
-import { addPackageDependency } from "../utils/add-package-deps";
-import { getPackageExecutionCommand } from "../utils/get-package-execution-command";
+
+import type { ProjectPackageManager } from "~/providers/better-t-stack/types.js";
+
+import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps";
+import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command";
 
 type PrismaConfig = {
   databaseUrl: string;
@@ -151,7 +153,7 @@ export default prisma;
   }
 }
 
-import type { ProjectConfig } from "../types.js";
+import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
 
 export async function setupPrismaPostgres(config: ProjectConfig) {
   const { projectName, packageManager } = config;

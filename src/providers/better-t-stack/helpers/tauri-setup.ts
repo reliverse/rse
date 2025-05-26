@@ -1,7 +1,7 @@
 import { spinner } from "@clack/prompts";
+import fs from "@reliverse/relifso";
 import { consola } from "consola";
 import { execa } from "execa";
-import fs from "@reliverse/relifso";
 import path from "node:path";
 import pc from "picocolors";
 
@@ -30,7 +30,9 @@ export async function setupTauri(config: ProjectConfig): Promise<void> {
 
     const clientPackageJsonPath = path.join(clientPackageDir, "package.json");
     if (await fs.pathExists(clientPackageJsonPath)) {
-      const packageJson = await fs.readJson(clientPackageJsonPath);
+      const packageJson = (await fs.readJson(clientPackageJsonPath)) as {
+        scripts?: Record<string, string>;
+      };
 
       packageJson.scripts = {
         ...packageJson.scripts,

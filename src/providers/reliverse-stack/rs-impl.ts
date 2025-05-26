@@ -10,17 +10,13 @@ import type {
   ProjectArchitecture,
   ProjectSubcategory,
   rseConfig,
-} from "~/libs/sdk/utils/rseConfig/cfg-types.js";
-import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
+} from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import {
   randomProjectFrameworkTitle,
   getRandomMessage,
 } from "~/db/messages.js";
-import {
-  endTitle,
-  UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 import { createWebProject } from "~/libs/sdk/init/use-template/cp-mod.js";
 import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
 import { recommended } from "~/libs/sdk/utils/badgeNotifiers.js";
@@ -31,6 +27,10 @@ import {
   type RepoOption,
   TEMP_SEPARATED_WEBSITE_TEMPLATE_OPTIONS,
 } from "~/libs/sdk/utils/projectRepository.js";
+import {
+  endTitle,
+  UNKNOWN_VALUE,
+} from "~/libs/sdk/utils/rseConfig/cfg-details.js";
 
 /**
  * Possible template options for VS Code extensions

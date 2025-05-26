@@ -1,14 +1,14 @@
 import { consola } from "consola";
 import pc from "picocolors";
+
 import type {
-  ProjectBackend,
   ProjectDatabase,
   ProjectOrm,
   ProjectRuntime,
-} from "../types.js";
-import { getPackageExecutionCommand } from "../utils/get-package-execution-command";
+} from "~/providers/better-t-stack/types.js";
+import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
 
-import type { ProjectConfig } from "../types.js";
+import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command.js";
 
 export function displayPostInstallInstructions(
   config: ProjectConfig & { depsInstalled: boolean },

@@ -14,6 +14,7 @@ import { existsSync } from "@reliverse/relifso";
 import chalk from "chalk";
 import { Command } from "commander";
 import { parse } from "dotenv";
+import { execaCommand } from "execa";
 import fs from "fs/promises";
 import path from "path";
 import semver from "semver";
@@ -22,18 +23,10 @@ import { z } from "zod";
 import { generateAuthConfig } from "~/app/auth/(generators)/auth-config.js";
 import { checkPackageManagers } from "~/app/auth/(utils)/check-package-managers.js";
 import { formatMilliseconds } from "~/app/auth/(utils)/format-ms.js";
+import { generateSecretHash } from "~/app/auth/(utils)/generate-secret.js";
 import { getPackageInfo } from "~/app/auth/(utils)/get-package-info.js";
 import { getTsconfigInfo } from "~/app/auth/(utils)/get-tsconfig-info.js";
 import { installDependencies } from "~/app/auth/(utils)/install-dependencies.js";
-import { generateSecretHash } from "~/app/auth/(utils)/secret.js";
-
-// Add type declaration for prettier
-declare module "prettier";
-
-// Add type declaration for secret.js
-declare module "~/app/auth/(utils)/secret.js" {
-  export function generateSecretHash(): string;
-}
 
 /**
  * Should only use any database that is core DBs, and supports the Better Auth CLI generate functionality.
@@ -203,18 +196,27 @@ export const supportedPlugins = [
 
 export type SupportedPlugin = (typeof supportedPlugins)[number];
 
-const defaultFormatOptions = {
-  trailingComma: "all" as const,
-  useTabs: false,
-  tabWidth: 4,
-};
+async function formatWithBiome(
+  code: string,
+  _filepath: string,
+): Promise<string> {
+  const tempFile = path.join(process.cwd(), `.temp-${Date.now()}.ts`);
+  try {
+    await fs.writeFile(tempFile, code);
+    await execaCommand(`bun x biome format --write ${tempFile}`);
+    const formatted = await fs.readFile(tempFile, "utf-8");
+    return formatted;
+  } finally {
+    await fs.unlink(tempFile).catch(() => undefined);
+  }
+}
 
 const getDefaultAuthConfig = async ({
   appName,
 }: {
   appName?: string;
 }) =>
-  await prettierFormat(
+  await formatWithBiome(
     [
       "import { betterAuth } from 'better-auth';",
       "",
@@ -223,10 +225,7 @@ const getDefaultAuthConfig = async ({
       "plugins: [],",
       "});",
     ].join("\n"),
-    {
-      filepath: "auth.ts",
-      ...defaultFormatOptions,
-    },
+    "auth.ts",
   );
 
 type SupportedFrameworks =
@@ -327,7 +326,7 @@ const getDefaultAuthClientConfig = async ({
     }
   }
 
-  return await prettierFormat(
+  const formattedCode = await formatWithBiome(
     [
       `import { createAuthClient } from "better-auth/${
         framework === "nextjs"
@@ -346,11 +345,10 @@ const getDefaultAuthClientConfig = async ({
         .join(", ")}],`,
       `});`,
     ].join("\n"),
-    {
-      filepath: "auth-client.ts",
-      ...defaultFormatOptions,
-    },
+    "auth-client.ts",
   );
+
+  return formattedCode;
 };
 
 const optionsSchema = z.object({
@@ -379,10 +377,7 @@ export async function initAction(opts: any) {
   let framework: SupportedFrameworks = "vanilla";
 
   const format = async (code: string) =>
-    await prettierFormat(code, {
-      filepath: config_path,
-      ...defaultFormatOptions,
-    });
+    await formatWithBiome(code, config_path);
 
   // ===== package.json =====
   let packageInfo: Record<string, any>;
@@ -446,20 +441,7 @@ export async function initAction(opts: any) {
     }
     if (shouldAdd) {
       try {
-        await fs.writeFile(
-          path.join(cwd, "tsconfig.json"),
-          // await prettierFormat(
-          //   JSON.stringify(
-          //     Object.assign(tsconfigInfo, {
-          //       compilerOptions: {
-          //         strict: true,
-          //       },
-          //     }),
-          //   ),
-          //   { filepath: "tsconfig.json", ...defaultFormatOptions },
-          // ),
-          "utf-8",
-        );
+        await fs.writeFile(path.join(cwd, "tsconfig.json"), "utf-8");
         log.success(`🚀 tsconfig.json successfully updated!`);
       } catch (error) {
         log.error(

@@ -1,25 +1,25 @@
+import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
+import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
-import fs from "@reliverse/relifso";
-import path from "@reliverse/pathkit";
 
-import type {
-  rseConfig,
-  ProjectCategory,
-} from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 import type { AppParams } from "~/libs/sdk/sdk-types.js";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository.js";
+import type {
+  ProjectCategory,
+  RseConfig,
+} from "~/libs/sdk/utils/rseConfig/cfg-types.js";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory.js";
 
 import { getRandomMessage } from "~/db/messages.js";
+import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu.js";
+import { createMobileProject } from "~/libs/sdk/init/use-template/cp-mod.js";
+import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
 import {
   endTitle,
   UNKNOWN_VALUE,
 } from "~/libs/sdk/utils/rseConfig/cfg-details.js";
-import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu.js";
-import { createMobileProject } from "~/libs/sdk/init/use-template/cp-mod.js";
-import { experimental } from "~/libs/sdk/utils/badgeNotifiers.js";
 import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect.js";
 
 import {

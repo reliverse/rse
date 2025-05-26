@@ -1,10 +1,10 @@
-import path from "node:path";
 import fs from "@reliverse/relifso";
+import path from "node:path";
 
 import {
   type AvailableDependencies,
   dependencyVersionMap,
-} from "../constants.js";
+} from "~/providers/better-t-stack/constants.js";
 
 export const addPackageDependency = async (opts: {
   dependencies?: AvailableDependencies[];
@@ -15,7 +15,10 @@ export const addPackageDependency = async (opts: {
 
   const pkgJsonPath = path.join(projectDir, "package.json");
 
-  const pkgJson = await fs.readJson(pkgJsonPath);
+  const pkgJson = (await fs.readJson(pkgJsonPath)) as {
+    dependencies?: Record<string, string>;
+    devDependencies?: Record<string, string>;
+  };
 
   if (!pkgJson.dependencies) pkgJson.dependencies = {};
   if (!pkgJson.devDependencies) pkgJson.devDependencies = {};

@@ -11,7 +11,7 @@ export default defineConfig({
   projectAuthor: "rse",
   projectDescription:
     "@reliverse/rse is your all-in-one companion for building and improving web projects — whether you're kicking off something new or upgrading an existing app. It's like having a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.",
-  version: "1.6.5",
+  version: "1.7.0",
   projectLicense: "MIT",
   projectState: "creating",
   projectRepository: "https://github.com/rse/rse",

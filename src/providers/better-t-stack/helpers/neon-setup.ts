@@ -1,11 +1,13 @@
-import path from "node:path";
 import { cancel, isCancel, log, spinner, text } from "@clack/prompts";
+import fs from "@reliverse/relifso";
 import { consola } from "consola";
 import { execa } from "execa";
-import fs from "@reliverse/relifso";
+import path from "node:path";
 import pc from "picocolors";
-import type { ProjectPackageManager } from "../types.js";
-import { getPackageExecutionCommand } from "../utils/get-package-execution-command";
+
+import type { ProjectPackageManager } from "~/providers/better-t-stack/types.js";
+
+import { getPackageExecutionCommand } from "~/providers/better-t-stack/utils/get-package-execution-command.js";
 
 type NeonConfig = {
   connectionString: string;
@@ -58,7 +60,7 @@ async function authenticateWithNeon(packageManager: ProjectPackageManager) {
     );
     log.success("Authenticated with Neon successfully!");
     return true;
-  } catch (error) {
+  } catch {
     consola.error(pc.red("Failed to authenticate with Neon"));
   }
 }
@@ -75,7 +77,16 @@ async function createNeonProject(
       `Creating Neon project "${projectName}"...`,
     );
 
-    const response = JSON.parse(stdout);
+    const response = JSON.parse(stdout) as {
+      project: { id: string };
+      connection_uris: {
+        connection_uri: string;
+        connection_parameters: {
+          database: string;
+          role: string;
+        };
+      }[];
+    };
 
     if (
       response.project &&
@@ -83,8 +94,8 @@ async function createNeonProject(
       response.connection_uris.length > 0
     ) {
       const projectId = response.project.id;
-      const connectionUri = response.connection_uris[0].connection_uri;
-      const params = response.connection_uris[0].connection_parameters;
+      const connectionUri = response.connection_uris[0]!.connection_uri;
+      const params = response.connection_uris[0]!.connection_parameters;
 
       return {
         connectionString: connectionUri,
@@ -97,7 +108,7 @@ async function createNeonProject(
       pc.red("Failed to extract connection information from response"),
     );
     return null;
-  } catch (error) {
+  } catch {
     consola.error(pc.red("Failed to create Neon project"));
   }
 }
@@ -125,7 +136,7 @@ function displayManualSetupInstructions() {
 DATABASE_URL="your_connection_string"`);
 }
 
-import type { ProjectConfig } from "../types.js";
+import type { ProjectConfig } from "~/providers/better-t-stack/types.js";
 
 export async function setupNeonPostgres(config: ProjectConfig): Promise<void> {
   const { projectName, packageManager } = config;

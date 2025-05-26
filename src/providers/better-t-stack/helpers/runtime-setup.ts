@@ -1,7 +1,12 @@
-import path from "node:path";
 import fs from "@reliverse/relifso";
-import type { ProjectBackend, ProjectConfig } from "../types.js";
-import { addPackageDependency } from "../utils/add-package-deps";
+import path from "node:path";
+
+import type {
+  ProjectBackend,
+  ProjectConfig,
+} from "~/providers/better-t-stack/types.js";
+
+import { addPackageDependency } from "~/providers/better-t-stack/utils/add-package-deps.js";
 
 export async function setupRuntime(config: ProjectConfig): Promise<void> {
   const { projectName, runtime, backend } = config;
@@ -26,12 +31,14 @@ export async function setupRuntime(config: ProjectConfig): Promise<void> {
 
 async function setupBunRuntime(
   serverDir: string,
-  backend: ProjectBackend,
+  _backend: ProjectBackend,
 ): Promise<void> {
   const packageJsonPath = path.join(serverDir, "package.json");
   if (!(await fs.pathExists(packageJsonPath))) return;
 
-  const packageJson = await fs.readJson(packageJsonPath);
+  const packageJson = (await fs.readJson(packageJsonPath)) as {
+    scripts?: Record<string, string>;
+  };
 
   packageJson.scripts = {
     ...packageJson.scripts,
@@ -54,7 +61,9 @@ async function setupNodeRuntime(
   const packageJsonPath = path.join(serverDir, "package.json");
   if (!(await fs.pathExists(packageJsonPath))) return;
 
-  const packageJson = await fs.readJson(packageJsonPath);
+  const packageJson = (await fs.readJson(packageJsonPath)) as {
+    scripts?: Record<string, string>;
+  };
 
   packageJson.scripts = {
     ...packageJson.scripts,

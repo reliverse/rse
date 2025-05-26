@@ -13,10 +13,11 @@ import { showCloneProjectMenu } from "~/libs/sdk/init/use-template/cp-modules/cl
 import { showEndPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showStartEndPrompt";
 import { showDevToolsMenu } from "~/libs/sdk/toolbox/toolbox-impl";
 import { showNativeCliMenu } from "~/libs/sdk/utils/native-cli/nc-mod";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import {
   cliJsrPath,
   UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+} from "~/libs/sdk/utils/rseConfig/rc-details";
 import { detectProject } from "~/libs/sdk/utils/rseConfig/rc-detect";
 import {
   showNewProjectMenu,
@@ -24,21 +25,22 @@ import {
 } from "~/providers/reliverse-stack/rs-mod";
 
 export async function app(params: ParamsOmitSkipPN) {
-  const { cwd, isDev, multireli, memory, config } = params;
+  const { cwd, isDev, mrse, memory, config } = params;
 
-  const skipPrompts = config.skipPromptsUseAutoBehavior;
+  const skipPrompts = config.skipPromptsUseAutoBehavior ?? false;
   const frontendUsername = memory.name !== "" ? memory.name : UNKNOWN_VALUE;
   const projectName = isDev
     ? generate({ exactly: 2, join: "-" })
-    : config.projectName;
+    : (config.projectName ?? UNKNOWN_VALUE);
 
   if (!isDev) {
     const rootProject = await detectProject(cwd, isDev);
     if (rootProject) {
+      const updatedMemory = await getReliverseMemory();
       await handleOpenProjectMenu(
         [rootProject],
         isDev,
-        memory,
+        updatedMemory,
         cwd,
         true,
         config,
@@ -49,7 +51,7 @@ export async function app(params: ParamsOmitSkipPN) {
     }
   }
 
-  const options = await getMainMenuOptions(cwd, isDev, multireli);
+  const options = await getMainMenuOptions(cwd, isDev, mrse);
 
   const mainMenuOption = await selectPrompt({
     options,
@@ -69,7 +71,7 @@ export async function app(params: ParamsOmitSkipPN) {
       isDev,
       memory,
       config,
-      multireli,
+      mrse,
       skipPrompts,
     });
   } else if (mainMenuOption === "clone") {
@@ -94,7 +96,7 @@ export async function app(params: ParamsOmitSkipPN) {
       isDev,
       memory,
       config,
-      multireli,
+      mrse,
       skipPrompts,
     });
   } else if (mainMenuOption === "isDevTools") {

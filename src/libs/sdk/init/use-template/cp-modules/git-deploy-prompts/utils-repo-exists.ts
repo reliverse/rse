@@ -8,7 +8,7 @@ import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import { getEffectiveDir } from "~/libs/sdk/utils/getEffectiveDir";
 import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod";
-import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { cliName } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { migrateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-migrate";
 
 import { handleExistingRepoContent } from "./utils-private-repo";
@@ -55,6 +55,7 @@ export async function handleExistingRepo(
     "",
     {
       ...params.config,
+      projectName: params.projectName,
       frontendUsername: params.githubUsername,
       primaryDomain: `${params.projectName}.com`,
     },

@@ -4,7 +4,7 @@ import { confirmPrompt, defineCommand } from "@reliverse/rempts";
 import { deleteLastLine, msg } from "@reliverse/rempts";
 
 import { deleteMemory } from "~/libs/sdk/logout/logout-impl";
-import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { memoryPath } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 const isConfigExists = async () => {
   if (await fs.pathExists(memoryPath)) {

@@ -1,6 +1,6 @@
 import { defineConfig } from "drizzle-kit";
 
-import { memoryPath } from "./src/libs/sdk/utils/rseConfig/cfg-details";
+import { memoryPath } from "./src/libs/sdk/utils/rseConfig/rc-details";
 
 export default defineConfig({
   out: "./drizzle",

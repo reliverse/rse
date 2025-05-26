@@ -5,7 +5,7 @@ import { readPackageJSON, writePackageJSON } from "pkg-types";
 
 import type { MonorepoType } from "~/types";
 
-import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 const MONOREPO_CONFIGS = {
   turborepo: {

@@ -268,7 +268,7 @@ export async function downloadJsrDist(
         "success",
         `@${scope}/${packageName}@${resolvedVersion} is already downloaded.`,
         pkgIsCLI
-          ? `Use "bun ${outputDir}/bin/main.ts" to run it (short command coming soon).`
+          ? `Use "bun ${outputDir}/bin/mod.ts" to run it (short command coming soon).`
           : undefined,
       );
       return;
@@ -317,7 +317,7 @@ export async function downloadJsrDist(
       "success",
       `All files for @${scope}/${packageName} downloaded successfully.`,
       pkgIsCLI
-        ? `Use "bun ${outputDir}/bin/main.ts" to run it (short command coming soon).`
+        ? `Use "bun ${outputDir}/bin/mod.ts" to run it (short command coming soon).`
         : undefined,
     );
   } catch (error) {

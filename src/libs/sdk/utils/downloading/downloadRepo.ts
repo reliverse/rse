@@ -23,7 +23,7 @@ import {
   cliConfigJsonc,
   cliConfigTs,
   cliHomeRepos,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+} from "~/libs/sdk/utils/rseConfig/rc-details";
 import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path";
 
 const execAsync = promisify(exec);

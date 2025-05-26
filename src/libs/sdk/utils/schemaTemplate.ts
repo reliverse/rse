@@ -6,7 +6,7 @@ import { Type, type Static } from "@sinclair/typebox";
 import {
   cliHomeRepos,
   cliVersion,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+} from "~/libs/sdk/utils/rseConfig/rc-details";
 
 // Import package.json with type assertion
 // import pkg from "../../package.json" assert { type: "json" };

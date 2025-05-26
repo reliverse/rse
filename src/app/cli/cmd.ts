@@ -6,8 +6,8 @@ import { defineCommand } from "@reliverse/rempts";
 import { showStartPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showStartEndPrompt";
 import { authCheck } from "~/libs/sdk/login/login-impl";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import { cliName, useLocalhost } from "~/libs/sdk/utils/rseConfig/cfg-details";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
+import { cliName, useLocalhost } from "~/libs/sdk/utils/rseConfig/rc-details";
+import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 import { app } from "./impl";
@@ -33,7 +33,7 @@ export default defineCommand({
     await showStartPrompt(isDev, false);
 
     // Ensure --dev flag is used only within a valid rse dev envi
-    await validateDevCwd(isDev, ["cli", "rse"], "rse", "rse");
+    await validateDevCwd(isDev, ["rse", "cli"], "rse", "reliverse");
 
     let cwd: string;
     if (args.cwd) {
@@ -46,14 +46,16 @@ export default defineCommand({
     }
 
     const memory = await getReliverseMemory();
-    const { config, multireli } = await getRseConfig({
+    const { config, mrse } = await getOrCreateRseConfig({
       projectPath: cwd,
       isDev,
       overrides: {},
     });
 
     await authCheck(isDev, memory, useLocalhost);
-    await app({ cwd, isDev, config, memory, multireli });
+    // Get fresh memory after auth check
+    const updatedMemory = await getReliverseMemory();
+    await app({ cwd, isDev, config, memory: updatedMemory, mrse });
 
     process.exit(0);
   },

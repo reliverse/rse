@@ -3,7 +3,7 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { readPackageJSON, writePackageJSON } from "pkg-types";
 
-import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 function generateTypeDefinitions(content: string): string {
   let result = content;

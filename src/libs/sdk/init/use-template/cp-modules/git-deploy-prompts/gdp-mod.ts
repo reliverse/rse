@@ -501,7 +501,11 @@ export async function promptGitDeploy({
 
     // Determine project domain:
     if (!alreadyDeployed) {
-      if (skipPrompts && !isSpecialDomain(config.projectDomain)) {
+      if (
+        skipPrompts &&
+        config.projectDomain &&
+        !isSpecialDomain(config.projectDomain)
+      ) {
         primaryDomain = config.projectDomain.replace(/^https?:\/\//, "");
       } else {
         primaryDomain = await promptForDomain(projectName);

@@ -5,7 +5,7 @@ import { selectPrompt } from "@reliverse/rempts";
 import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
 import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
-import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { cd } from "~/libs/sdk/utils/terminalHelpers";
 
 import { initGitDir } from "./git";

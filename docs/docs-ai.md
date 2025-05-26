@@ -1,14 +1,14 @@
-# rse CLI: `ai` Command
+# Rse CLI: `ai` Command
 
 > **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
-[💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [📚 Docs](https://docs.reliverse.org) • [💖 Sponsors](https://github.com/sponsors/blefnk)
+[Discord](https://discord.gg/Pb8uKbwpsJ) — [Docs](https://docs.reliverse.org) — [Sponsors](https://github.com/sponsors/blefnk)
 
 **@reliverse/ai** is a multi-modal AI agent. This integration allows for AI-powered chat and agents. Easily invoke specialized AI agents using simple chat commands and watch them work magic on your code.
 
 ## Features
 
-- 💬 **Chat-based AI interactions**  
+- **Chat-based AI interactions**  
   Invoke agentic tools in a single chat message using `@agent-name` with automatically detected parameters like paths to files or directories.
   
 - 🧩 **Agent-based architecture**  

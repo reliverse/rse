@@ -1,7 +1,7 @@
 // [isDev example]:
-// - `bun dev:multireli`
-// - `bun dev:multireli --ts`
-// - `bun dev:multireli --jsonc project1 project2 project3`
+// - `bun dev:mrse`
+// - `bun dev:mrse --ts`
+// - `bun dev:mrse --jsonc project1 project2 project3`
 
 import path from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
@@ -21,16 +21,16 @@ import {
   logVerbose,
   type GenCfg,
   type GenCfgJsonc,
-} from "~/libs/sdk/multireli/multireli-impl";
-import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/cfg-details";
+} from "~/libs/sdk/mrse/mrse-impl";
 import { generateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-create";
+import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 /**
  * Generates rse config files for multiple projects
  */
 export default defineCommand({
   meta: {
-    name: "multireli",
+    name: "mrse",
     description: "Generate rse config files for multiple projects",
     hidden: true,
   },
@@ -64,7 +64,7 @@ export default defineCommand({
     typesPath: {
       type: "string",
       description: "Custom path to type definitions for TypeScript configs",
-      default: "../src/libs/cfg/cfg-main.js",
+      default: "../src/libs/sdk/sdk-mod",
     },
     _: {
       type: "array",
@@ -106,28 +106,29 @@ export default defineCommand({
     // Get current working directory
     const cwd = process.cwd();
 
-    // Create 'multireli' folder if it doesn't exist
-    const multireliFolderPath = path.join(cwd, "multireli");
-    await ensuredir(multireliFolderPath);
+    // Create 'mrse' folder if it doesn't exist
+    const mrseFolderPath = path.join(cwd, ".config", "mrse");
+    await ensuredir(mrseFolderPath);
 
-    // Check for and generate gen.cfg file if it doesn't exist
-    const genCfgFileName = useJsonc ? "gen.cfg.jsonc" : "gen.cfg.ts";
-    const genCfgPath = path.join(multireliFolderPath, genCfgFileName);
-    const genCfgExists = await fs.pathExists(genCfgPath);
+    // Check for and generate mrse file if it doesn't exist
+    const mrseFileName = useJsonc ? "mrse.jsonc" : "mrse.ts";
+    const mrsePath = path.join(cwd, ".config", mrseFileName);
+    const mrseExists = await fs.pathExists(mrsePath);
 
     // Check if the other format already exists to prevent conflicts
-    const oppositeFormatFileName = useJsonc ? "gen.cfg.ts" : "gen.cfg.jsonc";
+    const oppositeFormatFileName = useJsonc ? "mrse.ts" : "mrse.jsonc";
     const oppositeFormatPath = path.join(
-      multireliFolderPath,
+      cwd,
+      ".config",
       oppositeFormatFileName,
     );
     const oppositeFormatExists = await fs.pathExists(oppositeFormatPath);
 
     // Throw error if trying to generate one format when the other exists
-    if (!genCfgExists && oppositeFormatExists) {
+    if (!mrseExists && oppositeFormatExists) {
       relinka(
         "error",
-        `Cannot generate ${genCfgFileName} when ${oppositeFormatFileName} already exists. ` +
+        `Cannot generate ${mrseFileName} when ${oppositeFormatFileName} already exists. ` +
           `Please delete ${oppositeFormatFileName} first or use the appropriate format flag.`,
       );
       // Exit process gracefully without showing stack trace
@@ -137,12 +138,12 @@ export default defineCommand({
     let genCfgData: GenCfg[] = [];
 
     // Check for mixed configuration formats in the directory
-    const existingFiles = await fs.readdir(multireliFolderPath);
+    const existingFiles = await fs.readdir(mrseFolderPath);
     const hasJsoncFiles = existingFiles.some(
-      (file) => file.endsWith(".jsonc") && file !== "gen.cfg.jsonc",
+      (file) => file.endsWith(".jsonc") && file !== "mrse.jsonc",
     );
     const hasTsFiles = existingFiles.some(
-      (file) => file.endsWith(".ts") && file !== "gen.cfg.ts",
+      (file) => file.endsWith(".ts") && file !== "mrse.ts",
     );
 
     // Don't allow mixing of TS and JSONC project files
@@ -151,23 +152,23 @@ export default defineCommand({
       const existingFormat = useJsonc ? "TypeScript" : "JSONC";
       relinka(
         "error",
-        `Cannot generate ${currentFormat} files when ${existingFormat} files already exist in the multireli folder. ` +
+        `Cannot generate ${currentFormat} files when ${existingFormat} files already exist in the mrse folder. ` +
           `Please use --${useJsonc ? "ts" : "jsonc"} flag to match your existing configuration format.`,
       );
       // Exit process gracefully without showing stack trace
       process.exit(1);
     }
 
-    if (!genCfgExists) {
-      relinka("info", `Generating ${genCfgFileName} file...`);
+    if (!mrseExists) {
+      relinka("info", `Generating ${mrseFileName} file...`);
 
-      // Create content for the gen.cfg file
-      let genCfgContent = "";
+      // Create content for the mrse file
+      let mrseContent = "";
       if (useJsonc) {
         // JSONC format
-        genCfgContent = `{
-  // @reliverse/rse multireli mode
-  // 👉 ${isDev ? "`bun dev:multireli`" : "`rse multireli`"}
+        mrseContent = `{
+  // @reliverse/rse mrse mode
+  // 👉 ${isDev ? "`bun dev:mrse`" : "`rse mrse`"}
   "genCfg": [
     {
       "projectName": "project1",
@@ -188,8 +189,8 @@ export default defineCommand({
 }`;
       } else {
         // TypeScript format
-        genCfgContent = `// @reliverse/rse multireli mode
-// 👉 ${isDev ? "`bun dev:multireli`" : "`rse multireli`"}
+        mrseContent = `// @reliverse/rse mrse mode
+// 👉 ${isDev ? "`bun dev:mrse`" : "`rse mrse`"}
 
 type GenCfg = {
   projectName: string;
@@ -218,21 +219,21 @@ export const genCfg: GenCfg[] = [
 `;
       }
 
-      // Write the gen.cfg file
+      // Write the mrse file
       if (useJsonc) {
-        await fs.writeFile(genCfgPath, genCfgContent);
+        await fs.writeFile(mrsePath, mrseContent);
       } else {
         // For TypeScript files, try magicast for safer formatting
         try {
-          const mod = builders.raw(genCfgContent);
-          await writeFile(mod, genCfgPath);
+          const mod = builders.raw(mrseContent);
+          await writeFile(mod, mrsePath);
         } catch {
           // Fallback to direct write
-          await fs.writeFile(genCfgPath, genCfgContent);
+          await fs.writeFile(mrsePath, mrseContent);
         }
       }
 
-      relinka("success", `Generated ${genCfgFileName} in multireli folder`);
+      relinka("success", `Generated ${mrseFileName} in .config folder`);
 
       // Default data for new file
       genCfgData = [
@@ -253,7 +254,7 @@ export const genCfg: GenCfg[] = [
         },
       ];
 
-      // If no project names were specified, exit after creating the gen.cfg file
+      // If no project names were specified, exit after creating the mrse file
       if (projectNames.length === 0) {
         relinka(
           "info",
@@ -262,12 +263,12 @@ export const genCfg: GenCfg[] = [
         return;
       }
     } else {
-      relinka("info", `Using existing ${genCfgFileName} file`);
+      relinka("info", `Using existing ${mrseFileName} file`);
 
       try {
-        // Read and parse gen.cfg file
+        // Read and parse mrse file
         if (useJsonc) {
-          const fileContent = await fs.readFile(genCfgPath, "utf-8");
+          const fileContent = await fs.readFile(mrsePath, "utf-8");
           try {
             // Parse JSONC
             const parsedData = parseJSONC(fileContent) as GenCfgJsonc;
@@ -312,7 +313,7 @@ export const genCfg: GenCfg[] = [
         } else {
           // TypeScript - use magicast
           try {
-            const mod = await loadFile(genCfgPath);
+            const mod = await loadFile(mrsePath);
             if (mod.exports && mod.exports.genCfg) {
               // Convert the result to a plain object
               genCfgData = JSON.parse(
@@ -321,7 +322,7 @@ export const genCfg: GenCfg[] = [
             } else {
               relinka(
                 "warn",
-                "The gen.cfg.ts file does not export a 'genCfg' array",
+                "The mrse.ts file does not export a 'genCfg' array",
               );
               genCfgData = [];
             }
@@ -336,11 +337,11 @@ export const genCfg: GenCfg[] = [
           }
         }
 
-        logVerbose("Loaded gen.cfg data:", genCfgData);
+        logVerbose("Loaded mrse data:", genCfgData);
       } catch (error) {
         relinka(
           "error",
-          `Error parsing ${genCfgFileName}: ${
+          `Error parsing ${mrseFileName}: ${
             error instanceof Error ? error.message : String(error)
           }`,
         );
@@ -362,18 +363,18 @@ export const genCfg: GenCfg[] = [
         projectsToProcess = matchingProjects;
         relinka(
           "info",
-          `Found ${matchingProjects.length} matching projects in ${genCfgFileName}`,
+          `Found ${matchingProjects.length} matching projects in ${mrseFileName}`,
         );
       } else {
         // If no matching config, process the user-specified projects anyway
         projectsToProcess = projectNames;
       }
-    } else if (genCfgExists) {
+    } else if (mrseExists) {
       // If no projects specified but gen.cfg exists, process all from gen.cfg
       projectsToProcess = genCfgData.map((cfg) => cfg.projectName);
       relinka(
         "info",
-        `Processing all ${projectsToProcess.length} projects from ${genCfgFileName}`,
+        `Processing all ${projectsToProcess.length} projects from ${mrseFileName}`,
       );
     }
 
@@ -423,10 +424,7 @@ export const genCfg: GenCfg[] = [
               `Using cached .env.example for ${projectName} from ${projectConfig.projectTemplate}`,
             );
             // Copy cached env file
-            const envFilePath = path.join(
-              multireliFolderPath,
-              `${projectName}.env`,
-            );
+            const envFilePath = path.join(mrseFolderPath, `${projectName}.env`);
             await fs.copy(cachePath, envFilePath);
             relinka("success", `Created ${projectName}.env from cache`);
             envFilesFromCache++;
@@ -456,7 +454,7 @@ export const genCfg: GenCfg[] = [
 
             if (envContent) {
               const envFilePath = path.join(
-                multireliFolderPath,
+                mrseFolderPath,
                 `${projectName}.env`,
               );
               await fs.writeFile(envFilePath, envContent);
@@ -481,7 +479,7 @@ export const genCfg: GenCfg[] = [
         const configFileName = useJsonc
           ? `${projectName}.jsonc`
           : `${projectName}.ts`;
-        const configPath = path.join(multireliFolderPath, configFileName);
+        const configPath = path.join(mrseFolderPath, configFileName);
 
         // Check if config file already exists
         const fileExists = await fs.pathExists(configPath);
@@ -519,7 +517,7 @@ export const genCfg: GenCfg[] = [
           projectPath: projectConfig?.projectPath || cwd,
           githubUsername,
           isDev,
-          customOutputPath: multireliFolderPath,
+          customOutputPath: mrseFolderPath,
           customFilename: configFileName,
           skipInstallPrompt,
           ...(customTypeImportPath
@@ -532,7 +530,10 @@ export const genCfg: GenCfg[] = [
           overrides: {},
         });
 
-        relinka("success", `Generated ${configFileName} in multireli folder`);
+        relinka(
+          "success",
+          `Generated ${configFileName} in .config/mrse folder`,
+        );
         generatedCount++;
       } catch (error) {
         relinka(
@@ -554,7 +555,7 @@ export const genCfg: GenCfg[] = [
       if (generatedCount > 0) {
         relinka(
           "success",
-          `Generated ${generatedCount} configs in the multireli folder.`,
+          `Generated ${generatedCount} configs in the .config/mrse folder.`,
         );
       }
       if (envFilesDownloaded > 0) {
@@ -580,10 +581,10 @@ export const genCfg: GenCfg[] = [
     if (isDev) {
       await fs.copy(
         path.join(cwd, "schema.json"),
-        path.join(multireliFolderPath, "schema.json"),
+        path.join(mrseFolderPath, "schema.json"),
       );
       await execaCommand("bunx biome check --write .", {
-        cwd: multireliFolderPath,
+        cwd: mrseFolderPath,
         stdio: "inherit",
       });
     }

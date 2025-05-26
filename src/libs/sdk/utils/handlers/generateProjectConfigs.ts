@@ -7,11 +7,11 @@ import { execaCommand } from "execa";
 
 import type { DeploymentService, VSCodeSettings } from "~/types";
 
+import { generateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-create";
 import {
   CONFIG_CATEGORIES,
   UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
-import { generateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-create";
+} from "~/libs/sdk/utils/rseConfig/rc-details";
 import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path";
 
 // ------------------------------------------------------------------
@@ -158,7 +158,7 @@ export async function generateConfigFiles(
           configInfo,
           ...(isDev && configInfo?.isTS
             ? {
-                customPathToTypes: "./src/libs/cfg/cfg-main.js",
+                customPathToTypes: "./src/libs/sdk/sdk-mod",
               }
             : {}),
           overrides: {},

@@ -1,7 +1,7 @@
 import fs from "@reliverse/relifso";
 import os from "node:os";
 
-import { homeDir } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { homeDir } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 type Platform = "darwin" | "linux" | "win32";
 

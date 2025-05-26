@@ -7,7 +7,7 @@ import { eq } from "drizzle-orm";
 import { db } from "~/db/client";
 import { encrypt, decrypt } from "~/db/config";
 import { configKeysTable, userDataTable } from "~/db/schema";
-import { memoryPath } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { memoryPath } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 import type {
   EncryptedDataMemory,

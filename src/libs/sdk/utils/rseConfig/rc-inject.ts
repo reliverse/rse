@@ -7,7 +7,7 @@ import MagicString from "magic-string";
 
 import type { RseConfig } from "./cfg-types";
 
-import { cliDomainDocs, cliName, cliVersion } from "./cfg-details";
+import { cliDomainDocs, cliName, cliVersion } from "./rc-details";
 
 export function injectSectionComments(fileContent: string): string {
   const ms = new MagicString(fileContent);

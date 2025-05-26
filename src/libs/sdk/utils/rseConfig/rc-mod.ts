@@ -9,7 +9,7 @@ import {
   RSE_SCHEMA_DEV,
   cliConfigJsonc,
   cliConfigTs,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+} from "~/libs/sdk/utils/rseConfig/rc-details";
 
 import { DEFAULT_CONFIG } from "./rc-const";
 import { createRseConfig } from "./rc-create";
@@ -23,10 +23,10 @@ import { parseAndFixRseConfig } from "./rc-repair";
  */
 
 /**
- * Retrieves or creates the main rseg (and any 'multireli' configs).
+ * Retrieves or creates the main rseg (and any 'mrse' configs).
  * Allows an optional custom path to the TS config file.
  */
-export async function getRseConfig({
+export async function getOrCreateRseConfig({
   projectPath,
   isDev,
   overrides,
@@ -36,20 +36,20 @@ export async function getRseConfig({
   isDev: boolean;
   overrides: Partial<RseConfig>;
   customTsconfigPath?: string;
-}): Promise<{ config: RseConfig; multireli: RseConfig[] }> {
+}): Promise<{ config: RseConfig; mrse: RseConfig[] }> {
   const githubUsername = UNKNOWN_VALUE;
-  const multireliFolderPath = path.join(projectPath, "multireli");
+  const mrseFolderPath = path.join(projectPath, ".config", "mrse");
   const results: RseConfig[] = [];
 
-  // Collect additional configs in "multireli" folder
-  if (await fs.pathExists(multireliFolderPath)) {
-    const dirItems = await fs.readdir(multireliFolderPath);
+  // Collect additional configs in "mrse" folder
+  if (await fs.pathExists(mrseFolderPath)) {
+    const dirItems = await fs.readdir(mrseFolderPath);
     const rseFiles = dirItems.filter(
       (item) => item === cliConfigJsonc || item === cliConfigTs,
     );
     const configs = await Promise.all(
       rseFiles.map(async (file) => {
-        const filePath = path.join(multireliFolderPath, file);
+        const filePath = path.join(mrseFolderPath, file);
         let foundConfig = await readRseConfig(filePath, isDev);
         if (!foundConfig) {
           foundConfig = await parseAndFixRseConfig(filePath, isDev);
@@ -98,11 +98,11 @@ export async function getRseConfig({
   const mainConfig = await readRseConfig(configPath, isDev);
   if (!mainConfig) {
     relinka("warn", "Using fallback default config due to validation failure.");
-    return { config: { ...DEFAULT_CONFIG }, multireli: results };
+    return { config: { ...DEFAULT_CONFIG }, mrse: results };
   }
   if (isDev) {
     mainConfig.$schema = RSE_SCHEMA_DEV;
   }
 
-  return { config: mainConfig, multireli: results };
+  return { config: mainConfig, mrse: results };
 }

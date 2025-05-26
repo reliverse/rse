@@ -25,7 +25,7 @@ export async function showStartPrompt(
 export async function showEndPrompt() {
   await endPrompt({
     title:
-      "│  ❤️  Please consider supporting dler: https://github.com/sponsors/blefnk",
+      "│  ❤️  Please consider supporting rse: https://github.com/sponsors/blefnk",
     titleAnimation: "glitch",
     titleColor: "dim",
     titleTypography: "bold",

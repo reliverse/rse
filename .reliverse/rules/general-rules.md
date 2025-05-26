@@ -1,1 +1,1 @@
-# rse CLI: General Rules for LLMs
+# Rse CLI: General Rules for LLMs

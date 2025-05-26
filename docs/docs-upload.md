@@ -1,8 +1,8 @@
-# rse CLI: `upload` Command
+# Rse CLI: `upload` Command
 
 > **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
-[📦 NPM](https://npmjs.com/@reliverse/rse) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
+[NPM](https://npmjs.com/@reliverse/rse) — [Discord](https://discord.gg/Pb8uKbwpsJ) — [GitHub Sponsors](https://github.com/sponsors/blefnk) — [Docs](https://docs.reliverse.org/cli)
 
 **@reliverse/rse** offers a streamlined `upload` command for quickly uploading images (and other files) to your preferred hosting destination—perfect for sharing assets or storing them for AI-driven workflows.
 
@@ -54,11 +54,11 @@ rse upload images/
 - Uploads each file separately, logging the final URLs or statuses.
 
 - **Custom Configuration**  
-- Environment variables or a `rse.jsonc`/`.ts` file can specify custom hosting settings.
+- Environment variables or a `.config/rse.jsonc`/`.config/rse.ts` file can specify custom hosting settings.
 - Example:
 
 ```jsonc
-// rse.jsonc
+// .config/rse.jsonc
 {
   "upload": {
     "destination": "customS3orCDN",
@@ -87,11 +87,9 @@ We welcome feature requests, bug reports, and community contributions:
 
 If rse helps your workflow, please consider supporting its development:
 
-- [GitHub Sponsors](https://github.com/sponsors/blefnk)  
-- [Patreon](https://patreon.com/blefnk)  
-- [PayPal](https://paypal.me/blefony)
+- [GitHub Sponsors](https://github.com/sponsors/blefnk)
 
-Every star on [GitHub](https://github.com/rse/rse) is also appreciated!
+Every star on [GitHub](https://github.com/reliverse/rse) is also appreciated!
 
 ## License
 

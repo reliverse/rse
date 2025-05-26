@@ -7,22 +7,22 @@ import { confirmPrompt } from "@reliverse/rempts";
 import { initGithubSDK } from "~/libs/sdk/utils/instanceGithub";
 import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import { homeDir } from "~/libs/sdk/utils/rseConfig/cfg-details";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
+import { homeDir } from "~/libs/sdk/utils/rseConfig/rc-details";
+import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 
 /**
  * Determines if we log additional debug info.
  * Set to `true` for verbose output.
  */
-export const multireliVerbose = false;
+export const mrseVerbose = false;
 
 /**
- * Helper to conditionally log verbose messages based on `multireliVerbose`.
+ * Helper to conditionally log verbose messages based on `mrseVerbose`.
  * @param msg - The message to log.
  * @param data - Optional additional data to log.
  */
 export function logVerbose(msg: string, data?: unknown): void {
-  if (multireliVerbose) {
+  if (mrseVerbose) {
     console.log(`Debug - ${msg}`, data ?? "");
   }
 }
@@ -137,7 +137,7 @@ export async function downloadFileFromGitHub(
 
     // Memory used for storing credentials
     const memory = await getReliverseMemory();
-    const { config } = await getRseConfig({
+    const { config } = await getOrCreateRseConfig({
       projectPath: process.cwd(),
       isDev: false,
       overrides: {},

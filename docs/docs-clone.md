@@ -1,8 +1,8 @@
-# rse CLI: `clone` Command
+# Rse CLI: `clone` Command
 
 > **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
-[📦 NPM](https://npmjs.com/@rse• [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.rse.orrse
+[NPM](<https://npmjs.com/@reliverse/rse>) [Discord](https://discord.gg/Pb8uKbwpsJ) — [GitHub Sponsors](https://github.com/sponsors/blefnk) — [Docs](https://docs.reliverse.org)
 
 **The `clone` command** in **@rse lets you directly clone GitHub repositories or crawl arbitrary URLs to capture “LLM-ready” structure for AI-driven analysis.
 
@@ -96,11 +96,9 @@ If you have suggestions, bug reports, or ideas for new features, please [join ou
 
 If you find rsealuable, consider supporting its continued development through:
 
-- [GitHub Sponsors](https://github.com/sponsors/blefnk)  
-- [Patreon](https://patreon.com/blefnk)  
-- [PayPal](https://paypal.me/blefony)
+- [GitHub Sponsors](https://github.com/sponsors/blefnk)
 
-Even a simple ⭐ on [GitHub](https://github.com/rseis greatly appreciated!
+Even a simple ⭐ on [GitHub](https://github.com/reliverse/rse) is greatly appreciated!
 
 ## License
 

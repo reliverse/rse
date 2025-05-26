@@ -22,7 +22,7 @@ import {
 import {
   cliHomeRepos,
   UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+} from "~/libs/sdk/utils/rseConfig/rc-details";
 
 interface UnghRepoResponse {
   repo?: {

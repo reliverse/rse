@@ -9,11 +9,11 @@ import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
 import { ofetch } from "ofetch";
 
-import type { rseSchema } from "~/libs/sdk/utils/rseConfig/cfg-schema";
+import type { rseSchema } from "~/libs/sdk/utils/rseConfig/rc-schema";
 import type { VSCodeRepoOption } from "~/providers/reliverse-stack/rs-impl";
 
 import { experimental, recommended } from "~/libs/sdk/utils/badgeNotifiers";
-import { cliHomeRepos } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { cliHomeRepos } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 import { setHiddenAttributeOnWindows } from "./filesysHelpers";
 import {

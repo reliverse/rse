@@ -9,8 +9,6 @@ import fs from "@reliverse/relifso";
 
 import { askRseConfigType } from "~/libs/sdk/utils/prompts/askRseConfigType";
 
-import { cliConfigTs, cliConfigJsonc } from "./cfg-details";
-
 // Cache the result per project path so the prompt is only shown once.
 const configPathCache = new Map<
   string,
@@ -29,10 +27,10 @@ export async function getRseConfigPath(
   skipPrompt: boolean,
   customTsconfigPath?: string,
 ): Promise<{ configPath: string; isTS: boolean }> {
-  // Dev mode: always choose .ts config in the project root
+  // Dev mode: always choose .ts config in the .config directory
   if (isDev) {
     const devResult = {
-      configPath: path.join(projectPath, cliConfigTs),
+      configPath: path.join(projectPath, ".config", "rse.ts"),
       isTS: true,
     };
     configPathCache.set(projectPath, devResult);
@@ -51,8 +49,8 @@ export async function getRseConfigPath(
     : path.join(projectPath, tsconfigJson);
 
   // Identify potential config paths
-  const rseath = path.join(projectPath, cliConfigJsonc);
-  const rse = path.join(projectPath, cliConfigTs);
+  const rseath = path.join(projectPath, ".config", "rse.jsonc");
+  const rse = path.join(projectPath, ".config", "rse.ts");
 
   // Check if these paths exist
   const [tsconfigExists, jsoncExists, tsExists] = await Promise.all([

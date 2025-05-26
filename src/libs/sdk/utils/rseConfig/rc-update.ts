@@ -8,11 +8,11 @@ import { relinka } from "@reliverse/relinka";
 import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
 
-import { rseSchema } from "./cfg-schema";
 import { type RseConfig } from "./cfg-types";
 import { DEFAULT_CONFIG } from "./rc-const";
 import { writeRseConfig } from "./rc-create";
 import { getRseConfigPath } from "./rc-path";
+import { rseSchema } from "./rc-schema";
 import { getBackupAndTempPaths } from "./rc-utils";
 
 /**
@@ -49,6 +49,66 @@ function deepMerge<T extends Record<string, unknown>>(
 }
 
 /**
+ * Compares two objects and returns an array of paths where values differ
+ */
+function findObjectDifferences(
+  obj1: Record<string, unknown>,
+  obj2: Record<string, unknown>,
+  path = "",
+): string[] {
+  const differences: string[] = [];
+  const allKeys = new Set([...Object.keys(obj1), ...Object.keys(obj2)]);
+
+  for (const key of allKeys) {
+    const currentPath = path ? `${path}.${key}` : key;
+    const val1 = obj1[key];
+    const val2 = obj2[key];
+
+    if (val1 === undefined || val2 === undefined) {
+      differences.push(
+        `${currentPath}: ${val1 === undefined ? "removed" : "added"}`,
+      );
+      continue;
+    }
+
+    if (
+      typeof val1 === "object" &&
+      val1 !== null &&
+      typeof val2 === "object" &&
+      val2 !== null
+    ) {
+      if (Array.isArray(val1) && Array.isArray(val2)) {
+        if (JSON.stringify(val1) !== JSON.stringify(val2)) {
+          differences.push(`${currentPath}: array values differ`);
+        }
+      } else {
+        differences.push(
+          ...findObjectDifferences(
+            val1 as Record<string, unknown>,
+            val2 as Record<string, unknown>,
+            currentPath,
+          ),
+        );
+      }
+    } else if (val1 !== val2) {
+      differences.push(
+        `${currentPath}: ${JSON.stringify(val1)} → ${JSON.stringify(val2)}`,
+      );
+    }
+  }
+
+  return differences;
+}
+
+/**
+ * Filters out memory-related fields that should not be in the rse config
+ */
+function filterMemoryFields<T extends Record<string, unknown>>(config: T): T {
+  const { code, key, ...rest } = config;
+  return rest as T;
+}
+
+/**
  * Updates project configuration by merging new updates with the existing config.
  * Creates a backup before overwriting and attempts to restore from backup on error.
  */
@@ -72,7 +132,9 @@ export async function updateRseConfig(
       }
     }
 
-    const mergedConfig = deepMerge(existingConfig, updates);
+    // Filter out memory fields before merging
+    const filteredUpdates = filterMemoryFields(updates);
+    const mergedConfig = deepMerge(existingConfig, filteredUpdates);
     if (!Value.Check(rseSchema, mergedConfig)) {
       const issues = [...Value.Errors(rseSchema, mergedConfig)].map(
         (err) => `Path "${err.path}": ${err.message}`,
@@ -80,6 +142,17 @@ export async function updateRseConfig(
       relinka("error", "Invalid config after merge:", issues.join("; "));
       return false;
     }
+
+    // Check if there are actual changes before updating
+    const differences = findObjectDifferences(existingConfig, mergedConfig);
+    if (differences.length === 0) {
+      relinka("verbose", "No changes detected in config, skipping update");
+      return true;
+    }
+
+    // Log the changes
+    relinka("info", "Config changes detected:");
+    differences.forEach((diff) => relinka("info", `  ${diff}`));
 
     // Backup current config (if exists) and write merged config
     if (await fs.pathExists(configPath)) {
@@ -89,6 +162,7 @@ export async function updateRseConfig(
     if (await fs.pathExists(backupPath)) {
       await fs.remove(backupPath);
     }
+    relinka("null", "");
     relinka("success", "rse config updated successfully");
     return true;
   } catch (error) {
@@ -127,10 +201,10 @@ export function mergeWithDefaults(partial: Partial<RseConfig>): RseConfig {
       ...(partial.features ?? {}),
     },
     codeStyle: {
-      ...DEFAULT_CONFIG.codeStyle,
+      ...(DEFAULT_CONFIG.codeStyle ?? {}),
       ...(partial.codeStyle ?? {}),
       modernize: {
-        ...DEFAULT_CONFIG.codeStyle.modernize,
+        ...(DEFAULT_CONFIG.codeStyle?.modernize ?? {}),
         ...(partial.codeStyle?.modernize ?? {}),
       },
     },

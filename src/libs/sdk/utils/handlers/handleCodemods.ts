@@ -13,7 +13,7 @@ import { convertRuntime } from "~/libs/sdk/utils/codemods/convertRuntime";
 import { convertToMonorepo } from "~/libs/sdk/utils/codemods/convertToMonorepo";
 import { replaceImportSymbol } from "~/libs/sdk/utils/codemods/replaceImportSymbol";
 import { replaceWithModern } from "~/libs/sdk/utils/codemods/replaceWithModern";
-import { cliConfigJsonc } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { cliConfigJsonc } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 export async function handleCodemods(rules: RseConfig, cwd: string) {
   if (!rules.codeStyle || !rules.preferredLibraries) {

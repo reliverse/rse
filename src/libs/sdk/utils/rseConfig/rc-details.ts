@@ -11,14 +11,14 @@ export const cliName = "@reliverse/rse";
 // GENERAL CONFIG NAMES
 export const tsconfigJson = "tsconfig.json";
 
-// rse CONFIG
-export const cliConfigJsonc = "rse.jsonc";
-export const cliConfigJsoncTmp = "rse.jsonc.tmp";
+// RSE CONFIG
+export const cliConfigJsonc = ".config/rse.jsonc";
+export const cliConfigJsoncTmp = ".config/rse.jsonc.tmp";
 export const cliConfigJsoncBak = "rse.jsonc.bak";
 
-// rse CONFIG
-export const cliConfigTs = "rse.ts";
-export const cliConfigTsTmp = "rse.ts.tmp";
+// RSE CONFIG
+export const cliConfigTs = ".config/rse.ts";
+export const cliConfigTsTmp = ".config/rse.ts.tmp";
 export const cliConfigTsBak = "rse.ts.bak";
 
 // DOCUMENTATION WEBSITE
@@ -36,7 +36,7 @@ export const cliHomeRepos = path.join(cliHomeDir, "repos");
 export const memoryPath = path.join(cliHomeDir, "memory.db");
 export const cliJsrPath = path.join(cliHomeDir, "cli");
 
-export const useLocalhost = false;
+export const useLocalhost = true;
 
 export const DEFAULT_CLI_USERNAME = "johnny911";
 

@@ -15,7 +15,7 @@ import {
   cliConfigJsonc,
   cliConfigJsoncTmp,
   cliHomeTmp,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+} from "~/libs/sdk/utils/rseConfig/rc-details";
 
 const gzipAsync = promisify(gzip);
 

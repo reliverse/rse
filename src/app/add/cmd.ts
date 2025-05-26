@@ -3,7 +3,7 @@ import { defineCommand } from "@reliverse/rempts";
 
 import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
+import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({
@@ -41,7 +41,7 @@ export default defineCommand({
     }
 
     const cwd = getCurrentWorkingDirectory();
-    const { config } = await getRseConfig({
+    const { config } = await getOrCreateRseConfig({
       projectPath: cwd,
       isDev,
       overrides: {},

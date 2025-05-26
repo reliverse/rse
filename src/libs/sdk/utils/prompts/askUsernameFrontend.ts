@@ -3,7 +3,7 @@ import { inputPrompt, deleteLastLine } from "@reliverse/rempts";
 
 import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { DEFAULT_CLI_USERNAME } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { DEFAULT_CLI_USERNAME } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update";
 
 // TODO: make it reliverse memory-based again instead of rse config-based

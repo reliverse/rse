@@ -4,7 +4,7 @@ import fs from "@reliverse/relifso";
 import {
   cliConfigJsonc,
   cliConfigTs,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+} from "~/libs/sdk/utils/rseConfig/rc-details";
 
 // Define a type that matches the boolean-based structure of requiredContent
 export interface RequiredProjectContent {

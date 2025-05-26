@@ -5,7 +5,7 @@ import { execa } from "execa";
 
 import type { RseConfig } from "~/libs/sdk/sdk-types";
 
-import { cliDomainEnv } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { cliDomainEnv } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 import {
   promptAndSetMissingValues,
@@ -24,7 +24,7 @@ export async function composeEnvFile(
   maskInput: boolean,
   skipPrompts: boolean,
   config: RseConfig | null,
-  isMultireli: boolean,
+  isMrse: boolean,
 ): Promise<void> {
   if (config === null) return;
 
@@ -71,7 +71,7 @@ export async function composeEnvFile(
             maskInput,
             config,
             true,
-            isMultireli,
+            isMrse,
             projectPath,
             skipPrompts,
           );
@@ -148,7 +148,7 @@ export async function composeEnvFile(
             maskInput,
             config,
             true,
-            isMultireli,
+            isMrse,
             projectPath,
             skipPrompts,
           );
@@ -172,7 +172,7 @@ export async function composeEnvFile(
             maskInput,
             config,
             true,
-            isMultireli,
+            isMrse,
             projectPath,
             skipPrompts,
           );
@@ -185,7 +185,7 @@ export async function composeEnvFile(
           maskInput,
           config,
           false,
-          isMultireli,
+          isMrse,
           projectPath,
           skipPrompts,
         );
@@ -198,7 +198,7 @@ export async function composeEnvFile(
         maskInput,
         config,
         false,
-        isMultireli,
+        isMrse,
         projectPath,
         skipPrompts,
       );

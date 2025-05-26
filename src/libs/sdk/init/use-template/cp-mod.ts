@@ -9,9 +9,9 @@ import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 import { getRseConfigPath } from "~/libs/sdk/sdk-mod";
 import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload";
 import { generateProjectConfigs } from "~/libs/sdk/utils/handlers/generateProjectConfigs";
-import { isMultireliProject } from "~/libs/sdk/utils/multireliHelpers";
+import { isMrseProject } from "~/libs/sdk/utils/mrseHelpers";
 import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod";
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update";
 
 import {
@@ -49,11 +49,11 @@ export async function createWebProject({
   relinka("info", message);
 
   // -------------------------------------------------
-  // 1) Check if the project is a multireli project
+  // 1) Check if the project is a mrse project
   // -------------------------------------------------
-  const isMultireli = await isMultireliProject(cwd);
-  if (isMultireli) {
-    relinka("info", "✅ Multireli mode activated");
+  const isMrse = await isMrseProject(cwd);
+  if (isMrse) {
+    relinka("info", "✅ Mrse mode activated");
   }
 
   // -------------------------------------------------
@@ -146,7 +146,7 @@ export async function createWebProject({
     maskInput,
     skipPrompts,
     config,
-    isMultireli,
+    isMrse,
   );
 
   // -------------------------------------------------

@@ -1,8 +1,8 @@
-# rse CLI: `cmod` Command
+# Rse CLI: `cmod` Command
 
 > **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
-[📦 NPM](https://npmjs.com/@reliverse/rse) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
+[NPM](https://npmjs.com/@reliverse/rse) — [Discord](https://discord.gg/Pb8uKbwpsJ) — [GitHub Sponsors](https://github.com/sponsors/blefnk) — [Docs](https://docs.reliverse.org/cli)
 
 The `rse cmod` command allows you to easily apply powerful codemods (code modifications) to your project. Codemods automate complex or repetitive refactoring tasks, saving significant time and effort while ensuring consistency across your codebase.
 
@@ -92,10 +92,8 @@ We're always looking to expand our codemod collection and enhance the rse experi
 Consider supporting us:
 
 - [GitHub Sponsors](https://github.com/sponsors/blefnk)
-- [Patreon](https://patreon.com/blefnk)
-- [PayPal](https://paypal.me/blefony)
 
-A simple star ⭐ on [GitHub](https://github.com/rse/rse) is always appreciated!
+A simple star ⭐ on [GitHub](https://github.com/reliverse/rse) is always appreciated!
 
 ## License
 

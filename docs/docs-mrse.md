@@ -1,39 +1,39 @@
-# 🧪 `rse multireli`
+# 🧪 `rse mrse`
 
 > **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
-The `multireli` command lets you define multiple rse config files and use them to generate multiple projects in a single run.  
+The `mrse` command lets you define multiple rse config files and use them to generate multiple projects in a single run.  
 Useful when you want to scaffold several related projects at once — like a monorepo, microservices setup, or just different playgrounds to experiment with.
 
-## 📦 How it works
+## How it works
 
 When you run:
 
 ```bash
-rse multireli
+rse mrse
 ```
 
 rse looks for config files inside this directory:
 
 ```bash
-.rse/multireli/
+.config/mrse/
 ```
 
 Each file should follow this pattern:
 
 ```bash
-{index}-rse.config.ts
+.config/mrse/{index}.ts
 # or
-{index}-rse.config.json
+.config/mrse/{index}.jsonc
 ```
 
 Example:
 
 ```bash
-.rse/multireli/
-├── 1-rse.config.ts
-├── 2-rse.config.ts
-└── 3-rse.config.json
+.config/mrse/
+├── .config/mrse/1.ts
+├── .config/mrse/2.ts
+└── .config/mrse/3.jsonc
 ```
 
 Each config will be passed into the CLI just like a single project setup.  
@@ -48,7 +48,7 @@ Let's say you want:
 - A main web app
 - A CMS admin panel
 
-You can create separate config files for each, place them in `.rse/multireli/`, and let rse do the heavy lifting.
+You can create separate config files for each, place them in `.config/mrse/`, and let rse do the heavy lifting.
 
 ## 🧠 Tips
 
@@ -60,7 +60,7 @@ You can create separate config files for each, place them in `.rse/multireli/`, 
 ## 🚀 Generate configs
 
 ```bash
-rse multireli
+rse mrse
 ```
 
 Sit back. Let rse CLI do its thing 🛠️✨

@@ -14,7 +14,7 @@ import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 import { downloadRepo } from "~/libs/sdk/utils/downloading/downloadRepo";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
 import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend";
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { cd, pwd, rm } from "~/libs/sdk/utils/terminalHelpers";
 
 import { openVercelTools } from "./toolbox-vercel";
@@ -66,7 +66,7 @@ export async function downloadRepoOption(
     maskInput,
     skipPrompts,
     config,
-    false, // isMultireli
+    false, // isMrse
   );
 
   const frontendUsername = await askUsernameFrontend(config, false);

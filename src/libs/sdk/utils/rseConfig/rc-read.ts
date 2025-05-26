@@ -13,9 +13,9 @@ import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
 import type { IterableError } from "./rc-types";
 
-import { rseSchema } from "./cfg-schema";
 import { writeRseConfig } from "./rc-create";
 import { repairAndParseJSON } from "./rc-repair";
+import { rseSchema } from "./rc-schema";
 import { mergeWithDefaults } from "./rc-update";
 import { getBackupAndTempPaths } from "./rc-utils";
 
@@ -38,10 +38,22 @@ async function parseRseConfig(configPath: string): Promise<{
       relinka("info", "Config JSON was repaired.");
       relinka("verbose", "Used tool: jsonrepair.");
     }
-    const isValid = Value.Check(rseSchema, parsed);
+
+    // Filter out fields that are not part of the rse config schema
+    const schemaProperties = Object.keys(rseSchema.properties);
+    const filteredParsed = Object.fromEntries(
+      Object.entries(parsed as Record<string, unknown>).filter(([key]) =>
+        schemaProperties.includes(key),
+      ),
+    );
+
+    const isValid = Value.Check(rseSchema, filteredParsed);
     return isValid
-      ? { parsed, errors: null }
-      : { parsed, errors: Value.Errors(rseSchema, parsed) };
+      ? { parsed: filteredParsed, errors: null }
+      : {
+          parsed: filteredParsed,
+          errors: Value.Errors(rseSchema, filteredParsed),
+        };
   } catch {
     return null;
   }

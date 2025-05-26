@@ -9,7 +9,6 @@ node_modules
 dist-jsr
 dist-libs
 dist-npm
-/multireli
 start-runtime
 tests-runtime
 relinter.json

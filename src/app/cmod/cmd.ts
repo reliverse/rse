@@ -1,7 +1,7 @@
 // `rse cmod` runs selected codemods
 
+import { re } from "@reliverse/relico";
 import { defineCommand } from "@reliverse/rempts";
-import chalk from "chalk";
 import { prompt } from "enquirer";
 
 import { runCodemods } from "~/libs/sdk/cmod/cmod-impl";
@@ -63,7 +63,7 @@ export default defineCommand({
     }
 
     // 2. Otherwise, go into interactive mode
-    console.log(chalk.green("\n◆ rse Codemod Selection\n"));
+    console.log(re.green("\n◆ Rse Codemod Selection\n"));
 
     const { chosen } = await prompt<{ chosen: string[] }>({
       type: "multiselect",
@@ -73,7 +73,7 @@ export default defineCommand({
     });
 
     if (!chosen || chosen.length === 0) {
-      console.log(chalk.yellow("No codemods selected. Exiting..."));
+      console.log(re.yellow("No codemods selected. Exiting..."));
       return;
     }
 

@@ -53,7 +53,7 @@ export type {
   EnvVar,
   DeploymentOptions,
 } from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-types.js";
-export type { GenCfg, GenCfgJsonc } from "./multireli/multireli-impl.js";
+export type { GenCfg, GenCfgJsonc } from "./mrse/mrse-impl.js";
 export type { ConfigurationOptions } from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-config.js";
 export type {
   KeyType,
@@ -78,12 +78,12 @@ export interface AppParams {
   isDev: boolean;
   memory: ReliverseMemory;
   config: RseConfig;
-  multireli: RseConfig[];
+  mrse: RseConfig[];
   skipPrompts: boolean;
 }
 
 export type ParamsOmitSkipPN = Omit<AppParams, "skipPrompts" | "projectName">;
-export type ParamsOmitReli = Omit<AppParams, "multireli">;
+export type ParamsOmitReli = Omit<AppParams, "mrse">;
 
 /**
  * Minimal object describing essential project info after initialization

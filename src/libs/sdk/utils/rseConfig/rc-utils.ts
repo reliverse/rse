@@ -9,13 +9,7 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { readTSConfig, writeTSConfig } from "pkg-types";
 
-import {
-  cliConfigTs,
-  cliConfigTsBak,
-  cliConfigTsTmp,
-  cliConfigJsoncBak,
-  cliConfigJsoncTmp,
-} from "./cfg-details";
+import { cliConfigTs } from "./rc-details";
 
 /**
  * Cleans GitHub repository URLs by removing git+ prefix and .git suffix.
@@ -77,7 +71,7 @@ export async function updateTsConfigInclude(
     if (!tsconfig.include.includes(cliConfigTs)) {
       tsconfig.include.push(cliConfigTs);
       await writeTSConfig(tsconfigPath, tsconfig);
-      relinka("verbose", "Updated tsconfig.json to include rse.ts");
+      relinka("verbose", "Updated tsconfig.json to include .config/rse.ts");
     }
   } catch (err) {
     relinka(
@@ -96,15 +90,16 @@ export function getBackupAndTempPaths(configPath: string): {
   tempPath: string;
 } {
   const configDir = path.dirname(configPath);
+  const baseName = path.basename(configPath);
   if (configPath.endsWith(".ts")) {
     return {
-      backupPath: path.join(configDir, cliConfigTsBak),
-      tempPath: path.join(configDir, cliConfigTsTmp),
+      backupPath: path.join(configDir, `${baseName}.bak`),
+      tempPath: path.join(configDir, `${baseName}.tmp`),
     };
   }
   return {
-    backupPath: path.join(configDir, cliConfigJsoncBak),
-    tempPath: path.join(configDir, cliConfigJsoncTmp),
+    backupPath: path.join(configDir, `${baseName}.bak`),
+    tempPath: path.join(configDir, `${baseName}.tmp`),
   };
 }
 
@@ -117,6 +112,10 @@ export async function atomicWriteFile(
   backupPath: string,
   tempPath: string,
 ): Promise<void> {
+  // Remove any existing backup file first
+  if (await fs.pathExists(backupPath)) {
+    await fs.remove(backupPath);
+  }
   if (await fs.pathExists(filePath)) {
     await fs.copy(filePath, backupPath);
   }

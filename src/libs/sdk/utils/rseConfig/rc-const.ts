@@ -7,7 +7,7 @@ import { isBunPM, runtimeInfo } from "@reliverse/runtime";
 
 import type { ProjectFramework, RseConfig } from "./cfg-types";
 
-import { DEFAULT_DOMAIN, RSE_SCHEMA_URL, UNKNOWN_VALUE } from "./cfg-details";
+import { DEFAULT_DOMAIN, RSE_SCHEMA_URL, UNKNOWN_VALUE } from "./rc-details";
 
 export const DEFAULT_CONFIG: RseConfig = {
   $schema: RSE_SCHEMA_URL,
@@ -30,7 +30,9 @@ export const DEFAULT_CONFIG: RseConfig = {
   repoBranch: "main",
   projectFramework: "nextjs",
   projectPackageManager: (await isBunPM()) ? "bun" : "npm",
-  projectRuntime: runtimeInfo?.name || "node",
+  projectRuntime: (["node", "deno", "bun"].includes(runtimeInfo?.name ?? "")
+    ? runtimeInfo?.name
+    : "node") as "node" | "deno" | "bun",
   preferredLibraries: {
     stateManagement: UNKNOWN_VALUE,
     formManagement: UNKNOWN_VALUE,
@@ -134,14 +136,30 @@ export const DEFAULT_CONFIG: RseConfig = {
 
 export const PROJECT_FRAMEWORK_FILES: Record<ProjectFramework, string[]> = {
   unknown: [],
-  "npm-jsr": ["jsr.json", "jsr.jsonc", "build.publish.ts"],
-  astro: ["astro.config.js", "astro.config.ts", "astro.config.mjs"],
   nextjs: ["next.config.js", "next.config.ts", "next.config.mjs"],
   vite: ["vite.config.js", "vite.config.ts", "react.config.js"],
   svelte: ["svelte.config.js", "svelte.config.ts"],
+  remix: ["remix.config.js", "remix.config.ts"],
+  astro: ["astro.config.js", "astro.config.ts", "astro.config.mjs"],
+  nuxt: ["nuxt.config.js", "nuxt.config.ts"],
+  solid: ["solid.config.js", "solid.config.ts"],
+  qwik: ["qwik.config.js", "qwik.config.ts"],
+  "react-native": ["App.js", "App.tsx", "App.ts"],
+  expo: ["app.json", "app.config.js"],
+  capacitor: ["capacitor.config.ts", "capacitor.config.json"],
+  ionic: ["ionic.config.json"],
+  electron: ["electron.config.js", "electron.config.ts"],
+  tauri: ["tauri.conf.json"],
+  neutralino: ["neutralino.config.json"],
+  commander: ["package.json"],
+  cac: ["package.json"],
+  meow: ["package.json"],
+  yargs: ["package.json"],
+  vscode: ["vscode.config.js", "vscode.config.ts"],
+  webextension: ["manifest.json"],
+  "browser-extension": ["manifest.json"],
+  "npm-jsr": ["jsr.json", "jsr.jsonc"],
+  lynx: ["App.tsx", "App.css"],
   vue: ["vue.config.js", "vite.config.ts"],
   wxt: ["wxt.config.js", "wxt.config.ts"],
-  vscode: ["vscode.config.js", "vscode.config.ts"],
-  "react-native": ["App.js", "App.tsx", "App.ts"],
-  lynx: ["App.tsx", "App.css"],
 };

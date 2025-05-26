@@ -1,6 +1,6 @@
-# @reliverse/rse (prev. @reliverse/cli) | [reliverse.org](https://reliverse.org)
+# rse (prev. reliverse cli) — [reliverse.org](https://reliverse.org)
 
-[💖 github sponsors](https://github.com/sponsors/blefnk) • [💬 discord](https://discord.gg/pb8ukbwpsj) • [✨ repo](https://github.com/rse/rse) • [📦 npm](https://npmjs.com/@reliverse/rse) • [📚 docs](https://blefnk.reliverse.org/blog/my-products/rse-cli)
+[sponsor](https://github.com/sponsors/blefnk) — [discord](https://discord.gg/Pb8uKbwpsJ) — [repo](https://github.com/reliverse/rse) — [npm](https://npmjs.com/@reliverse/rse) — [introduction](https://blefnk.reliverse.org/blog/my-projects/cli)
 
 **@reliverse/rse** is your all-in-one terminal companion for building and improving web projects — whether you're starting fresh or leveling up an existing app. think of it as a little ai-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.
 
@@ -9,7 +9,7 @@
 - 🦾 **superapp for devs.** one cli, tons of features. spin up, refactor, deploy, ai — all in one place.
 - 🚀 **start new or load up** templates in seconds.
 - 🌐 **push** to github, deploy to vercel — all in one go.
-- 🤝 **different providers.** don't like the rse's stack? launch `rse` and choose `better-t-stack` or any other provider for your project bootstrap. rse won't mind (promise). [learn more](https://reliverse.org/rse/providers).
+- 🤝 **different providers.** don't like the recommended `rse-stack`? launch `rse` and choose `better-t-stack` or any other provider for your project bootstrap. rse won't mind (promise). [learn more](https://reliverse.org/rse/providers).
 - 🔧 **refactor** safely, add popular libs, and keep your codebase happy.
 - ⚙️ **automate** boring setup (eslint, env files, etc) — let the cli handle it.
 - 🏗️ **works great with next.js**, and plays nice with other frameworks too.
@@ -25,7 +25,6 @@ that's why rse gives you the opportunity to use not only its native rse-stack fo
 
 - ✅ [rse-stack](https://reliverse.org/rse/providers/rse-stack) ([donate](https://github.com/sponsors/blefnk))
 - 🏗️ [better-t-stack](https://reliverse.org/rse/providers/better-t-stack) ([donate](https://github.com/sponsors/AmanVarshney01))
-- 🔜 `t3-stack` (maybe)
 
 > want to add your/someone else's cli? please open a pr or [create an issue](https://github.com/rse/rse/issues/new).
 
@@ -70,7 +69,7 @@ changes apply on next launch (hot-reload coming soon).
 if `@reliverse/rse` saved you time or made you smile:
 
 - support on [github sponsors](https://github.com/sponsors/blefnk)
-- or drop a ⭐️ on [github](https://github.com/rse/rse)
+- or drop a ⭐️ on [github](https://github.com/reliverse/rse)
 
 it helps more than you think! thanks for being here.
 
@@ -112,7 +111,7 @@ from bootstrapping projects to ai superpowers — here's what rse cli can do.
 - `rse clone` ([docs](./src/cli/docs/docs-clone.md)) — clone a github repo (just paste the link), or convert a webpage into llm-ready content.
 - `rse cmod` ([docs](./src/cli/docs/docs-cmod.md)) — apply codemods for quick, safe refactoring (ai or presets).
 - `rse env` ([docs](./src/cli/docs/docs-env.md)) — generate a .env file from your .env.example with an interactive wizard.
-- `rse multireli` ([docs](./src/cli/docs/docs-multireli.md)) — batch-generate multiple rse config files for multiple projects.
+- `rse mrse` ([docs](./src/cli/docs/docs-mrse.md)) — batch-generate multiple rse config files for multiple projects.
 - `rse upload` ([docs](./src/cli/docs/docs-upload.md)) — upload media files (images, etc) to providers like uploadthing and uploadcare.
 - `rse sync` _(coming soon)_ — sync your local @reliverse/rse memory with your rse ai on [reliverse.org](https://reliverse.org).
 
@@ -213,4 +212,4 @@ thanks for being part of this!
 
 ## license
 
-💖 [mit](LICENSES) © 2025 [nazar kornienko (blefnk)](https://github.com/blefnk), [reliverse](https://github.com/reliverse)
+[mit](LICENSES) © 2025 [nazar kornienko (blefnk)](https://github.com/blefnk), [reliverse](https://github.com/reliverse)

@@ -24,10 +24,7 @@ import {
   type RepoOption,
   TEMP_SEPARATED_WEBSITE_TEMPLATE_OPTIONS,
 } from "~/libs/sdk/utils/projectRepository";
-import {
-  endTitle,
-  UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { endTitle, UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 /**
  * Possible template options for VS Code extensions
@@ -304,7 +301,7 @@ export async function optionCreateBrowserExtension(
 
 /**
  * Orchestrates the creation of a Web project.
- * If `isMultiConfig` is true, we loop through `multireli` array.
+ * If `isMultiConfig` is true, we loop through `mrse` array.
  */
 export async function optionCreateWebProject(
   projectName: string,
@@ -313,11 +310,11 @@ export async function optionCreateWebProject(
   memory: ReliverseMemory,
   config: RseConfig,
   isMultiConfig: boolean,
-  multireli: RseConfig[],
+  mrse: RseConfig[],
   skipPrompts: boolean,
 ): Promise<void> {
   if (isMultiConfig) {
-    for (const multiConfig of multireli) {
+    for (const multiConfig of mrse) {
       let template = multiConfig.projectTemplate;
       if (template === UNKNOWN_VALUE) {
         let architecture = multiConfig.projectArchitecture;
@@ -347,12 +344,12 @@ export async function optionCreateWebProject(
         })) as RepoOption;
       }
 
-      const settingUpMsg = `Setting up project #${multireli.indexOf(multiConfig) + 1}...`;
+      const settingUpMsg = `Setting up project #${mrse.indexOf(multiConfig) + 1}...`;
 
       await createWebProject({
         projectName,
         initialProjectName: projectName,
-        selectedRepo: template,
+        selectedRepo: template!,
         message: settingUpMsg,
         isDev,
         config: multiConfig,
@@ -445,14 +442,14 @@ export async function optionCreateWebProject(
     }
 
     const settingUpMsg = isMultiConfig
-      ? `Setting up project #${multireli.indexOf(config) + 1}...`
+      ? `Setting up project #${mrse.indexOf(config) + 1}...`
       : getRandomMessage("details");
 
     // Finally, create the web project
     await createWebProject({
       projectName,
       initialProjectName: projectName,
-      selectedRepo: template,
+      selectedRepo: template as RepoOption,
       message: settingUpMsg,
       isDev,
       config,

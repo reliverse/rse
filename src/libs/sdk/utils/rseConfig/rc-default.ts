@@ -13,13 +13,13 @@ import { getBiomeConfig } from "~/libs/sdk/utils/configHandler";
 
 import type { RseConfig } from "./cfg-types";
 
+import { DEFAULT_CONFIG } from "./rc-const";
 import {
   DEFAULT_DOMAIN,
   UNKNOWN_VALUE,
   cliName,
   cliDomainDocs,
-} from "./cfg-details";
-import { DEFAULT_CONFIG } from "./rc-const";
+} from "./rc-details";
 import {
   detectFeatures,
   detectProjectFramework,
@@ -86,7 +86,9 @@ export async function getDefaultRseConfig(
     repoBranch: "main",
     projectFramework: detectedProjectFramework ?? UNKNOWN_VALUE,
     projectPackageManager: detectedPkgManager.packageManager,
-    projectRuntime: runtimeInfo?.name || "node",
+    projectRuntime: (["node", "deno", "bun"].includes(runtimeInfo?.name ?? "")
+      ? runtimeInfo?.name
+      : "node") as "node" | "deno" | "bun",
     codeStyle: {
       ...DEFAULT_CONFIG.codeStyle,
       lineWidth: biomeConfig?.lineWidth ?? 80,

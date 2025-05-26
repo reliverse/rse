@@ -30,7 +30,7 @@ import {
   cliDomainDocs,
   homeDir,
   UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+} from "~/libs/sdk/utils/rseConfig/rc-details";
 
 /**
  * Ensures a unique project name by prompting for a new one if the target directory exists.
@@ -91,9 +91,9 @@ export async function initializeProjectConfig(
     config?.projectAuthor !== UNKNOWN_VALUE &&
     config?.projectAuthor !== ""
       ? config.projectAuthor
-      : ((await askUsernameFrontend(config, true)) ?? "");
+      : ((await askUsernameFrontend(config, true)) ?? "default-user");
 
-  if (!frontendUsername) {
+  if (!frontendUsername || frontendUsername.trim() === "") {
     throw new Error(
       "Failed to determine your frontend username. Please try again or notify the CLI developers.",
     );
@@ -126,7 +126,11 @@ export async function initializeProjectConfig(
       ? config.projectDomain
       : `${projectName}.vercel.app`;
 
-  return { frontendUsername, projectName, primaryDomain };
+  return {
+    frontendUsername: frontendUsername.trim(),
+    projectName,
+    primaryDomain: primaryDomain ?? `${projectName}.vercel.app`,
+  };
 }
 
 /**
@@ -394,15 +398,15 @@ export async function handleNextActions(
           ]
         : []),
       {
-        label: "Support rsetreon",
-        value: "patreon",
+        label: "Support Reliverse",
+        value: "sponsors",
       },
       {
-        label: "Join rserd Server",
+        label: "Join Reliverse Discord",
         value: "discord",
       },
       {
-        label: "Open rseentation",
+        label: "Open Reliverse docs",
         value: "docs",
       },
     ],
@@ -453,18 +457,18 @@ export async function handleNextAction(
         }
         break;
       }
-      case "patreon": {
-        relinka("verbose", "Opening rseon page...");
-        await open("https://patreon.com/c/blefnk/membership");
+      case "sponsors": {
+        relinka("verbose", "Opening GitHub Sponsors page...");
+        await open("https://github.com/sponsors/blefnk");
         break;
       }
       case "discord": {
-        relinka("verbose", "Opening rserd server...");
+        relinka("verbose", "Opening Discord server...");
         await open("https://discord.gg/Pb8uKbwpsJ");
         break;
       }
       case "docs": {
-        relinka("verbose", "Opening rseentation...");
+        relinka("verbose", "Opening Reliverse Docs...");
         await open(cliDomainDocs);
         break;
       }

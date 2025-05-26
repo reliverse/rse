@@ -6,7 +6,7 @@ import {
   getAllPkgManagers,
   type PackageManager,
 } from "~/libs/sdk/utils/dependencies/getUserPkgManager";
-import { cliName } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { cliName } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 async function getPmOptions() {

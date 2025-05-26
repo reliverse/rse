@@ -2,8 +2,8 @@ import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 
 import { composeEnvFile } from "~/libs/sdk/init/use-template/cp-modules/compose-env-file/cef-mod";
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/cfg-details";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/rc-details";
+import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export async function envArgImpl(isDev: boolean, pathToProject?: string) {
@@ -12,7 +12,7 @@ export async function envArgImpl(isDev: boolean, pathToProject?: string) {
     const projectPath = pathToProject ?? getCurrentWorkingDirectory();
 
     // Get rseg
-    const { config } = await getRseConfig({
+    const { config } = await getOrCreateRseConfig({
       projectPath,
       isDev,
       overrides: {},

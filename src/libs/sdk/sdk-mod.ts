@@ -1,56 +1,56 @@
-export { useORPC } from "./add/add-local/api/orpc.js";
-export { useTRPC } from "./add/add-local/api/trpc.js";
-export { useBetterAuth } from "./add/add-local/auth/better-auth.js";
-export { useClerkAuth } from "./add/add-local/auth/clerk-auth.js";
-export { useNextAuth } from "./add/add-local/auth/next-auth.js";
-export { checkMissingDependencies } from "./add/add-local/core/deps.js";
-export { getPromptContent } from "./add/add-local/core/prompts.js";
+export { useORPC } from "./add/add-local/api/orpc";
+export { useTRPC } from "./add/add-local/api/trpc";
+export { useBetterAuth } from "./add/add-local/auth/better-auth";
+export { useClerkAuth } from "./add/add-local/auth/clerk-auth";
+export { useNextAuth } from "./add/add-local/auth/next-auth";
+export { checkMissingDependencies } from "./add/add-local/core/deps";
+export { getPromptContent } from "./add/add-local/core/prompts";
 export {
   checkForTemplateUpdate,
   updateProjectTemplateDate,
   getTemplateUpdateInfo,
-} from "./add/add-local/core/templates.js";
-export { useDrizzleORM } from "./add/add-local/db/drizzle.js";
-export { usePrismaORM } from "./add/add-local/db/prisma.js";
-export { useUploadthing } from "./add/add-local/files/uploadthing.js";
-export { useReactHookForm } from "./add/add-local/form/react-hook-form.js";
-export { useTanstackForm } from "./add/add-local/form/tanstack-form.js";
-export { usePlasmoBrowserExtFramework } from "./add/add-local/fws/browser/plasmo.js";
-export { useWxtBrowserExtFramework } from "./add/add-local/fws/browser/wxt.js";
-export { useEslintConfig } from "./add/add-local/fws/configs/eslint-config.js";
-export { useLynxNativeFramework } from "./add/add-local/fws/native/lynx.js";
-export { useReactNativeFramework } from "./add/add-local/fws/native/react.js";
-export { useEslintPlugin } from "./add/add-local/fws/plugins/eslint-plugin.js";
-export { useVscodeExtFramework } from "./add/add-local/fws/vscode/vscode-ext.js";
-export { useAstroWebFramework } from "./add/add-local/fws/web/astro.js";
-export { useJStackWebFramework } from "./add/add-local/fws/web/jstack.js";
-export { useNextJsWebFramework } from "./add/add-local/fws/web/next.js";
-export { useTanstackStartWebFramework } from "./add/add-local/fws/web/start.js";
-export { useViteWebFramework } from "./add/add-local/fws/web/vite.js";
-export { useGtLibs } from "./add/add-local/i18n/gt-libs.js";
-export { useLanguine } from "./add/add-local/i18n/languine.js";
-export { useNextIntl } from "./add/add-local/i18n/next-intl.js";
-export { useVercelAI } from "./add/add-local/llm/vercel.js";
-export { useResendMail } from "./add/add-local/mail/resend.js";
-export { usePolarPayments } from "./add/add-local/pay/polar.js";
-export { useStripePayments } from "./add/add-local/pay/stripe.js";
-export { useBiomeTool } from "./add/add-local/tool/biome.js";
-export { useEslintTool } from "./add/add-local/tool/eslint.js";
-export { useOxlintTool } from "./add/add-local/tool/oxlint.js";
-export { use21stUI } from "./add/add-local/ui/21st.js";
-export { useShadcnUI } from "./add/add-local/ui/shadcn.js";
-export { useTailwindCSS } from "./add/add-local/ui/tailwind.js";
+} from "./add/add-local/core/templates";
+export { useDrizzleORM } from "./add/add-local/db/drizzle";
+export { usePrismaORM } from "./add/add-local/db/prisma";
+export { useUploadthing } from "./add/add-local/files/uploadthing";
+export { useReactHookForm } from "./add/add-local/form/react-hook-form";
+export { useTanstackForm } from "./add/add-local/form/tanstack-form";
+export { usePlasmoBrowserExtFramework } from "./add/add-local/fws/browser/plasmo";
+export { useWxtBrowserExtFramework } from "./add/add-local/fws/browser/wxt";
+export { useEslintConfig } from "./add/add-local/fws/configs/eslint-config";
+export { useLynxNativeFramework } from "./add/add-local/fws/native/lynx";
+export { useReactNativeFramework } from "./add/add-local/fws/native/react";
+export { useEslintPlugin } from "./add/add-local/fws/plugins/eslint-plugin";
+export { useVscodeExtFramework } from "./add/add-local/fws/vscode/vscode-ext";
+export { useAstroWebFramework } from "./add/add-local/fws/web/astro";
+export { useJStackWebFramework } from "./add/add-local/fws/web/jstack";
+export { useNextJsWebFramework } from "./add/add-local/fws/web/next";
+export { useTanstackStartWebFramework } from "./add/add-local/fws/web/start";
+export { useViteWebFramework } from "./add/add-local/fws/web/vite";
+export { useGtLibs } from "./add/add-local/i18n/gt-libs";
+export { useLanguine } from "./add/add-local/i18n/languine";
+export { useNextIntl } from "./add/add-local/i18n/next-intl";
+export { useVercelAI } from "./add/add-local/llm/vercel";
+export { useResendMail } from "./add/add-local/mail/resend";
+export { usePolarPayments } from "./add/add-local/pay/polar";
+export { useStripePayments } from "./add/add-local/pay/stripe";
+export { useBiomeTool } from "./add/add-local/tool/biome";
+export { useEslintTool } from "./add/add-local/tool/eslint";
+export { useOxlintTool } from "./add/add-local/tool/oxlint";
+export { use21stUI } from "./add/add-local/ui/21st";
+export { useShadcnUI } from "./add/add-local/ui/shadcn";
+export { useTailwindCSS } from "./add/add-local/ui/tailwind";
 export {
   CACHE_ROOT_DIR,
   DEFAULT_BRANCH,
   RULE_FILE_EXTENSION,
   getRepoCacheDir,
   RULES_REPOS,
-} from "./add/add-rule/add-rule-const.js";
+} from "./add/add-rule/add-rule-const";
 export {
   handleDirectRules,
   showRulesMenu,
-} from "./add/add-rule/add-rule-impl.js";
+} from "./add/add-rule/add-rule-impl";
 export {
   convertTsToMdc,
   hasCursorRulesDir,
@@ -60,9 +60,9 @@ export {
   downloadRules,
   installRules,
   handleRuleUpdates,
-} from "./add/add-rule/add-rule-utils.js";
-export { ensureOpenAIKey } from "./ai/ai-impl/ai-auth.js";
-export { aiChat } from "./ai/ai-impl/ai-chat.js";
+} from "./add/add-rule/add-rule-utils";
+export { ensureOpenAIKey } from "./ai/ai-impl/ai-auth";
+export { aiChat } from "./ai/ai-impl/ai-chat";
 export {
   AGENT_NAMES,
   MODEL,
@@ -70,21 +70,21 @@ export {
   MAX_TOKENS,
   CIRCULAR_TRIGGERS,
   EXIT_KEYWORDS,
-} from "./ai/ai-impl/ai-const.js";
-export { aiAgenticTool } from "./ai/ai-impl/ai-tools.js";
-export { aiCodeCommand } from "./ai/ai-impl/code/code-mod.js";
-export { handleMcpCommand } from "./ai/ai-impl/mcp/mcp-mod.js";
+} from "./ai/ai-impl/ai-const";
+export { aiAgenticTool } from "./ai/ai-impl/ai-tools";
+export { aiCodeCommand } from "./ai/ai-impl/code/code-mod";
+export { handleMcpCommand } from "./ai/ai-impl/mcp/mcp-mod";
 export {
   agentRelinter,
   collectLintableFiles,
   gatherLintSuggestions,
   writeSuggestionsToFile,
-} from "./ai/ai-impl/relinter/relinter.js";
-export { aiMenu } from "./ai/ai-menu.js";
-export { useFirecrawl } from "./clone/firecrawl/firecrawl-mod.js";
-export { runCodemods } from "./cmod/cmod-impl.js";
-export { envArgImpl } from "./env/env-impl.js";
-export { showManualBuilderMenu } from "./init/init-impl.js";
+} from "./ai/ai-impl/relinter/relinter";
+export { aiMenu } from "./ai/ai-menu";
+export { useFirecrawl } from "./clone/firecrawl/firecrawl-mod";
+export { runCodemods } from "./cmod/cmod-impl";
+export { envArgImpl } from "./env/env-impl";
+export { showManualBuilderMenu } from "./init/init-impl";
 export {
   handleProjectSelectionMenu,
   initMinimalrseProject,
@@ -93,9 +93,9 @@ export {
   handleNewProject,
   handleExistingProject,
   handleIncompleteProject,
-} from "./init/init-utils.js";
-export { COLUMN_TYPES } from "./init/manual-mode/deprecated/drizzle/manageDrizzleConstants.js";
-export { manageDrizzleSchema } from "./init/manual-mode/deprecated/drizzle/manageDrizzleSchema.js";
+} from "./init/init-utils";
+export { COLUMN_TYPES } from "./init/manual-mode/deprecated/drizzle/manageDrizzleConstants";
+export { manageDrizzleSchema } from "./init/manual-mode/deprecated/drizzle/manageDrizzleSchema";
 export {
   detectDatabaseProvider,
   setupDrizzle,
@@ -112,17 +112,17 @@ export {
   renameTableInSchema,
   updateTableNameInIndex,
   addColumnToTable,
-} from "./init/manual-mode/deprecated/drizzle/manageDrizzleSchemaUtils.js";
-export { handleIntegrations } from "./init/manual-mode/deprecated/editor-impl.js";
-export { handleOpenProjectMenu } from "./init/manual-mode/deprecated/editor-menu.js";
+} from "./init/manual-mode/deprecated/drizzle/manageDrizzleSchemaUtils";
+export { handleIntegrations } from "./init/manual-mode/deprecated/editor-impl";
+export { handleOpenProjectMenu } from "./init/manual-mode/deprecated/editor-menu";
 export {
   updatePackageJson,
   installIntegration,
   removeIntegration,
-} from "./init/manual-mode/deprecated/editor-mod.js";
-export { INTEGRATION_CONFIGS } from "./init/manual-mode/deprecated/feature-add.js";
-export { REMOVAL_CONFIGS } from "./init/manual-mode/deprecated/feature-rm.js";
-export { manageShadcn } from "./init/manual-mode/deprecated/shadcn/shadcn-mod.js";
+} from "./init/manual-mode/deprecated/editor-mod";
+export { INTEGRATION_CONFIGS } from "./init/manual-mode/deprecated/feature-add";
+export { REMOVAL_CONFIGS } from "./init/manual-mode/deprecated/feature-rm";
+export { manageShadcn } from "./init/manual-mode/deprecated/shadcn/shadcn-mod";
 export {
   initializeProjectConfig,
   setupI18nSupport,
@@ -131,18 +131,18 @@ export {
   showSuccessAndNextSteps,
   handleNextActions,
   handleNextAction,
-} from "./init/use-template/cp-impl.js";
+} from "./init/use-template/cp-impl";
 export {
   createWebProject,
   createMobileProject,
-} from "./init/use-template/cp-mod.js";
-export { getMainMenuOptions } from "./init/use-template/cp-modules/cli-main-modules/cli-menu-items/getMainMenuOptions.js";
-export { showCloneProjectMenu } from "./init/use-template/cp-modules/cli-main-modules/cli-menu-items/showCloneProjectMenu.js";
-export { showAnykeyPrompt } from "./init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt.js";
+} from "./init/use-template/cp-mod";
+export { getMainMenuOptions } from "./init/use-template/cp-modules/cli-main-modules/cli-menu-items/getMainMenuOptions";
+export { showCloneProjectMenu } from "./init/use-template/cp-modules/cli-main-modules/cli-menu-items/showCloneProjectMenu";
+export { showAnykeyPrompt } from "./init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt";
 export {
   showStartPrompt,
   showEndPrompt,
-} from "./init/use-template/cp-modules/cli-main-modules/modules/showStartEndPrompt.js";
+} from "./init/use-template/cp-modules/cli-main-modules/modules/showStartEndPrompt";
 export {
   ensureExampleExists,
   ensureEnvExists,
@@ -153,7 +153,7 @@ export {
   promptAndSetMissingValues,
   saveLastEnvFilePath,
   getLastEnvFilePath,
-} from "./init/use-template/cp-modules/compose-env-file/cef-impl.js";
+} from "./init/use-template/cp-modules/compose-env-file/cef-impl";
 export {
   keyTypeSchema,
   keyVarsSchema,
@@ -162,146 +162,146 @@ export {
   dashboards,
   knownServiceSchema,
   KNOWN_SERVICES,
-} from "./init/use-template/cp-modules/compose-env-file/cef-keys.js";
-export { composeEnvFile } from "./init/use-template/cp-modules/compose-env-file/cef-mod.js";
+} from "./init/use-template/cp-modules/compose-env-file/cef-keys";
+export { composeEnvFile } from "./init/use-template/cp-modules/compose-env-file/cef-mod";
 export {
   selectDeploymentService,
   deployProject,
-} from "./init/use-template/cp-modules/git-deploy-prompts/deploy.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/deploy";
 export {
   handleGitInit,
   configureGithubRepo,
   promptGitDeploy,
-} from "./init/use-template/cp-modules/git-deploy-prompts/gdp-mod.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/gdp-mod";
 export {
   initializeGitRepo,
   initGitDir,
   createCommit,
   handleGithubRepo,
   pushGitCommits,
-} from "./init/use-template/cp-modules/git-deploy-prompts/git.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/git";
 export {
   checkGithubRepoOwnership,
   createGithubRepo,
-} from "./init/use-template/cp-modules/git-deploy-prompts/github.js";
-export { isSpecialDomain } from "./init/use-template/cp-modules/git-deploy-prompts/helpers/domainHelpers.js";
-export { ensureDbInitialized } from "./init/use-template/cp-modules/git-deploy-prompts/helpers/handlePkgJsonScripts.js";
-export { promptForDomain } from "./init/use-template/cp-modules/git-deploy-prompts/helpers/promptForDomain.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/github";
+export { isSpecialDomain } from "./init/use-template/cp-modules/git-deploy-prompts/helpers/domainHelpers";
+export { ensureDbInitialized } from "./init/use-template/cp-modules/git-deploy-prompts/helpers/handlePkgJsonScripts";
+export { promptForDomain } from "./init/use-template/cp-modules/git-deploy-prompts/helpers/promptForDomain";
 export {
   isDirHasGit,
   setupGitRemote,
-} from "./init/use-template/cp-modules/git-deploy-prompts/utils-git-github.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/utils-git-github";
 export {
   archiveExistingRepoContent,
   handleExistingRepoContent,
-} from "./init/use-template/cp-modules/git-deploy-prompts/utils-private-repo.js";
-export { handleExistingRepo } from "./init/use-template/cp-modules/git-deploy-prompts/utils-repo-exists.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/utils-private-repo";
+export { handleExistingRepo } from "./init/use-template/cp-modules/git-deploy-prompts/utils-repo-exists";
 export {
   getVercelEnvVar,
   withRateLimit,
-} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-api.js";
-export { checkVercelDeployment } from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-check.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-api";
+export { checkVercelDeployment } from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-check";
 export {
   updateProject,
   enableAnalytics,
   configureBranchProtection,
   configureResources,
   getConfigurationOptions,
-} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-config.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-config";
 export {
   createVercelProject,
   prepareVercelProjectCreation,
-} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-create.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-create";
 export {
   monitorDeployment,
   createInitialVercelDeployment,
-} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-deploy.js";
-export { getVercelProjectDomain } from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-domain.js";
-export { addEnvVarsToVercelProject } from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-env.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-deploy";
+export { getVercelProjectDomain } from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-domain";
+export { addEnvVarsToVercelProject } from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-env";
 export {
   saveVercelToken,
   getEnvVars,
   detectFramework,
   verifyDomain,
-} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-utils.js";
-export { auth, authCheck } from "./login/login-impl.js";
-export { deleteMemory } from "./logout/logout-impl.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-utils";
+export { auth, authCheck } from "./login/login-impl";
+export { deleteMemory } from "./logout/logout-impl";
 export {
-  multireliVerbose,
+  mrseVerbose,
   logVerbose,
   getEnvCacheDir,
   ensureEnvCacheDir,
   getEnvCachePath,
   downloadFileFromGitHub,
-} from "./multireli/multireli-impl.js";
+} from "./mrse/mrse-impl";
 export {
   rmTestsRuntime,
   downloadRepoOption,
   showDevToolsMenu,
-} from "./toolbox/toolbox-impl.js";
-export { openVercelTools } from "./toolbox/toolbox-vercel.js";
-export { uploadToUploadthing } from "./upload/providers/uploadthing.js";
-export { formatBytes } from "./upload/upload-utils.js";
-export { recommended, experimental } from "./utils/badgeNotifiers.js";
-export { convertCjsToEsm } from "./utils/codemods/convertCjsToEsm.js";
+} from "./toolbox/toolbox-impl";
+export { openVercelTools } from "./toolbox/toolbox-vercel";
+export { uploadToUploadthing } from "./upload/providers/uploadthing";
+export { formatBytes } from "./upload/upload-utils";
+export { recommended, experimental } from "./utils/badgeNotifiers";
+export { convertCjsToEsm } from "./utils/codemods/convertCjsToEsm";
 export {
   uploadToProvider,
   getMimeType,
   readFilesFromPaths,
-} from "./upload/providers/providers-mod.js";
+} from "./upload/providers/providers-mod";
 export {
   convertPrismaToDrizzle,
   convertDatabaseProvider,
-} from "./utils/codemods/convertDatabase.js";
+} from "./utils/codemods/convertDatabase";
 export {
   getPrimaryVercelTeam,
   verifyTeam,
   getVercelTeams,
-} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-team.js";
-export { uploadToUploadcare } from "./upload/providers/uploadcare.js";
-export { convertTypeDefinitions } from "./utils/codemods/convertDefinitions.js";
-export { convertImportStyle } from "./utils/codemods/convertImportStyle.js";
-export { convertJsToTs } from "./utils/codemods/convertJsToTs.js";
-export { convertQuoteStyle } from "./utils/codemods/convertQuoteStyle.js";
-export { convertRuntime } from "./utils/codemods/convertRuntime.js";
-export { convertToMonorepo } from "./utils/codemods/convertToMonorepo.js";
-export { removeComments } from "./utils/codemods/removeComments.js";
-export { getUnusedDependencies } from "./utils/codemods/removeUnusedDeps.js";
-export { replaceImportSymbol } from "./utils/codemods/replaceImportSymbol.js";
-export { replaceWithModern } from "./utils/codemods/replaceWithModern.js";
-export { getBiomeConfig } from "./utils/configHandler.js";
-export { createPackageJSON } from "./utils/createPackageJSON.js";
-export { createTSConfig } from "./utils/createTSConfig.js";
-export { decide } from "./utils/decideHelper.js";
+} from "./init/use-template/cp-modules/git-deploy-prompts/vercel/vercel-team";
+export { uploadToUploadcare } from "./upload/providers/uploadcare";
+export { convertTypeDefinitions } from "./utils/codemods/convertDefinitions";
+export { convertImportStyle } from "./utils/codemods/convertImportStyle";
+export { convertJsToTs } from "./utils/codemods/convertJsToTs";
+export { convertQuoteStyle } from "./utils/codemods/convertQuoteStyle";
+export { convertRuntime } from "./utils/codemods/convertRuntime";
+export { convertToMonorepo } from "./utils/codemods/convertToMonorepo";
+export { removeComments } from "./utils/codemods/removeComments";
+export { getUnusedDependencies } from "./utils/codemods/removeUnusedDeps";
+export { replaceImportSymbol } from "./utils/codemods/replaceImportSymbol";
+export { replaceWithModern } from "./utils/codemods/replaceWithModern";
+export { getBiomeConfig } from "./utils/configHandler";
+export { createPackageJSON } from "./utils/createPackageJSON";
+export { createTSConfig } from "./utils/createTSConfig";
+export { decide } from "./utils/decideHelper";
 export {
   getUserPkgManager,
   getAllPkgManagers,
-} from "./utils/dependencies/getUserPkgManager.js";
+} from "./utils/dependencies/getUserPkgManager";
 
 // TODO: make relidler don't detect `export` when it is in `` (template literal)
-// export { setupI18nFiles, generateMetadata, generateStaticParams, languages, defaultLanguage, languageNames } from "./utils/downloading/downloadI18nFiles.js";
+// export { setupI18nFiles, generateMetadata, generateStaticParams, languages, defaultLanguage, languageNames } from "./utils/downloading/downloadI18nFiles";
 
-export { setupI18nFiles } from "./utils/downloading/downloadI18nFiles.js";
-export { downloadRepo } from "./utils/downloading/downloadRepo.js";
-export { handleDownload } from "./utils/downloading/handleDownload.js";
+export { setupI18nFiles } from "./utils/downloading/downloadI18nFiles";
+export { downloadRepo } from "./utils/downloading/downloadRepo";
+export { handleDownload } from "./utils/downloading/handleDownload";
 export {
   setHiddenAttributeOnWindows,
   isHidden,
   isDirectoryEmpty,
   rmEnsureDir,
-} from "./utils/filesysHelpers.js";
-export { getEffectiveDir } from "./utils/getEffectiveDir.js";
-export { pm } from "./utils/getPackageManager.js";
-export { getProjectContent } from "./utils/getProjectContent.js";
-export { uninstallDependencies } from "./utils/handlers/dependencies.js";
+} from "./utils/filesysHelpers";
+export { getEffectiveDir } from "./utils/getEffectiveDir";
+export { pm } from "./utils/getPackageManager";
+export { getProjectContent } from "./utils/getProjectContent";
+export { uninstallDependencies } from "./utils/handlers/dependencies";
 export {
   generateConfigFiles,
   generateProjectConfigs,
-} from "./utils/handlers/generateProjectConfigs.js";
-export { handleCleanup } from "./utils/handlers/handleCleanup.js";
-export { handleCodemods } from "./utils/handlers/handleCodemods.js";
-export { isVSCodeInstalled } from "./utils/handlers/isAppInstalled.js";
-export { promptPackageJsonScripts } from "./utils/handlers/promptPackageJsonScripts.js";
+} from "./utils/handlers/generateProjectConfigs";
+export { handleCleanup } from "./utils/handlers/handleCleanup";
+export { handleCodemods } from "./utils/handlers/handleCodemods";
+export { isVSCodeInstalled } from "./utils/handlers/isAppInstalled";
+export { promptPackageJsonScripts } from "./utils/handlers/promptPackageJsonScripts";
 export {
   readShadcnConfig,
   getInstalledComponents,
@@ -312,23 +312,23 @@ export {
   AVAILABLE_COMPONENTS,
   selectSidebarPrompt,
   selectChartsPrompt,
-} from "./utils/handlers/shadcn.js";
-export { hasOnlyRse } from "./utils/hasOnlyRseConfig.js";
+} from "./utils/handlers/shadcn";
+export { hasOnlyRse } from "./utils/hasOnlyRseConfig";
 export {
   OctokitWithRest,
   octokitUserAgent,
   ensureGithubToken,
   initGithubSDK,
-} from "./utils/instanceGithub.js";
-export { askVercelToken, initVercelSDK } from "./utils/instanceVercel.js";
-export { getMaxHeightSize, sleep } from "./utils/microHelpers.js";
+} from "./utils/instanceGithub";
+export { askVercelToken, initVercelSDK } from "./utils/instanceVercel";
+export { getMaxHeightSize, sleep } from "./utils/microHelpers";
 export {
   hasConfigFiles,
-  isMultireliProject,
-} from "./utils/multireliHelpers.js";
-export { downloadJsrDist } from "./utils/native-cli/nc-impl.js";
-export { showNativeCliMenu } from "./utils/native-cli/nc-mod.js";
-export { checkScriptExists } from "./utils/pkgJsonHelpers.js";
+  isMrseProject,
+} from "./utils/mrseHelpers";
+export { downloadJsrDist } from "./utils/native-cli/nc-impl";
+export { showNativeCliMenu } from "./utils/native-cli/nc-mod";
+export { checkScriptExists } from "./utils/pkgJsonHelpers";
 export {
   REPO_TEMPLATES,
   getRepoInfo,
@@ -337,28 +337,28 @@ export {
   TEMP_SEPARATED_WEBSITE_TEMPLATE_OPTIONS,
   TEMP_VSCODE_TEMPLATE_OPTIONS,
   TEMP_BROWSER_TEMPLATE_OPTIONS,
-} from "./utils/projectRepository.js";
-export { askAppOrLib } from "./utils/prompts/askAppOrLib.js";
-export { askInstallDeps } from "./utils/prompts/askInstallDeps.js";
-export { askOpenInIDE } from "./utils/prompts/askOpenInIDE.js";
-export { askProjectName } from "./utils/prompts/askProjectName.js";
-export { askRseConfigType } from "./utils/prompts/askRseConfigType.js";
-export { askUsernameFrontend } from "./utils/prompts/askUsernameFrontend.js";
-export { askUsernameGithub } from "./utils/prompts/askUsernameGithub.js";
-export { shouldInitGit } from "./utils/prompts/shouldInitGit.js";
+} from "./utils/projectRepository";
+export { askAppOrLib } from "./utils/prompts/askAppOrLib";
+export { askInstallDeps } from "./utils/prompts/askInstallDeps";
+export { askOpenInIDE } from "./utils/prompts/askOpenInIDE";
+export { askProjectName } from "./utils/prompts/askProjectName";
+export { askRseConfigType } from "./utils/prompts/askRseConfigType";
+export { askUsernameFrontend } from "./utils/prompts/askUsernameFrontend";
+export { askUsernameGithub } from "./utils/prompts/askUsernameGithub";
+export { shouldInitGit } from "./utils/prompts/shouldInitGit";
 export {
   DEFAULT_CONFIG,
   PROJECT_FRAMEWORK_FILES,
-} from "./utils/rseConfig/rc-const.js";
+} from "./utils/rseConfig/rc-const";
 export {
   writeRseConfig,
   createRseConfig,
   generateRseConfig,
-} from "./utils/rseConfig/rc-create.js";
+} from "./utils/rseConfig/rc-create";
 export {
   getDefaultRseConfig,
   generateDefaultRulesForProject,
-} from "./utils/rseConfig/rc-default.js";
+} from "./utils/rseConfig/rc-default";
 export {
   detectProjectFramework,
   getPackageJson,
@@ -366,62 +366,62 @@ export {
   detectProject,
   detectProjectsWithRseConfig,
   detectFeatures,
-} from "./utils/rseConfig/rc-detect.js";
-export { injectSectionComments } from "./utils/rseConfig/rc-inject.js";
-export { migrateRseConfig } from "./utils/rseConfig/rc-migrate.js";
-export { getRseConfigPath } from "./utils/rseConfig/rc-path.js";
+} from "./utils/rseConfig/rc-detect";
+export { injectSectionComments } from "./utils/rseConfig/rc-inject";
+export { migrateRseConfig } from "./utils/rseConfig/rc-migrate";
+export { getRseConfigPath } from "./utils/rseConfig/rc-path";
 export {
   readRseTs,
   readRseConfig,
-} from "./utils/rseConfig/rc-read.js";
+} from "./utils/rseConfig/rc-read";
 export {
   repairAndParseJSON,
   fixLineByLine,
   parseAndFixRseConfig,
-} from "./utils/rseConfig/rc-repair.js";
+} from "./utils/rseConfig/rc-repair";
 export {
   loadrse,
   watchrse,
-} from "./utils/rseConfig/rc-unstable.js";
-export { mergeWithDefaults } from "./utils/rseConfig/rc-update.js";
+} from "./utils/rseConfig/rc-unstable";
+export { mergeWithDefaults } from "./utils/rseConfig/rc-update";
 export {
   cleanGitHubUrl,
   objectToCodeString,
   updateTsConfigInclude,
   getBackupAndTempPaths,
   atomicWriteFile,
-} from "./utils/rseConfig/rc-utils.js";
+} from "./utils/rseConfig/rc-utils";
 export {
   getReliverseMemory,
   updateReliverseMemory,
-} from "./utils/reliverseMemory.js";
+} from "./utils/reliverseMemory";
 export {
   extractRepoInfo,
   replaceStringsInFiles,
-} from "./utils/replacements/reps-impl.js";
+} from "./utils/replacements/reps-impl";
 export {
   hardcodedSchema,
   urlPatternsSchema,
   HardcodedStrings,
   CommonPatterns,
-} from "./utils/replacements/reps-keys.js";
-export { memorySchema } from "./utils/schemaMemory.js";
+} from "./utils/replacements/reps-keys";
+export { memorySchema } from "./utils/schemaMemory";
 export {
   repoInfoSchema,
   reposSchema,
   DEFAULT_REPOS_CONFIG,
   generateReposJsonSchema,
   shouldRegenerateSchema,
-} from "./utils/schemaTemplate.js";
+} from "./utils/schemaTemplate";
 export {
   handleError,
   cd,
   pwd,
   rm,
   getCurrentWorkingDirectory,
-} from "./utils/terminalHelpers.js";
-export { setupDevModeIfNeeded } from "./utils/testsRuntime.js";
-export { findTsconfigUp } from "./utils/tsconfigHelpers.js";
+} from "./utils/terminalHelpers";
+export { setupDevModeIfNeeded } from "./utils/testsRuntime";
+export { findTsconfigUp } from "./utils/tsconfigHelpers";
 export {
   PROJECT_ROOT,
   cliVersion,
@@ -451,10 +451,10 @@ export {
   DEFAULT_DOMAIN,
   RSE_SCHEMA_DEV,
   RSE_SCHEMA_URL,
-} from "./utils/rseConfig/cfg-details.js";
+} from "./utils/rseConfig/rc-details";
 export {
   rseSchema,
   generateJsonSchema,
   generateSchemaFile,
   defineConfig,
-} from "~/libs/sdk/utils/rseConfig/cfg-schema.js";
+} from "~/libs/sdk/utils/rseConfig/rc-schema";

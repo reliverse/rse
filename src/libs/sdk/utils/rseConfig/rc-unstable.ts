@@ -3,13 +3,13 @@ import { loadConfig, watchConfig } from "c12";
 
 import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { rseSchema } from "~/libs/sdk/utils/rseConfig/cfg-schema";
+import { rseSchema } from "~/libs/sdk/utils/rseConfig/rc-schema";
 
 import { DEFAULT_CONFIG } from "./rc-const";
 
 /**
- * Loads the rseg using c12. Merges:
- * 1) File named `rseg.*`
+ * Loads the rse config using c12. Merges:
+ * 1) File named `rse.*`
  * 2) Optional overrides
  */
 export async function loadrse(
@@ -20,7 +20,7 @@ export async function loadrse(
   const { config } = await loadConfig<RseConfig>({
     cwd: projectPath,
     name: "rse",
-    configFile: "rseg", // will look for files like `rse.config`
+    configFile: "rse", // will look for files like `.config/rse.{ts,jsonc}`
     rcFile: false,
     packageJson: false,
     dotenv: false, // disable loading .env
@@ -33,13 +33,13 @@ export async function loadrse(
     const errors = [...Value.Errors(rseSchema, config)].map(
       (err) => `Path "${err.path}": ${err.message}`,
     );
-    throw new Error(`Invalid rseg:\n${errors.join("\n")}`);
+    throw new Error(`Invalid rse config:\n${errors.join("\n")}`);
   }
   return config;
 }
 
 /**
- * Watches the rseg for changes and reloads on each update.
+ * Watches the rse config for changes and reloads on each update.
  */
 export async function watchrse(
   projectPath: string,

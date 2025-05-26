@@ -4,7 +4,7 @@ import { relinka } from "@reliverse/relinka";
 import { inputPrompt } from "@reliverse/rempts";
 
 import { askUsernameGithub } from "~/libs/sdk/utils/prompts/askUsernameGithub";
-import { cliVersion } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { cliVersion } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 import type { ReliverseMemory } from "./schemaMemory";
 

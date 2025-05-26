@@ -3,7 +3,7 @@ import { ensuredir } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { drizzle } from "drizzle-orm/libsql/node";
 
-import { memoryPath, cliHomeDir } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { memoryPath, cliHomeDir } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 // Ensure the directory exists
 await ensuredir(cliHomeDir);

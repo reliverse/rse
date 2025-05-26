@@ -16,10 +16,7 @@ import { getRandomMessage } from "~/db/messages";
 import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu";
 import { createMobileProject } from "~/libs/sdk/init/use-template/cp-mod";
 import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
-import {
-  endTitle,
-  UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { endTitle, UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect";
 
 import {
@@ -29,7 +26,7 @@ import {
 } from "./rs-impl";
 
 async function handleProjectCategory(params: AppParams) {
-  const { cwd, isDev, memory, config, multireli, skipPrompts } = params;
+  const { cwd, isDev, memory, config, mrse, skipPrompts } = params;
 
   let projectCategory = config.projectCategory;
   if (projectCategory === UNKNOWN_VALUE) {
@@ -111,7 +108,7 @@ async function handleProjectCategory(params: AppParams) {
       memory,
       config,
       false,
-      multireli,
+      mrse,
       skipPrompts,
     );
   }
@@ -172,10 +169,9 @@ async function optionCreateMobileProject(
  * Main entry point to show user a new project menu
  */
 export async function showNewProjectMenu(params: AppParams): Promise<void> {
-  const { cwd, isDev, memory, config, multireli, skipPrompts, projectName } =
-    params;
+  const { cwd, isDev, memory, config, mrse, skipPrompts, projectName } = params;
 
-  const isMultiConfig = multireli.length > 0;
+  const isMultiConfig = mrse.length > 0;
 
   if (isMultiConfig) {
     relinka(
@@ -189,7 +185,7 @@ export async function showNewProjectMenu(params: AppParams): Promise<void> {
       memory,
       config,
       isMultiConfig,
-      multireli,
+      mrse,
       skipPrompts,
     );
   } else {

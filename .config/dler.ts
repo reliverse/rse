@@ -23,7 +23,7 @@ export default defineConfig({
   coreEntryFile: "mod.ts",
   coreEntrySrcDir: "src",
   coreBuildOutDir: "bin",
-  coreIsCLI: { enabled: true, scripts: { dler: "cli.ts" } },
+  coreIsCLI: { enabled: true, scripts: { rse: "cli.ts" } },
 
   // JSR-only config
   distJsrAllowDirty: true,

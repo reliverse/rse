@@ -1,10 +1,10 @@
-# rse CLI: `add` command
+# Rse CLI: `add` command
 
 > **Note**: This command is currently in the development and may have some limitations. This README.md will be updated over time. Feedback is welcome!
 
-[📦 NPM](https://npmjs.com/@reliverse/rse) • [💬 Discord](https://discord.gg/Pb8uKbwpsJ) • [💖 GitHub Sponsors](https://github.com/sponsors/blefnk) • [📚 Docs](https://docs.reliverse.org/cli)
+[NPM](https://npmjs.com/@reliverse/rse) — [Discord](https://discord.gg/Pb8uKbwpsJ) — [GitHub Sponsors](https://github.com/sponsors/blefnk) — [Docs](https://docs.reliverse.org/cli)
 
-**@reliverse/rse** includes a **`rse add <something>`** subcommand—internally known as the “Manual Project Builder” or **Composer Mode**. This interactive tool helps you **create, customize, and integrate** new or existing projects with **rse Addons** (i.e., integrations for APIs, auth, i18n, DB, frameworks, etc.).
+**@reliverse/rse** includes a **`rse add <something>`** subcommand—internally known as the "Manual Project Builder" or **Composer Mode**. This interactive tool helps you **create, customize, and integrate** new or existing projects with **Reliverse Addons** (i.e., integrations for APIs, auth, i18n, DB, frameworks, etc.).
 
 The `rse add -g <something>` command simplifies installing global NPM packages and popular desktop applications directly from your command line. With a user-friendly, interactive prompt system, you can quickly select and install essential tools or specify exactly what you need in one go.
 
@@ -21,7 +21,7 @@ The `rse add -g <something>` command simplifies installing global NPM packages a
   Easily integrate popular tools like Next.js, React Native, Prisma, or i18n solutions in just a few steps.
 
 - 📝 **Configurable & Re-runnable**  
-  Edits are stored in `rse.jsonc` or `rse.ts`. You can rerun the manual builder to apply changes.
+  Edits are stored in `.config/rse.jsonc` or `.config/rse.ts`. You can rerun the manual builder to apply changes.
 
 - ⚡ **Quick Setup**  
   Automates tasks like installing dependencies, updating templates, or setting up key config files.
@@ -122,7 +122,7 @@ Selecting this opens Composer Mode to either create or configure a project.
 - [x] Create a project if the current directory is empty  
 - [x] Display the rse project selector and selected project menu  
 - [ ] After an addon is integrated, ask if the user wants to install the related cursor rule  
-- [ ] Implement “Apply everything as configured in `rse.{ts,jsonc}`” option  
+- [ ] Implement "Apply everything as configured in `rse.{ts,jsonc}`" option  
 
 ---
 
@@ -139,7 +139,7 @@ Selecting this opens Composer Mode to either create or configure a project.
 - 💻 **Cross-platform Compatibility**
   Automatically detects your OS and installs apps suitable for macOS, Windows, or Linux.
 
-- 📦 **Quick Direct Installation**
+- 🐦‍🔥 **Quick Direct Installation**
   Install multiple packages and apps directly from the command line with one command.
 
 ## Global Apps Usage
@@ -220,11 +220,9 @@ Have feature requests or feedback? We'd love to hear from you:
 
 If rse saves you time and helps your workflow, please consider supporting its continued development:
 
-- [GitHub Sponsors](https://github.com/sponsors/blefnk)  
-- [Patreon](https://patreon.com/blefnk)  
-- [PayPal](https://paypal.me/blefony)
+- [GitHub Sponsors](https://github.com/sponsors/blefnk)
 
-A star on [GitHub](https://github.com/rse/rse) is also greatly appreciated!
+A star on [GitHub](https://github.com/reliverse/rse) is also greatly appreciated!
 
 ## License
 

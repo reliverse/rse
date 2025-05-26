@@ -1,14 +1,16 @@
 // TODO: This tests manager file should be able to run all `bun dev:*` commands without any user interaction.
 
+// TODO: Use @reliverse/rempts' await runCmd(await someCmd(), [...args])
+
 /**
  * WHAT SHOULD BE TESTED:
  *
  * [ tested manually **bun dev:cmd** | tested manually **rse cmd** | tested automatically **bun dev:cmd** | command ]
  *
- * - ❌ | ❌ | ❌ | `dev:cli`
  * - ❌ | ❌ | ❌ | `dev:add`
- * - ❌ | ❌ | ❌ | `dev:add rule`
+ * - ❌ | ❌ | ❌ | `dev:auth`
  * - ❌ | ❌ | ❌ | `dev:ai`
+ * - ❌ | ❌ | ❌ | `dev:cli` <— main command (`bun dev` or `rse cli`)
  * - ❌ | ❌ | ❌ | `dev:clone`
  * - ❌ | ❌ | ❌ | `dev:cmod`
  * - ❌ | ❌ | ❌ | `dev:env`
@@ -17,7 +19,7 @@
  * - ❌ | ❌ | ❌ | `dev:login`
  * - ❌ | ❌ | ❌ | `dev:logout`
  * - ❌ | ❌ | ❌ | `dev:memory`
- * - ❌ | ❌ | ❌ | `dev:multireli`
+ * - ❌ | ❌ | ❌ | `dev:mrse`
  * - ❌ | ❌ | ❌ | `dev:schema`
  * - ❌ | ❌ | ❌ | `dev:studio`
  * - ❌ | ❌ | ❌ | `dev:toolbox`

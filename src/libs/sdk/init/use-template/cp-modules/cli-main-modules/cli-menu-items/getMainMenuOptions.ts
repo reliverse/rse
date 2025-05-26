@@ -5,7 +5,7 @@ import { isBunPM, isBunRuntime } from "@reliverse/runtime";
 
 import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
-import { cliJsrPath } from "~/libs/sdk/utils/rseConfig/cfg-details";
+import { cliJsrPath } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect";
 
 export type MainMenuChoice =
@@ -30,12 +30,12 @@ interface MainMenuOption {
 export async function getMainMenuOptions(
   cwd: string,
   isDev: boolean,
-  multireli: RseConfig[],
+  mrse: RseConfig[],
 ): Promise<MainMenuOption[]> {
   // Initial multi-config hint (if relevant)
   const multiConfigMsg =
-    multireli.length > 0
-      ? re.dim(`multi-config mode with ${multireli.length} projects`)
+    mrse.length > 0
+      ? re.dim(`multi-config mode with ${mrse.length} projects`)
       : "";
 
   // Detect local projects from the current directory or tests-runtime in dev mode
@@ -70,9 +70,9 @@ export async function getMainMenuOptions(
       hint: multiConfigMsg,
       value: "clone",
     },
-    { label: "💬 Chat with rseent", value: "ai" },
+    { label: "💬 Chat with Reliverse AI", value: "ai" },
     {
-      label: "🧰 Open developer tools kit",
+      label: "🧰 Open developer toolkit",
       value: "isDevTools",
     },
     {

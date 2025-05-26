@@ -29,7 +29,7 @@ import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
 import { shouldInitGit } from "~/libs/sdk/utils/prompts/shouldInitGit";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
+import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 import { findTsconfigUp } from "~/libs/sdk/utils/tsconfigHelpers";
 
 import { promptGitDeploy } from "./use-template/cp-modules/git-deploy-prompts/gdp-mod";
@@ -161,7 +161,7 @@ export async function initMinimalrseProject(
     }
 
     // Load or create rse configuration for the project
-    const { config } = await getRseConfig({
+    const { config } = await getOrCreateRseConfig({
       projectPath,
       isDev,
       overrides: { projectFramework },
@@ -366,7 +366,7 @@ export async function handleNewProject(
 ): Promise<ShowMenuResult> {
   try {
     relinka("info", "Setting up rse config for this project...");
-    await getRseConfig({
+    await getOrCreateRseConfig({
       projectPath: cwd,
       isDev,
       overrides: {},

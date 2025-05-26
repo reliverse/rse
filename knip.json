@@ -5,23 +5,27 @@
     "eslint.config.js",
     "build.config.ts",
     "addons/**/*.ts",
-    "src/main.ts",
-    "src/libs/**/*.ts"
+    "src/mod.ts",
+    "src/app/**/cmd.ts",
+    "src/libs/**/*.ts",
+    "src/templates/**/*.ts",
+    "src/templates/**/*.tsx",
+    "src/providers/better-t-stack/**/*.ts",
+    "src/providers/better-t-stack/**/*.tsx"
   ],
-  "project": [
-    "eslint.config.js",
-    "build.config.ts",
-    "addons/**/*.ts",
-    "src/**/*.ts"
-  ],
+  "project": ["eslint.config.js", "src/**/*.ts"],
   "ignoreExportsUsedInFile": true,
   "ignore": [
     "tests-runtime/",
     "dist-jsr/",
     "dist-npm/",
     "dist-libs/",
-    "relinter-test.ts"
+    "relinter-test.ts",
+    "src/templates/**/*.ts",
+    "src/templates/**/*.tsx",
+    "src/providers/better-t-stack/**/*.ts",
+    "src/providers/better-t-stack/**/*.tsx"
   ],
-  "ignoreBinaries": ["code", "db:push"],
-  "ignoreDependencies": ["octokit", "ora", "querystring"]
+  "ignoreBinaries": ["code", "db:push", "brew", "choco"],
+  "ignoreDependencies": ["octokit", "querystring"]
 }

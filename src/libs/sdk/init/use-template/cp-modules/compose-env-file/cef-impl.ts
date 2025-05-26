@@ -331,7 +331,7 @@ export async function promptAndSetMissingValues(
   maskInput: boolean,
   config: RseConfig,
   wasEnvCopied = false,
-  isMultireli = false,
+  isMrse = false,
   projectPath = "",
   skipPrompts = false,
 ): Promise<void> {
@@ -347,35 +347,34 @@ export async function promptAndSetMissingValues(
 
   relinka("verbose", `Processing missing values: ${missingKeys.join(", ")}`);
 
-  // Check for multireli project env file
-  let multiReliEnvPath: string | null = null;
+  // Check for mrse project env file
+  let mrseEnvPath: string | null = null;
   let projectName = "";
 
-  if (isMultireli && projectPath) {
+  if (isMrse && projectPath) {
     // Extract project name from the path
     projectName = path.basename(projectPath);
-    // Construct the path to the multireli env file
-    multiReliEnvPath = path.join(
-      path.dirname(projectPath),
-      "multireli",
+    // Construct the path to the mrse env file
+    mrseEnvPath = path.join(
+      projectPath,
+      ".config",
+      "mrse",
       `${projectName}.env`,
     );
 
-    // Check if the multireli env file exists
-    const multiReliEnvExists = await fs
-      .pathExists(multiReliEnvPath)
-      .catch(() => false);
+    // Check if the mrse env file exists
+    const mrseEnvExists = await fs.pathExists(mrseEnvPath).catch(() => false);
 
-    // If skipPrompts is true and the multireli env file exists, use it automatically
-    if (skipPrompts && multiReliEnvExists) {
+    // If skipPrompts is true and the mrse env file exists, use it automatically
+    if (skipPrompts && mrseEnvExists) {
       relinka(
         "info",
-        `Using environment variables from multireli/${projectName}.env`,
+        `Using environment variables from .config/mrse/${projectName}.env`,
       );
-      if (await copyFromExisting(projectPath, multiReliEnvPath)) {
+      if (await copyFromExisting(projectPath, mrseEnvPath)) {
         relinka(
           "success",
-          "Environment variables copied from multireli environment file.",
+          "Environment variables copied from mrse environment file.",
         );
         const remainingMissingKeys = await getMissingKeys(projectPath);
         if (remainingMissingKeys.length > 0) {
@@ -390,7 +389,7 @@ export async function promptAndSetMissingValues(
             maskInput,
             config,
             true,
-            isMultireli,
+            isMrse,
             projectPath,
             skipPrompts,
           );
@@ -427,16 +426,12 @@ export async function promptAndSetMissingValues(
   // Prepare options for the multiselectPrompt
   let options = validServices;
 
-  // Add the special multireli option if applicable
-  if (
-    isMultireli &&
-    multiReliEnvPath &&
-    (await fs.pathExists(multiReliEnvPath))
-  ) {
+  // Add the special mrse option if applicable
+  if (isMrse && mrseEnvPath && (await fs.pathExists(mrseEnvPath))) {
     options = [
       {
-        label: `Get keys from multireli/${projectName}.env`,
-        value: "multireli_env",
+        label: `Get keys from .config/mrse/${projectName}.env`,
+        value: "mrse_env",
       },
       ...validServices,
     ];
@@ -449,16 +444,16 @@ export async function promptAndSetMissingValues(
     options: options,
   });
 
-  // Handle the special multireli option if selected
-  if (selectedServices.includes("multireli_env") && multiReliEnvPath) {
+  // Handle the special mrse option if selected
+  if (selectedServices.includes("mrse_env") && mrseEnvPath) {
     relinka(
       "info",
-      `Using environment variables from multireli/${projectName}.env`,
+      `Using environment variables from .config/mrse/${projectName}.env`,
     );
-    if (await copyFromExisting(projectPath, multiReliEnvPath)) {
+    if (await copyFromExisting(projectPath, mrseEnvPath)) {
       relinka(
         "success",
-        "Environment variables copied from multireli environment file.",
+        "Environment variables copied from mrse environment file.",
       );
       const remainingMissingKeys = await getMissingKeys(projectPath);
       if (remainingMissingKeys.length > 0) {
@@ -466,9 +461,9 @@ export async function promptAndSetMissingValues(
           "info",
           `The following keys are still missing in the copied .env file: ${remainingMissingKeys.join(", ")}`,
         );
-        // Continue with the normal flow for remaining keys, but remove the multireli option
+        // Continue with the normal flow for remaining keys, but remove the mrse option
         const filteredServices = selectedServices.filter(
-          (s) => s !== "multireli_env",
+          (s) => s !== "mrse_env",
         );
         if (filteredServices.length > 0) {
           // Process the remaining services
@@ -489,7 +484,7 @@ export async function promptAndSetMissingValues(
 
   // Process the selected services
   for (const serviceKey of selectedServices) {
-    if (serviceKey === "skip" || serviceKey === "multireli_env") continue;
+    if (serviceKey === "skip" || serviceKey === "mrse_env") continue;
     await processService(serviceKey, missingKeys, envPath, maskInput, config);
   }
 }

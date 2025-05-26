@@ -7,7 +7,7 @@ import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl";
 import { initMinimalrseProject } from "~/libs/sdk/init/init-utils";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import { getRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
+import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({
@@ -35,7 +35,7 @@ export default defineCommand({
 
       // Retrieve project memory and configuration
       const memory = await getReliverseMemory();
-      const { config } = await getRseConfig({
+      const { config } = await getOrCreateRseConfig({
         projectPath: cwd,
         isDev,
         overrides: {},

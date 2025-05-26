@@ -15,23 +15,23 @@ import type { DeploymentService } from "~/types";
 
 import type { RseConfig } from "./cfg-types";
 
-import { PROJECT_ROOT, cliDomainDocs } from "./cfg-details";
-import {
-  UNKNOWN_VALUE,
-  cliName,
-  DEFAULT_DOMAIN,
-  RSE_SCHEMA_DEV,
-} from "./cfg-details";
-import { rseSchema } from "./cfg-schema";
 import { DEFAULT_CONFIG } from "./rc-const";
 import {
   generateDefaultRulesForProject,
   getDefaultRseConfig,
 } from "./rc-default";
+import { cliDomainDocs } from "./rc-details";
+import {
+  UNKNOWN_VALUE,
+  cliName,
+  DEFAULT_DOMAIN,
+  RSE_SCHEMA_DEV,
+} from "./rc-details";
 import { getPackageJson, detectFeatures } from "./rc-detect";
 import { injectSectionComments } from "./rc-inject";
 import { getRseConfigPath } from "./rc-path";
 import { readRseConfig } from "./rc-read";
+import { rseSchema } from "./rc-schema";
 import {
   objectToCodeString,
   atomicWriteFile,
@@ -43,7 +43,7 @@ import {
 /**
  * Writes the given rseConfig to the specified config file (TypeScript or JSONC).
  * Performs an atomic write (using a temp file) and creates a backup of any existing config.
- * In dev mode, automatically builds a relative path to `cfg-main.js`.
+ * In dev mode, automatically builds a relative path to `sdk-mod.ts`.
  */
 export async function writeRseConfig(
   configPath: string,
@@ -52,13 +52,49 @@ export async function writeRseConfig(
   skipInstallPrompt = false,
   customPathToTypes?: string,
 ): Promise<void> {
+  // If file exists, skip writing and continue
+  if (await fs.pathExists(configPath)) {
+    relinka(
+      "verbose",
+      `Config file already exists at ${configPath}, skipping creation`,
+    );
+    return;
+  }
+
+  // Ensure .config directory exists
+  const configDir = path.dirname(configPath);
+  if (!(await fs.pathExists(configDir))) {
+    await fs.mkdir(configDir, { recursive: true });
+  }
+
   // TypeScript branch
   if (configPath.endsWith(".ts")) {
     const { backupPath, tempPath } = getBackupAndTempPaths(configPath);
 
     try {
+      relinka("verbose", `Starting config write process for: ${configPath}`);
+      relinka("verbose", `Backup path: ${backupPath}`);
+      relinka("verbose", `Temp path: ${tempPath}`);
+
+      // Remove existing backup and temp files if they exist
+      for (const file of [backupPath, tempPath]) {
+        if (await fs.pathExists(file)) {
+          relinka("verbose", `Removing existing file: ${file}`);
+          await fs.remove(file);
+        }
+      }
+
       if (await fs.pathExists(configPath)) {
+        relinka(
+          "verbose",
+          `Creating backup of existing config at: ${backupPath}`,
+        );
         await fs.copy(configPath, backupPath);
+      } else {
+        relinka(
+          "verbose",
+          "No existing config found, skipping backup creation",
+        );
       }
 
       // Convert the config object to a TypeScript-friendly string
@@ -67,27 +103,14 @@ export async function writeRseConfig(
 
       // Build the import path for dev or production
       // - If dev is true, create an alias path to ~/libs/sdk/sdk-mod.js
-      // - Otherwise default to "@reliverse/rse-cfg"
+      // - Otherwise default to "@reliverse/rse"
       let importPath: string;
       if (customPathToTypes) {
         importPath = customPathToTypes;
       } else if (isDev) {
-        const relativeDir = path.dirname(configPath);
-        const absoluteMainJs = path.join(
-          PROJECT_ROOT,
-          "src",
-          "libs",
-          "sdk",
-          "sdk-mod.ts",
-        );
-        const relativeMainJs = path
-          .relative(relativeDir, absoluteMainJs)
-          .replace(/\\/g, "/");
-        importPath = relativeMainJs.startsWith(".")
-          ? relativeMainJs
-          : `./${relativeMainJs}`;
+        importPath = "~/libs/sdk/sdk-mod";
       } else {
-        importPath = "@reliverse/rse-cfg";
+        importPath = "@reliverse/rse";
       }
 
       // Produce TypeScript config file content
@@ -104,13 +127,13 @@ export default defineConfig(${objectLiteralWithComments});
 
       // Optionally add devDependency and prompt for install if not dev
       if (!isDev && !skipInstallPrompt) {
-        await addDevDependency("@reliverse/rse-cfg", {
+        await addDevDependency("@reliverse/rse", {
           cwd: path.dirname(configPath),
         });
         relinka("verbose", "TS config written successfully");
 
         const shouldRunInstall = await confirmPrompt({
-          title: "Run `bun install` now to install '@reliverse/rse-cfg'?",
+          title: "Run `bun install` now to install '@reliverse/rse'?",
           defaultValue: true,
         });
         if (shouldRunInstall) {

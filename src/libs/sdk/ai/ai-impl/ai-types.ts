@@ -1,4 +1,4 @@
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import type { AGENT_NAMES, CIRCULAR_TRIGGERS } from "./ai-const";

@@ -1,10 +1,10 @@
 import { re } from "@reliverse/relico";
 import { inputPrompt, deleteLastLine } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
-import { DEFAULT_CLI_USERNAME } from "~/libs/sdk/utils/rseConfig/rc-details";
-import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update";
+import { updateRseConfig } from "~/libs/sdk/cfg/rc-update";
+import { DEFAULT_CLI_USERNAME } from "~/libs/sdk/constants";
 
 // TODO: make it reliverse memory-based again instead of rse config-based
 export async function askUsernameFrontend(

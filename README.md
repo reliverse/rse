@@ -2,7 +2,7 @@
 
 [sponsor](https://github.com/sponsors/blefnk) — [discord](https://discord.gg/Pb8uKbwpsJ) — [repo](https://github.com/reliverse/rse) — [npm](https://npmjs.com/@reliverse/rse) — [introduction](https://blefnk.reliverse.org/blog/my-projects/cli)
 
-**@reliverse/rse** is your all-in-one terminal companion for building and improving web projects — whether you're starting fresh or leveling up an existing app. think of it as a little ai-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.
+**@reliverse/rse** is your all-in-one companion for bootstrapping and improving any kind of projects (especially web apps built with frameworks like Next.js) — whether you're kicking off something new or upgrading an existing app. It is also a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.
 
 ## what it can do
 

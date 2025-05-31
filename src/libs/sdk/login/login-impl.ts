@@ -13,13 +13,10 @@ import url from "url";
 
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
+import { cliDomainDocs, memoryPath } from "~/libs/sdk/constants";
 import { showAnykeyPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import {
-  cliDomainDocs,
-  memoryPath,
-} from "~/libs/sdk/utils/rseConfig/rc-details";
 
 /**
  * Custom error for when a user cancels the process.

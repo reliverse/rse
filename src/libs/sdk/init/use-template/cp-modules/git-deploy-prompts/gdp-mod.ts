@@ -1,10 +1,10 @@
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
+import type { DeploymentService } from "~/libs/sdk/sdk-types";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
-import type { DeploymentService } from "~/types";
 
 import { decide } from "~/libs/sdk/utils/decideHelper";
 import {

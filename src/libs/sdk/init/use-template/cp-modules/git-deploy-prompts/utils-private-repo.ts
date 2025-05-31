@@ -1,6 +1,7 @@
 import path from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
+import { setHiddenAttributeOnWindows } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 import { simpleGit } from "simple-git";
@@ -10,12 +11,11 @@ import { gzip } from "zlib";
 
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { setHiddenAttributeOnWindows } from "~/libs/sdk/utils/filesysHelpers";
 import {
   cliConfigJsonc,
   cliConfigJsoncTmp,
   cliHomeTmp,
-} from "~/libs/sdk/utils/rseConfig/rc-details";
+} from "~/libs/sdk/constants";
 
 const gzipAsync = promisify(gzip);
 

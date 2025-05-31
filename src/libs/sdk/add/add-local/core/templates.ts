@@ -1,13 +1,13 @@
 import { relinka } from "@reliverse/relinka";
 import { ofetch } from "ofetch";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
+import { getRseConfigPath } from "~/libs/sdk/cfg/rc-path";
+import { readRseConfig } from "~/libs/sdk/cfg/rc-read";
+import { updateRseConfig } from "~/libs/sdk/cfg/rc-update";
+import { UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import { REPO_TEMPLATES } from "~/libs/sdk/utils/projectRepository";
-import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/rc-details";
-import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path";
-import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read";
-import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update";
 
 /**
  * Response type for UNGH API repository information

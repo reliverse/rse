@@ -7,28 +7,27 @@ import { defineConfig } from "@reliverse/dler";
  */
 export default defineConfig({
   // Bump configuration
-  bumpDisable: true,
-  bumpFilter: ["package.json", ".config/rse.ts"],
+  bumpDisable: false,
+  bumpFilter: ["package.json", ".config/rse.ts", "src/libs/sdk/constants.ts"],
   bumpMode: "patch",
 
   // Common configuration
-  commonPubPause: true,
+  commonPubPause: false,
   commonPubRegistry: "npm-jsr",
-  commonVerbose: false,
+  commonVerbose: true,
 
   // Core configuration
+  coreBuildOutDir: "bin",
   coreDeclarations: true,
   coreDescription:
-    "rse (prev. reliverse cli) all-in-one companion for building and improving web projects — whether you're kicking off something new or upgrading an existing app. It's like having a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.",
+    "@reliverse/rse is your all-in-one companion for bootstrapping and improving any kind of projects (especially web apps built with frameworks like Next.js) — whether you're kicking off something new or upgrading an existing app. It is also a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.",
   coreEntryFile: "mod.ts",
   coreEntrySrcDir: "src",
-  coreBuildOutDir: "bin",
   coreIsCLI: { enabled: true, scripts: { rse: "cli.ts" } },
 
   // JSR-only config
   distJsrAllowDirty: true,
   distJsrBuilder: "jsr",
-  distJsrCopyRootFiles: ["README.md", "LICENSE"],
   distJsrDirName: "dist-jsr",
   distJsrDryRun: false,
   distJsrFailOnWarn: false,
@@ -38,7 +37,6 @@ export default defineConfig({
 
   // NPM-only config
   distNpmBuilder: "mkdist",
-  distNpmCopyRootFiles: ["README.md", "LICENSE"],
   distNpmDirName: "dist-npm",
   distNpmOutFilesExt: "js",
 
@@ -53,44 +51,90 @@ export default defineConfig({
     "@reliverse/rse-sdk": {
       libDeclarations: true,
       libDescription:
-        "@reliverse/rse-sdk allows you to create new rse CLI plugins, interact with reliverse.org, and even extend your own CLI functionality (you may also try @reliverse/dler-sdk for this case).",
+        "@reliverse/rse-sdk allows you to create new plugins for @reliverse/rse CLI, interact with reliverse.org, and even extend your own CLI functionality (you may also try @reliverse/dler-sdk for this case).",
       libDirName: "sdk",
       libMainFile: "sdk/sdk-mod.ts",
       libPkgKeepDeps: true,
       libTranspileMinify: true,
       libPubPause: false,
+      libPubRegistry: "npm-jsr",
     },
   },
 
-  // Logger setup
-  logsFileName: "logs/relinka.log",
+  // @reliverse/relinka logger setup
+  logsFileName: ".logs/relinka.log",
   logsFreshFile: true,
+
+  // Specifies what resources to send to npm and jsr registries.
+  // coreBuildOutDir (e.g. "bin") dir is automatically included.
+  // The following is also included if publishArtifacts is {}:
+  // - global: ["package.json", "README.md", "LICENSE"]
+  // - dist-jsr,dist-libs/jsr: ["jsr.json"]
+  publishArtifacts: {
+    global: ["package.json", "README.md", "LICENSE", "LICENSES"],
+    "dist-jsr": [],
+    "dist-npm": [],
+    "dist-libs": {
+      "@reliverse/rse-sdk": {
+        jsr: [],
+        npm: [],
+      },
+    },
+  },
 
   // Dependency filtering
   // Global is always applied
-  removeDepsPatterns: {
+  filterDepsPatterns: {
     global: [
+      "bun",
       "@types",
       "biome",
       "eslint",
       "knip",
       "prettier",
       "typescript",
+      "@reliverse/rse",
       "@reliverse/dler",
+      "!@reliverse/rse-sdk",
+      "!@reliverse/dler-sdk",
     ],
-    "dist-npm": ["bun"],
     "dist-jsr": [],
-    "dist-libs": {},
+    "dist-npm": [],
+    "dist-libs": {
+      "@reliverse/rse-sdk": {
+        jsr: [],
+        npm: [],
+      },
+    },
   },
 
   // Build setup
+  // transpileAlias: {},
+  // transpileClean: true,
+  // transpileEntries: [],
   transpileEsbuild: "es2023",
+  // transpileExternals: [],
+  transpileFailOnWarn: false,
   transpileFormat: "esm",
   transpileMinify: true,
+  // transpileParallel: false,
   transpilePublicPath: "/",
+  // transpileReplace: {},
+  // transpileRollup: {
+  //   alias: {},
+  //   commonjs: {},
+  //   dts: {},
+  //   esbuild: {},
+  //   json: {},
+  //   replace: {},
+  //   resolve: {},
+  // },
+  // transpileShowOutLog: false,
   transpileSourcemap: "none",
   transpileSplitting: false,
   transpileStub: false,
+  // transpileStubOptions: { jiti: {} },
   transpileTarget: "node",
   transpileWatch: false,
+  // transpileWatchOptions: undefined,
 });

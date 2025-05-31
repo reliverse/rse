@@ -1,7 +1,7 @@
 import { endPrompt, startPrompt } from "@reliverse/rempts";
 import { isBun, isBunPM, isBunRuntime } from "@reliverse/runtime";
 
-import { getPkgName, getPkgVersion } from "~/info";
+import { getPkgName, getPkgVersion } from "~/libs/sdk/utils/startEndPrompts";
 
 export async function showStartPrompt(
   isDev: boolean,

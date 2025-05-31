@@ -1,7 +1,10 @@
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 
-import type { IntegrationCategory, IntegrationOptions } from "~/types";
+import type {
+  IntegrationCategory,
+  IntegrationOptions,
+} from "~/libs/sdk/sdk-types";
 
 import { installIntegration, removeIntegration } from "./editor-mod";
 import { INTEGRATION_CONFIGS } from "./feature-add";

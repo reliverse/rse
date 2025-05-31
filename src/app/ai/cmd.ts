@@ -7,8 +7,9 @@ import { ensureOpenAIKey } from "~/libs/sdk/ai/ai-impl/ai-auth";
 import { AGENT_NAMES } from "~/libs/sdk/ai/ai-impl/ai-const";
 import { aiAgenticTool } from "~/libs/sdk/ai/ai-impl/ai-tools";
 import { aiMenu } from "~/libs/sdk/ai/ai-menu";
+import { getRseConfigPath } from "~/libs/sdk/cfg/rc-path";
+import { readRseConfig } from "~/libs/sdk/cfg/rc-read";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({
@@ -41,7 +42,8 @@ export default defineCommand({
     }
 
     const cwd = getCurrentWorkingDirectory();
-    const config = await readRseConfig(cwd, isDev);
+    const { configPath } = await getRseConfigPath(cwd, isDev, false);
+    const config = await readRseConfig(configPath, isDev);
     if (!config) {
       throw new Error("Failed to read rse config");
     }

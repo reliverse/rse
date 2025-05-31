@@ -1,12 +1,15 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "rse Configuration Schema",
+  "title": "rse v1.7.1 configuration schema",
   "description": "https://docs.reliverse.org/cli",
   "type": "object",
   "properties": {
     "$schema": {
       "type": "string",
-      "enum": ["https://reliverse.org/schema.json", "./schema.json"]
+      "enum": [
+        "https://reliverse.org/schema.json",
+        "./schema.json"
+      ]
     },
     "projectName": {
       "anyOf": [
@@ -49,19 +52,38 @@
     },
     "projectGitService": {
       "type": "string",
-      "enum": ["github", "gitlab", "bitbucket", "none"]
+      "enum": [
+        "github",
+        "gitlab",
+        "bitbucket",
+        "none"
+      ]
     },
     "projectDeployService": {
       "type": "string",
-      "enum": ["vercel", "netlify", "railway", "deno", "none"]
+      "enum": [
+        "vercel",
+        "netlify",
+        "railway",
+        "deno",
+        "none"
+      ]
     },
     "projectPackageManager": {
       "type": "string",
-      "enum": ["npm", "pnpm", "yarn", "bun"]
+      "enum": [
+        "npm",
+        "pnpm",
+        "yarn",
+        "bun"
+      ]
     },
     "projectState": {
       "type": "string",
-      "enum": ["creating", "created"]
+      "enum": [
+        "creating",
+        "created"
+      ]
     },
     "projectCategory": {
       "type": "string",
@@ -77,7 +99,11 @@
     },
     "projectSubcategory": {
       "type": "string",
-      "enum": ["unknown", "e-commerce", "tool"]
+      "enum": [
+        "unknown",
+        "e-commerce",
+        "tool"
+      ]
     },
     "projectFramework": {
       "type": "string",
@@ -86,13 +112,31 @@
         "nextjs",
         "vite",
         "svelte",
-        "vue",
+        "remix",
         "astro",
-        "npm-jsr",
+        "nuxt",
+        "solid",
+        "qwik",
+        "vue",
         "wxt",
-        "vscode",
+        "lynx",
         "react-native",
-        "lynx"
+        "expo",
+        "capacitor",
+        "ionic",
+        "electron",
+        "tauri",
+        "neutralino",
+        "rempts",
+        "citty",
+        "commander",
+        "cac",
+        "meow",
+        "yargs",
+        "vscode",
+        "webextension",
+        "browser-extension",
+        "npm-jsr"
       ]
     },
     "projectTemplate": {
@@ -109,10 +153,10 @@
         "blefnk/versator-nextjs-template",
         "blefnk/relivator-lynxjs-template",
         "blefnk/relivator-react-native-template",
-        "rse/template-browser-extension",
+        "reliverse/template-browser-extension",
         "microsoft/vscode-extension-samples",
         "microsoft/vscode-extension-template",
-        "rse/rse-starter-template",
+        "rsetarter-template",
         "blefnk/deno-cli-tutorial"
       ]
     },
@@ -130,7 +174,11 @@
         },
         "themeMode": {
           "type": "string",
-          "enum": ["light", "dark", "dark-light"]
+          "enum": [
+            "light",
+            "dark",
+            "dark-light"
+          ]
         },
         "authentication": {
           "type": "boolean"
@@ -174,33 +222,27 @@
             "type": "string"
           }
         }
-      },
-      "required": [
-        "i18n",
-        "analytics",
-        "themeMode",
-        "authentication",
-        "api",
-        "database",
-        "testing",
-        "docker",
-        "ci",
-        "commands",
-        "webview",
-        "language",
-        "themes"
-      ]
+      }
     },
     "preferredLibraries": {
       "type": "object",
       "properties": {
         "stateManagement": {
           "type": "string",
-          "enum": ["zustand", "jotai", "redux-toolkit", "unknown"]
+          "enum": [
+            "zustand",
+            "jotai",
+            "redux-toolkit",
+            "unknown"
+          ]
         },
         "formManagement": {
           "type": "string",
-          "enum": ["react-hook-form", "formik", "unknown"]
+          "enum": [
+            "react-hook-form",
+            "formik",
+            "unknown"
+          ]
         },
         "styling": {
           "type": "string",
@@ -214,11 +256,23 @@
         },
         "uiComponents": {
           "type": "string",
-          "enum": ["shadcn-ui", "chakra-ui", "material-ui", "unknown"]
+          "enum": [
+            "shadcn-ui",
+            "chakra-ui",
+            "material-ui",
+            "unknown"
+          ]
         },
         "testing": {
           "type": "string",
-          "enum": ["bun", "vitest", "jest", "playwright", "cypress", "unknown"]
+          "enum": [
+            "bun",
+            "vitest",
+            "jest",
+            "playwright",
+            "cypress",
+            "unknown"
+          ]
         },
         "authentication": {
           "type": "string",
@@ -233,158 +287,221 @@
         },
         "databaseLibrary": {
           "type": "string",
-          "enum": ["drizzle", "prisma", "supabase", "unknown"]
+          "enum": [
+            "drizzle",
+            "prisma",
+            "supabase",
+            "unknown"
+          ]
         },
         "databaseProvider": {
           "type": "string",
-          "enum": ["pg", "mysql", "sqlite", "mongodb", "unknown"]
+          "enum": [
+            "pg",
+            "mysql",
+            "sqlite",
+            "mongodb",
+            "unknown"
+          ]
         },
         "api": {
           "type": "string",
-          "enum": ["hono", "trpc", "graphql", "rest", "unknown"]
+          "enum": [
+            "hono",
+            "trpc",
+            "graphql",
+            "rest",
+            "unknown"
+          ]
         },
         "linting": {
           "type": "string",
-          "enum": ["eslint", "unknown"]
+          "enum": [
+            "eslint",
+            "unknown"
+          ]
         },
         "formatting": {
           "type": "string",
-          "enum": ["biome", "unknown"]
+          "enum": [
+            "biome",
+            "unknown"
+          ]
         },
         "payment": {
           "type": "string",
-          "enum": ["stripe", "unknown"]
+          "enum": [
+            "stripe",
+            "unknown"
+          ]
         },
         "analytics": {
           "type": "string",
-          "enum": ["vercel", "unknown"]
+          "enum": [
+            "vercel",
+            "unknown"
+          ]
         },
         "monitoring": {
           "type": "string",
-          "enum": ["sentry", "unknown"]
+          "enum": [
+            "sentry",
+            "unknown"
+          ]
         },
         "logging": {
           "type": "string",
-          "enum": ["axiom", "unknown"]
+          "enum": [
+            "axiom",
+            "unknown"
+          ]
         },
         "forms": {
           "type": "string",
-          "enum": ["react-hook-form", "unknown"]
+          "enum": [
+            "react-hook-form",
+            "unknown"
+          ]
         },
         "notifications": {
           "type": "string",
-          "enum": ["sonner", "unknown"]
+          "enum": [
+            "sonner",
+            "unknown"
+          ]
         },
         "search": {
           "type": "string",
-          "enum": ["algolia", "unknown"]
+          "enum": [
+            "algolia",
+            "unknown"
+          ]
         },
         "uploads": {
           "type": "string",
-          "enum": ["uploadthing", "unknown"]
+          "enum": [
+            "uploadthing",
+            "unknown"
+          ]
         },
         "validation": {
           "type": "string",
-          "enum": ["zod", "typebox", "valibot", "unknown"]
+          "enum": [
+            "zod",
+            "typebox",
+            "valibot",
+            "unknown"
+          ]
         },
         "documentation": {
           "type": "string",
-          "enum": ["starlight", "nextra", "unknown"]
+          "enum": [
+            "starlight",
+            "nextra",
+            "unknown"
+          ]
         },
         "icons": {
           "type": "string",
-          "enum": ["lucide", "unknown"]
+          "enum": [
+            "lucide",
+            "unknown"
+          ]
         },
         "mail": {
           "type": "string",
-          "enum": ["resend", "unknown"]
+          "enum": [
+            "resend",
+            "unknown"
+          ]
         },
         "cache": {
           "type": "string",
-          "enum": ["redis", "unknown"]
+          "enum": [
+            "redis",
+            "unknown"
+          ]
         },
         "storage": {
           "type": "string",
-          "enum": ["cloudflare", "unknown"]
+          "enum": [
+            "cloudflare",
+            "unknown"
+          ]
         },
         "cdn": {
           "type": "string",
-          "enum": ["cloudflare", "unknown"]
+          "enum": [
+            "cloudflare",
+            "unknown"
+          ]
         },
         "cms": {
           "type": "string",
-          "enum": ["contentlayer", "unknown"]
+          "enum": [
+            "contentlayer",
+            "unknown"
+          ]
         },
         "i18n": {
           "type": "string",
-          "enum": ["next-intl", "unknown"]
+          "enum": [
+            "next-intl",
+            "unknown"
+          ]
         },
         "seo": {
           "type": "string",
-          "enum": ["next-seo", "unknown"]
+          "enum": [
+            "next-seo",
+            "unknown"
+          ]
         },
         "motion": {
           "type": "string",
-          "enum": ["framer", "unknown"]
+          "enum": [
+            "framer",
+            "unknown"
+          ]
         },
         "charts": {
           "type": "string",
-          "enum": ["recharts", "unknown"]
+          "enum": [
+            "recharts",
+            "unknown"
+          ]
         },
         "dates": {
           "type": "string",
-          "enum": ["dayjs", "unknown"]
+          "enum": [
+            "dayjs",
+            "unknown"
+          ]
         },
         "markdown": {
           "type": "string",
-          "enum": ["mdx", "unknown"]
+          "enum": [
+            "mdx",
+            "unknown"
+          ]
         },
         "security": {
           "type": "string",
-          "enum": ["auth", "unknown"]
+          "enum": [
+            "auth",
+            "unknown"
+          ]
         },
         "routing": {
           "type": "string",
-          "enum": ["next", "react-router", "tanstack-router", "unknown"]
+          "enum": [
+            "next",
+            "react-router",
+            "tanstack-router",
+            "unknown"
+          ]
         }
-      },
-      "required": [
-        "stateManagement",
-        "formManagement",
-        "styling",
-        "uiComponents",
-        "testing",
-        "authentication",
-        "databaseLibrary",
-        "databaseProvider",
-        "api",
-        "linting",
-        "formatting",
-        "payment",
-        "analytics",
-        "monitoring",
-        "logging",
-        "forms",
-        "notifications",
-        "search",
-        "uploads",
-        "validation",
-        "documentation",
-        "icons",
-        "mail",
-        "cache",
-        "storage",
-        "cdn",
-        "cms",
-        "i18n",
-        "seo",
-        "motion",
-        "charts",
-        "dates",
-        "markdown",
-        "security",
-        "routing"
-      ]
+      }
     },
     "codeStyle": {
       "type": "object",
@@ -397,25 +514,38 @@
         },
         "indentStyle": {
           "type": "string",
-          "enum": ["space", "tab"]
+          "enum": [
+            "space",
+            "tab"
+          ]
         },
         "quoteMark": {
           "type": "string",
-          "enum": ["single", "double"]
+          "enum": [
+            "single",
+            "double"
+          ]
         },
         "semicolons": {
           "type": "boolean"
         },
         "trailingComma": {
           "type": "string",
-          "enum": ["none", "es5", "all"]
+          "enum": [
+            "none",
+            "es5",
+            "all"
+          ]
         },
         "bracketSpacing": {
           "type": "boolean"
         },
         "arrowParens": {
           "type": "string",
-          "enum": ["always", "avoid"]
+          "enum": [
+            "always",
+            "avoid"
+          ]
         },
         "tabWidth": {
           "type": "number"
@@ -431,11 +561,19 @@
         },
         "typeOrInterface": {
           "type": "string",
-          "enum": ["type", "interface", "mixed"]
+          "enum": [
+            "type",
+            "interface",
+            "mixed"
+          ]
         },
         "importOrRequire": {
           "type": "string",
-          "enum": ["import", "require", "mixed"]
+          "enum": [
+            "import",
+            "require",
+            "mixed"
+          ]
         },
         "cjsToEsm": {
           "type": "boolean"
@@ -461,46 +599,25 @@
             "replaceEvents": {
               "type": "boolean"
             }
-          },
-          "required": [
-            "replaceFs",
-            "replacePath",
-            "replaceHttp",
-            "replaceProcess",
-            "replaceConsole",
-            "replaceEvents"
-          ]
+          }
         },
         "importSymbol": {
           "type": "string"
         }
-      },
-      "required": [
-        "lineWidth",
-        "indentSize",
-        "indentStyle",
-        "quoteMark",
-        "semicolons",
-        "trailingComma",
-        "bracketSpacing",
-        "arrowParens",
-        "tabWidth",
-        "jsToTs",
-        "dontRemoveComments",
-        "shouldAddComments",
-        "typeOrInterface",
-        "importOrRequire",
-        "cjsToEsm",
-        "modernize",
-        "importSymbol"
-      ]
+      }
     },
     "monorepo": {
       "type": "object",
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["none", "turborepo", "nx", "pnpm", "bun"]
+          "enum": [
+            "none",
+            "turborepo",
+            "nx",
+            "pnpm",
+            "bun"
+          ]
         },
         "packages": {
           "type": "array",
@@ -514,8 +631,7 @@
             "type": "string"
           }
         }
-      },
-      "required": ["type", "packages", "sharedPackages"]
+      }
     },
     "ignoreDependencies": {
       "type": "array",
@@ -559,22 +675,26 @@
     },
     "repoPrivacy": {
       "type": "string",
-      "enum": ["unknown", "public", "private"]
+      "enum": [
+        "unknown",
+        "public",
+        "private"
+      ]
     },
     "projectArchitecture": {
       "type": "string",
-      "enum": ["unknown", "fullstack", "separated"]
+      "enum": [
+        "unknown",
+        "fullstack",
+        "separated"
+      ]
     },
     "projectRuntime": {
       "type": "string",
       "enum": [
-        "bun",
-        "deno",
-        "edge-light",
-        "fastly",
-        "netlify",
         "node",
-        "workerd"
+        "deno",
+        "bun"
       ]
     },
     "skipPromptsUseAutoBehavior": {
@@ -582,72 +702,60 @@
     },
     "deployBehavior": {
       "type": "string",
-      "enum": ["prompt", "autoYes", "autoNo"]
+      "enum": [
+        "prompt",
+        "autoYes",
+        "autoNo"
+      ]
     },
     "depsBehavior": {
       "type": "string",
-      "enum": ["prompt", "autoYes", "autoNo"]
+      "enum": [
+        "prompt",
+        "autoYes",
+        "autoNo"
+      ]
     },
     "gitBehavior": {
       "type": "string",
-      "enum": ["prompt", "autoYes", "autoNo"]
+      "enum": [
+        "prompt",
+        "autoYes",
+        "autoNo"
+      ]
     },
     "i18nBehavior": {
       "type": "string",
-      "enum": ["prompt", "autoYes", "autoNo"]
+      "enum": [
+        "prompt",
+        "autoYes",
+        "autoNo"
+      ]
     },
     "scriptsBehavior": {
       "type": "string",
-      "enum": ["prompt", "autoYes", "autoNo"]
+      "enum": [
+        "prompt",
+        "autoYes",
+        "autoNo"
+      ]
     },
     "existingRepoBehavior": {
       "type": "string",
-      "enum": ["prompt", "autoYes", "autoYesSkipCommit", "autoNo"]
+      "enum": [
+        "prompt",
+        "autoYes",
+        "autoYesSkipCommit",
+        "autoNo"
+      ]
     },
     "relinterConfirm": {
       "type": "string",
-      "enum": ["promptOnce", "promptEachFile", "autoYes"]
+      "enum": [
+        "promptOnce",
+        "promptEachFile",
+        "autoYes"
+      ]
     }
-  },
-  "required": [
-    "$schema",
-    "projectName",
-    "projectAuthor",
-    "projectDescription",
-    "version",
-    "projectLicense",
-    "projectRepository",
-    "projectDomain",
-    "projectGitService",
-    "projectDeployService",
-    "projectPackageManager",
-    "projectState",
-    "projectCategory",
-    "projectSubcategory",
-    "projectFramework",
-    "projectTemplate",
-    "projectTemplateDate",
-    "features",
-    "preferredLibraries",
-    "codeStyle",
-    "monorepo",
-    "ignoreDependencies",
-    "customRules",
-    "multipleRepoCloneMode",
-    "hideRepoSuggestions",
-    "customReposOnNewProject",
-    "envComposerOpenBrowser",
-    "repoBranch",
-    "repoPrivacy",
-    "projectArchitecture",
-    "projectRuntime",
-    "skipPromptsUseAutoBehavior",
-    "deployBehavior",
-    "depsBehavior",
-    "gitBehavior",
-    "i18nBehavior",
-    "scriptsBehavior",
-    "existingRepoBehavior",
-    "relinterConfirm"
-  ]
+  }
 }

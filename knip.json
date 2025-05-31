@@ -26,6 +26,21 @@
     "src/providers/better-t-stack/**/*.ts",
     "src/providers/better-t-stack/**/*.tsx"
   ],
-  "ignoreBinaries": ["code", "db:push", "brew", "choco"],
-  "ignoreDependencies": ["octokit", "querystring"]
+  "ignoreBinaries": [
+    "code",
+    "db:push",
+    "brew",
+    "choco",
+    "atlas",
+    "turso",
+    "where",
+    "which"
+  ],
+  "ignoreDependencies": [
+    "octokit",
+    "querystring",
+    "@ai-sdk/svelte",
+    "@ai-sdk/vue",
+    "@tanstack/vue-query-devtools"
+  ]
 }

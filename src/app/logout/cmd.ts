@@ -3,8 +3,8 @@ import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, defineCommand } from "@reliverse/rempts";
 import { deleteLastLine, msg } from "@reliverse/rempts";
 
+import { memoryPath } from "~/libs/sdk/constants";
 import { deleteMemory } from "~/libs/sdk/logout/logout-impl";
-import { memoryPath } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 const isConfigExists = async () => {
   if (await fs.pathExists(memoryPath)) {

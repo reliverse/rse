@@ -1,6 +1,7 @@
 import path, { dirname } from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
+import { rmEnsureDir, setHiddenAttributeOnWindows } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 import { exec } from "child_process";
@@ -12,19 +13,15 @@ import { simpleGit } from "simple-git";
 import { extract } from "tar";
 import { promisify } from "util";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
-import { initGitDir } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/git";
-import {
-  rmEnsureDir,
-  setHiddenAttributeOnWindows,
-} from "~/libs/sdk/utils/filesysHelpers";
+import { getRseConfigPath } from "~/libs/sdk/cfg/rc-path";
 import {
   cliConfigJsonc,
   cliConfigTs,
   cliHomeRepos,
-} from "~/libs/sdk/utils/rseConfig/rc-details";
-import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path";
+} from "~/libs/sdk/constants";
+import { initGitDir } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/git";
 
 const execAsync = promisify(exec);
 

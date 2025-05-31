@@ -3,7 +3,7 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { parseJSONC } from "confbox";
 
-import type { BiomeConfig, BiomeConfigResult } from "~/types";
+import type { BiomeConfig, BiomeConfigResult } from "~/libs/sdk/sdk-types";
 
 let cachedBiomeConfig: BiomeConfigResult = null;
 

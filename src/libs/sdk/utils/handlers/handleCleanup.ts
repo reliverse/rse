@@ -8,11 +8,11 @@ import {
 } from "@reliverse/rempts";
 import { destr } from "destr";
 
-import type { BaseConfig } from "~/types";
+import type { BaseConfig } from "~/libs/sdk/sdk-types";
 
+import { readRseConfig } from "~/libs/sdk/cfg/rc-read";
 import { removeComments } from "~/libs/sdk/utils/codemods/removeComments";
 import { getUnusedDependencies } from "~/libs/sdk/utils/codemods/removeUnusedDeps";
-import { readRseConfig } from "~/libs/sdk/utils/rseConfig/rc-read";
 
 import { uninstallDependencies } from "./dependencies";
 

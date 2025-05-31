@@ -4,10 +4,10 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { eq } from "drizzle-orm";
 
-import { db } from "~/db/client";
-import { encrypt, decrypt } from "~/db/config";
-import { configKeysTable, userDataTable } from "~/db/schema";
-import { memoryPath } from "~/libs/sdk/utils/rseConfig/rc-details";
+import { memoryPath } from "~/libs/sdk/constants";
+import { db } from "~/libs/sdk/db/client";
+import { encrypt, decrypt } from "~/libs/sdk/db/config";
+import { configKeysTable, userDataTable } from "~/libs/sdk/db/schema";
 
 import type {
   EncryptedDataMemory,

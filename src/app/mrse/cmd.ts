@@ -13,6 +13,8 @@ import { execaCommand } from "execa";
 import { jsonrepair } from "jsonrepair";
 import { loadFile, writeFile, builders } from "magicast";
 
+import { generateRseConfig } from "~/libs/sdk/cfg/rc-create";
+import { UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import {
   downloadFileFromGitHub,
   ensureEnvCacheDir,
@@ -22,8 +24,6 @@ import {
   type GenCfg,
   type GenCfgJsonc,
 } from "~/libs/sdk/mrse/mrse-impl";
-import { generateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-create";
-import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/rc-details";
 
 /**
  * Generates rse config files for multiple projects

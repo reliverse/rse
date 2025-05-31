@@ -5,9 +5,9 @@ import { destr } from "destr";
 import { readPackageJSON } from "pkg-types";
 import { glob } from "tinyglobby";
 
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { ProjectConfigReturn } from "~/libs/sdk/sdk-types";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 
 import { extractRepoInfo, replaceStringsInFiles } from "./reps-impl";
 import { CommonPatterns, HardcodedStrings } from "./reps-keys";

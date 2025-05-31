@@ -12,7 +12,18 @@ export interface UploadFile {
   type: string;
 }
 
-export async function uploadToProvider(files: UploadFile[], provider?: string) {
+export interface UploadResult {
+  url: string;
+  size: number;
+  name: string;
+  uuid?: string;
+  key?: string;
+}
+
+export async function uploadToProvider(
+  files: UploadFile[],
+  provider?: string,
+): Promise<UploadResult[]> {
   const defaultProvider = process.env.DEFAULT_UPLOAD_PROVIDER || "uploadthing";
   const chosen = provider || defaultProvider;
 

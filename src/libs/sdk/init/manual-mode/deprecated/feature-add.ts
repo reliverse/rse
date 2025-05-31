@@ -1,7 +1,7 @@
 import { relinka } from "@reliverse/relinka";
 import { execa } from "execa";
 
-import type { IntegrationConfig } from "~/types";
+import type { IntegrationConfig } from "~/libs/sdk/sdk-types";
 
 // Integration configurations
 export const INTEGRATION_CONFIGS: Record<string, IntegrationConfig> = {

@@ -1,7 +1,7 @@
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
 /**
  * A string literal union for either 'gitBehavior' or 'deployBehavior'

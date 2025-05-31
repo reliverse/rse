@@ -4,7 +4,7 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { readPackageJSON, writePackageJSON } from "pkg-types";
 
-import type { PrismaField, PrismaModel } from "~/types";
+import type { PrismaField, PrismaModel } from "~/libs/sdk/sdk-types";
 
 function parsePrismaSchema(content: string): PrismaModel[] {
   const models: PrismaModel[] = [];

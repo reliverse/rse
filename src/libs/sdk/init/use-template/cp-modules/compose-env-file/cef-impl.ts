@@ -11,11 +11,11 @@ import { ofetch } from "ofetch";
 import open from "open";
 import { getRandomValues } from "uncrypto";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
-import { db } from "~/db/client";
-import { encrypt, decrypt } from "~/db/config";
-import { userDataTable } from "~/db/schema";
+import { db } from "~/libs/sdk/db/client";
+import { encrypt, decrypt } from "~/libs/sdk/db/config";
+import { userDataTable } from "~/libs/sdk/db/schema";
 
 import { KNOWN_SERVICES, type KeyType } from "./cef-keys";
 

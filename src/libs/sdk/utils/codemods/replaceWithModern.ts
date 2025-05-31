@@ -3,7 +3,7 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { glob } from "tinyglobby";
 
-import type { ModernReplacement } from "~/types";
+import type { ModernReplacement } from "~/libs/sdk/sdk-types";
 
 const MODERN_REPLACEMENTS: ModernReplacement[] = [
   // File System

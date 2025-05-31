@@ -15,10 +15,11 @@ import open from "open";
 import os from "os";
 
 import type { ProjectConfigReturn, RseConfig } from "~/libs/sdk/sdk-types";
+import type { Behavior } from "~/libs/sdk/sdk-types";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
-import type { Behavior } from "~/types";
 
+import { cliDomainDocs, homeDir, UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 import { setupI18nFiles } from "~/libs/sdk/utils/downloading/downloadI18nFiles";
 import { isVSCodeInstalled } from "~/libs/sdk/utils/handlers/isAppInstalled";
@@ -26,11 +27,6 @@ import { promptPackageJsonScripts } from "~/libs/sdk/utils/handlers/promptPackag
 import { askOpenInIDE } from "~/libs/sdk/utils/prompts/askOpenInIDE";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
 import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend";
-import {
-  cliDomainDocs,
-  homeDir,
-  UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/rc-details";
 
 /**
  * Ensures a unique project name by prompting for a new one if the target directory exists.

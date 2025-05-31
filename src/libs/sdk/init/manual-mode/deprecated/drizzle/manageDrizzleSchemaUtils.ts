@@ -3,7 +3,11 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt, confirmPrompt, inputPrompt } from "@reliverse/rempts";
 
-import type { ColumnType, DatabaseProvider, TableSchema } from "~/types";
+import type {
+  ColumnType,
+  DatabaseProvider,
+  TableSchema,
+} from "~/libs/sdk/sdk-types";
 
 import { installIntegration } from "~/libs/sdk/init/manual-mode/deprecated/editor-mod";
 import { INTEGRATION_CONFIGS } from "~/libs/sdk/init/manual-mode/deprecated/feature-add";

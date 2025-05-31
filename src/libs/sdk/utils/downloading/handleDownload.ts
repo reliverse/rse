@@ -1,16 +1,17 @@
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
+import { setHiddenAttributeOnWindows } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 import { ofetch } from "ofetch";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
+import { cliHomeRepos, UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import {
   downloadRepo,
   type DownloadResult,
 } from "~/libs/sdk/utils/downloading/downloadRepo";
-import { setHiddenAttributeOnWindows } from "~/libs/sdk/utils/filesysHelpers";
 import {
   REPO_TEMPLATES,
   saveRepoToDevice,
@@ -19,10 +20,6 @@ import {
   type CategoryFromSchema,
   type CloneOrTemplateRepo,
 } from "~/libs/sdk/utils/projectRepository";
-import {
-  cliHomeRepos,
-  UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/rc-details";
 
 interface UnghRepoResponse {
   repo?: {

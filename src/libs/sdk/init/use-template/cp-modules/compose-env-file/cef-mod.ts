@@ -5,7 +5,7 @@ import { execa } from "execa";
 
 import type { RseConfig } from "~/libs/sdk/sdk-types";
 
-import { cliDomainEnv } from "~/libs/sdk/utils/rseConfig/rc-details";
+import { cliDomainEnv } from "~/libs/sdk/constants";
 
 import {
   promptAndSetMissingValues,

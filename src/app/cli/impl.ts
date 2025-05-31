@@ -4,25 +4,27 @@ import { generate } from "random-words";
 
 import type { ParamsOmitSkipPN } from "~/libs/sdk/sdk-types";
 
-import { ad, getRandomMessage, getWelcomeTitle, premium } from "~/db/messages";
 import { aiMenu } from "~/libs/sdk/ai/ai-menu";
+import { detectProject } from "~/libs/sdk/cfg/rc-detect";
+import { cliJsrPath, UNKNOWN_VALUE } from "~/libs/sdk/constants";
+import {
+  ad,
+  getRandomMessage,
+  getWelcomeTitle,
+  premium,
+} from "~/libs/sdk/db/messages";
 import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl";
 import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu";
 import { getMainMenuOptions } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/cli-menu-items/getMainMenuOptions";
 import { showCloneProjectMenu } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/cli-menu-items/showCloneProjectMenu";
 import { showEndPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showStartEndPrompt";
-import { showDevToolsMenu } from "~/libs/sdk/toolbox/toolbox-impl";
-import { showNativeCliMenu } from "~/libs/sdk/utils/native-cli/nc-mod";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import {
-  cliJsrPath,
-  UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/rc-details";
-import { detectProject } from "~/libs/sdk/utils/rseConfig/rc-detect";
 import {
   showNewProjectMenu,
   showOpenProjectMenu,
-} from "~/providers/reliverse-stack/rs-mod";
+} from "~/libs/sdk/providers/reliverse-stack/rs-mod";
+import { showDevToolsMenu } from "~/libs/sdk/toolbox/toolbox-impl";
+import { showNativeCliMenu } from "~/libs/sdk/utils/native-cli/nc-mod";
+import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 export async function app(params: ParamsOmitSkipPN) {
   const { cwd, isDev, mrse, memory, config } = params;

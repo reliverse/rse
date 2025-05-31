@@ -5,7 +5,7 @@ import { confirmPrompt } from "@reliverse/rempts";
 import { generateText } from "ai";
 import { countTokens } from "gpt-tokenizer/model/gpt-4o-mini";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
 import {
   CIRCULAR_TRIGGERS,

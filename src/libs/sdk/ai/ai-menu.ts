@@ -1,6 +1,6 @@
 import { inputPrompt, selectPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import { experimental } from "~/libs/sdk/utils/badgeNotifiers";

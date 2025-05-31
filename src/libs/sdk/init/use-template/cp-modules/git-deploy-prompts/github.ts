@@ -2,10 +2,10 @@ import { RequestError } from "@octokit/request-error";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
+import { UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
-import { UNKNOWN_VALUE } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { cd } from "~/libs/sdk/utils/terminalHelpers";
 
 import { initGitDir } from "./git";

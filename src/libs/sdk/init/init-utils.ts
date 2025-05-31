@@ -1,12 +1,13 @@
 import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
 import { ensuredir } from "@reliverse/relifso";
+import { isDirectoryEmpty } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { nextStepsPrompt, selectPrompt } from "@reliverse/rempts";
 import { simpleGit, type SimpleGit } from "simple-git";
 
 import type { ShowMenuResult } from "~/libs/sdk/add/add-local/core/types";
-import type { ProjectFramework } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { ProjectFramework } from "~/libs/sdk/cfg/cfg-types";
 
 import { checkMissingDependencies } from "~/libs/sdk/add/add-local/core/deps";
 import { getPromptContent } from "~/libs/sdk/add/add-local/core/prompts";
@@ -15,9 +16,10 @@ import {
   updateProjectTemplateDate,
   type TemplateUpdateInfo,
 } from "~/libs/sdk/add/add-local/core/templates";
+import { detectProjectsWithRseConfig } from "~/libs/sdk/cfg/rc-detect";
+import { getOrCreateRseConfig } from "~/libs/sdk/cfg/rc-mod";
 import { createPackageJSON } from "~/libs/sdk/utils/createPackageJSON";
 import { createTSConfig } from "~/libs/sdk/utils/createTSConfig";
-import { isDirectoryEmpty } from "~/libs/sdk/utils/filesysHelpers";
 import {
   getProjectContent,
   type RequiredProjectContent,
@@ -28,8 +30,6 @@ import { askOpenInIDE } from "~/libs/sdk/utils/prompts/askOpenInIDE";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
 import { shouldInitGit } from "~/libs/sdk/utils/prompts/shouldInitGit";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect";
-import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 import { findTsconfigUp } from "~/libs/sdk/utils/tsconfigHelpers";
 
 import { promptGitDeploy } from "./use-template/cp-modules/git-deploy-prompts/gdp-mod";

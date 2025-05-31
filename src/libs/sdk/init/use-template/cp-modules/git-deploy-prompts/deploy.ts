@@ -2,11 +2,11 @@ import { re } from "@reliverse/relico";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
+import type { DeploymentService } from "~/libs/sdk/sdk-types";
 import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
 import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
-import type { DeploymentService } from "~/types";
 
 import { prepareVercelProjectCreation } from "./vercel/vercel-create";
 

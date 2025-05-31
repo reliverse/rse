@@ -1,8 +1,8 @@
 import { defineCommand } from "@reliverse/rempts";
 
+import { getOrCreateRseConfig } from "~/libs/sdk/cfg/rc-mod";
 import { showDevToolsMenu } from "~/libs/sdk/toolbox/toolbox-impl";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({

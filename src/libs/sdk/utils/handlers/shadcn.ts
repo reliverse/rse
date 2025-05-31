@@ -3,7 +3,7 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { execa } from "execa";
 
-import type { ShadcnConfig, Theme } from "~/types";
+import type { ShadcnConfig, Theme } from "~/libs/sdk/sdk-types";
 
 import { pmx } from "~/libs/sdk/utils/getPackageManager";
 

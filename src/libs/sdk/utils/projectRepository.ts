@@ -4,18 +4,18 @@ import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
 import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
+import { setHiddenAttributeOnWindows } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
 import { ofetch } from "ofetch";
 
-import type { rseSchema } from "~/libs/sdk/utils/rseConfig/rc-schema";
-import type { VSCodeRepoOption } from "~/providers/reliverse-stack/rs-impl";
+import type { rseSchema } from "~/libs/sdk/cfg/rc-schema";
+import type { VSCodeRepoOption } from "~/libs/sdk/providers/reliverse-stack/rs-impl";
 
+import { cliHomeRepos } from "~/libs/sdk/constants";
 import { experimental, recommended } from "~/libs/sdk/utils/badgeNotifiers";
-import { cliHomeRepos } from "~/libs/sdk/utils/rseConfig/rc-details";
 
-import { setHiddenAttributeOnWindows } from "./filesysHelpers";
 import {
   DEFAULT_REPOS_CONFIG,
   type RepoInfo,

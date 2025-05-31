@@ -6,7 +6,7 @@ import {
   multiselectPrompt,
 } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import { getUserPkgManager } from "~/libs/sdk/utils/dependencies/getUserPkgManager";

@@ -1,10 +1,7 @@
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 
-import {
-  cliConfigJsonc,
-  cliConfigTs,
-} from "~/libs/sdk/utils/rseConfig/rc-details";
+import { cliConfigJsonc, cliConfigTs } from "~/libs/sdk/constants";
 
 // Define a type that matches the boolean-based structure of requiredContent
 export interface RequiredProjectContent {

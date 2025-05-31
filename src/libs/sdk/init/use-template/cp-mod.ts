@@ -6,13 +6,13 @@ import type { RseConfig } from "~/libs/sdk/sdk-types";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
+import { updateRseConfig } from "~/libs/sdk/cfg/rc-update";
+import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/constants";
 import { getRseConfigPath } from "~/libs/sdk/sdk-mod";
 import { handleDownload } from "~/libs/sdk/utils/downloading/handleDownload";
 import { generateProjectConfigs } from "~/libs/sdk/utils/handlers/generateProjectConfigs";
 import { isMrseProject } from "~/libs/sdk/utils/mrseHelpers";
 import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod";
-import { FALLBACK_ENV_EXAMPLE_URL } from "~/libs/sdk/utils/rseConfig/rc-details";
-import { updateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-update";
 
 import {
   initializeProjectConfig,

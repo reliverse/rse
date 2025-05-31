@@ -3,11 +3,11 @@ import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
 import { defineCommand } from "@reliverse/rempts";
 
+import { getOrCreateRseConfig } from "~/libs/sdk/cfg/rc-mod";
+import { cliName, useLocalhost } from "~/libs/sdk/constants";
 import { showStartPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showStartEndPrompt";
 import { authCheck } from "~/libs/sdk/login/login-impl";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import { cliName, useLocalhost } from "~/libs/sdk/utils/rseConfig/rc-details";
-import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 import { app } from "./impl";

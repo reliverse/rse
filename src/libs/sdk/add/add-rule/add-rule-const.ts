@@ -1,6 +1,6 @@
 import path from "@reliverse/pathkit";
 
-import { homeDir } from "~/libs/sdk/utils/rseConfig/rc-details";
+import { homeDir } from "~/libs/sdk/constants";
 
 import type { RuleRepo } from "./add-rule-types";
 

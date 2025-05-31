@@ -7,14 +7,14 @@ import { relinka } from "@reliverse/relinka";
 import { inputPrompt, selectPrompt, deleteLastLine } from "@reliverse/rempts";
 import { simpleGit } from "simple-git";
 
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { GitModParams } from "~/libs/sdk/sdk-types";
 import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
+import { cliName } from "~/libs/sdk/constants";
 import { getEffectiveDir } from "~/libs/sdk/utils/getEffectiveDir";
-import { cliName } from "~/libs/sdk/utils/rseConfig/rc-details";
 import { cd, pwd } from "~/libs/sdk/utils/terminalHelpers";
 
 import { checkGithubRepoOwnership, createGithubRepo } from "./github";

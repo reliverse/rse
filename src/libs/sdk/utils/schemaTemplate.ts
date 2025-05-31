@@ -3,10 +3,7 @@ import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
 import { Type, type Static } from "@sinclair/typebox";
 
-import {
-  cliHomeRepos,
-  cliVersion,
-} from "~/libs/sdk/utils/rseConfig/rc-details";
+import { cliHomeRepos, cliVersion } from "~/libs/sdk/constants";
 
 // Import package.json with type assertion
 // import pkg from "../../package.json" assert { type: "json" };

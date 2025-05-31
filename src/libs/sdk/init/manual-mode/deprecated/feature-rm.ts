@@ -1,4 +1,4 @@
-import type { RemovalConfig } from "~/types";
+import type { RemovalConfig } from "~/libs/sdk/sdk-types";
 
 export const REMOVAL_CONFIGS: Record<string, RemovalConfig> = {
   database: {

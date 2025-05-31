@@ -277,19 +277,9 @@ export {
   getUserPkgManager,
   getAllPkgManagers,
 } from "./utils/dependencies/getUserPkgManager";
-
-// TODO: make relidler don't detect `export` when it is in `` (template literal)
-// export { setupI18nFiles, generateMetadata, generateStaticParams, languages, defaultLanguage, languageNames } from "./utils/downloading/downloadI18nFiles";
-
 export { setupI18nFiles } from "./utils/downloading/downloadI18nFiles";
 export { downloadRepo } from "./utils/downloading/downloadRepo";
 export { handleDownload } from "./utils/downloading/handleDownload";
-export {
-  setHiddenAttributeOnWindows,
-  isHidden,
-  isDirectoryEmpty,
-  rmEnsureDir,
-} from "./utils/filesysHelpers";
 export { getEffectiveDir } from "./utils/getEffectiveDir";
 export { pm } from "./utils/getPackageManager";
 export { getProjectContent } from "./utils/getProjectContent";
@@ -349,16 +339,16 @@ export { shouldInitGit } from "./utils/prompts/shouldInitGit";
 export {
   DEFAULT_CONFIG,
   PROJECT_FRAMEWORK_FILES,
-} from "./utils/rseConfig/rc-const";
+} from "./cfg/default";
 export {
   writeRseConfig,
   createRseConfig,
   generateRseConfig,
-} from "./utils/rseConfig/rc-create";
+} from "./cfg/rc-create";
 export {
   getDefaultRseConfig,
   generateDefaultRulesForProject,
-} from "./utils/rseConfig/rc-default";
+} from "./cfg/rc-default";
 export {
   detectProjectFramework,
   getPackageJson,
@@ -366,31 +356,31 @@ export {
   detectProject,
   detectProjectsWithRseConfig,
   detectFeatures,
-} from "./utils/rseConfig/rc-detect";
-export { injectSectionComments } from "./utils/rseConfig/rc-inject";
-export { migrateRseConfig } from "./utils/rseConfig/rc-migrate";
-export { getRseConfigPath } from "./utils/rseConfig/rc-path";
+} from "./cfg/rc-detect";
+export { injectSectionComments } from "./cfg/rc-inject";
+export { migrateRseConfig } from "./cfg/rc-migrate";
+export { getRseConfigPath } from "./cfg/rc-path";
 export {
   readRseTs,
   readRseConfig,
-} from "./utils/rseConfig/rc-read";
+} from "./cfg/rc-read";
 export {
   repairAndParseJSON,
   fixLineByLine,
   parseAndFixRseConfig,
-} from "./utils/rseConfig/rc-repair";
+} from "./cfg/rc-repair";
 export {
   loadrse,
   watchrse,
-} from "./utils/rseConfig/rc-unstable";
-export { mergeWithDefaults } from "./utils/rseConfig/rc-update";
+} from "./cfg/rc-unstable";
+export { mergeWithDefaults } from "./cfg/rc-update";
 export {
   cleanGitHubUrl,
   objectToCodeString,
   updateTsConfigInclude,
   getBackupAndTempPaths,
   atomicWriteFile,
-} from "./utils/rseConfig/rc-utils";
+} from "./cfg/rc-utils";
 export {
   getReliverseMemory,
   updateReliverseMemory,
@@ -451,10 +441,9 @@ export {
   DEFAULT_DOMAIN,
   RSE_SCHEMA_DEV,
   RSE_SCHEMA_URL,
-} from "./utils/rseConfig/rc-details";
+} from "./constants";
 export {
   rseSchema,
   generateJsonSchema,
   generateSchemaFile,
-  defineConfig,
-} from "~/libs/sdk/utils/rseConfig/rc-schema";
+} from "./cfg/rc-schema";

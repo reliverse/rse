@@ -1,4 +1,4 @@
-import type { DatabaseProvider } from "~/types";
+import type { DatabaseProvider } from "~/libs/sdk/sdk-types";
 
 export const COLUMN_TYPES: Record<DatabaseProvider, string[]> = {
   postgres: [

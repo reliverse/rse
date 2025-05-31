@@ -6,7 +6,7 @@ import { relinka } from "@reliverse/relinka";
 import { destr } from "destr";
 import { glob } from "tinyglobby";
 
-import { tsconfigJson } from "~/libs/sdk/utils/rseConfig/rc-details";
+import { tsconfigJson } from "~/libs/sdk/constants";
 
 const RUNTIME_REPLACEMENTS = {
   bun: {

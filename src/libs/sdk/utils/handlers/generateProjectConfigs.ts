@@ -5,14 +5,11 @@ import { relinka } from "@reliverse/relinka";
 import { destr } from "destr";
 import { execaCommand } from "execa";
 
-import type { DeploymentService, VSCodeSettings } from "~/types";
+import type { DeploymentService, VSCodeSettings } from "~/libs/sdk/sdk-types";
 
-import { generateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-create";
-import {
-  CONFIG_CATEGORIES,
-  UNKNOWN_VALUE,
-} from "~/libs/sdk/utils/rseConfig/rc-details";
-import { getRseConfigPath } from "~/libs/sdk/utils/rseConfig/rc-path";
+import { generateRseConfig } from "~/libs/sdk/cfg/rc-create";
+import { getRseConfigPath } from "~/libs/sdk/cfg/rc-path";
+import { CONFIG_CATEGORIES, UNKNOWN_VALUE } from "~/libs/sdk/constants";
 
 // ------------------------------------------------------------------
 // Helper Functions for Additional Config Files

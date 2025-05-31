@@ -3,10 +3,10 @@ import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
 import { isBunPM, isBunRuntime } from "@reliverse/runtime";
 
-import type { RseConfig } from "~/libs/sdk/utils/rseConfig/cfg-types";
+import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
-import { cliJsrPath } from "~/libs/sdk/utils/rseConfig/rc-details";
-import { detectProjectsWithRseConfig } from "~/libs/sdk/utils/rseConfig/rc-detect";
+import { detectProjectsWithRseConfig } from "~/libs/sdk/cfg/rc-detect";
+import { cliJsrPath } from "~/libs/sdk/constants";
 
 export type MainMenuChoice =
   | "create"

@@ -3,11 +3,11 @@ import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
 
+import { getOrCreateRseConfig } from "~/libs/sdk/cfg/rc-mod";
 import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl";
 import { initMinimalrseProject } from "~/libs/sdk/init/init-utils";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
-import { getOrCreateRseConfig } from "~/libs/sdk/utils/rseConfig/rc-mod";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({

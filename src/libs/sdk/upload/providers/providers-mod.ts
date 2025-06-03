@@ -1,7 +1,7 @@
 import type { Buffer } from "buffer";
 
 import path from "@reliverse/pathkit";
-import fs from "@reliverse/relifso";
+import fs from "node:fs/promises";
 
 import { uploadToUploadcare } from "./uploadcare";
 import { uploadToUploadthing } from "./uploadthing";

@@ -18,6 +18,8 @@ import {
 } from "~/libs/sdk/add/add-local/core/templates";
 import { detectProjectsWithRseConfig } from "~/libs/sdk/cfg/rc-detect";
 import { getOrCreateRseConfig } from "~/libs/sdk/cfg/rc-mod";
+import { promptGitDeploy } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/gdp-mod";
+import { initializeGitRepo } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/git";
 import { createPackageJSON } from "~/libs/sdk/utils/createPackageJSON";
 import { createTSConfig } from "~/libs/sdk/utils/createTSConfig";
 import {
@@ -32,20 +34,9 @@ import { shouldInitGit } from "~/libs/sdk/utils/prompts/shouldInitGit";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { findTsconfigUp } from "~/libs/sdk/utils/tsconfigHelpers";
 
-import { promptGitDeploy } from "./use-template/cp-modules/git-deploy-prompts/gdp-mod";
-import { initializeGitRepo } from "./use-template/cp-modules/git-deploy-prompts/git";
-
 /** Constants for menu option values */
 const NEW_PROJECT_OPTION = "new-project";
 const EXIT_OPTION = "exit";
-
-/**
- * Defines what is returned when selecting or creating a project.
- */
-export interface ProjectSelectionResult {
-  projectPath: string;
-  wasNewlyCreated: boolean;
-}
 
 /**
  * Constructs the menu options for selecting an existing project

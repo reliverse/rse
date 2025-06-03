@@ -1,6 +1,6 @@
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
-import { setHiddenAttributeOnWindows } from "@reliverse/relifso";
+import { setHiddenAttribute } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 import { ofetch } from "ofetch";
@@ -158,7 +158,7 @@ export async function handleDownload({
         ? path.join(cwd, "tests-runtime", projectName)
         : path.join(cwd, projectName);
       await fs.copy(localRepoPath, projectPath);
-      await setHiddenAttributeOnWindows(path.join(projectPath, ".git"));
+      await setHiddenAttribute(path.join(projectPath, ".git"));
     }
   }
 

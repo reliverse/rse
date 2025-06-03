@@ -9,18 +9,17 @@ import type { AppParams } from "~/libs/sdk/sdk-types";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
+import { handleOpenProjectMenu } from "~/app/init/impl/mm-deprecated/editor-menu";
 import { detectProjectsWithRseConfig } from "~/libs/sdk/cfg/rc-detect";
 import { endTitle, UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import { getRandomMessage } from "~/libs/sdk/db/messages";
-import { handleOpenProjectMenu } from "~/libs/sdk/init/manual-mode/deprecated/editor-menu";
 import { createMobileProject } from "~/libs/sdk/init/use-template/cp-mod";
-import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
-
 import {
   optionCreateBrowserExtension,
   optionCreateVSCodeExtension,
   optionCreateWebProject,
-} from "./rs-impl";
+} from "~/libs/sdk/providers/reliverse-stack/rs-impl";
+import { experimental } from "~/libs/sdk/utils/badgeNotifiers";
 
 async function handleProjectCategory(params: AppParams) {
   const { cwd, isDev, memory, config, mrse, skipPrompts } = params;

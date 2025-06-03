@@ -12,6 +12,7 @@
     "yoavbls.pretty-ts-errors",
     "yzhang.markdown-all-in-one",
     "vue.volar",
-    "astro-build.astro-vscode"
+    "astro-build.astro-vscode",
+    "svelte.svelte-vscode"
   ]
 }

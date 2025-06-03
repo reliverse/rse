@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/vue-query";
 
+// @ts-expect-error dler-remove-comment
 const { $orpc } = useNuxtApp();
 
 const newTodoText = ref("");

@@ -41,6 +41,8 @@
     "querystring",
     "@ai-sdk/svelte",
     "@ai-sdk/vue",
+    "@tanstack/svelte-form",
+    "@tanstack/svelte-query",
     "@tanstack/vue-query-devtools"
   ]
 }

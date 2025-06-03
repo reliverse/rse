@@ -4,7 +4,7 @@ import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
 import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
-import { setHiddenAttributeOnWindows } from "@reliverse/relifso";
+import { setHiddenAttribute } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
@@ -224,7 +224,7 @@ export async function saveRepoToDevice(
 
     // Set the .git folder hidden on Windows
     const gitFolderPath = path.join(repoSavePath, ".git");
-    await setHiddenAttributeOnWindows(gitFolderPath);
+    await setHiddenAttribute(gitFolderPath);
 
     // Validate repo ID format
     const [owner, repoName] = repo.id.split("/");

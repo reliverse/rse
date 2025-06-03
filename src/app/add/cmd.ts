@@ -1,8 +1,8 @@
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
 
+import { showManualBuilderMenu } from "~/app/init/impl/init-impl";
 import { getOrCreateRseConfig } from "~/libs/sdk/cfg/rc-mod";
-import { showManualBuilderMenu } from "~/libs/sdk/init/init-impl";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 

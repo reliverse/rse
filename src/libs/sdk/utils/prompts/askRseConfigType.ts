@@ -9,10 +9,10 @@ export async function askRseConfigType(): Promise<"jsonc" | "ts"> {
     title:
       "Please select a rseonfiguration file type. JSONC is recommended for most projects.",
     content:
-      "A tsconfig.json file was detected. You can use the TypeScript config type for this project; however, it requires @rsefg to be installed; without it, the rse CLrserun correctly when using the TS config type.",
+      "A tsconfig.json file was detected. You can use the TypeScript config type for this project; however, it requires @reliverse/rse to be installed (as a dev dependency); without it, the rse CLI may not run correctly when using the TS config type.",
     options: [
+      { label: "TypeScript (rse) (recommended)", value: "ts" },
       { label: "JSONC (rse)", value: "jsonc" },
-      { label: "TypeScript (rse)", value: "ts" },
     ],
     defaultValue: "jsonc",
   });

@@ -9,8 +9,8 @@ import type {
   TableSchema,
 } from "~/libs/sdk/sdk-types";
 
-import { installIntegration } from "~/libs/sdk/init/manual-mode/deprecated/editor-mod";
-import { INTEGRATION_CONFIGS } from "~/libs/sdk/init/manual-mode/deprecated/feature-add";
+import { installIntegration } from "~/libs/sdk/init/mm-deprecated/editor-mod";
+import { INTEGRATION_CONFIGS } from "~/libs/sdk/init/mm-deprecated/feature-add";
 
 import { COLUMN_TYPES } from "./manageDrizzleConstants";
 

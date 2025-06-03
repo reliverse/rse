@@ -1,6 +1,9 @@
 <script lang="ts">
+// @ts-expect-error dler-remove-comment
 import { authClient } from "$lib/auth-client";
+// @ts-expect-error dler-remove-comment
 import { goto } from "$app/navigation";
+// @ts-expect-error dler-remove-comment
 import { queryClient } from "$lib/orpc";
 
 const sessionQuery = authClient.useSession();

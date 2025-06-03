@@ -70,7 +70,14 @@ export type {
   AiSdkAgent,
   AIAgentOptions,
 } from "./ai/ai-impl/ai-types.js";
-export type { ProjectSelectionResult } from "./init/init-utils.js";
+
+/**
+ * Defines what is returned when selecting or creating a project.
+ */
+export interface ProjectSelectionResult {
+  projectPath: string;
+  wasNewlyCreated: boolean;
+}
 
 export interface AppParams {
   projectName: string;

@@ -10,17 +10,17 @@ const MODERN_REPLACEMENTS: ModernReplacement[] = [
   {
     pattern: /import fs from ["']fs["'];/g,
     replacement: 'import fs from "@reliverse/relifso";',
-    description: "Replace Node.js fs with fs-extra",
+    description: "Replace Node.js fs with @reliverse/relifso",
   },
   {
     pattern: /import \* as fs from ["']fs["'];/g,
     replacement: 'import fs from "@reliverse/relifso";',
-    description: "Replace Node.js fs namespace with fs-extra",
+    description: "Replace Node.js fs namespace with @reliverse/relifso",
   },
   {
     pattern: /import \{ promises as fs \} from ["']fs["'];/g,
     replacement: 'import fs from "@reliverse/relifso";',
-    description: "Replace fs.promises with fs-extra",
+    description: "Replace fs.promises with @reliverse/relifso",
   },
 
   // Path

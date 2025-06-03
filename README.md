@@ -1,6 +1,6 @@
 # rse (prev. reliverse cli) — [reliverse.org](https://reliverse.org)
 
-[sponsor](https://github.com/sponsors/blefnk) — [discord](https://discord.gg/Pb8uKbwpsJ) — [repo](https://github.com/reliverse/rse) — [npm](https://npmjs.com/@reliverse/rse) — [introduction](https://blefnk.reliverse.org/blog/my-projects/cli)
+[sponsor](https://github.com/sponsors/blefnk) — [discord](https://discord.gg/Pb8uKbwpsJ) — [github](https://github.com/reliverse/rse) — [npm](https://npmjs.com/@reliverse/rse) — [introduction](https://blefnk.reliverse.org/blog/my-projects/cli)
 
 **@reliverse/rse** is your all-in-one companion for bootstrapping and improving any kind of projects (especially web apps built with frameworks like Next.js) — whether you're kicking off something new or upgrading an existing app. It is also a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.
 
@@ -13,7 +13,7 @@
 - 🔧 **refactor** safely, add popular libs, and keep your codebase happy.
 - ⚙️ **automate** boring setup (eslint, env files, etc) — let the cli handle it.
 - 🏗️ **works great with next.js**, and plays nice with other frameworks too.
-- ⏬ **auto-clones repos**/templates and configures them smartly.
+- ⏬ **auto-clones repos/templates** and configures them smartly.
 - 🔌 **integrate** tools into your codebase. use `create/edit project manually` (or `rse init`).
 - 🤖 **chat with rse ai** or let agentic tools like relinter suggest improvements.
 

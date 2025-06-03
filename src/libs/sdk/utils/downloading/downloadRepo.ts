@@ -1,7 +1,7 @@
 import path, { dirname } from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
-import { rmEnsureDir, setHiddenAttributeOnWindows } from "@reliverse/relifso";
+import { rmEnsureDir, setHiddenAttribute } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 import { exec } from "child_process";
@@ -505,11 +505,11 @@ export async function downloadRepo({
             });
           }
         } else {
-          await setHiddenAttributeOnWindows(path.join(projectPath, ".git"));
+          await setHiddenAttribute(path.join(projectPath, ".git"));
         }
       } else {
         if (preserveGit) {
-          await setHiddenAttributeOnWindows(path.join(projectPath, ".git"));
+          await setHiddenAttribute(path.join(projectPath, ".git"));
         }
       }
     } finally {

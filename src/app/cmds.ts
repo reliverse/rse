@@ -1,5 +1,8 @@
 // 👉 `dler rempts init --cmds`
 
-export async function cmdAuthGenerate() {
-  return (await import("./auth/generate/cmd")).default;
-}
+import { loadCommand } from "@reliverse/rempts";
+
+export const getAuthCmd = async () => await loadCommand("./auth/cmd");
+
+export const getAuthGenerateCmd = async () =>
+  await loadCommand("./auth/generate/cmd");

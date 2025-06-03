@@ -1,12 +1,16 @@
 import { re } from "@reliverse/relico";
 import { relinka } from "@reliverse/relinka";
-import { selectPrompt, inputPrompt } from "@reliverse/rempts";
+import { selectPrompt, inputPrompt, runCmd } from "@reliverse/rempts";
 
 import type { DetectedProject, RseConfig } from "~/libs/sdk/sdk-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
+import { getAuthCmd } from "~/app/cmds";
 import { useLanguine } from "~/libs/sdk/add/add-local/i18n/languine";
 import { envArgImpl } from "~/libs/sdk/env/env-impl";
+import { manageDrizzleSchema } from "~/libs/sdk/init/mm-deprecated/drizzle/manageDrizzleSchema";
+import { handleIntegrations } from "~/libs/sdk/init/mm-deprecated/editor-impl";
+import { manageShadcn } from "~/libs/sdk/init/mm-deprecated/shadcn/shadcn-mod";
 import { deployProject } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/deploy";
 import {
   createCommit,
@@ -31,10 +35,6 @@ import { checkScriptExists } from "~/libs/sdk/utils/pkgJsonHelpers";
 import { askInstallDeps } from "~/libs/sdk/utils/prompts/askInstallDeps";
 import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend";
 
-import { manageDrizzleSchema } from "./drizzle/manageDrizzleSchema";
-import { handleIntegrations } from "./editor-impl";
-import { manageShadcn } from "./shadcn/shadcn-mod";
-
 type ProjectMenuOption =
   | "git-deploy"
   | "languine"
@@ -47,6 +47,7 @@ type ProjectMenuOption =
   | "env"
   | "updater"
   | "i18n"
+  | "better-auth"
   | "exit";
 
 // =============================================
@@ -135,6 +136,11 @@ export async function handleOpenProjectMenu(
     content: depsWarning ? re.bold(depsWarning) : "",
     options: [
       {
+        label: "Generate BetterAuth schema",
+        value: "better-auth",
+        hint: re.dim("better better-auth cli"),
+      },
+      {
         label: "Git and deploy operations",
         value: "git-deploy",
         hint: re.dim("commit and push changes"),
@@ -209,6 +215,23 @@ export async function handleOpenProjectMenu(
 
   // (4) Handle Actions
   switch (action) {
+    case "better-auth": {
+      relinka(
+        "info",
+        "The following args will be passed to the rse auth command:",
+      );
+      relinka("log", `--config ${selectedProject.path}/src/lib/auth.ts`);
+      relinka(
+        "log",
+        `--output ${selectedProject.path}/src/db/schema/user/tables.ts`,
+      );
+      // await handleBetterAuth(selectedProject.path);
+      await runCmd(await getAuthCmd(), [
+        `--config ${selectedProject.path}/src/lib/auth.ts --output ${selectedProject.path}/src/db/schema/user/tables.ts`,
+      ]);
+      break;
+    }
+
     case "git-deploy": {
       // Initialize Github SDK
       const githubResult = await initGithubSDK(

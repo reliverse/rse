@@ -5,7 +5,7 @@ import os from "node:os";
 export const PROJECT_ROOT = path.resolve(process.cwd());
 
 // CLI VERSION AND NAME
-const version= "1.7.1";
+const version= "1.7.3";
 export const cliVersion = version;
 export const cliName = "@reliverse/rse";
 
@@ -37,7 +37,7 @@ export const cliHomeRepos = path.join(cliHomeDir, "repos");
 export const memoryPath = path.join(cliHomeDir, "memory.db");
 export const cliJsrPath = path.join(cliHomeDir, "cli");
 
-export const useLocalhost = true;
+export const useLocalhost = false;
 
 export const DEFAULT_CLI_USERNAME = "johnny911";
 

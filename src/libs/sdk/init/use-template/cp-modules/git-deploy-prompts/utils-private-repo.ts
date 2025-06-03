@@ -1,7 +1,7 @@
 import path from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
-import { setHiddenAttributeOnWindows } from "@reliverse/relifso";
+import { setHiddenAttribute } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 import { simpleGit } from "simple-git";
@@ -129,7 +129,7 @@ export async function archiveExistingRepoContent(
 
       // Set hidden attribute for .git folder on Windows
       const gitFolderPath = path.join(projectPath, ".git");
-      await setHiddenAttributeOnWindows(gitFolderPath);
+      await setHiddenAttribute(gitFolderPath);
 
       relinka("verbose", "Copied .git folder from existing repository");
     } else {

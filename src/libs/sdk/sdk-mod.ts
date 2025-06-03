@@ -84,18 +84,8 @@ export { aiMenu } from "./ai/ai-menu";
 export { useFirecrawl } from "./clone/firecrawl/firecrawl-mod";
 export { runCodemods } from "./cmod/cmod-impl";
 export { envArgImpl } from "./env/env-impl";
-export { showManualBuilderMenu } from "./init/init-impl";
-export {
-  handleProjectSelectionMenu,
-  initMinimalrseProject,
-  showExistingProjectMenu,
-  determineProjectStatus,
-  handleNewProject,
-  handleExistingProject,
-  handleIncompleteProject,
-} from "./init/init-utils";
-export { COLUMN_TYPES } from "./init/manual-mode/deprecated/drizzle/manageDrizzleConstants";
-export { manageDrizzleSchema } from "./init/manual-mode/deprecated/drizzle/manageDrizzleSchema";
+export { COLUMN_TYPES } from "./init/mm-deprecated/drizzle/manageDrizzleConstants";
+export { manageDrizzleSchema } from "./init/mm-deprecated/drizzle/manageDrizzleSchema";
 export {
   detectDatabaseProvider,
   setupDrizzle,
@@ -112,17 +102,16 @@ export {
   renameTableInSchema,
   updateTableNameInIndex,
   addColumnToTable,
-} from "./init/manual-mode/deprecated/drizzle/manageDrizzleSchemaUtils";
-export { handleIntegrations } from "./init/manual-mode/deprecated/editor-impl";
-export { handleOpenProjectMenu } from "./init/manual-mode/deprecated/editor-menu";
+} from "./init/mm-deprecated/drizzle/manageDrizzleSchemaUtils";
+export { handleIntegrations } from "./init/mm-deprecated/editor-impl";
 export {
   updatePackageJson,
   installIntegration,
   removeIntegration,
-} from "./init/manual-mode/deprecated/editor-mod";
-export { INTEGRATION_CONFIGS } from "./init/manual-mode/deprecated/feature-add";
-export { REMOVAL_CONFIGS } from "./init/manual-mode/deprecated/feature-rm";
-export { manageShadcn } from "./init/manual-mode/deprecated/shadcn/shadcn-mod";
+} from "./init/mm-deprecated/editor-mod";
+export { INTEGRATION_CONFIGS } from "./init/mm-deprecated/feature-add";
+export { REMOVAL_CONFIGS } from "./init/mm-deprecated/feature-rm";
+export { manageShadcn } from "./init/mm-deprecated/shadcn/shadcn-mod";
 export {
   initializeProjectConfig,
   setupI18nSupport,

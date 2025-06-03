@@ -10,11 +10,12 @@ rse auth better-auth generate
 
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand, runCmd } from "@reliverse/rempts";
 import { execaCommand } from "execa";
 import MagicString from "magic-string";
 
-import { cmdAuthGenerate } from "~/app/cmds";
+import { getAuthGenerateCmd } from "~/app/cmds";
 
 import { configPath, schemaPath } from "./consts";
 
@@ -31,22 +32,34 @@ const notice = `/**
 
 export default defineCommand({
   meta: {
-    name: "better better-auth cli",
+    name: "auth",
     version: "1.1.2",
   },
   args: defineArgs({
     config: {
       type: "string",
       default: configPath,
+      required: true,
     },
     schema: {
       type: "string",
-      output: schemaPath,
+      default: schemaPath,
+      required: true,
     },
   }),
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   async run({ args }) {
-    await runCmd(await cmdAuthGenerate(), [
+    const configExists = await fs.exists(args.config);
+    if (!configExists) {
+      relinka("error", "Config file does not exist; tried:", args.config);
+      process.exit(1);
+    }
+    const schemaExists = await fs.exists(args.schema);
+    if (!schemaExists) {
+      relinka("error", "Schema file does not exist; tried:", args.schema);
+      process.exit(1);
+    }
+
+    await runCmd(await getAuthGenerateCmd(), [
       `--config ${configPath} --output ${schemaPath}`,
     ]);
 

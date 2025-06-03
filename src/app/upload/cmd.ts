@@ -1,6 +1,6 @@
-import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
+import fs from "node:fs/promises";
 import ora from "ora";
 
 import {
@@ -42,7 +42,10 @@ export default defineCommand({
       ) as string[];
       const validFiles = await Promise.all(
         inputFiles.map(async (filePath: string) => {
-          const exists = await fs.pathExists(filePath);
+          const exists = await fs
+            .access(filePath)
+            .then(() => true)
+            .catch(() => false);
           if (!exists) relinka("error", `File not found: ${filePath}`);
           return exists ? filePath : null;
         }),

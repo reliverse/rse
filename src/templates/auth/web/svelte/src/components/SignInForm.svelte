@@ -1,11 +1,13 @@
 <script lang="ts">
 import { createForm } from "@tanstack/svelte-form";
 import { z } from "zod";
+// @ts-expect-error dler-remove-comment
 import { authClient } from "$lib/auth-client";
+// @ts-expect-error dler-remove-comment
 import { goto } from "$app/navigation";
 
 let { switchToSignUp } = $props<{ switchToSignUp: () => void }>();
-
+   
 const validationSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),

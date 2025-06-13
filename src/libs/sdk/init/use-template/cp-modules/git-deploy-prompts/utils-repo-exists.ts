@@ -1,12 +1,13 @@
+import type { RseConfig } from "@reliverse/cfg";
+
+import { migrateRseConfig } from "@reliverse/cfg";
 import { relinka } from "@reliverse/relinka";
 import { simpleGit } from "simple-git";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { GitModParams } from "~/libs/sdk/sdk-types";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
-import { migrateRseConfig } from "~/libs/sdk/cfg/rc-migrate";
 import { cliName } from "~/libs/sdk/constants";
 import { getEffectiveDir } from "~/libs/sdk/utils/getEffectiveDir";
 import { handleReplacements } from "~/libs/sdk/utils/replacements/reps-mod";

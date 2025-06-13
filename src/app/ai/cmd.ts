@@ -1,3 +1,5 @@
+import { getRseConfigPath } from "@reliverse/cfg";
+import { readRseConfig } from "@reliverse/cfg";
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
 
@@ -7,8 +9,6 @@ import { ensureOpenAIKey } from "~/libs/sdk/ai/ai-impl/ai-auth";
 import { AGENT_NAMES } from "~/libs/sdk/ai/ai-impl/ai-const";
 import { aiAgenticTool } from "~/libs/sdk/ai/ai-impl/ai-tools";
 import { aiMenu } from "~/libs/sdk/ai/ai-menu";
-import { getRseConfigPath } from "~/libs/sdk/cfg/rc-path";
-import { readRseConfig } from "~/libs/sdk/cfg/rc-read";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 

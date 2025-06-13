@@ -3,6 +3,7 @@
 // - `bun dev:mrse --ts`
 // - `bun dev:mrse --jsonc project1 project2 project3`
 
+import { generateRseConfig } from "@reliverse/cfg";
 import path from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
@@ -13,7 +14,6 @@ import { execaCommand } from "execa";
 import { jsonrepair } from "jsonrepair";
 import { loadFile, writeFile, builders } from "magicast";
 
-import { generateRseConfig } from "~/libs/sdk/cfg/rc-create";
 import { UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import {
   downloadFileFromGitHub,

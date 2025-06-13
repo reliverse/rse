@@ -1,11 +1,11 @@
+import type { RseConfig } from "@reliverse/cfg";
+
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 import { generateText } from "ai";
 import { countTokens } from "gpt-tokenizer/model/gpt-4o-mini";
-
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
 import {
   CIRCULAR_TRIGGERS,

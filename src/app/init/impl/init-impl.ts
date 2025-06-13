@@ -1,7 +1,8 @@
+import { getProjectContent } from "@reliverse/cfg";
+
 import type { ShowMenuResult } from "~/libs/sdk/add/add-local/core/types";
 import type { ParamsOmitReli } from "~/libs/sdk/sdk-types";
 
-import { getProjectContent } from "~/libs/sdk/utils/getProjectContent";
 import { setupDevModeIfNeeded } from "~/libs/sdk/utils/testsRuntime";
 
 import {

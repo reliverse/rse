@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { z } from "zod";
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 const { $authClient } = useNuxtApp();
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import type { FormSubmitEvent } from "#ui/types";
 
 const emit = defineEmits(["switchToSignUp"]);
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 const toast = useToast();
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 const loading = ref(false);
 
 const schema = z.object({
@@ -19,7 +19,7 @@ const schema = z.object({
 
 type Schema = z.output<typeof schema>;
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 const state = reactive({
   email: "",
   password: "",
@@ -36,7 +36,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       {
         onSuccess: () => {
           toast.add({ title: "Sign in successful" });
-          // @ts-expect-error dler-remove-comment
+          // @ts-expect-error <dler-remove-comment>
           navigateTo("/dashboard", { replace: true });
         },
         onError: (error) => {

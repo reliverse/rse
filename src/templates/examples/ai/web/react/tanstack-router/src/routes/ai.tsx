@@ -3,12 +3,12 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Send } from "lucide-react";
 import { useRef, useEffect } from "react";
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { Button } from "@/components/ui/button";
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { Input } from "@/components/ui/input";
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 export const Route = createFileRoute("/ai")({
   component: RouteComponent,
 });

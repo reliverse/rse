@@ -1,6 +1,6 @@
 import * as React from "react";
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { cn } from "@/lib/utils";
 
 function Input({ className, type, ...props }: React.ComponentProps<"input">) {

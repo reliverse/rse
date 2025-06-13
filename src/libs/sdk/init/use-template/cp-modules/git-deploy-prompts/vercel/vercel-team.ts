@@ -111,14 +111,12 @@ export async function getVercelTeams(
   const { teams } = res.value;
   return teams
     .filter(
-      // @ts-expect-error TODO: fix ts
-      (team): team is GetTeamsResponseBody["teams"][0] => team.name !== null,
+      (team): team is GetTeamsResponseBody["teams"][0] & { name: string } =>
+        team.name !== null,
     )
     .map((team) => ({
       id: team.id,
-      // @ts-expect-error TODO: fix ts
       slug: team.slug,
-      // @ts-expect-error TODO: fix ts
       name: team.name,
     }));
 }

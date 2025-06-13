@@ -1,11 +1,11 @@
+import type { RseConfig } from "@reliverse/cfg";
+
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { setHiddenAttribute } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 import { ofetch } from "ofetch";
-
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
 import { cliHomeRepos, UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import {

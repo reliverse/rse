@@ -1,11 +1,11 @@
+import type { RseConfig } from "@reliverse/cfg";
+
+import { updateRseConfig } from "@reliverse/cfg";
+import { getRseConfigPath } from "@reliverse/cfg";
+import { readRseConfig } from "@reliverse/cfg";
 import { relinka } from "@reliverse/relinka";
 import { ofetch } from "ofetch";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
-
-import { getRseConfigPath } from "~/libs/sdk/cfg/rc-path";
-import { readRseConfig } from "~/libs/sdk/cfg/rc-read";
-import { updateRseConfig } from "~/libs/sdk/cfg/rc-update";
 import { UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import { REPO_TEMPLATES } from "~/libs/sdk/utils/projectRepository";
 

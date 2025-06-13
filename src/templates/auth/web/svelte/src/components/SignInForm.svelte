@@ -1,9 +1,9 @@
 <script lang="ts">
 import { createForm } from "@tanstack/svelte-form";
 import { z } from "zod";
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { authClient } from "$lib/auth-client";
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { goto } from "$app/navigation";
 
 let { switchToSignUp } = $props<{ switchToSignUp: () => void }>();

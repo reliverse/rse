@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */ // dler-remove-line
+/* eslint-disable @typescript-eslint/no-unused-vars */ // <dler-remove-line>
 import { cancel, isCancel, log, password, spinner } from "@clack/prompts";
 import fs from "@reliverse/relifso";
 import { consola } from "consola";

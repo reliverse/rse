@@ -1,13 +1,12 @@
-import { selectPrompt } from "@reliverse/rempts";
-import { deleteLastLine } from "@reliverse/rempts";
+import { detectProject } from "@reliverse/cfg";
+import { runCmd, selectPrompt } from "@reliverse/rempts";
 import { generate } from "random-words";
 
 import type { ParamsOmitSkipPN } from "~/libs/sdk/sdk-types";
 
+import { getWebCmd } from "~/app/cmds";
 import { showManualBuilderMenu } from "~/app/init/impl/init-impl";
-import { handleOpenProjectMenu } from "~/app/init/impl/mm-deprecated/editor-menu";
 import { aiMenu } from "~/libs/sdk/ai/ai-menu";
-import { detectProject } from "~/libs/sdk/cfg/rc-detect";
 import { cliJsrPath, UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import {
   ad,
@@ -20,7 +19,6 @@ import { showCloneProjectMenu } from "~/libs/sdk/init/use-template/cp-modules/cl
 import { showEndPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showStartEndPrompt";
 import { showDevToolsMenu } from "~/libs/sdk/toolbox/toolbox-impl";
 import { showNativeCliMenu } from "~/libs/sdk/utils/native-cli/nc-mod";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import {
   showNewProjectMenu,
   showOpenProjectMenu,
@@ -36,21 +34,22 @@ export async function app(params: ParamsOmitSkipPN) {
     : (config.projectName ?? UNKNOWN_VALUE);
 
   if (!isDev) {
-    const rootProject = await detectProject(cwd, isDev);
-    if (rootProject) {
-      const updatedMemory = await getReliverseMemory();
-      await handleOpenProjectMenu(
-        [rootProject],
-        isDev,
-        updatedMemory,
-        cwd,
-        true,
-        config,
-      );
-      await showEndPrompt();
-      deleteLastLine();
-      process.exit(0);
-    }
+    await detectProject(cwd, isDev);
+    // Commented out to always show main menu
+    // if (rootProject) {
+    //   const updatedMemory = await getReliverseMemory();
+    //   await handleOpenProjectMenu(
+    //     [rootProject],
+    //     isDev,
+    //     updatedMemory,
+    //     cwd,
+    //     true,
+    //     config,
+    //   );
+    //   await showEndPrompt();
+    //   deleteLastLine();
+    //   process.exit(0);
+    // }
   }
 
   const options = await getMainMenuOptions(cwd, isDev, mrse);
@@ -112,7 +111,17 @@ export async function app(params: ParamsOmitSkipPN) {
     });
   } else if (mainMenuOption === "ai") {
     await aiMenu(config, false, memory);
+  } else if (mainMenuOption === "web-ui") {
+    await showWebUiMenu({ isDev });
   }
 
   await showEndPrompt();
+}
+
+export async function showWebUiMenu({
+  isDev,
+}: {
+  isDev: boolean;
+}) {
+  await runCmd(await getWebCmd(), [`--dev ${isDev}`]);
 }

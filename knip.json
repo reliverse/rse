@@ -2,18 +2,13 @@
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": [
     ".config/**/*.ts",
-    "eslint.config.js",
-    "build.config.ts",
-    "addons/**/*.ts",
     "src/mod.ts",
     "src/app/**/cmd.ts",
     "src/libs/**/*.ts",
     "src/templates/**/*.ts",
-    "src/templates/**/*.tsx",
-    "src/providers/better-t-stack/**/*.ts",
-    "src/providers/better-t-stack/**/*.tsx"
+    "src/templates/**/*.tsx"
   ],
-  "project": ["eslint.config.js", "src/**/*.ts"],
+  "project": ["src/**/*.ts"],
   "ignoreExportsUsedInFile": true,
   "ignore": [
     "tests-runtime/",
@@ -22,11 +17,10 @@
     "dist-libs/",
     "relinter-test.ts",
     "src/templates/**/*.ts",
-    "src/templates/**/*.tsx",
-    "src/providers/better-t-stack/**/*.ts",
-    "src/providers/better-t-stack/**/*.tsx"
+    "src/templates/**/*.tsx"
   ],
   "ignoreBinaries": [
+    "build",
     "code",
     "db:push",
     "brew",

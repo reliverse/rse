@@ -1,3 +1,8 @@
+import type { ProjectFramework } from "@reliverse/cfg";
+
+import { getOrCreateRseConfig } from "@reliverse/cfg";
+import { detectProjectsWithRseConfig } from "@reliverse/cfg";
+import { getProjectContent, type RequiredProjectContent } from "@reliverse/cfg";
 import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
 import { ensuredir } from "@reliverse/relifso";
@@ -7,7 +12,6 @@ import { nextStepsPrompt, selectPrompt } from "@reliverse/rempts";
 import { simpleGit, type SimpleGit } from "simple-git";
 
 import type { ShowMenuResult } from "~/libs/sdk/add/add-local/core/types";
-import type { ProjectFramework } from "~/libs/sdk/cfg/cfg-types";
 
 import { checkMissingDependencies } from "~/libs/sdk/add/add-local/core/deps";
 import { getPromptContent } from "~/libs/sdk/add/add-local/core/prompts";
@@ -16,16 +20,10 @@ import {
   updateProjectTemplateDate,
   type TemplateUpdateInfo,
 } from "~/libs/sdk/add/add-local/core/templates";
-import { detectProjectsWithRseConfig } from "~/libs/sdk/cfg/rc-detect";
-import { getOrCreateRseConfig } from "~/libs/sdk/cfg/rc-mod";
 import { promptGitDeploy } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/gdp-mod";
 import { initializeGitRepo } from "~/libs/sdk/init/use-template/cp-modules/git-deploy-prompts/git";
 import { createPackageJSON } from "~/libs/sdk/utils/createPackageJSON";
 import { createTSConfig } from "~/libs/sdk/utils/createTSConfig";
-import {
-  getProjectContent,
-  type RequiredProjectContent,
-} from "~/libs/sdk/utils/getProjectContent";
 import { askAppOrLib } from "~/libs/sdk/utils/prompts/askAppOrLib";
 import { askInstallDeps } from "~/libs/sdk/utils/prompts/askInstallDeps";
 import { askOpenInIDE } from "~/libs/sdk/utils/prompts/askOpenInIDE";

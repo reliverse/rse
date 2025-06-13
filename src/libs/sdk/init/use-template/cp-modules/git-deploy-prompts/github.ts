@@ -1,8 +1,8 @@
+import type { RseConfig } from "@reliverse/cfg";
+
 import { RequestError } from "@octokit/request-error";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
-
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
 import { UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import { type InstanceGithub } from "~/libs/sdk/utils/instanceGithub";

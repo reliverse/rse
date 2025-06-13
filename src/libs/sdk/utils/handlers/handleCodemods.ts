@@ -1,7 +1,8 @@
+import type { RseConfig } from "@reliverse/cfg";
+
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, multiselectPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { MonorepoType } from "~/libs/sdk/sdk-types";
 
 import { cliConfigJsonc } from "~/libs/sdk/constants";

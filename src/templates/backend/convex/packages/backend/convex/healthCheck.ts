@@ -1,4 +1,4 @@
-// @ts-expect-error dler-remove-this-comment
+// @ts-expect-error <dler-remove-comment>
 import { query } from "./_generated/server";
 
 export const get = query({

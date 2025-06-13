@@ -3,16 +3,16 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { z } from "zod";
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { authClient } from "@/lib/auth-client";
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import Loader from "./loader";
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { Button } from "./ui/button";
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { Input } from "./ui/input";
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { Label } from "./ui/label";
 
 export default function SignInForm({

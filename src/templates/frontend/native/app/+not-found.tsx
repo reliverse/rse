@@ -1,7 +1,7 @@
 import { Link, Stack } from "expo-router";
 import { Text } from "react-native";
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { Container } from "@/components/container";
 
 export default function NotFoundScreen() {

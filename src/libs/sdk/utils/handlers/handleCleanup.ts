@@ -1,3 +1,8 @@
+// TODO: move this implementation to @reliverse/dler's codebase
+
+import type { BaseConfig } from "@reliverse/cfg";
+
+import { readRseConfig } from "@reliverse/cfg";
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
@@ -8,9 +13,6 @@ import {
 } from "@reliverse/rempts";
 import { destr } from "destr";
 
-import type { BaseConfig } from "~/libs/sdk/sdk-types";
-
-import { readRseConfig } from "~/libs/sdk/cfg/rc-read";
 import { removeComments } from "~/libs/sdk/utils/codemods/removeComments";
 import { getUnusedDependencies } from "~/libs/sdk/utils/codemods/removeUnusedDeps";
 

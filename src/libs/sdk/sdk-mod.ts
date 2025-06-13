@@ -258,7 +258,6 @@ export { removeComments } from "./utils/codemods/removeComments";
 export { getUnusedDependencies } from "./utils/codemods/removeUnusedDeps";
 export { replaceImportSymbol } from "./utils/codemods/replaceImportSymbol";
 export { replaceWithModern } from "./utils/codemods/replaceWithModern";
-export { getBiomeConfig } from "./utils/configHandler";
 export { createPackageJSON } from "./utils/createPackageJSON";
 export { createTSConfig } from "./utils/createTSConfig";
 export { decide } from "./utils/decideHelper";
@@ -271,12 +270,12 @@ export { downloadRepo } from "./utils/downloading/downloadRepo";
 export { handleDownload } from "./utils/downloading/handleDownload";
 export { getEffectiveDir } from "./utils/getEffectiveDir";
 export { pm } from "./utils/getPackageManager";
-export { getProjectContent } from "./utils/getProjectContent";
+export { getProjectContent } from "@reliverse/cfg";
 export { uninstallDependencies } from "./utils/handlers/dependencies";
 export {
   generateConfigFiles,
   generateProjectConfigs,
-} from "./utils/handlers/generateProjectConfigs";
+} from "@reliverse/cfg";
 export { handleCleanup } from "./utils/handlers/handleCleanup";
 export { handleCodemods } from "./utils/handlers/handleCodemods";
 export { isVSCodeInstalled } from "./utils/handlers/isAppInstalled";
@@ -321,55 +320,9 @@ export { askAppOrLib } from "./utils/prompts/askAppOrLib";
 export { askInstallDeps } from "./utils/prompts/askInstallDeps";
 export { askOpenInIDE } from "./utils/prompts/askOpenInIDE";
 export { askProjectName } from "./utils/prompts/askProjectName";
-export { askRseConfigType } from "./utils/prompts/askRseConfigType";
 export { askUsernameFrontend } from "./utils/prompts/askUsernameFrontend";
 export { askUsernameGithub } from "./utils/prompts/askUsernameGithub";
 export { shouldInitGit } from "./utils/prompts/shouldInitGit";
-export {
-  DEFAULT_CONFIG,
-  PROJECT_FRAMEWORK_FILES,
-} from "./cfg/default";
-export {
-  writeRseConfig,
-  createRseConfig,
-  generateRseConfig,
-} from "./cfg/rc-create";
-export {
-  getDefaultRseConfig,
-  generateDefaultRulesForProject,
-} from "./cfg/rc-default";
-export {
-  detectProjectFramework,
-  getPackageJson,
-  getPackageJsonSafe,
-  detectProject,
-  detectProjectsWithRseConfig,
-  detectFeatures,
-} from "./cfg/rc-detect";
-export { injectSectionComments } from "./cfg/rc-inject";
-export { migrateRseConfig } from "./cfg/rc-migrate";
-export { getRseConfigPath } from "./cfg/rc-path";
-export {
-  readRseTs,
-  readRseConfig,
-} from "./cfg/rc-read";
-export {
-  repairAndParseJSON,
-  fixLineByLine,
-  parseAndFixRseConfig,
-} from "./cfg/rc-repair";
-export {
-  loadrse,
-  watchrse,
-} from "./cfg/rc-unstable";
-export { mergeWithDefaults } from "./cfg/rc-update";
-export {
-  cleanGitHubUrl,
-  objectToCodeString,
-  updateTsConfigInclude,
-  getBackupAndTempPaths,
-  atomicWriteFile,
-} from "./cfg/rc-utils";
 export {
   getReliverseMemory,
   updateReliverseMemory,
@@ -431,8 +384,3 @@ export {
   RSE_SCHEMA_DEV,
   RSE_SCHEMA_URL,
 } from "./constants";
-export {
-  rseSchema,
-  generateJsonSchema,
-  generateSchemaFile,
-} from "./cfg/rc-schema";

@@ -1,8 +1,9 @@
+import type { RseConfig } from "@reliverse/cfg";
+
 import { re } from "@reliverse/relico";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { DeploymentService } from "~/libs/sdk/sdk-types";
 import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
 import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";

@@ -1,3 +1,5 @@
+import type { RseConfig } from "@reliverse/cfg";
+
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
@@ -10,8 +12,6 @@ import { eq } from "drizzle-orm";
 import { ofetch } from "ofetch";
 import open from "open";
 import { getRandomValues } from "uncrypto";
-
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
 import { db } from "~/libs/sdk/db/client";
 import { encrypt, decrypt } from "~/libs/sdk/db/config";

@@ -11,12 +11,12 @@ import {
   VueQueryPlugin,
 } from "@tanstack/vue-query";
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 export default defineNuxtPlugin((nuxt) => {
-  // @ts-expect-error dler-remove-comment
+  // @ts-expect-error <dler-remove-comment>
   const vueQueryState = useState<DehydratedState | null>("vue-query");
 
-  // @ts-expect-error dler-remove-comment
+  // @ts-expect-error <dler-remove-comment>
   const toast = useToast();
 
   const queryClient = new QueryClient({
@@ -34,12 +34,14 @@ export default defineNuxtPlugin((nuxt) => {
 
   nuxt.vueApp.use(VueQueryPlugin, options);
 
+  // @ts-expect-error <dler-remove-comment>
   if (import.meta.server) {
     nuxt.hooks.hook("app:rendered", () => {
       vueQueryState.value = dehydrate(queryClient);
     });
   }
 
+  // @ts-expect-error <dler-remove-comment>
   if (import.meta.client) {
     nuxt.hooks.hook("app:created", () => {
       hydrate(queryClient, vueQueryState.value);

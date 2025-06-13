@@ -1,3 +1,5 @@
+import type { RseConfig } from "@reliverse/cfg";
+
 import { relinka } from "@reliverse/relinka";
 import {
   selectPrompt,
@@ -6,7 +8,6 @@ import {
   multiselectPrompt,
 } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import { getUserPkgManager } from "~/libs/sdk/utils/dependencies/getUserPkgManager";

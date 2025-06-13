@@ -1,3 +1,4 @@
+import { getProjectContent } from "@reliverse/cfg";
 import { re } from "@reliverse/relico";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt, inputPrompt, runCmd } from "@reliverse/rempts";
@@ -26,7 +27,6 @@ import {
   convertDatabaseProvider,
   convertPrismaToDrizzle,
 } from "~/libs/sdk/utils/codemods/convertDatabase";
-import { getProjectContent } from "~/libs/sdk/utils/getProjectContent";
 import { handleCleanup } from "~/libs/sdk/utils/handlers/handleCleanup";
 import { handleCodemods } from "~/libs/sdk/utils/handlers/handleCodemods";
 import { initGithubSDK } from "~/libs/sdk/utils/instanceGithub";

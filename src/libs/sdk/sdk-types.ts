@@ -1,4 +1,5 @@
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types.js";
+import type { RseConfig } from "@reliverse/cfg";
+
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 export type {
@@ -9,12 +10,12 @@ export type {
 } from "./utils/projectRepository.js";
 export type { InstanceVercel } from "./utils/instanceVercel.js";
 export type { InstanceGithub } from "./utils/instanceGithub.js";
-export type { RequiredProjectContent } from "./utils/getProjectContent.js";
+export type { RequiredProjectContent } from "@reliverse/cfg";
 export type { DownloadResult } from "./utils/downloading/downloadRepo.js";
 export type {
   IterableError,
   DetectedProject,
-} from "./cfg/rc-types.js";
+} from "@reliverse/cfg";
 export type { ReliverseMemory } from "./utils/schemaMemory.js";
 export type {
   PackageManager,
@@ -38,7 +39,7 @@ export type {
   ProjectFramework,
   ProjectArchitecture,
   RelinterConfirm,
-} from "./cfg/cfg-types.js";
+} from "@reliverse/cfg";
 export type { TemplateUpdateInfo } from "./add/add-local/core/templates.js";
 export type { ShowMenuResult } from "./add/add-local/core/types.js";
 export type { UploadFile } from "./upload/providers/providers-mod.js";
@@ -168,48 +169,6 @@ export type MonorepoType =
   | "bun-workspaces"
   | "pnpm-workspaces";
 
-// Return type explicitly first
-export type BiomeConfigResult = {
-  lineWidth?: number;
-  indentStyle?: "space" | "tab";
-  indentWidth?: 2 | 4 | 8;
-  quoteMark?: "single" | "double";
-  semicolons?: boolean;
-  trailingComma?: boolean;
-} | null;
-
-export type BiomeConfig = BaseConfig & {
-  $schema: string;
-  organizeImports: {
-    enabled: boolean;
-  };
-  formatter: {
-    enabled: boolean;
-    lineWidth?: number;
-    indentStyle?: "space" | "tab";
-    indentWidth?: 2 | 4 | 8;
-  };
-  linter: {
-    enabled: boolean;
-    rules?: {
-      recommended?: boolean;
-    };
-  };
-  javascript?: {
-    formatter: {
-      trailingComma?: "all" | "es5" | "none";
-      quoteStyle?: "single" | "double";
-      semicolons?: "always" | "never";
-    };
-  };
-};
-
-// Common type for all configurations
-export interface BaseConfig {
-  version: string;
-  generatedAt: string;
-}
-
 export interface IntegrationConfig {
   name: string;
   dependencies: string[];
@@ -311,14 +270,4 @@ export interface ModernReplacement {
   pattern: RegExp;
   replacement: string;
   description: string;
-}
-
-export interface VSCodeSettings {
-  "editor.formatOnSave"?: boolean;
-  "editor.defaultFormatter"?: string;
-  "editor.codeActionsOnSave"?: Record<string, string>;
-  "eslint.ignoreUntitled"?: boolean;
-  "eslint.rules.customizations"?: { rule: string; severity: string }[];
-  "markdownlint.config"?: Record<string, boolean>;
-  "typescript.enablePromptUseWorkspaceTsdk"?: boolean;
 }

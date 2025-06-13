@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */ // dler-remove-line
+/* eslint-disable @typescript-eslint/no-unused-vars */ // <dler-remove-line>
 import fs from "@reliverse/relifso";
 import path from "node:path";
 

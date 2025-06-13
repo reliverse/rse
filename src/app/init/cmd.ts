@@ -1,3 +1,4 @@
+import { getOrCreateRseConfig } from "@reliverse/cfg";
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
@@ -5,7 +6,6 @@ import { defineCommand } from "@reliverse/rempts";
 
 import { showManualBuilderMenu } from "~/app/init/impl/init-impl";
 import { initMinimalrseProject } from "~/app/init/impl/init-utils";
-import { getOrCreateRseConfig } from "~/libs/sdk/cfg/rc-mod";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
 import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";

@@ -1,11 +1,11 @@
+import type { RseConfig } from "@reliverse/cfg";
+
+import { detectProjectsWithRseConfig } from "@reliverse/cfg";
 import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
 import { isBunPM, isBunRuntime } from "@reliverse/runtime";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
-
-import { detectProjectsWithRseConfig } from "~/libs/sdk/cfg/rc-detect";
 import { cliJsrPath } from "~/libs/sdk/constants";
 
 export type MainMenuChoice =
@@ -16,7 +16,8 @@ export type MainMenuChoice =
   | "native-cli"
   | "manual"
   | "exit"
-  | "ai";
+  | "ai"
+  | "web-ui";
 
 interface MainMenuOption {
   label: string;
@@ -58,6 +59,11 @@ export async function getMainMenuOptions(
       label: "✨ Create a brand new project",
       hint: multiConfigMsg,
       value: "create",
+    },
+    {
+      label: "🖼️  Open rse web ui",
+      hint: "(experimental)",
+      value: "web-ui",
     },
     {
       label: "🔬 Create/edit project manually",

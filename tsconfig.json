@@ -25,12 +25,14 @@
     "esModuleInterop": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
+    "noPropertyAccessFromIndexSignature": false,
+    "forceConsistentCasingInFileNames": true
   },
   "include": [
     "**/*.ts",
     "**/*.js",
     ".*/**/*.ts",
+    "src/app/web/**/*.tsx",
     "src/templates/**/*.tsx",
     "src/templates/**/*.mjs"
   ],

@@ -1,3 +1,4 @@
+import type { RseConfig } from "@reliverse/cfg";
 import type { SimpleGit } from "simple-git";
 
 import path from "@reliverse/pathkit";
@@ -7,7 +8,6 @@ import { relinka } from "@reliverse/relinka";
 import { inputPrompt, selectPrompt, deleteLastLine } from "@reliverse/rempts";
 import { simpleGit } from "simple-git";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { GitModParams } from "~/libs/sdk/sdk-types";
 import type { InstanceGithub } from "~/libs/sdk/utils/instanceGithub";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";

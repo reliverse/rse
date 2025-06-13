@@ -1,3 +1,5 @@
+import type { RseConfig } from "@reliverse/cfg";
+
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
@@ -5,7 +7,6 @@ import { destr } from "destr";
 import { readPackageJSON } from "pkg-types";
 import { glob } from "tinyglobby";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { ProjectConfigReturn } from "~/libs/sdk/sdk-types";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
 

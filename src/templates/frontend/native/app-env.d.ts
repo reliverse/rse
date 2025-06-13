@@ -1,2 +1,2 @@
-// @ts-expect-error dler-remove-this-comment
+// @ts-expect-error <dler-remove-comment>
 /// <reference types="nativewind/types" />

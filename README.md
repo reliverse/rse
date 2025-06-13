@@ -1,40 +1,25 @@
 # rse (prev. reliverse cli) — [reliverse.org](https://reliverse.org)
 
+> **@reliverse/rse** is your all-in-one daily companion for bootstrapping and improving any kind of projects (especially web apps built with frameworks like Next.js) — whether you're kicking off something new or upgrading an existing app. It is also a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.
+
 [sponsor](https://github.com/sponsors/blefnk) — [discord](https://discord.gg/Pb8uKbwpsJ) — [github](https://github.com/reliverse/rse) — [npm](https://npmjs.com/@reliverse/rse) — [introduction](https://blefnk.reliverse.org/blog/my-projects/cli)
 
-**@reliverse/rse** is your all-in-one companion for bootstrapping and improving any kind of projects (especially web apps built with frameworks like Next.js) — whether you're kicking off something new or upgrading an existing app. It is also a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.
+## features
 
-## what it can do
-
-- 🦾 **superapp for devs.** one cli, tons of features. spin up, refactor, deploy, ai — all in one place.
-- 🚀 **start new or load up** templates in seconds.
-- 🌐 **push** to github, deploy to vercel — all in one go.
-- 🤝 **different providers.** don't like the recommended `rse-stack`? launch `rse` and choose `better-t-stack` or any other provider for your project bootstrap. rse won't mind (promise). [learn more](https://reliverse.org/rse/providers).
-- 🔧 **refactor** safely, add popular libs, and keep your codebase happy.
-- ⚙️ **automate** boring setup (eslint, env files, etc) — let the cli handle it.
-- 🏗️ **works great with next.js**, and plays nice with other frameworks too.
-- ⏬ **auto-clones repos/templates** and configures them smartly.
-- 🔌 **integrate** tools into your codebase. use `create/edit project manually` (or `rse init`).
-- 🤖 **chat with rse ai** or let agentic tools like relinter suggest improvements.
-
-### stack providers
-
-the main principle on which the rse ecosystem stands is collaboration and creating the most convenient dx possible. the more friends we have, the better our projects become. that's why rse doesn't strive to be the only one—rse just strives to be really useful. the usefulness of rse is that you don't need to install many different tools to do many different things. rse aims to become an all-in-one tool that runs the tools best suited for your many tasks.
-
-that's why rse gives you the opportunity to use not only its native rse-stack for bootstrapping your project, but also the stacks of our good friends. here's what you can choose from after you click `create a brand new project`:
-
-- ✅ [rse-stack](https://reliverse.org/rse/providers/rse-stack) ([donate](https://github.com/sponsors/blefnk))
-- 🏗️ [better-t-stack](https://reliverse.org/rse/providers/better-t-stack) ([donate](https://github.com/sponsors/AmanVarshney01))
-
-> want to add your/someone else's cli? please open a pr or [create an issue](https://github.com/rse/rse/issues/new).
-
-by choosing a stack other than rse-stack, you will still have access to all the features provided by rse—such as pushing to github, deploying to vercel, further updating your bootstrapped project, and so on.
-
-**legend**:
-
-- ✅ well tested
-- 🏗️ not well tested yet
-- 🔜 coming soon
+- 🦾 **superapp for devs**: one cli, tons of features. spin up, refactor, deploy, ai — all in one place.
+- 🚀 **start new or load up**: templates in seconds.
+- 🌐 **all in one go**: bootstrapping, pushing to github, deploying to vercel, and more.
+- 😉 **bootstrap modes**: clone some already existing `template`, or build a new project from scratch with preferred `stack`.
+- 😊 **different templates**: select specific template (from the list or by providing a custom link to a github repo) or ask rse to narrow the list to templates which contain your prefferences.
+- 🤝 **different stack providers**: `reliverse-stack`, `better-t-stack` (and more coming soon). you have a freedom to use any provider for your project bootstrap.
+- 😜 **not limited to web apps**: you can bootstrap any kind of project — web/mobile/desktop apps, npm/jsr libraries (incl. shadcn-based component libraries), cli tools, vscode/browser/eslint extensions, better-auth/eslint plugins, etc. everything can be bootstrapped as a single repo or monorepo. (please note: at the moment, not everything described in this list point is fully implemented, but it's coming soon)
+- 😋 **better better-auth cli**: use `rse better auth` to use improved version of [better-auth cli](https://better-auth.com/docs/concepts/cli), which is more stable and natively works with bun, thanks to [@reliverse/rempts](https://github.com/reliverse/rempts).
+- 🔧 **refactor safely**: add popular libs, and keep your codebase happy.
+- ⚙️ **automate**: boring setup (eslint, env files, etc) — let the cli handle it.
+- 🏗️ **works great with next.js**: plays well with other frameworks too.
+- ⏬ **auto-clones repos/templates**: and configures them smartly.
+- 🔌 **integrate**: tools into your codebase. use `create/edit project manually` (or `rse init`).
+- 🤖 **built-in local reliverse ai**: chat with terminal version of [reliverse ai](https://reliverse.org) (use your provider's api, or 🔜 ollama, or 🔜 reliverse.org api), or ask it to use agentic tools, like relinter (an ai-based alternative to eslint) which suggests improvements to your codebase (🔜 reliverse ai then can apply the changes based on the generated suggestions file). follows rules from the dirs like `.cursor/rules`, and the files like `.config/rse.ts`.
 
 ## getting started
 
@@ -48,7 +33,7 @@ make sure you have git, node.js, and bun/pnpm/yarn/npm installed.
    bun i -g @reliverse/rse
    ```
 
-   **or update:**
+   **or update**:
 
    ```sh
    rse update
@@ -125,6 +110,42 @@ from bootstrapping projects to ai superpowers — here's what rse cli can do.
 bun add @reliverse/rse-sdk
 ```
 
+## stack providers
+
+the main principle on which the rse ecosystem stands is collaboration and creating the most convenient dx possible. the more friends we have, the better our projects become. that's why rse doesn't strive to be the only one—rse just strives to be really useful. the usefulness of rse is that you don't need to install many different tools to do many different things. rse aims to become an all-in-one tool that runs the tools best suited for your many tasks.
+
+that's why rse gives you the opportunity to use not only its native reliverse-stack for bootstrapping your project, but also the stacks of our good friends. here's what you can choose from after you click `create a brand new project`:
+
+- ✅ [reliverse-stack](https://reliverse.org/rse/providers/reliverse-stack) ([donate](https://github.com/sponsors/blefnk)) — a narrow collection of bootstrap options, especially a great choice for beginners who do not yet understand what options are really the best for them.
+- 🏗️ [better-t-stack](https://reliverse.org/rse/providers/better-t-stack) ([donate](https://github.com/sponsors/AmanVarshney01)) — a comprehensive collection of different bootstrap options.
+- 🔜 [shadcn](https://ui.shadcn.com) — one-click project setup, automated actions described in the shadcn/ui docs. if shadcn already detected in your project, rse will display you a multi-select prompt what components you want to install (only displayed components which are not already installed).
+- 🔜 **remote stacks**: any repo, which contains `.config/dler.ts` and `.config/*-dler-pack/*-mod.ts`, will be available for use as a stack. (see [reliverse.org/rse/stacks](https://reliverse.org/rse/stacks) to apply your own or someone else's open-source stack)
+
+(get bonus perks on rse and [reliverse.org](https://reliverse.org) by donating to the creators of the stacks, each stack gives its own perks)
+
+> want to add your/someone else's cli? please open a pr or [create an issue](https://github.com/rse/rse/issues/new) or apply on [reliverse.org/rse/stacks](https://reliverse.org/rse/stacks). requested stack will be packed with [`dler pack`](https://github.com/reliverse/dler) and will be available for anyone to use.
+
+by choosing a stack other than reliverse-stack, you will still have access to all the features provided by rse—such as pushing to github, deploying to vercel, further updating your bootstrapped project, and so on.
+
+**legend**:
+
+- ✅ well tested
+- 🏗️ recently added, not well tested yet
+- 🔜 coming soon
+
+## templates
+
+similar to stack providers, rse has a list of templates, which you can choose from (note: not everything is integrated yet).
+
+- ✅ [relivator](https://github.com/blefnk/relivator)
+- ✅ [versator](https://github.com/blefnk/versator)
+- 🔜 [nexfaster](https://github.com/rudrodip/nexfaster)
+- 🔜 [chat-sdk](https://github.com/vercel/ai-chatbot)
+- 🔜 [chat0](https://github.com/senbo1/chat0)
+- 🔜 [nuxt.new](https://nuxt.new)
+- 🔜 [react-tanstarter](https://github.com/dotnize/react-tanstarter)
+- 🔜 more free and paid templates coming soon (see [reliverse.org/rse/templates](https://reliverse.org/rse/templates) to apply your own template or someone else's open-source template)
+
 ## contribute, please 😽
 
 - everything you see in rse so far is **built by one person** ([@blefnk nazar kornienko](https://github.com/blefnk)) — with love, caffeine, and way too many terminal tabs.
@@ -189,6 +210,10 @@ rse cli
 - that's it. you're amazing.
 
 thanks for being part of this!
+
+## todo
+
+- [ ] call `applyMagicSpells()` in the end of bootstrapping packed by `dler pack` templates
 
 ## shoutout 😘
 

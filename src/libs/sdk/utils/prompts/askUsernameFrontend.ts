@@ -1,9 +1,9 @@
+import type { RseConfig } from "@reliverse/cfg";
+
+import { updateRseConfig } from "@reliverse/cfg";
 import { re } from "@reliverse/relico";
 import { inputPrompt, deleteLastLine } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
-
-import { updateRseConfig } from "~/libs/sdk/cfg/rc-update";
 import { DEFAULT_CLI_USERNAME } from "~/libs/sdk/constants";
 
 // TODO: make it reliverse memory-based again instead of rse config-based

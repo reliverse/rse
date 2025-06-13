@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */ // dler-remove-line
+/* eslint-disable @typescript-eslint/no-unused-vars */ // <dler-remove-line>
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import React, { forwardRef } from "react";
 import { Pressable, StyleSheet } from "react-native";

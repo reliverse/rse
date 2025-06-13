@@ -1,16 +1,17 @@
+import type { ProjectCategory, RseConfig } from "@reliverse/cfg";
+
+import { detectProjectsWithRseConfig } from "@reliverse/cfg";
 import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { selectPrompt } from "@reliverse/rempts";
 
-import type { ProjectCategory, RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { AppParams } from "~/libs/sdk/sdk-types";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import { handleOpenProjectMenu } from "~/app/init/impl/mm-deprecated/editor-menu";
-import { detectProjectsWithRseConfig } from "~/libs/sdk/cfg/rc-detect";
 import { endTitle, UNKNOWN_VALUE } from "~/libs/sdk/constants";
 import { getRandomMessage } from "~/libs/sdk/db/messages";
 import { createMobileProject } from "~/libs/sdk/init/use-template/cp-mod";

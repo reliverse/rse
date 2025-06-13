@@ -1,3 +1,9 @@
+import type {
+  ProjectArchitecture,
+  ProjectSubcategory,
+  RseConfig,
+} from "@reliverse/cfg";
+
 import { re } from "@reliverse/relico";
 import { relinka } from "@reliverse/relinka";
 import {
@@ -6,11 +12,6 @@ import {
   multiselectPrompt,
 } from "@reliverse/rempts";
 
-import type {
-  ProjectArchitecture,
-  ProjectSubcategory,
-  RseConfig,
-} from "~/libs/sdk/cfg/cfg-types";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import { endTitle, UNKNOWN_VALUE } from "~/libs/sdk/constants";

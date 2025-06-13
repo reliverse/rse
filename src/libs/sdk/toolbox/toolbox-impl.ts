@@ -1,9 +1,10 @@
+import type { RseConfig } from "@reliverse/cfg";
+
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, selectPrompt } from "@reliverse/rempts";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 import type { ParamsOmitReli } from "~/libs/sdk/sdk-types";
 import type { RepoOption } from "~/libs/sdk/utils/projectRepository";
 import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";

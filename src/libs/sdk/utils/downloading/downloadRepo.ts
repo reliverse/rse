@@ -1,3 +1,4 @@
+import { getRseConfigPath, type RseConfig } from "@reliverse/cfg";
 import path, { dirname } from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
@@ -13,9 +14,6 @@ import { simpleGit } from "simple-git";
 import { extract } from "tar";
 import { promisify } from "util";
 
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
-
-import { getRseConfigPath } from "~/libs/sdk/cfg/rc-path";
 import {
   cliConfigJsonc,
   cliConfigTs,

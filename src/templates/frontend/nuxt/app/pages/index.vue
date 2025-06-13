@@ -1,5 +1,5 @@
 <script setup lang="ts">
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 const { $orpc } = useNuxtApp();
 import { useQuery } from "@tanstack/vue-query";
 

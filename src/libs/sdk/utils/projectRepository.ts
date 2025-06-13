@@ -1,3 +1,4 @@
+import type { rseSchema } from "@reliverse/cfg";
 import type { Static } from "@sinclair/typebox";
 
 import path from "@reliverse/pathkit";
@@ -10,7 +11,6 @@ import { Value } from "@sinclair/typebox/value";
 import { parseJSONC } from "confbox";
 import { ofetch } from "ofetch";
 
-import type { rseSchema } from "~/libs/sdk/cfg/rc-schema";
 import type { VSCodeRepoOption } from "~/libs/sdk/providers/reliverse-stack/rs-impl";
 
 import { cliHomeRepos } from "~/libs/sdk/constants";

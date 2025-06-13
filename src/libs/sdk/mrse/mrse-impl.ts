@@ -1,10 +1,10 @@
+import { getOrCreateRseConfig } from "@reliverse/cfg";
 import path from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt } from "@reliverse/rempts";
 
-import { getOrCreateRseConfig } from "~/libs/sdk/cfg/rc-mod";
 import { homeDir } from "~/libs/sdk/constants";
 import { initGithubSDK } from "~/libs/sdk/utils/instanceGithub";
 import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend";

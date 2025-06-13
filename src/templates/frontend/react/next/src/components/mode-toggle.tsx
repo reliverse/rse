@@ -4,14 +4,14 @@ import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import * as React from "react";
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  // @ts-expect-error dler-remove-comment
+  // @ts-expect-error <dler-remove-comment>
 } from "@/components/ui/dropdown-menu";
 
 export function ModeToggle() {

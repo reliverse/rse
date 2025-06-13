@@ -1,5 +1,5 @@
 <script lang="ts">
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import { PUBLIC_SERVER_URL } from "$env/static/public";
 import { Chat } from "@ai-sdk/svelte";
 

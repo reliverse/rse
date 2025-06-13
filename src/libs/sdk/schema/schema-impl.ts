@@ -1,7 +1,7 @@
+import { generateSchemaFile } from "@reliverse/cfg";
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
 
-import { generateSchemaFile } from "~/libs/sdk/cfg/rc-schema";
 import { cliConfigJsonc } from "~/libs/sdk/constants";
 
 export default defineCommand({

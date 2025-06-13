@@ -1,10 +1,9 @@
+import type { RseConfig } from "@reliverse/cfg";
 import type { CoreMessage } from "ai";
 
 import { re } from "@reliverse/relico";
 import { inputPrompt, msg } from "@reliverse/rempts";
 import { streamText } from "ai";
-
-import type { RseConfig } from "~/libs/sdk/cfg/cfg-types";
 
 import { EXIT_KEYWORDS, MODEL } from "./ai-const";
 import { agentRelinter } from "./relinter/relinter";

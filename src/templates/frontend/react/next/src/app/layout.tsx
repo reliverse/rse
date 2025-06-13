@@ -1,13 +1,13 @@
-/* eslint-disable no-relative-import-paths/no-relative-import-paths */ // dler-remove-line
+/* eslint-disable no-relative-import-paths/no-relative-import-paths */ // <dler-remove-line>
 import type { Metadata } from "next";
 
 import { Geist, Geist_Mono } from "next/font/google";
 
 import "../index.css";
 
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import Header from "@/components/header";
-// @ts-expect-error dler-remove-comment
+// @ts-expect-error <dler-remove-comment>
 import Providers from "@/components/providers";
 
 const geistSans = Geist({

@@ -61,8 +61,8 @@ export async function getMainMenuOptions(
       value: "create",
     },
     {
-      label: "🖼️  Open rse web ui",
-      hint: "(experimental)",
+      label: "🖼️  Use web ui to create a project",
+      hint: "experimental",
       value: "web-ui",
     },
     {

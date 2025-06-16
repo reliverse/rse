@@ -334,6 +334,7 @@ export async function showSuccessAndNextSteps(
       "- Install dependencies manually if needed: bun i OR pnpm i",
       "- Apply linting & formatting: bun check OR pnpm check",
       "- Run the project: bun dev OR pnpm dev",
+      "- Note: if some of bootstrapped file contains `<dler-...>` you probably need to run `dler magic`, or ask your template developer, or learn more here: https://github.com/reliverse/dler/?tab=readme-ov-file#14-magic",
     ],
   });
 

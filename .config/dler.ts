@@ -12,7 +12,7 @@ export default defineConfigDler({
   bumpMode: "patch",
 
   // Common configuration
-  commonPubPause: true,
+  commonPubPause: false,
   commonPubRegistry: "npm-jsr",
   commonVerbose: true,
 
@@ -82,6 +82,13 @@ export default defineConfigDler({
     },
   },
 
+  // Files with these extensions will be built
+  // Any other files will be copied as-is to dist
+  buildPreExtensions: ["ts", "js"],
+  // If you need to exclude some ts/js files from being built,
+  // you can store them in the dirs with buildTemplatesDir name
+  buildTemplatesDir: "templates",
+
   // Dependency filtering
   // Global is always applied
   filterDepsPatterns: {
@@ -106,6 +113,28 @@ export default defineConfigDler({
         npm: [],
       },
     },
+  },
+
+  // Code quality tools
+  // Available: tsc, eslint, biome, knip, dler-check
+  runBeforeBuild: [],
+  // Available: dler-check
+  runAfterBuild: [],
+
+  // Build hooks
+  hooksBeforeBuild: [
+    // async () => {
+    //   await someAsyncOperation();
+    // }
+  ],
+  hooksAfterBuild: [
+    // async () => {
+    //   await someAsyncOperation();
+    // }
+  ],
+
+  postBuildSettings: {
+    cleanupTempDirs: true,
   },
 
   // Build setup

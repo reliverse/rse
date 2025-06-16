@@ -5,7 +5,7 @@ import os from "node:os";
 export const PROJECT_ROOT = path.resolve(process.cwd());
 
 // CLI VERSION AND NAME
-const version = "1.7.6";
+const version = "1.7.7";
 export const cliVersion = version;
 export const cliName = "@reliverse/rse";
 

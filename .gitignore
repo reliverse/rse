@@ -21,6 +21,7 @@ dist-jsr
 dist-libs
 dist-npm
 dist-web
+dist-tmp
 logs
 node_modules
 out

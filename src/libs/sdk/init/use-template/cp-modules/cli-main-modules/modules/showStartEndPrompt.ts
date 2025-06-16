@@ -1,7 +1,7 @@
 import { endPrompt, startPrompt } from "@reliverse/rempts";
 import { isBun, isBunPM, isBunRuntime } from "@reliverse/runtime";
 
-import { getPkgName, getPkgVersion } from "~/libs/sdk/utils/startEndPrompts";
+import { cliVersion } from "~/libs/sdk/constants";
 
 export async function showStartPrompt(
   isDev: boolean,
@@ -10,8 +10,8 @@ export async function showStartPrompt(
   await startPrompt({
     titleColor: "inverse",
     clearConsole: true,
-    packageName: getPkgName(),
-    packageVersion: getPkgVersion(),
+    packageName: "@reliverse/rse",
+    packageVersion: cliVersion,
     isDev,
   });
 
@@ -25,7 +25,7 @@ export async function showStartPrompt(
 export async function showEndPrompt() {
   await endPrompt({
     title:
-      "│  ❤️  Please consider supporting rse: https://github.com/sponsors/blefnk",
+      "│  ❤️  Please consider supporting rse development: https://github.com/sponsors/blefnk",
     titleAnimation: "glitch",
     titleColor: "dim",
     titleTypography: "bold",

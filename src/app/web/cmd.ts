@@ -1,6 +1,5 @@
+import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
-// import { serve } from "bun";
-// import index from "./index.html";
 import { $ } from "bun";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
@@ -32,11 +31,11 @@ export default defineCommand({
 
     if (args.dev) {
       // Development mode with hot reloading
-      console.log("Running in development mode with hot reloading");
+      relinka("verbose", "Running in development mode with hot reloading");
       await $`bun --hot ${webServerPath}`;
     } else {
       // Production mode
-      console.log("Running in production mode");
+      relinka("verbose", "Running in production mode");
       await $`NODE_ENV=production bun ${webServerPath}`;
     }
   },

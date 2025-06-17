@@ -31,6 +31,7 @@
     "which"
   ],
   "ignoreDependencies": [
+    "@webtui/css",
     "octokit",
     "querystring",
     "@ai-sdk/svelte",

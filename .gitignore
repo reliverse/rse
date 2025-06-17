@@ -14,7 +14,6 @@ _.log
 *.log
 *.tgz
 *.tsbuildinfo
-/__*/
 coverage
 dist
 dist-jsr
@@ -30,3 +29,4 @@ relinter.json
 report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 start-runtime
 tests-runtime
+/__*

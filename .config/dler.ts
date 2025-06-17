@@ -134,7 +134,7 @@ export default defineConfigDler({
   ],
 
   postBuildSettings: {
-    cleanupTempDirs: true,
+    deleteDistTmpAfterBuild: true,
   },
 
   // Build setup

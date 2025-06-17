@@ -22,7 +22,7 @@ import { showNativeCliMenu } from "~/libs/sdk/utils/native-cli/nc-mod";
 import {
   showNewProjectMenu,
   showOpenProjectMenu,
-} from "~/providers/reliverse-stack/rs-mod";
+} from "~/providers/reliverse-stack/reliverse-stack-mod";
 
 export async function app(params: ParamsOmitSkipPN) {
   const { cwd, isDev, mrse, memory, config } = params;

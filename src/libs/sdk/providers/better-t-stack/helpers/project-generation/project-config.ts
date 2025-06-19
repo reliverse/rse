@@ -1,10 +1,18 @@
-import { log } from "@clack/prompts";
+import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import { $, execa } from "execa";
 import path from "node:path";
-import pc from "picocolors";
 
 import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
+
+interface PackageJson {
+  name?: string;
+  scripts?: Record<string, string>;
+  workspaces?: string[];
+  packageManager?: string;
+  "lint-staged"?: Record<string, string[]>;
+}
 
 export async function updatePackageConfigurations(
   projectDir: string,
@@ -25,13 +33,7 @@ async function updateRootPackageJson(
   const rootPackageJsonPath = path.join(projectDir, "package.json");
   if (!(await fs.pathExists(rootPackageJsonPath))) return;
 
-  const packageJson = (await fs.readJson(rootPackageJsonPath)) as {
-    name?: string;
-    scripts?: Record<string, string>;
-    workspaces?: string[];
-    packageManager?: string;
-    "lint-staged"?: Record<string, string[]>;
-  };
+  const packageJson = (await fs.readJson(rootPackageJsonPath)) as PackageJson;
   packageJson.name = options.projectName;
 
   if (!packageJson.scripts) {
@@ -183,8 +185,8 @@ async function updateRootPackageJson(
       cwd: projectDir,
     });
     packageJson.packageManager = `${options.packageManager}@${stdout.trim()}`;
-  } catch (_error) {
-    log.warn(`Could not determine ${options.packageManager} version.`);
+  } catch (_e) {
+    relinka("warn", `Could not determine ${options.packageManager} version.`);
   }
 
   if (!packageJson.workspaces) {
@@ -224,9 +226,9 @@ async function updateServerPackageJson(
 
   if (!(await fs.pathExists(serverPackageJsonPath))) return;
 
-  const serverPackageJson = (await fs.readJson(serverPackageJsonPath)) as {
-    scripts?: Record<string, string>;
-  };
+  const serverPackageJson = (await fs.readJson(
+    serverPackageJsonPath,
+  )) as PackageJson;
 
   if (!serverPackageJson.scripts) {
     serverPackageJson.scripts = {};
@@ -267,10 +269,9 @@ async function updateConvexPackageJson(
 
   if (!(await fs.pathExists(convexPackageJsonPath))) return;
 
-  const convexPackageJson = (await fs.readJson(convexPackageJsonPath)) as {
-    name?: string;
-    scripts?: Record<string, string>;
-  };
+  const convexPackageJson = (await fs.readJson(
+    convexPackageJsonPath,
+  )) as PackageJson;
   convexPackageJson.name = `@${options.projectName}/backend`;
 
   if (!convexPackageJson.scripts) {
@@ -293,7 +294,7 @@ export async function initializeGit(
   })`git --version`;
 
   if (gitVersionResult.exitCode !== 0) {
-    log.warn(pc.yellow("Git is not installed"));
+    relinka("warn", re.yellow("Git is not installed"));
     return;
   }
 

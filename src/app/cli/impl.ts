@@ -118,10 +118,6 @@ export async function app(params: ParamsOmitSkipPN) {
   await showEndPrompt();
 }
 
-export async function showWebUiMenu({
-  isDev,
-}: {
-  isDev: boolean;
-}) {
+export async function showWebUiMenu({ isDev }: { isDev: boolean }) {
   await runCmd(await getWebCmd(), [`--dev ${isDev}`]);
 }

@@ -2,20 +2,27 @@ import fs from "@reliverse/relifso";
 import path from "node:path";
 
 import type {
-  ProjectBackend,
+  Backend,
   ProjectConfig,
 } from "~/libs/sdk/providers/better-t-stack/types";
 
 import { addPackageDependency } from "~/libs/sdk/providers/better-t-stack/utils/add-package-deps";
 
+interface PackageJson {
+  name?: string;
+  scripts?: Record<string, string>;
+  workspaces?: string[];
+  packageManager?: string;
+  "lint-staged"?: Record<string, string[]>;
+}
+
 export async function setupRuntime(config: ProjectConfig): Promise<void> {
-  const { projectName, runtime, backend } = config;
+  const { runtime, backend, projectDir } = config;
 
   if (backend === "convex" || backend === "next" || runtime === "none") {
     return;
   }
 
-  const projectDir = path.resolve(process.cwd(), projectName);
   const serverDir = path.join(projectDir, "apps/server");
 
   if (!(await fs.pathExists(serverDir))) {
@@ -26,19 +33,19 @@ export async function setupRuntime(config: ProjectConfig): Promise<void> {
     await setupBunRuntime(serverDir, backend);
   } else if (runtime === "node") {
     await setupNodeRuntime(serverDir, backend);
+  } else if (runtime === "workers") {
+    await setupWorkersRuntime(serverDir);
   }
 }
 
 async function setupBunRuntime(
   serverDir: string,
-  _backend: ProjectBackend,
+  _backend: Backend,
 ): Promise<void> {
   const packageJsonPath = path.join(serverDir, "package.json");
   if (!(await fs.pathExists(packageJsonPath))) return;
 
-  const packageJson = (await fs.readJson(packageJsonPath)) as {
-    scripts?: Record<string, string>;
-  };
+  const packageJson = (await fs.readJson(packageJsonPath)) as PackageJson;
 
   packageJson.scripts = {
     ...packageJson.scripts,
@@ -56,14 +63,12 @@ async function setupBunRuntime(
 
 async function setupNodeRuntime(
   serverDir: string,
-  backend: ProjectBackend,
+  backend: Backend,
 ): Promise<void> {
   const packageJsonPath = path.join(serverDir, "package.json");
   if (!(await fs.pathExists(packageJsonPath))) return;
 
-  const packageJson = (await fs.readJson(packageJsonPath)) as {
-    scripts?: Record<string, string>;
-  };
+  const packageJson = (await fs.readJson(packageJsonPath)) as PackageJson;
 
   packageJson.scripts = {
     ...packageJson.scripts,
@@ -89,4 +94,27 @@ async function setupNodeRuntime(
       projectDir: serverDir,
     });
   }
+}
+
+async function setupWorkersRuntime(serverDir: string): Promise<void> {
+  const packageJsonPath = path.join(serverDir, "package.json");
+  if (!(await fs.pathExists(packageJsonPath))) return;
+
+  const packageJson = (await fs.readJson(packageJsonPath)) as PackageJson;
+
+  packageJson.scripts = {
+    ...packageJson.scripts,
+    dev: "wrangler dev --port=3000",
+    start: "wrangler dev",
+    deploy: "wrangler deploy",
+    build: "wrangler deploy --dry-run",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+  };
+
+  await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+
+  await addPackageDependency({
+    devDependencies: ["wrangler"],
+    projectDir: serverDir,
+  });
 }

@@ -116,8 +116,8 @@ the main principle on which the rse ecosystem stands is collaboration and creati
 
 that's why rse gives you the opportunity to use not only its native reliverse-stack for bootstrapping your project, but also the stacks of our good friends. here's what you can choose from after you click `create a brand new project`:
 
-- ✅ [reliverse-stack](https://reliverse.org/rse/providers/reliverse-stack) ([donate](https://github.com/sponsors/blefnk)) — a narrow collection of bootstrap options, especially a great choice for beginners who do not yet understand what options are really the best for them.
-- 🏗️ [better-t-stack](https://reliverse.org/rse/providers/better-t-stack) ([donate](https://github.com/sponsors/AmanVarshney01)) — a comprehensive collection of different bootstrap options.
+- ✅ [reliverse-stack](https://reliverse.org/rse/providers/reliverse-stack) ([donate](https://github.com/sponsors/blefnk)) ([star](https://github.com/reliverse/rse)) — a narrow collection of bootstrap options, especially a great choice for beginners who do not yet understand what options are really the best for them.
+- 🏗️ [better-t-stack](https://reliverse.org/rse/providers/better-t-stack) ([donate](https://github.com/sponsors/AmanVarshney01)) ([star](https://github.com/AmanVarshney01/create-better-t-stack)) — a comprehensive collection of different bootstrap options.
 - 🔜 [shadcn](https://ui.shadcn.com) — one-click project setup, automated actions described in the shadcn/ui docs. if shadcn already detected in your project, rse will display you a multi-select prompt what components you want to install (only displayed components which are not already installed).
 - 🔜 **remote stacks**: any repo, which contains `.config/dler.ts` and `.config/*-dler-pack/*-mod.ts`, will be available for use as a stack. (see [reliverse.org/rse/stacks](https://reliverse.org/rse/stacks) to apply your own or someone else's open-source stack)
 

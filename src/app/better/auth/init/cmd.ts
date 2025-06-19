@@ -1,17 +1,18 @@
+import { re } from "@reliverse/relico";
+import { existsSync } from "@reliverse/relifso";
+import { relinka } from "@reliverse/relinka";
 import {
   cancel,
   confirm,
   intro,
   isCancel,
-  log,
   multiselect,
   outro,
   select,
+  selectSimple,
   spinner,
   text,
-} from "@clack/prompts";
-import { re } from "@reliverse/relico";
-import { existsSync } from "@reliverse/relifso";
+} from "@reliverse/rempts";
 import { defineCommand } from "@reliverse/rempts";
 import { parse } from "dotenv";
 import { execaCommand } from "execa";
@@ -211,11 +212,7 @@ async function formatWithBiome(
   }
 }
 
-const getDefaultAuthConfig = async ({
-  appName,
-}: {
-  appName?: string;
-}) =>
+const getDefaultAuthConfig = async ({ appName }: { appName?: string }) =>
   await formatWithBiome(
     [
       "import { betterAuth } from 'better-auth';",
@@ -408,8 +405,7 @@ export const init = defineCommand({
     const options = optionsSchema.parse(args);
 
     const cwd = path.resolve(options.cwd);
-    let packageManagerPreference: "bun" | "pnpm" | "yarn" | "npm" | undefined =
-      undefined;
+    let packageManagerPreference: "bun" | "pnpm" | "yarn" | "npm" | undefined;
 
     let config_path = "";
     let framework: SupportedFrameworks = "vanilla";
@@ -422,8 +418,11 @@ export const init = defineCommand({
     try {
       packageInfo = getPackageInfo(cwd) as Record<string, any>;
     } catch (error) {
-      log.error(`❌ Couldn't read your package.json file. (dir: ${cwd})`);
-      log.error(JSON.stringify(error, null, 2));
+      relinka(
+        "error",
+        `❌ Couldn't read your package.json file. (dir: ${cwd})`,
+      );
+      relinka("error", JSON.stringify(error, null, 2));
       process.exit(1);
     }
 
@@ -454,7 +453,10 @@ export const init = defineCommand({
         any
       >;
     } catch (error) {
-      log.error(`❌ Couldn't read your tsconfig.json file. (dir: ${cwd})`);
+      relinka(
+        "error",
+        `❌ Couldn't read your tsconfig.json file. (dir: ${cwd})`,
+      );
       console.error(error);
       process.exit(1);
     }
@@ -465,7 +467,8 @@ export const init = defineCommand({
         tsconfigInfo.compilerOptions.strict === true
       )
     ) {
-      log.warn(
+      relinka(
+        "warn",
         `Better Auth requires your tsconfig.json to have "compilerOptions.strict" set to true.`,
       );
       const shouldAdd = await confirm({
@@ -480,9 +483,10 @@ export const init = defineCommand({
       if (shouldAdd) {
         try {
           await fs.writeFile(path.join(cwd, "tsconfig.json"), "utf-8");
-          log.success(`🚀 tsconfig.json successfully updated!`);
+          relinka("success", `🚀 tsconfig.json successfully updated!`);
         } catch (error) {
-          log.error(
+          relinka(
+            "error",
             `Failed to add "compilerOptions.strict" to your tsconfig.json file.`,
           );
           console.error(error);
@@ -499,7 +503,7 @@ export const init = defineCommand({
     try {
       latest_betterauth_version = await getLatestNpmVersion("better-auth");
     } catch (error) {
-      log.error(`❌ Couldn't get latest version of better-auth.`);
+      relinka("error", `❌ Couldn't get latest version of better-auth.`);
       console.error(error);
       process.exit(1);
     }
@@ -582,7 +586,7 @@ export const init = defineCommand({
           );
         } catch (error: any) {
           s.stop(`Failed to update Better Auth:`);
-          log.error(error.message);
+          relinka("error", error.message);
           process.exit(1);
         }
       }
@@ -732,7 +736,7 @@ export const init = defineCommand({
 
         const filePath = path.join(cwd, "auth.ts");
         config_path = filePath;
-        log.info(`Creating auth config file: ${filePath}`);
+        relinka("info", `Creating auth config file: ${filePath}`);
         try {
           current_user_config = await getDefaultAuthConfig({
             appName,
@@ -749,10 +753,11 @@ export const init = defineCommand({
           current_user_config = generatedCode;
           await fs.writeFile(filePath, current_user_config);
           config_path = filePath;
-          log.success(`🚀 Auth config file successfully created!`);
+          relinka("success", `🚀 Auth config file successfully created!`);
 
           if (envs.length !== 0) {
-            log.info(
+            relinka(
+              "info",
               `There are ${envs.length} environment variables for your database of choice.`,
             );
             const shouldUpdateEnvs = await confirm({
@@ -776,7 +781,7 @@ export const init = defineCommand({
                 process.exit(0);
               }
               if (filesToUpdate.length === 0) {
-                log.info("No .env files to update. Skipping...");
+                relinka("info", "No .env files to update. Skipping...");
               } else {
                 try {
                   await updateEnvs({
@@ -785,16 +790,17 @@ export const init = defineCommand({
                     isCommented: true,
                   });
                 } catch (error) {
-                  log.error(`Failed to update .env files:`);
-                  log.error(JSON.stringify(error, null, 2));
+                  relinka("error", `Failed to update .env files:`);
+                  relinka("error", JSON.stringify(error, null, 2));
                   process.exit(1);
                 }
-                log.success(`🚀 ENV files successfully updated!`);
+                relinka("success", `🚀 ENV files successfully updated!`);
               }
             }
           }
           if (dependencies.length !== 0) {
-            log.info(
+            relinka(
+              "info",
               `There are ${
                 dependencies.length
               } dependencies to install. (${dependencies
@@ -834,23 +840,24 @@ export const init = defineCommand({
                 s.stop(
                   `Failed to install dependencies using ${packageManagerPreference}:`,
                 );
-                log.error(error.message);
+                relinka("error", error.message);
                 process.exit(1);
               }
             }
           }
         } catch (error) {
-          log.error(`Failed to create auth config file: ${filePath}`);
+          relinka("error", `Failed to create auth config file: ${filePath}`);
           console.error(error);
           process.exit(1);
         }
       } else if (shouldCreateAuthConfig === "no") {
-        log.info(`Skipping auth config file creation.`);
+        relinka("info", `Skipping auth config file creation.`);
       }
     } else {
-      log.message();
-      log.success(`Found auth config file. ${re.gray(`(${config_path})`)}`);
-      log.message();
+      relinka(
+        "success",
+        `Found auth config file. ${re.gray(`(${config_path})`)}`,
+      );
     }
 
     // ===== auth client path =====
@@ -901,7 +908,10 @@ export const init = defineCommand({
       }
       if (choice === "yes") {
         authClientConfigPath = path.join(cwd, "auth-client.ts");
-        log.info(`Creating auth client config file: ${authClientConfigPath}`);
+        relinka(
+          "info",
+          `Creating auth client config file: ${authClientConfigPath}`,
+        );
         try {
           const contents = await getDefaultAuthClientConfig({
             auth_config_path:
@@ -931,19 +941,24 @@ export const init = defineCommand({
             framework: framework,
           });
           await fs.writeFile(authClientConfigPath, contents);
-          log.success(`🚀 Auth client config file successfully created!`);
+          relinka(
+            "success",
+            `🚀 Auth client config file successfully created!`,
+          );
         } catch (error) {
-          log.error(
+          relinka(
+            "error",
             `Failed to create auth client config file: ${authClientConfigPath}`,
           );
-          log.error(JSON.stringify(error, null, 2));
+          relinka("error", JSON.stringify(error, null, 2));
           process.exit(1);
         }
       } else if (choice === "no") {
-        log.info(`Skipping auth client config file creation.`);
+        relinka("info", `Skipping auth client config file creation.`);
       }
     } else {
-      log.success(
+      relinka(
+        "success",
         `Found auth client config file. ${re.gray(`(${authClientConfigPath})`)}`,
       );
     }
@@ -967,7 +982,7 @@ export const init = defineCommand({
             txt = re.bold(`BETTER_AUTH_URL`);
           else
             txt = `${re.underline(`BETTER_AUTH_SECRET`)} and ${re.underline(`BETTER_AUTH_URL`)}`;
-          log.warn(`Missing ${txt} in ${targetEnvFile}`);
+          relinka("warn", `Missing ${txt} in ${targetEnvFile}`);
 
           const shouldAdd = await select({
             message: `Do you want to add ${txt} to ${targetEnvFile}?`,
@@ -996,18 +1011,22 @@ export const init = defineCommand({
                 isCommented: false,
               });
             } catch (error) {
-              log.error(`Failed to add ENV variables to ${targetEnvFile}`);
-              log.error(JSON.stringify(error, null, 2));
+              relinka(
+                "error",
+                `Failed to add ENV variables to ${targetEnvFile}`,
+              );
+              relinka("error", JSON.stringify(error, null, 2));
               process.exit(1);
             }
-            log.success(`🚀 ENV variables successfully added!`);
+            relinka("success", `🚀 ENV variables successfully added!`);
             if (isMissingUrl) {
-              log.info(
+              relinka(
+                "info",
                 `Be sure to update your BETTER_AUTH_URL according to your app's needs.`,
               );
             }
           } else if (shouldAdd === "no") {
-            log.info(`Skipping ENV step.`);
+            relinka("info", `Skipping ENV step.`);
           } else if (shouldAdd === "other") {
             if (!envFiles.length) {
               cancel("No env files found. Please create an env file first.");
@@ -1026,7 +1045,7 @@ export const init = defineCommand({
               process.exit(0);
             }
             if (envFilesToUpdate.length === 0) {
-              log.info("No .env files to update. Skipping...");
+              relinka("info", "No .env files to update. Skipping...");
             } else {
               try {
                 await updateEnvs({
@@ -1035,11 +1054,11 @@ export const init = defineCommand({
                   isCommented: false,
                 });
               } catch (error) {
-                log.error(`Failed to update .env files:`);
-                log.error(JSON.stringify(error, null, 2));
+                relinka("error", `Failed to update .env files:`);
+                relinka("error", JSON.stringify(error, null, 2));
                 process.exit(1);
               }
-              log.success(`🚀 ENV files successfully updated!`);
+              relinka("success", `🚀 ENV files successfully updated!`);
             }
           }
         }
@@ -1062,7 +1081,9 @@ async function getLatestNpmVersion(packageName: string): Promise<string> {
       throw new Error(`Package not found: ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data = (await response.json()) as {
+      "dist-tags": { latest: string };
+    };
     return data["dist-tags"].latest; // Get the latest version from dist-tags
   } catch (error: any) {
     throw error?.message;
@@ -1097,7 +1118,7 @@ async function getPackageManager() {
     hint: "not recommended",
   });
 
-  const packageManager = await select({
+  const packageManager = await selectSimple({
     message: "Choose a package manager",
     options: packageManagerOptions,
   });

@@ -1,8 +1,8 @@
 import fs from "@reliverse/relifso";
 import path from "node:path";
 
+import type { Frontend } from "~/libs/sdk/providers/better-t-stack/types";
 import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
-import type { ProjectFrontend } from "~/libs/sdk/providers/better-t-stack/types";
 
 import { addPackageDependency } from "~/libs/sdk/providers/better-t-stack/utils/add-package-deps";
 
@@ -10,17 +10,23 @@ import { setupStarlight } from "./starlight-setup";
 import { setupTauri } from "./tauri-setup";
 
 interface PackageJson {
+  name?: string;
   scripts?: Record<string, string>;
+  workspaces?: string[];
+  packageManager?: string;
   "lint-staged"?: Record<string, string[]>;
 }
 
 export async function setupAddons(config: ProjectConfig) {
-  const { projectName, addons, frontend } = config;
-  const projectDir = path.resolve(process.cwd(), projectName);
+  const { addons, frontend, projectDir } = config;
   const hasReactWebFrontend =
-    frontend.includes("react-router") || frontend.includes("tanstack-router");
+    frontend.includes("react-router") ||
+    frontend.includes("tanstack-router") ||
+    frontend.includes("next");
   const hasNuxtFrontend = frontend.includes("nuxt");
   const hasSvelteFrontend = frontend.includes("svelte");
+  const hasSolidFrontend = frontend.includes("solid");
+  const hasNextFrontend = frontend.includes("next");
 
   if (addons.includes("turborepo")) {
     await addPackageDependency({
@@ -29,12 +35,16 @@ export async function setupAddons(config: ProjectConfig) {
     });
   }
 
-  if (addons.includes("pwa") && hasReactWebFrontend) {
+  if (addons.includes("pwa") && (hasReactWebFrontend || hasSolidFrontend)) {
     await setupPwa(projectDir, frontend);
   }
   if (
     addons.includes("tauri") &&
-    (hasReactWebFrontend || hasNuxtFrontend || hasSvelteFrontend)
+    (hasReactWebFrontend ||
+      hasNuxtFrontend ||
+      hasSvelteFrontend ||
+      hasSolidFrontend ||
+      hasNextFrontend)
   ) {
     await setupTauri(config);
   }
@@ -49,13 +59,12 @@ export async function setupAddons(config: ProjectConfig) {
   }
 }
 
-function getWebAppDir(
-  projectDir: string,
-  frontends: ProjectFrontend[],
-): string {
+function getWebAppDir(projectDir: string, frontends: Frontend[]): string {
   if (
     frontends.some((f) =>
-      ["react-router", "tanstack-router", "nuxt", "svelte"].includes(f),
+      ["react-router", "tanstack-router", "nuxt", "svelte", "solid"].includes(
+        f,
+      ),
     )
   ) {
     return path.join(projectDir, "apps/web");
@@ -107,9 +116,9 @@ async function setupHusky(projectDir: string) {
   }
 }
 
-async function setupPwa(projectDir: string, frontends: ProjectFrontend[]) {
+async function setupPwa(projectDir: string, frontends: Frontend[]) {
   const isCompatibleFrontend = frontends.some((f) =>
-    ["react-router", "tanstack-router"].includes(f),
+    ["react-router", "tanstack-router", "solid"].includes(f),
   );
   if (!isCompatibleFrontend) return;
 

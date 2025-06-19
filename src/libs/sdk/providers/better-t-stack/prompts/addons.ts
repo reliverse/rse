@@ -1,34 +1,38 @@
-import { cancel, isCancel, multiselect } from "@clack/prompts";
-import pc from "picocolors";
+import { re } from "@reliverse/relico";
+import { cancel, isCancel, multiselect } from "@reliverse/rempts";
 
 import type {
-  ProjectAddons,
-  ProjectFrontend,
+  Addons,
+  Frontend,
 } from "~/libs/sdk/providers/better-t-stack/types";
 
 import { DEFAULT_CONFIG } from "~/libs/sdk/providers/better-t-stack/constants";
 
 interface AddonOption {
-  value: ProjectAddons;
+  value: Addons;
   label: string;
   hint: string;
 }
 
 export async function getAddonsChoice(
-  addons?: ProjectAddons[],
-  frontends?: ProjectFrontend[],
-): Promise<ProjectAddons[]> {
+  addons?: Addons[],
+  frontends?: Frontend[],
+): Promise<Addons[]> {
   if (addons !== undefined) return addons;
 
   const hasCompatiblePwaFrontend =
     frontends?.includes("react-router") ||
-    frontends?.includes("tanstack-router");
+    frontends?.includes("tanstack-router") ||
+    frontends?.includes("solid") ||
+    frontends?.includes("next");
 
   const hasCompatibleTauriFrontend =
     frontends?.includes("react-router") ||
     frontends?.includes("tanstack-router") ||
     frontends?.includes("nuxt") ||
-    frontends?.includes("svelte");
+    frontends?.includes("svelte") ||
+    frontends?.includes("solid") ||
+    frontends?.includes("next");
 
   const allPossibleOptions: AddonOption[] = [
     {
@@ -81,7 +85,7 @@ export async function getAddonsChoice(
   });
 
   if (isCancel(response)) {
-    cancel(pc.red("Operation cancelled"));
+    cancel(re.red("Operation cancelled"));
     process.exit(0);
   }
 

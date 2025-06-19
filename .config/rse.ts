@@ -10,7 +10,7 @@ export default defineConfigRse({
   projectAuthor: "reliverse",
   projectDescription:
     "@reliverse/rse is your all-in-one companion for bootstrapping and improving any kind of projects (especially web apps built with frameworks like Next.js) — whether you're kicking off something new or upgrading an existing app. It is also a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.",
-  version: "1.7.7",
+  version: "1.7.8",
   projectLicense: "MIT",
   projectState: "creating",
   projectRepository: "https://github.com/reliverse/rse",

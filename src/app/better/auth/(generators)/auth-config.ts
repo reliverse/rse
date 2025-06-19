@@ -1,4 +1,4 @@
-import { type spinner as clackSpinner } from "@clack/prompts";
+import { type spinner as clackSpinner } from "@reliverse/rempts";
 import { logger } from "better-auth";
 
 import type {

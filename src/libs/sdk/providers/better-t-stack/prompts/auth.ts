@@ -1,14 +1,14 @@
-import { cancel, confirm, isCancel } from "@clack/prompts";
-import pc from "picocolors";
+import { re } from "@reliverse/relico";
+import { cancel, confirm, isCancel } from "@reliverse/rempts";
 
-import type { ProjectBackend } from "~/libs/sdk/providers/better-t-stack/types";
+import type { Backend } from "~/libs/sdk/providers/better-t-stack/types";
 
 import { DEFAULT_CONFIG } from "~/libs/sdk/providers/better-t-stack/constants";
 
 export async function getAuthChoice(
   auth: boolean | undefined,
   hasDatabase: boolean,
-  backend?: ProjectBackend,
+  backend?: Backend,
 ): Promise<boolean> {
   if (backend === "convex") {
     return false;
@@ -24,7 +24,7 @@ export async function getAuthChoice(
   });
 
   if (isCancel(response)) {
-    cancel(pc.red("Operation cancelled"));
+    cancel(re.red("Operation cancelled"));
     process.exit(0);
   }
 

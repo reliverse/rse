@@ -1,5 +1,5 @@
-import { cancel, confirm, isCancel } from "@clack/prompts";
-import pc from "picocolors";
+import { re } from "@reliverse/relico";
+import { cancel, confirm, isCancel } from "@reliverse/rempts";
 
 import { DEFAULT_CONFIG } from "~/libs/sdk/providers/better-t-stack/constants";
 
@@ -12,7 +12,7 @@ export async function getinstallChoice(install?: boolean): Promise<boolean> {
   });
 
   if (isCancel(response)) {
-    cancel(pc.red("Operation cancelled"));
+    cancel(re.red("Operation cancelled"));
     process.exit(0);
   }
 

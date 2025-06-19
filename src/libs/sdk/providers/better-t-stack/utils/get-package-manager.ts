@@ -1,6 +1,6 @@
-import type { ProjectPackageManager } from "~/libs/sdk/providers/better-t-stack/types";
+import type { PackageManager } from "~/libs/sdk/providers/better-t-stack/types";
 
-export const getUserPkgManager: () => ProjectPackageManager = () => {
+export const getUserPkgManager: () => PackageManager = () => {
   const userAgent = process.env.npm_config_user_agent;
 
   if (userAgent?.startsWith("pnpm")) {

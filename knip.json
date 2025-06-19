@@ -5,8 +5,8 @@
     "src/mod.ts",
     "src/app/**/cmd.ts",
     "src/libs/**/*.ts",
-    "src/templates/**/*.ts",
-    "src/templates/**/*.tsx"
+    "src/providers/better-t-stack/**/*.ts",
+    "src/app/web/frontend.tsx"
   ],
   "project": ["src/**/*.ts"],
   "ignoreExportsUsedInFile": true,
@@ -15,9 +15,7 @@
     "dist-jsr/",
     "dist-npm/",
     "dist-libs/",
-    "relinter-test.ts",
-    "src/templates/**/*.ts",
-    "src/templates/**/*.tsx"
+    "relinter-test.ts"
   ],
   "ignoreBinaries": [
     "build",
@@ -30,14 +28,5 @@
     "where",
     "which"
   ],
-  "ignoreDependencies": [
-    "@webtui/css",
-    "octokit",
-    "querystring",
-    "@ai-sdk/svelte",
-    "@ai-sdk/vue",
-    "@tanstack/svelte-form",
-    "@tanstack/svelte-query",
-    "@tanstack/vue-query-devtools"
-  ]
+  "ignoreDependencies": ["@webtui/css", "octokit", "querystring"]
 }

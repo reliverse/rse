@@ -1,29 +1,17 @@
-import { cancel, isCancel, text } from "@clack/prompts";
+import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
+import { cancel, isCancel, text } from "@reliverse/rempts";
 import path from "node:path";
-import pc from "picocolors";
 
 import { DEFAULT_CONFIG } from "~/libs/sdk/providers/better-t-stack/constants";
-
-const INVALID_CHARS = ["<", ">", ":", '"', "|", "?", "*"];
-const MAX_LENGTH = 255;
+import { ProjectNameSchema } from "~/libs/sdk/providers/better-t-stack/types";
 
 function validateDirectoryName(name: string): string | undefined {
-  // Allow "." as it represents current directory
   if (name === ".") return undefined;
 
-  if (!name) return "Project name cannot be empty";
-  if (name.length > MAX_LENGTH) {
-    return `Project name must be less than ${MAX_LENGTH} characters`;
-  }
-  if (INVALID_CHARS.some((char) => name.includes(char))) {
-    return "Project name contains invalid characters";
-  }
-  if (name.startsWith(".") || name.startsWith("-")) {
-    return "Project name cannot start with a dot or dash";
-  }
-  if (name.toLowerCase() === "node_modules") {
-    return "Project name is reserved";
+  const result = ProjectNameSchema.safeParse(name);
+  if (!result.success) {
+    return result.error.issues[0]?.message || "Invalid project name";
   }
   return undefined;
 }
@@ -31,22 +19,12 @@ function validateDirectoryName(name: string): string | undefined {
 export async function getProjectName(initialName?: string): Promise<string> {
   if (initialName) {
     if (initialName === ".") {
-      const projectDir = process.cwd();
-      if (fs.readdirSync(projectDir).length === 0) {
-        return initialName;
-      }
-    } else {
-      const finalDirName = path.basename(initialName);
-      const validationError = validateDirectoryName(finalDirName);
-      if (!validationError) {
-        const projectDir = path.resolve(process.cwd(), initialName);
-        if (
-          !fs.pathExistsSync(projectDir) ||
-          fs.readdirSync(projectDir).length === 0
-        ) {
-          return initialName;
-        }
-      }
+      return initialName;
+    }
+    const finalDirName = path.basename(initialName);
+    const validationError = validateDirectoryName(finalDirName);
+    if (!validationError) {
+      return initialName;
     }
   }
 
@@ -55,7 +33,10 @@ export async function getProjectName(initialName?: string): Promise<string> {
   let defaultName = DEFAULT_CONFIG.projectName;
   let counter = 1;
 
-  while (fs.pathExistsSync(path.resolve(process.cwd(), defaultName))) {
+  while (
+    fs.pathExistsSync(path.resolve(process.cwd(), defaultName)) &&
+    fs.readdirSync(path.resolve(process.cwd(), defaultName)).length > 0
+  ) {
     defaultName = `${DEFAULT_CONFIG.projectName}-${counter}`;
     counter++;
   }
@@ -67,46 +48,31 @@ export async function getProjectName(initialName?: string): Promise<string> {
       placeholder: defaultName,
       initialValue: initialName,
       defaultValue: defaultName,
-      validate: (value) => {
+      validate: (value: string) => {
         const nameToUse = value.trim() || defaultName;
 
-        if (nameToUse === ".") {
-          const dirContents = fs.readdirSync(process.cwd());
-          if (dirContents.length > 0) {
-            return "Current directory is not empty. Please choose a different directory.";
-          }
-          isValid = true;
-          return undefined;
-        }
-
-        const projectDir = path.resolve(process.cwd(), nameToUse);
-        const finalDirName = path.basename(projectDir);
-
+        const finalDirName = path.basename(nameToUse);
         const validationError = validateDirectoryName(finalDirName);
         if (validationError) return validationError;
 
-        if (!projectDir.startsWith(process.cwd())) {
-          return "Project path must be within current directory";
-        }
-
-        if (fs.pathExistsSync(projectDir)) {
-          const dirContents = fs.readdirSync(projectDir);
-          if (dirContents.length > 0) {
-            return `Directory "${nameToUse}" already exists and is not empty. Please choose a different name or path.`;
+        if (nameToUse !== ".") {
+          const projectDir = path.resolve(process.cwd(), nameToUse);
+          if (!projectDir.startsWith(process.cwd())) {
+            return "Project path must be within current directory";
           }
         }
 
-        isValid = true;
         return undefined;
       },
     });
 
     if (isCancel(response)) {
-      cancel(pc.red("Operation cancelled."));
+      cancel(re.red("Operation cancelled."));
       process.exit(0);
     }
 
     projectPath = response || defaultName;
+    isValid = true;
   }
 
   return projectPath;

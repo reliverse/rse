@@ -1,12 +1,16 @@
-import { cancel, isCancel, log, spinner, text } from "@clack/prompts";
+import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
-import consola from "consola";
+import { relinka } from "@reliverse/relinka";
+import { cancel, isCancel, spinner, inputPrompt } from "@reliverse/rempts";
 import { execa } from "execa";
 import path from "node:path";
-import pc from "picocolors";
 
 import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
 
+import {
+  type EnvVariable,
+  addEnvVariablesToFile,
+} from "~/libs/sdk/providers/better-t-stack/helpers/project-generation/env-setup";
 import { commandExists } from "~/libs/sdk/providers/better-t-stack/utils/command-exists";
 
 interface MongoDBConfig {
@@ -15,18 +19,18 @@ interface MongoDBConfig {
 
 async function checkAtlasCLI(): Promise<boolean> {
   const s = spinner();
-  s.start("Checking for MongoDB Atlas CLI");
+  s.start("Checking for MongoDB Atlas CLI...");
 
   try {
     const exists = await commandExists("atlas");
     s.stop(
       exists
         ? "MongoDB Atlas CLI found"
-        : pc.yellow("MongoDB Atlas CLI not found"),
+        : re.yellow("MongoDB Atlas CLI not found"),
     );
     return exists;
-  } catch {
-    s.stop(pc.red("Error checking for MongoDB Atlas CLI"));
+  } catch (_error) {
+    s.stop(re.red("Error checking MongoDB Atlas CLI"));
     return false;
   }
 }
@@ -38,29 +42,32 @@ async function initMongoDBAtlas(
     const hasAtlas = await checkAtlasCLI();
 
     if (!hasAtlas) {
-      consola.error(pc.red("MongoDB Atlas CLI not found."));
-      log.info(
-        pc.yellow(
+      relinka("error", re.red("MongoDB Atlas CLI not found."));
+      relinka(
+        "info",
+        re.yellow(
           "Please install it from: https://www.mongodb.com/docs/atlas/cli/current/install-atlas-cli/",
         ),
       );
       return null;
     }
 
-    log.info(pc.blue("Running MongoDB Atlas setup..."));
+    relinka("info", re.blue("Running MongoDB Atlas setup..."));
 
     await execa("atlas", ["deployments", "setup"], {
       cwd: serverDir,
       stdio: "inherit",
     });
 
-    log.info(pc.green("Atlas setup complete!"));
+    relinka("info", re.green("MongoDB Atlas deployment ready"));
 
-    const connectionString = await text({
+    const connectionString = await inputPrompt({
       message: "Enter your MongoDB connection string:",
       placeholder:
         "mongodb+srv://username:password@cluster.mongodb.net/database",
       validate(value) {
+        /* error:
+         */
         if (!value) return "Please enter a connection string";
         if (!value.startsWith("mongodb")) {
           return "URL should start with mongodb:// or mongodb+srv://";
@@ -78,7 +85,7 @@ async function initMongoDBAtlas(
     };
   } catch (error) {
     if (error instanceof Error) {
-      consola.error(pc.red(error.message));
+      relinka("error", re.red(error.message));
     }
     return null;
   }
@@ -87,89 +94,84 @@ async function initMongoDBAtlas(
 async function writeEnvFile(projectDir: string, config?: MongoDBConfig) {
   try {
     const envPath = path.join(projectDir, "apps/server", ".env");
-    await fs.ensureDir(path.dirname(envPath));
-
-    let envContent = "";
-    if (await fs.pathExists(envPath)) {
-      envContent = await fs.readFile(envPath, "utf8");
-    }
-
-    const mongoUrlLine = config
-      ? `DATABASE_URL="${config.connectionString}"`
-      : `DATABASE_URL="mongodb://localhost:27017/mydb"`;
-
-    if (!envContent.includes("DATABASE_URL=")) {
-      envContent += `\n${mongoUrlLine}`;
-    } else {
-      envContent = envContent.replace(
-        /DATABASE_URL=.*(\r?\n|$)/,
-        `${mongoUrlLine}$1`,
-      );
-    }
-
-    await fs.writeFile(envPath, envContent.trim());
-  } catch {
-    consola.error("Failed to update environment configuration");
+    const variables: EnvVariable[] = [
+      {
+        key: "DATABASE_URL",
+        value: config?.connectionString ?? "mongodb://localhost:27017/mydb",
+        condition: true,
+      },
+    ];
+    await addEnvVariablesToFile(envPath, variables);
+  } catch (_error) {
+    relinka("error", "Failed to update environment configuration");
   }
 }
 
 function displayManualSetupInstructions() {
-  log.info(`
-${pc.green("MongoDB Atlas Manual Setup Instructions:")}
+  relinka(
+    "info",
+    `
+${re.green("MongoDB Atlas Manual Setup Instructions:")}
 
 1. Install Atlas CLI:
-   ${pc.blue("https://www.mongodb.com/docs/atlas/cli/stable/install-atlas-cli/")}
+   ${re.blue(
+     "https://www.mongodb.com/docs/atlas/cli/stable/install-atlas-cli/",
+   )}
 
 2. Run the following command and follow the prompts:
-   ${pc.blue("atlas deployments setup")}
+   ${re.blue("atlas deployments setup")}
 
 3. Get your connection string from the Atlas dashboard:
-   Format: ${pc.dim("mongodb+srv://USERNAME:PASSWORD@CLUSTER.mongodb.net/DATABASE_NAME")}
+   Format: ${re.dim(
+     "mongodb+srv://USERNAME:PASSWORD@CLUSTER.mongodb.net/DATABASE_NAME",
+   )}
 
 4. Add the connection string to your .env file:
-   ${pc.dim('DATABASE_URL="your_connection_string"')}
-`);
+   ${re.dim('DATABASE_URL="your_connection_string"')}
+`,
+  );
 }
 
 export async function setupMongoDBAtlas(config: ProjectConfig) {
-  const { projectName } = config;
-  const projectDir = path.resolve(process.cwd(), projectName);
+  const { projectDir } = config;
   const mainSpinner = spinner();
-  mainSpinner.start("Setting up MongoDB Atlas");
+  mainSpinner.start("Setting up MongoDB Atlas...");
 
   const serverDir = path.join(projectDir, "apps/server");
   try {
     await fs.ensureDir(serverDir);
 
-    mainSpinner.stop("Starting MongoDB Atlas setup");
+    mainSpinner.stop("MongoDB Atlas setup ready");
 
     const config = await initMongoDBAtlas(serverDir);
 
     if (config) {
       await writeEnvFile(projectDir, config);
-      log.success(
-        pc.green(
+      relinka(
+        "success",
+        re.green(
           "MongoDB Atlas setup complete! Connection saved to .env file.",
         ),
       );
     } else {
-      log.warn(pc.yellow("Falling back to local MongoDB configuration"));
+      relinka("warn", re.yellow("Falling back to local MongoDB configuration"));
       await writeEnvFile(projectDir);
       displayManualSetupInstructions();
     }
   } catch (error) {
-    mainSpinner.stop(pc.red("MongoDB Atlas setup failed"));
-    consola.error(
-      pc.red(
-        `Error during MongoDB Atlas setup: ${error instanceof Error ? error.message : String(error)}`,
+    mainSpinner.stop(re.red("MongoDB Atlas setup failed"));
+    relinka(
+      "error",
+      re.red(
+        `Error during MongoDB Atlas setup: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
       ),
     );
 
     try {
       await writeEnvFile(projectDir);
       displayManualSetupInstructions();
-    } catch {
-      /* empty */
-    }
+    } catch {}
   }
 }

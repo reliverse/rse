@@ -1,634 +1,371 @@
-import { intro, log, outro } from "@clack/prompts";
+import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
-import { defineCommand } from "@reliverse/rempts";
-import { consola } from "consola";
+import { relinka } from "@reliverse/relinka";
+import {
+  cancel,
+  createCli,
+  defineCommand,
+  intro,
+  isCancel,
+  outro,
+  selectPrompt,
+  spinner,
+} from "@reliverse/rempts";
+import { trpcServer, zod as z } from "@reliverse/rempts";
 import path from "node:path";
-import pc from "picocolors";
 
-import type {
-  ProjectAddons,
-  ProjectApi,
-  ProjectBackend,
-  ProjectConfig,
-  ProjectDBSetup,
-  ProjectDatabase,
-  ProjectExamples,
-  ProjectFrontend,
-  ProjectOrm,
-  ProjectPackageManager,
-  ProjectRuntime,
-} from "./types";
+import type { CreateInput, ProjectConfig } from "./types";
 
 import { DEFAULT_CONFIG } from "./constants";
-import { createProject } from "./helpers/create-project";
+import { createProject } from "./helpers/project-generation/create-project";
 import { gatherConfig } from "./prompts/config-prompts";
 import { getProjectName } from "./prompts/project-name";
+import {
+  APISchema,
+  AddonsSchema,
+  BackendSchema,
+  DatabaseSchema,
+  DatabaseSetupSchema,
+  ExamplesSchema,
+  FrontendSchema,
+  ORMSchema,
+  PackageManagerSchema,
+  ProjectNameSchema,
+  RuntimeSchema,
+} from "./types";
+import { trackProjectCreation } from "./utils/analytics";
 import { displayConfig } from "./utils/display-config";
 import { generateReproducibleCommand } from "./utils/generate-reproducible-command";
 import { getLatestCLIVersion } from "./utils/get-latest-cli-version";
+import { openUrl } from "./utils/open-url";
 import { renderTitle } from "./utils/render-title";
+import { displaySponsors, fetchSponsors } from "./utils/sponsors";
+import { getProvidedFlags, processAndValidateFlags } from "./validation";
+
+const t = trpcServer.initTRPC.create();
+
+async function handleDirectoryConflict(currentPathInput: string): Promise<{
+  finalPathInput: string;
+  shouldClearDirectory: boolean;
+}> {
+  while (true) {
+    const resolvedPath = path.resolve(process.cwd(), currentPathInput);
+    const dirExists = fs.pathExistsSync(resolvedPath);
+    const dirIsNotEmpty = dirExists && fs.readdirSync(resolvedPath).length > 0;
+
+    if (!dirIsNotEmpty) {
+      return { finalPathInput: currentPathInput, shouldClearDirectory: false };
+    }
+
+    relinka(
+      "warn",
+      `Directory "${re.yellow(
+        currentPathInput,
+      )}" already exists and is not empty.`,
+    );
+
+    const action = await selectPrompt<
+      "overwrite" | "merge" | "rename" | "cancel"
+    >({
+      title: "What would you like to do?",
+      options: [
+        {
+          value: "overwrite",
+          label: "Overwrite",
+          hint: "Empty the directory and create the project",
+        },
+        {
+          value: "merge",
+          label: "Merge",
+          hint: "Create project files inside, potentially overwriting conflicts",
+        },
+        {
+          value: "rename",
+          label: "Choose a different name/path",
+          hint: "Keep the existing directory and create a new one",
+        },
+        { value: "cancel", label: "Cancel", hint: "Abort the process" },
+      ],
+      defaultValue: "rename",
+    });
+
+    if (isCancel(action)) {
+      cancel(re.red("Operation cancelled."));
+      process.exit(0);
+    }
+
+    switch (action) {
+      case "overwrite":
+        return { finalPathInput: currentPathInput, shouldClearDirectory: true };
+      case "merge":
+        relinka(
+          "info",
+          `Proceeding into existing directory "${re.yellow(
+            currentPathInput,
+          )}". Files may be overwritten.`,
+        );
+        return {
+          finalPathInput: currentPathInput,
+          shouldClearDirectory: false,
+        };
+      case "rename": {
+        relinka("info", "Please choose a different project name or path.");
+        const newPathInput = await getProjectName(undefined);
+        return await handleDirectoryConflict(newPathInput);
+      }
+      case "cancel":
+        cancel(re.red("Operation cancelled."));
+        process.exit(0);
+    }
+  }
+}
+
+async function setupProjectDirectory(
+  finalPathInput: string,
+  shouldClearDirectory: boolean,
+): Promise<{ finalResolvedPath: string; finalBaseName: string }> {
+  let finalResolvedPath: string;
+  let finalBaseName: string;
+
+  if (finalPathInput === ".") {
+    finalResolvedPath = process.cwd();
+    finalBaseName = path.basename(finalResolvedPath);
+  } else {
+    finalResolvedPath = path.resolve(process.cwd(), finalPathInput);
+    finalBaseName = path.basename(finalResolvedPath);
+  }
+
+  if (shouldClearDirectory) {
+    const s = spinner();
+    s.start(`Clearing directory "${finalResolvedPath}"...`);
+    try {
+      await fs.emptyDir(finalResolvedPath);
+      s.stop(`Directory "${finalResolvedPath}" cleared.`);
+    } catch (error) {
+      s.stop(re.red(`Failed to clear directory "${finalResolvedPath}".`));
+      relinka("error", String(error));
+      process.exit(1);
+    }
+  } else {
+    await fs.ensureDir(finalResolvedPath);
+  }
+
+  return { finalResolvedPath, finalBaseName };
+}
+
+async function createProjectHandler(
+  input: CreateInput & { projectName?: string },
+) {
+  const startTime = Date.now();
+
+  try {
+    renderTitle();
+    intro(re.magenta("Creating a new Better-T Stack project"));
+
+    let currentPathInput: string;
+    if (input.yes && input.projectName) {
+      currentPathInput = input.projectName;
+    } else if (input.yes) {
+      let defaultName = DEFAULT_CONFIG.relativePath;
+      let counter = 1;
+      while (
+        fs.pathExistsSync(path.resolve(process.cwd(), defaultName)) &&
+        fs.readdirSync(path.resolve(process.cwd(), defaultName)).length > 0
+      ) {
+        defaultName = `${DEFAULT_CONFIG.projectName}-${counter}`;
+        counter++;
+      }
+      currentPathInput = defaultName;
+    } else {
+      currentPathInput = await getProjectName(input.projectName);
+    }
+
+    const { finalPathInput, shouldClearDirectory } =
+      await handleDirectoryConflict(currentPathInput);
+
+    const { finalResolvedPath, finalBaseName } = await setupProjectDirectory(
+      finalPathInput,
+      shouldClearDirectory,
+    );
+
+    const cliInput = {
+      ...input,
+      projectDirectory: input.projectName,
+    };
+
+    const providedFlags = getProvidedFlags(cliInput);
+    const flagConfig = processAndValidateFlags(
+      cliInput,
+      providedFlags,
+      finalBaseName,
+    );
+    const { projectName: _projectNameFromFlags, ...otherFlags } = flagConfig;
+
+    if (!input.yes && Object.keys(otherFlags).length > 0) {
+      relinka("info", re.yellow("Using these pre-selected options:"));
+      relinka("log", displayConfig(otherFlags));
+      relinka("log", "");
+    }
+
+    let config: ProjectConfig;
+    if (input.yes) {
+      config = {
+        ...DEFAULT_CONFIG,
+        ...flagConfig,
+        projectName: finalBaseName,
+        projectDir: finalResolvedPath,
+        relativePath: finalPathInput,
+      };
+
+      if (config.backend === "convex") {
+        relinka(
+          "info",
+          "Due to '--backend convex' flag, the following options have been automatically set: auth=false, database=none, orm=none, api=none, runtime=none, dbSetup=none, examples=todo",
+        );
+      } else if (config.backend === "none") {
+        relinka(
+          "info",
+          "Due to '--backend none', the following options have been automatically set: --auth=false, --database=none, --orm=none, --api=none, --runtime=none, --db-setup=none, --examples=none",
+        );
+      }
+
+      relinka(
+        "info",
+        re.yellow("Using default/flag options (config prompts skipped):"),
+      );
+      relinka("log", displayConfig(config));
+      relinka("log", "");
+    } else {
+      config = await gatherConfig(
+        flagConfig,
+        finalBaseName,
+        finalResolvedPath,
+        finalPathInput,
+      );
+    }
+
+    await createProject(config);
+
+    const reproducibleCommand = generateReproducibleCommand(config);
+    relinka(
+      "success",
+      re.blue(
+        `You can reproduce this setup with the following command:\n${reproducibleCommand}`,
+      ),
+    );
+
+    await trackProjectCreation(config);
+
+    const elapsedTimeInSeconds = ((Date.now() - startTime) / 1000).toFixed(2);
+    outro(
+      re.magenta(
+        `Project created successfully in ${re.bold(
+          elapsedTimeInSeconds,
+        )} seconds!`,
+      ),
+    );
+  } catch (error) {
+    relinka("error", String(error));
+    process.exit(1);
+  }
+}
+
+const router = t.router({
+  init: t.procedure
+    .meta({
+      description: "Create a new Better-T Stack project",
+      default: true,
+    })
+    .input(
+      z.tuple([
+        ProjectNameSchema.optional(),
+        z
+          .object({
+            yes: z
+              .boolean()
+              .optional()
+              .default(false)
+              .describe("Use default configuration"),
+            database: DatabaseSchema.optional(),
+            orm: ORMSchema.optional(),
+            auth: z.boolean().optional(),
+            frontend: z.array(FrontendSchema).optional(),
+            addons: z.array(AddonsSchema).optional(),
+            examples: z.array(ExamplesSchema).optional(),
+            git: z.boolean().optional(),
+            packageManager: PackageManagerSchema.optional(),
+            install: z.boolean().optional(),
+            dbSetup: DatabaseSetupSchema.optional(),
+            backend: BackendSchema.optional(),
+            runtime: RuntimeSchema.optional(),
+            api: APISchema.optional(),
+          })
+          .optional()
+          .default({}),
+      ]),
+    )
+    .mutation(async ({ input }) => {
+      const [projectName, options] = input;
+      const combinedInput = {
+        projectName,
+        ...options,
+      };
+      await createProjectHandler(combinedInput);
+    }),
+  sponsors: t.procedure
+    .meta({ description: "Show Better-T Stack sponsors" })
+    .mutation(async () => {
+      try {
+        renderTitle();
+        intro(re.magenta("Better-T Stack Sponsors"));
+        const sponsors = await fetchSponsors();
+        displaySponsors(sponsors);
+      } catch (error) {
+        relinka("error", String(error));
+        process.exit(1);
+      }
+    }),
+  docs: t.procedure
+    .meta({ description: "Open Better-T Stack documentation" })
+    .mutation(async () => {
+      const DOCS_URL = "https://better-t-stack.dev/docs";
+      try {
+        await openUrl(DOCS_URL);
+        relinka("success", re.blue("Opened docs in your default browser."));
+      } catch {
+        relinka("log", `Please visit ${DOCS_URL}`);
+      }
+    }),
+  builder: t.procedure
+    .meta({ description: "Open the web-based stack builder" })
+    .mutation(async () => {
+      const BUILDER_URL = "https://better-t-stack.dev/new";
+      try {
+        await openUrl(BUILDER_URL);
+        relinka("success", re.blue("Opened builder in your default browser."));
+      } catch {
+        relinka("log", `Please visit ${BUILDER_URL}`);
+      }
+    }),
+});
 
 export default defineCommand({
-  meta: {
-    name: "create-better-t-stack",
-    version: getLatestCLIVersion(),
-    description: "Create a new Better-T Stack project",
-  },
-  args: {
-    projectDirectory: {
-      type: "positional",
-      description: "Project name/directory",
-    },
-    yes: {
-      type: "boolean",
-      alias: "y",
-      description: "Use default configuration and skip prompts",
-      default: false,
-    },
-    database: {
-      type: "string",
-      description: "Database type",
-      allowed: ["none", "sqlite", "postgres", "mysql", "mongodb"],
-    },
-    orm: {
-      type: "string",
-      description: "ORM type",
-      allowed: ["drizzle", "prisma", "mongoose", "none"],
-    },
-    auth: {
-      type: "boolean",
-      description: "Include authentication (use --no-auth to exclude)",
-    },
-    frontend: {
-      type: "array",
-      description: "Frontend types",
-      allowed: [
-        "tanstack-router",
-        "react-router",
-        "tanstack-start",
-        "next",
-        "nuxt",
-        "native",
-        "svelte",
-        "none",
-      ],
-    },
-    addons: {
-      type: "array",
-      description: "Additional addons",
-      allowed: [
-        "pwa",
-        "tauri",
-        "starlight",
-        "biome",
-        "husky",
-        "turborepo",
-        "none",
-      ],
-    },
-    examples: {
-      type: "array",
-      description: "Examples to include",
-      allowed: ["todo", "ai", "none"],
-    },
-    git: {
-      type: "boolean",
-      description: "Initialize git repository (use --no-git to skip)",
-    },
-    packageManager: {
-      type: "string",
-      alias: "pm",
-      description: "Package manager",
-      allowed: ["npm", "pnpm", "bun"],
-    },
-    install: {
-      type: "boolean",
-      description: "Install dependencies (use --no-install to skip)",
-    },
-    dbSetup: {
-      type: "string",
-      description: "Database setup",
-      allowed: ["turso", "neon", "prisma-postgres", "mongodb-atlas", "none"],
-    },
-    backend: {
-      type: "string",
-      description: "Backend framework",
-      allowed: ["hono", "express", "next", "elysia", "convex"],
-    },
-    runtime: {
-      type: "string",
-      description: "Runtime",
-      allowed: ["bun", "node", "none"],
-    },
-    api: {
-      type: "string",
-      description: "API type",
-      allowed: ["trpc", "orpc", "none"],
-    },
-  },
-  async run({ args }) {
-    const startTime = Date.now();
-
-    try {
-      renderTitle();
-
-      const flagConfig = processAndValidateFlags(args);
-
-      intro(pc.magenta("Creating a new Better-T-Stack project"));
-
-      if (!args.yes && Object.keys(flagConfig).length > 0) {
-        log.info(pc.yellow("Using these pre-selected options:"));
-        log.message(displayConfig(flagConfig));
-        log.message("");
-      }
-
-      let config: ProjectConfig;
-      if (args.yes) {
-        config = {
-          ...DEFAULT_CONFIG,
-          projectName: args.projectDirectory ?? DEFAULT_CONFIG.projectName,
-          ...flagConfig,
-        };
-
-        if (config.backend === "convex") {
-          config.auth = false;
-          config.database = "none";
-          config.orm = "none";
-          config.api = "none";
-          config.runtime = "none";
-          config.dbSetup = "none";
-        } else if (config.database === "none") {
-          config.orm = "none";
-          config.auth = false;
-          config.dbSetup = "none";
-        }
-
-        log.info(pc.yellow("Using these default/flag options:"));
-        log.message(displayConfig(config));
-        log.message("");
-      } else {
-        config = await gatherConfig(flagConfig);
-      }
-
-      const projectDir = path.resolve(process.cwd(), config.projectName);
-
-      if (
-        fs.pathExistsSync(projectDir) &&
-        fs.readdirSync(projectDir).length > 0
-      ) {
-        const newProjectName = await getProjectName();
-        config.projectName = newProjectName;
-      }
-
-      await createProject(config);
-
-      log.success(
-        pc.blue(
-          `You can reproduce this setup with the following command:\n${generateReproducibleCommand(
-            config,
-          )}`,
-        ),
-      );
-
-      const elapsedTimeInSeconds = ((Date.now() - startTime) / 1000).toFixed(2);
-      outro(
-        pc.magenta(
-          `Project created successfully in ${pc.bold(
-            elapsedTimeInSeconds,
-          )} seconds!`,
-        ),
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        consola.error(`An unexpected error occurred: ${error.message}`);
-        if (!error.message.includes("is only supported with")) {
-          consola.error(error.stack);
-        }
-        process.exit(1);
-      } else {
-        consola.error("An unexpected error occurred.");
-        console.error(error);
-        process.exit(1);
-      }
-    }
+  router,
+  run() {
+    console.log("hello, world");
   },
 });
 
-function processAndValidateFlags(
-  options: Record<string, unknown>,
-): Partial<ProjectConfig> {
-  const config: Partial<ProjectConfig> = {};
-  const providedFlags = new Set<string>(
-    Object.keys(options).filter((key) => key !== "_" && key !== "$0"),
-  );
+// createCli({
+//   router,
+//   name: "create-better-t-stack",
+//   version: getLatestCLIVersion(),
+// }).run();
 
-  if (options.api) {
-    config.api = options.api as ProjectApi;
-    if (options.api === "none") {
-      if (options.backend && options.backend !== "convex") {
-        consola.fatal(
-          `'--api none' is only supported with '--backend convex'. Please choose a different API setting or use '--backend convex'.`,
-        );
-        process.exit(1);
-      }
-      config.backend = "convex";
-    }
-  }
-
-  if (options.backend) {
-    config.backend = options.backend as ProjectBackend;
-  }
-
-  if (
-    providedFlags.has("backend") &&
-    config.backend &&
-    config.backend !== "convex"
-  ) {
-    if (providedFlags.has("api") && options.api === "none") {
-      consola.fatal(
-        `'--api none' is only supported with '--backend convex'. Please choose 'trpc', 'orpc', or remove the --api flag.`,
-      );
-      process.exit(1);
-    }
-    if (providedFlags.has("runtime") && options.runtime === "none") {
-      consola.fatal(
-        `'--runtime none' is only supported with '--backend convex'. Please choose 'bun', 'node', or remove the --runtime flag.`,
-      );
-      process.exit(1);
-    }
-  }
-
-  if (options.database) {
-    config.database = options.database as ProjectDatabase;
-  }
-  if (options.orm) {
-    config.orm = options.orm as ProjectOrm;
-  }
-  if (options.auth !== undefined) {
-    config.auth = options.auth as boolean;
-  }
-  if (options.git !== undefined) {
-    config.git = options.git as boolean;
-  }
-  if (options.install !== undefined) {
-    config.install = options.install as boolean;
-  }
-  if (options.runtime) {
-    config.runtime = options.runtime as ProjectRuntime;
-  }
-  if (options.dbSetup) {
-    config.dbSetup = options.dbSetup as ProjectDBSetup;
-  }
-  if (options.packageManager) {
-    config.packageManager = options.packageManager as ProjectPackageManager;
-  }
-  if (options.projectDirectory) {
-    config.projectName = options.projectDirectory as string;
-  }
-
-  if (options.frontend && Array.isArray(options.frontend)) {
-    if (options.frontend.includes("none")) {
-      if (options.frontend.length > 1) {
-        consola.fatal(`Cannot combine 'none' with other frontend options.`);
-        process.exit(1);
-      }
-      config.frontend = [];
-    } else {
-      const validOptions = options.frontend.filter(
-        (f): f is ProjectFrontend => f !== "none",
-      );
-      const webFrontends = validOptions.filter(
-        (f) =>
-          f === "tanstack-router" ||
-          f === "react-router" ||
-          f === "tanstack-start" ||
-          f === "next" ||
-          f === "nuxt" ||
-          f === "svelte",
-      );
-      if (webFrontends.length > 1) {
-        consola.fatal(
-          "Cannot select multiple web frameworks. Choose only one of: tanstack-router, tanstack-start, react-router, next, nuxt, svelte",
-        );
-        process.exit(1);
-      }
-      config.frontend = validOptions;
-    }
-  }
-  if (options.addons && Array.isArray(options.addons)) {
-    if (options.addons.includes("none")) {
-      if (options.addons.length > 1) {
-        consola.fatal(`Cannot combine 'none' with other addons.`);
-        process.exit(1);
-      }
-      config.addons = [];
-    } else {
-      config.addons = options.addons.filter(
-        (addon): addon is ProjectAddons => addon !== "none",
-      );
-    }
-  }
-  if (options.examples && Array.isArray(options.examples)) {
-    if (options.examples.includes("none")) {
-      if (options.examples.length > 1) {
-        consola.fatal("Cannot combine 'none' with other examples.");
-        process.exit(1);
-      }
-      config.examples = [];
-    } else {
-      config.examples = options.examples.filter(
-        (ex): ex is ProjectExamples => ex !== "none",
-      );
-      if (config.backend !== "convex" && options.examples.includes("none")) {
-        config.examples = [];
-      }
-    }
-  }
-
-  if (config.backend === "convex") {
-    const incompatibleFlags: string[] = [];
-
-    if (providedFlags.has("auth") && options.auth === true)
-      incompatibleFlags.push("--auth");
-    if (providedFlags.has("database") && options.database !== "none")
-      incompatibleFlags.push(`--database ${options.database}`);
-    if (providedFlags.has("orm") && options.orm !== "none")
-      incompatibleFlags.push(`--orm ${options.orm}`);
-    if (providedFlags.has("api") && options.api !== "none")
-      incompatibleFlags.push(`--api ${options.api}`);
-    if (providedFlags.has("runtime") && options.runtime !== "none")
-      incompatibleFlags.push(`--runtime ${options.runtime}`);
-    if (providedFlags.has("dbSetup") && options.dbSetup !== "none")
-      incompatibleFlags.push(`--db-setup ${options.dbSetup}`);
-    if (providedFlags.has("examples")) {
-      incompatibleFlags.push("--examples");
-    }
-
-    if (incompatibleFlags.length > 0) {
-      consola.fatal(
-        `The following flags are incompatible with '--backend convex': ${incompatibleFlags.join(
-          ", ",
-        )}. Please remove them. The 'todo' example is included automatically with Convex.`,
-      );
-      process.exit(1);
-    }
-
-    config.auth = false;
-    config.database = "none";
-    config.orm = "none";
-    config.api = "none";
-    config.runtime = "none";
-    config.dbSetup = "none";
-    config.examples = ["todo"];
-  } else {
-    const effectiveDatabase =
-      config.database ?? (options.yes ? DEFAULT_CONFIG.database : undefined);
-    const effectiveOrm =
-      config.orm ?? (options.yes ? DEFAULT_CONFIG.orm : undefined);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const effectiveAuth =
-      config.auth ?? (options.yes ? DEFAULT_CONFIG.auth : undefined);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const effectiveDbSetup =
-      config.dbSetup ?? (options.yes ? DEFAULT_CONFIG.dbSetup : undefined);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const effectiveExamples =
-      config.examples ?? (options.yes ? DEFAULT_CONFIG.examples : undefined);
-    const effectiveFrontend =
-      config.frontend ?? (options.yes ? DEFAULT_CONFIG.frontend : undefined);
-    const effectiveApi =
-      config.api ?? (options.yes ? DEFAULT_CONFIG.api : undefined);
-    const effectiveBackend =
-      config.backend ?? (options.yes ? DEFAULT_CONFIG.backend : undefined);
-
-    if (effectiveDatabase === "none") {
-      if (providedFlags.has("orm") && options.orm !== "none") {
-        consola.fatal(
-          `Cannot use ORM '--orm ${options.orm}' when database is 'none'.`,
-        );
-        process.exit(1);
-      }
-      config.orm = "none";
-
-      if (providedFlags.has("auth") && options.auth === true) {
-        consola.fatal(
-          "Authentication requires a database. Cannot use --auth when database is 'none'.",
-        );
-        process.exit(1);
-      }
-      config.auth = false;
-
-      if (providedFlags.has("dbSetup") && options.dbSetup !== "none") {
-        consola.fatal(
-          `Database setup '--db-setup ${options.dbSetup}' requires a database. Cannot use when database is 'none'.`,
-        );
-        process.exit(1);
-      }
-      config.dbSetup = "none";
-    }
-
-    if (config.orm === "mongoose" && !providedFlags.has("database")) {
-      config.database = "mongodb";
-    }
-
-    if (effectiveDatabase === "mongodb" && effectiveOrm === "drizzle") {
-      consola.fatal(
-        "Drizzle ORM is not compatible with MongoDB. Please use --orm prisma or --orm mongoose.",
-      );
-      process.exit(1);
-    }
-
-    if (
-      effectiveOrm === "mongoose" &&
-      effectiveDatabase &&
-      effectiveDatabase !== "mongodb"
-    ) {
-      consola.fatal(
-        `Mongoose ORM requires MongoDB. Cannot use --orm mongoose with --database ${effectiveDatabase}.`,
-      );
-      process.exit(1);
-    }
-
-    if (config.dbSetup && config.dbSetup !== "none") {
-      const dbSetup = config.dbSetup;
-
-      if (!effectiveDatabase || effectiveDatabase === "none") {
-        consola.fatal(
-          `Database setup '--db-setup ${dbSetup}' requires a database. Cannot use when database is 'none'.`,
-        );
-        process.exit(1);
-      }
-
-      if (dbSetup === "turso") {
-        if (effectiveDatabase && effectiveDatabase !== "sqlite") {
-          consola.fatal(
-            `Turso setup requires SQLite. Cannot use --db-setup turso with --database ${effectiveDatabase}`,
-          );
-          process.exit(1);
-        }
-        if (effectiveOrm !== "drizzle") {
-          consola.fatal(
-            `Turso setup requires Drizzle ORM. Cannot use --db-setup turso with --orm ${effectiveOrm ?? "none"}.`,
-          );
-          process.exit(1);
-        }
-      } else if (dbSetup === "prisma-postgres") {
-        if (effectiveDatabase !== "postgres") {
-          consola.fatal(
-            `Prisma PostgreSQL setup requires PostgreSQL. Cannot use --db-setup prisma-postgres with --database ${effectiveDatabase}.`,
-          );
-          process.exit(1);
-        }
-        if (effectiveOrm !== "prisma") {
-          consola.fatal(
-            `Prisma PostgreSQL setup requires Prisma ORM. Cannot use --db-setup prisma-postgres with --orm ${effectiveOrm}.`,
-          );
-          process.exit(1);
-        }
-      } else if (dbSetup === "mongodb-atlas") {
-        if (effectiveDatabase !== "mongodb") {
-          consola.fatal(
-            `MongoDB Atlas setup requires MongoDB. Cannot use --db-setup mongodb-atlas with --database ${effectiveDatabase}.`,
-          );
-          process.exit(1);
-        }
-        if (effectiveOrm !== "prisma" && effectiveOrm !== "mongoose") {
-          consola.fatal(
-            `MongoDB Atlas setup requires Prisma or Mongoose ORM. Cannot use --db-setup mongodb-atlas with --orm ${effectiveOrm}.`,
-          );
-          process.exit(1);
-        }
-      } else if (dbSetup === "neon") {
-        if (effectiveDatabase !== "postgres") {
-          consola.fatal(
-            `Neon PostgreSQL setup requires PostgreSQL. Cannot use --db-setup neon with --database ${effectiveDatabase}.`,
-          );
-          process.exit(1);
-        }
-      }
-    }
-
-    const includesNuxt = effectiveFrontend?.includes("nuxt");
-    const includesSvelte = effectiveFrontend?.includes("svelte");
-
-    if ((includesNuxt || includesSvelte) && effectiveApi === "trpc") {
-      consola.fatal(
-        `tRPC API is not supported with '${
-          includesNuxt ? "nuxt" : "svelte"
-        }' frontend. Please use --api orpc or remove '${
-          includesNuxt ? "nuxt" : "svelte"
-        }' from --frontend.`,
-      );
-      process.exit(1);
-    }
-    if (
-      (includesNuxt || includesSvelte) &&
-      effectiveApi !== "orpc" &&
-      (!options.api || (options.yes && options.api !== "trpc"))
-    ) {
-      if (config.api !== "none") {
-        config.api = "orpc";
-      }
-    }
-
-    if (config.addons && config.addons.length > 0) {
-      const webSpecificAddons = ["pwa", "tauri"];
-      const hasWebSpecificAddons = config.addons.some((addon) =>
-        webSpecificAddons.includes(addon),
-      );
-      const hasCompatibleWebFrontend = effectiveFrontend?.some(
-        (f) =>
-          f === "tanstack-router" ||
-          f === "react-router" ||
-          (f === "nuxt" &&
-            config.addons?.includes("tauri") &&
-            !config.addons?.includes("pwa")) ||
-          (f === "svelte" &&
-            config.addons?.includes("tauri") &&
-            !config.addons?.includes("pwa")),
-      );
-
-      if (hasWebSpecificAddons && !hasCompatibleWebFrontend) {
-        let incompatibleAddon = "";
-        if (config.addons.includes("pwa") && includesNuxt) {
-          incompatibleAddon = "PWA addon is not compatible with Nuxt.";
-        } else if (
-          config.addons.includes("pwa") ||
-          config.addons.includes("tauri")
-        ) {
-          incompatibleAddon =
-            "PWA and Tauri addons require tanstack-router, react-router, or Nuxt/Svelte (Tauri only).";
-        }
-        consola.fatal(
-          `${incompatibleAddon} Cannot use these addons with your frontend selection.`,
-        );
-        process.exit(1);
-      }
-
-      if (config.addons.includes("husky") && !config.addons.includes("biome")) {
-        consola.warn(
-          "Husky addon is recommended to be used with Biome for lint-staged configuration.",
-        );
-      }
-      config.addons = [...new Set(config.addons)];
-    }
-
-    const onlyNativeFrontend =
-      effectiveFrontend &&
-      effectiveFrontend.length === 1 &&
-      effectiveFrontend[0] === "native";
-
-    if (
-      onlyNativeFrontend &&
-      config.examples &&
-      config.examples.length > 0 &&
-      !config.examples.includes("none")
-    ) {
-      consola.fatal(
-        "Examples are not supported when only the 'native' frontend is selected.",
-      );
-      process.exit(1);
-    }
-
-    if (
-      config.examples &&
-      config.examples.length > 0 &&
-      !config.examples.includes("none")
-    ) {
-      if (
-        config.examples.includes("todo") &&
-        effectiveBackend !== "convex" &&
-        effectiveDatabase === "none"
-      ) {
-        consola.fatal(
-          "The 'todo' example requires a database (unless using Convex). Cannot use --examples todo when database is 'none'.",
-        );
-        process.exit(1);
-      }
-
-      if (config.examples.includes("ai") && effectiveBackend === "elysia") {
-        consola.fatal(
-          "The 'ai' example is not compatible with the Elysia backend.",
-        );
-        process.exit(1);
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const hasWebFrontendForExamples = effectiveFrontend?.some((f) =>
-        [
-          "tanstack-router",
-          "react-router",
-          "tanstack-start",
-          "next",
-          "nuxt",
-          "svelte",
-        ].includes(f),
-      );
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const noFrontendSelected =
-        !effectiveFrontend || effectiveFrontend.length === 0;
-    }
-  }
-
-  return config;
-}
+createCli({
+  name: "create-better-t-stack",
+  version: getLatestCLIVersion(),
+  rpc: {
+    router,
+  },
+}).run();

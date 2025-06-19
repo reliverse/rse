@@ -1,10 +1,10 @@
-import { consola } from "consola";
-import pc from "picocolors";
+import { re } from "@reliverse/relico";
+import { relinka } from "@reliverse/relinka";
 
 import type {
-  ProjectDatabase,
-  ProjectOrm,
-  ProjectRuntime,
+  Database,
+  ORM,
+  Runtime,
 } from "~/libs/sdk/providers/better-t-stack/types";
 import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
 
@@ -15,7 +15,7 @@ export function displayPostInstallInstructions(
 ) {
   const {
     database,
-    projectName,
+    relativePath,
     packageManager,
     depsInstalled,
     orm,
@@ -27,7 +27,7 @@ export function displayPostInstallInstructions(
 
   const isConvex = backend === "convex";
   const runCmd = packageManager === "npm" ? "npm run" : packageManager;
-  const cdCmd = `cd ${projectName}`;
+  const cdCmd = `cd ${relativePath}`;
   const hasHuskyOrBiome =
     addons?.includes("husky") || addons?.includes("biome");
 
@@ -42,9 +42,11 @@ export function displayPostInstallInstructions(
   const lintingInstructions = hasHuskyOrBiome
     ? getLintingInstructions(runCmd)
     : "";
-  const nativeInstructions = frontend?.includes("native")
-    ? getNativeInstructions(isConvex)
-    : "";
+  const nativeInstructions =
+    frontend?.includes("native-nativewind") ||
+    frontend?.includes("native-unistyles")
+      ? getNativeInstructions(isConvex)
+      : "";
   const pwaInstructions =
     addons?.includes("pwa") &&
     (frontend?.includes("react-router") ||
@@ -63,9 +65,12 @@ export function displayPostInstallInstructions(
       "tanstack-start",
       "nuxt",
       "svelte",
+      "solid",
     ].includes(f),
   );
-  const hasNative = frontend?.includes("native");
+  const hasNative =
+    frontend?.includes("native-nativewind") ||
+    frontend?.includes("native-unistyles");
 
   const bunWebNativeWarning =
     packageManager === "bun" && hasNative && hasWeb
@@ -80,34 +85,49 @@ export function displayPostInstallInstructions(
 
   const tazeCommand = getPackageExecutionCommand(packageManager, "taze -r");
 
-  let output = `${pc.bold("Next steps")}\n${pc.cyan("1.")} ${cdCmd}\n`;
+  let output = `${re.bold("Next steps")}\n${re.cyan("1.")} ${cdCmd}\n`;
   let stepCounter = 2;
 
   if (!depsInstalled) {
-    output += `${pc.cyan(`${stepCounter++}.`)} ${packageManager} install\n`;
+    output += `${re.cyan(`${stepCounter++}.`)} ${packageManager} install\n`;
   }
 
   if (isConvex) {
-    output += `${pc.cyan(`${stepCounter++}.`)} ${runCmd} dev:setup ${pc.dim("(this will guide you through Convex project setup)")}\n`;
-    output += `${pc.cyan(`${stepCounter++}.`)} ${runCmd} dev\n\n`;
+    output += `${re.cyan(`${stepCounter++}.`)} ${runCmd} dev:setup ${re.dim(
+      "(this will guide you through Convex project setup)",
+    )}\n`;
+    output += `${re.cyan(`${stepCounter++}.`)} ${runCmd} dev\n\n`;
   } else {
-    output += `${pc.cyan(`${stepCounter++}.`)} ${runCmd} dev\n\n`;
+    if (runtime !== "workers") {
+      output += `${re.cyan(`${stepCounter++}.`)} ${runCmd} dev\n`;
+    }
+
+    if (runtime === "workers") {
+      output += `${re.cyan(`${stepCounter++}.`)} bun dev\n`;
+      output += `${re.cyan(
+        `${stepCounter++}.`,
+      )} cd apps/server && bun run cf-typegen\n\n`;
+    } else {
+      output += "\n";
+    }
   }
 
-  output += `${pc.bold("Your project will be available at:")}\n`;
+  output += `${re.bold("Your project will be available at:")}\n`;
 
   if (hasWeb) {
-    output += `${pc.cyan("•")} Frontend: http://localhost:${webPort}\n`;
+    output += `${re.cyan("•")} Frontend: http://localhost:${webPort}\n`;
   } else if (!hasNative && !addons?.includes("starlight")) {
-    output += `${pc.yellow("NOTE:")} You are creating a backend-only app (no frontend selected)\n`;
+    output += `${re.yellow(
+      "NOTE:",
+    )} You are creating a backend-only app (no frontend selected)\n`;
   }
 
   if (!isConvex) {
-    output += `${pc.cyan("•")} Backend API: http://localhost:3000\n`;
+    output += `${re.cyan("•")} Backend API: http://localhost:3000\n`;
   }
 
   if (addons?.includes("starlight")) {
-    output += `${pc.cyan("•")} Docs: http://localhost:4321\n`;
+    output += `${re.cyan("•")} Docs: http://localhost:4321\n`;
   }
 
   if (nativeInstructions) output += `\n${nativeInstructions.trim()}\n`;
@@ -120,11 +140,15 @@ export function displayPostInstallInstructions(
   if (noOrmWarning) output += `\n${noOrmWarning.trim()}\n`;
   if (bunWebNativeWarning) output += `\n${bunWebNativeWarning.trim()}\n`;
 
-  output += `\n${pc.bold("Update all dependencies:\n")}${pc.cyan(tazeCommand)}\n\n`;
-  output += `${pc.bold("Like Better-T Stack?")} Please consider giving us a star on GitHub:\n`;
-  output += pc.cyan("https://github.com/AmanVarshney01/create-better-t-stack");
+  output += `\n${re.bold("Update all dependencies:\n")}${re.cyan(
+    tazeCommand,
+  )}\n\n`;
+  output += `${re.bold(
+    "Like Better-T Stack?",
+  )} Please consider giving us a star on GitHub:\n`;
+  output += re.cyan("https://github.com/AmanVarshney01/create-better-t-stack");
 
-  consola.box(output);
+  relinka("info", output);
 }
 
 function getNativeInstructions(isConvex: boolean): string {
@@ -137,29 +161,37 @@ function getNativeInstructions(isConvex: boolean): string {
     ? "your Convex deployment URL (find after running 'dev:setup')"
     : "your local IP address";
 
-  return `${pc.yellow(
+  let instructions = `${re.yellow(
     "NOTE:",
   )} For Expo connectivity issues, update apps/native/${envFileName} \nwith ${ipNote}:\n${`${envVar}=${exampleUrl}`}\n`;
+
+  if (isConvex) {
+    instructions += `\n${re.yellow(
+      "IMPORTANT:",
+    )} When using local development with Convex and native apps, ensure you use your local IP address \ninstead of localhost or 127.0.0.1 for proper connectivity.\n`;
+  }
+
+  return instructions;
 }
 
 function getLintingInstructions(runCmd?: string): string {
-  return `${pc.bold("Linting and formatting:")}\n${pc.cyan(
+  return `${re.bold("Linting and formatting:")}\n${re.cyan(
     "•",
   )} Format and lint fix: ${`${runCmd} check`}\n`;
 }
 
 function getDatabaseInstructions(
-  database: ProjectDatabase,
-  orm?: ProjectOrm,
+  database: Database,
+  orm?: ORM,
   runCmd?: string,
-  runtime?: ProjectRuntime,
+  runtime?: Runtime,
 ): string {
   const instructions = [];
 
   if (orm === "prisma") {
     if (database === "sqlite") {
       instructions.push(
-        `${pc.yellow(
+        `${re.yellow(
           "NOTE:",
         )} Turso support with Prisma is in Early Access and requires additional setup.`,
         `${"Learn more at: https://www.prisma.io/docs/orm/overview/databases/turso"}`,
@@ -168,65 +200,67 @@ function getDatabaseInstructions(
 
     if (runtime === "bun") {
       instructions.push(
-        `${pc.yellow(
+        `${re.yellow(
           "NOTE:",
         )} Prisma with Bun may require additional configuration. If you encounter errors,\nfollow the guidance provided in the error messages`,
       );
     }
 
-    instructions.push(`${pc.cyan("•")} Apply schema: ${`${runCmd} db:push`}`);
-    instructions.push(`${pc.cyan("•")} Database UI: ${`${runCmd} db:studio`}`);
+    instructions.push(`${re.cyan("•")} Apply schema: ${`${runCmd} db:push`}`);
+    instructions.push(`${re.cyan("•")} Database UI: ${`${runCmd} db:studio`}`);
   } else if (orm === "drizzle") {
-    instructions.push(`${pc.cyan("•")} Apply schema: ${`${runCmd} db:push`}`);
-    instructions.push(`${pc.cyan("•")} Database UI: ${`${runCmd} db:studio`}`);
+    instructions.push(`${re.cyan("•")} Apply schema: ${`${runCmd} db:push`}`);
+    instructions.push(`${re.cyan("•")} Database UI: ${`${runCmd} db:studio`}`);
     if (database === "sqlite") {
       instructions.push(
-        `${pc.cyan("•")} Start local DB (if needed): ${`cd apps/server && ${runCmd} db:local`}`,
+        `${re.cyan(
+          "•",
+        )} Start local DB (if needed): ${`cd apps/server && ${runCmd} db:local`}`,
       );
     }
   } else if (orm === "none") {
     instructions.push(
-      `${pc.yellow("NOTE:")} Manual database schema setup required.`,
+      `${re.yellow("NOTE:")} Manual database schema setup required.`,
     );
   }
 
   return instructions.length
-    ? `${pc.bold("Database commands:")}\n${instructions.join("\n")}`
+    ? `${re.bold("Database commands:")}\n${instructions.join("\n")}`
     : "";
 }
 
 function getTauriInstructions(runCmd?: string): string {
-  return `\n${pc.bold("Desktop app with Tauri:")}\n${pc.cyan(
+  return `\n${re.bold("Desktop app with Tauri:")}\n${re.cyan(
     "•",
-  )} Start desktop app: ${`cd apps/web && ${runCmd} desktop:dev`}\n${pc.cyan(
+  )} Start desktop app: ${`cd apps/web && ${runCmd} desktop:dev`}\n${re.cyan(
     "•",
-  )} Build desktop app: ${`cd apps/web && ${runCmd} desktop:build`}\n${pc.yellow(
+  )} Build desktop app: ${`cd apps/web && ${runCmd} desktop:build`}\n${re.yellow(
     "NOTE:",
   )} Tauri requires Rust and platform-specific dependencies.\nSee: ${"https://v2.tauri.app/start/prerequisites/"}`;
 }
 
 function getPwaInstructions(): string {
-  return `\n${pc.bold("PWA with React Router v7:")}\n${pc.yellow(
+  return `\n${re.bold("PWA with React Router v7:")}\n${re.yellow(
     "NOTE:",
   )} There is a known compatibility issue between VitePWA and React Router v7.\nSee: https://github.com/vite-pwa/vite-plugin-pwa/issues/809`;
 }
 
 function getStarlightInstructions(runCmd?: string): string {
-  return `\n${pc.bold("Documentation with Starlight:")}\n${pc.cyan(
+  return `\n${re.bold("Documentation with Starlight:")}\n${re.cyan(
     "•",
-  )} Start docs site: ${`cd apps/docs && ${runCmd} dev`}\n${pc.cyan(
+  )} Start docs site: ${`cd apps/docs && ${runCmd} dev`}\n${re.cyan(
     "•",
   )} Build docs site: ${`cd apps/docs && ${runCmd} build`}`;
 }
 
 function getNoOrmWarning(): string {
-  return `\n${pc.yellow(
+  return `\n${re.yellow(
     "WARNING:",
   )} Database selected without an ORM. Features requiring database access (e.g., examples, auth) need manual setup.`;
 }
 
 function getBunWebNativeWarning(): string {
-  return `\n${pc.yellow(
+  return `\n${re.yellow(
     "WARNING:",
   )} 'bun' might cause issues with web + native apps in a monorepo. Use 'pnpm' if problems arise.`;
 }

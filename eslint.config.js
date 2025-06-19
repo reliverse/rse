@@ -31,6 +31,7 @@ const config = tseslint.config(
       "no-relative-import-paths": noRelativeImportPaths,
     },
     rules: {
+      "no-empty": "off",
       "max-lines": ["off", 1300],
       "no-useless-catch": "off",
       "@typescript-eslint/no-floating-promises": "off",

@@ -1,4 +1,4 @@
-import pc from "picocolors";
+import { re } from "@reliverse/relico";
 
 import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
 
@@ -6,7 +6,7 @@ export function displayConfig(config: Partial<ProjectConfig>) {
   const configDisplay: string[] = [];
 
   if (config.projectName) {
-    configDisplay.push(`${pc.blue("Project Name:")} ${config.projectName}`);
+    configDisplay.push(`${re.blue("Project Name:")} ${config.projectName}`);
   }
 
   if (config.frontend !== undefined) {
@@ -17,29 +17,27 @@ export function displayConfig(config: Partial<ProjectConfig>) {
       frontend.length > 0 && frontend[0] !== undefined
         ? frontend.join(", ")
         : "none";
-    configDisplay.push(`${pc.blue("Frontend:")} ${frontendText}`);
+    configDisplay.push(`${re.blue("Frontend:")} ${frontendText}`);
   }
 
   if (config.backend !== undefined) {
-    configDisplay.push(
-      `${pc.blue("Backend Framework:")} ${String(config.backend)}`,
-    );
+    configDisplay.push(`${re.blue("Backend:")} ${String(config.backend)}`);
   }
 
   if (config.runtime !== undefined) {
-    configDisplay.push(`${pc.blue("Runtime:")} ${String(config.runtime)}`);
+    configDisplay.push(`${re.blue("Runtime:")} ${String(config.runtime)}`);
   }
 
   if (config.api !== undefined) {
-    configDisplay.push(`${pc.blue("API:")} ${String(config.api)}`);
+    configDisplay.push(`${re.blue("API:")} ${String(config.api)}`);
   }
 
   if (config.database !== undefined) {
-    configDisplay.push(`${pc.blue("Database:")} ${String(config.database)}`);
+    configDisplay.push(`${re.blue("Database:")} ${String(config.database)}`);
   }
 
   if (config.orm !== undefined) {
-    configDisplay.push(`${pc.blue("ORM:")} ${String(config.orm)}`);
+    configDisplay.push(`${re.blue("ORM:")} ${String(config.orm)}`);
   }
 
   if (config.auth !== undefined) {
@@ -49,7 +47,7 @@ export function displayConfig(config: Partial<ProjectConfig>) {
           ? "Yes"
           : "No"
         : String(config.auth);
-    configDisplay.push(`${pc.blue("Authentication:")} ${authText}`);
+    configDisplay.push(`${re.blue("Authentication:")} ${authText}`);
   }
 
   if (config.addons !== undefined) {
@@ -58,7 +56,7 @@ export function displayConfig(config: Partial<ProjectConfig>) {
       : [config.addons];
     const addonsText =
       addons.length > 0 && addons[0] !== undefined ? addons.join(", ") : "none";
-    configDisplay.push(`${pc.blue("Addons:")} ${addonsText}`);
+    configDisplay.push(`${re.blue("Addons:")} ${addonsText}`);
   }
 
   if (config.examples !== undefined) {
@@ -69,7 +67,7 @@ export function displayConfig(config: Partial<ProjectConfig>) {
       examples.length > 0 && examples[0] !== undefined
         ? examples.join(", ")
         : "none";
-    configDisplay.push(`${pc.blue("Examples:")} ${examplesText}`);
+    configDisplay.push(`${re.blue("Examples:")} ${examplesText}`);
   }
 
   if (config.git !== undefined) {
@@ -79,12 +77,12 @@ export function displayConfig(config: Partial<ProjectConfig>) {
           ? "Yes"
           : "No"
         : String(config.git);
-    configDisplay.push(`${pc.blue("Git Init:")} ${gitText}`);
+    configDisplay.push(`${re.blue("Git Init:")} ${gitText}`);
   }
 
   if (config.packageManager !== undefined) {
     configDisplay.push(
-      `${pc.blue("Package Manager:")} ${String(config.packageManager)}`,
+      `${re.blue("Package Manager:")} ${String(config.packageManager)}`,
     );
   }
 
@@ -95,17 +93,17 @@ export function displayConfig(config: Partial<ProjectConfig>) {
           ? "Yes"
           : "No"
         : String(config.install);
-    configDisplay.push(`${pc.blue("Install Dependencies:")} ${installText}`);
+    configDisplay.push(`${re.blue("Install Dependencies:")} ${installText}`);
   }
 
   if (config.dbSetup !== undefined) {
     configDisplay.push(
-      `${pc.blue("Database Setup:")} ${String(config.dbSetup)}`,
+      `${re.blue("Database Setup:")} ${String(config.dbSetup)}`,
     );
   }
 
   if (configDisplay.length === 0) {
-    return pc.yellow("No configuration selected.");
+    return re.yellow("No configuration selected.");
   }
 
   return configDisplay.join("\n");

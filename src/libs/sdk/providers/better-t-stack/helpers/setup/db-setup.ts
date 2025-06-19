@@ -1,24 +1,23 @@
-import { spinner } from "@clack/prompts";
+import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
-import consola from "consola";
+import { relinka } from "@reliverse/relinka";
+import { spinner } from "@reliverse/rempts";
 import path from "node:path";
-import pc from "picocolors";
 
 import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
 
+import { setupMongoDBAtlas } from "~/libs/sdk/providers/better-t-stack/helpers/database-providers/mongodb-atlas-setup";
+import { setupNeonPostgres } from "~/libs/sdk/providers/better-t-stack/helpers/database-providers/neon-setup";
+import { setupPrismaPostgres } from "~/libs/sdk/providers/better-t-stack/helpers/database-providers/prisma-postgres-setup";
+import { setupSupabase } from "~/libs/sdk/providers/better-t-stack/helpers/database-providers/supabase-setup";
+import { setupTurso } from "~/libs/sdk/providers/better-t-stack/helpers/database-providers/turso-setup";
 import { addPackageDependency } from "~/libs/sdk/providers/better-t-stack/utils/add-package-deps";
 
-import { setupMongoDBAtlas } from "./mongodb-atlas-setup";
-import { setupNeonPostgres } from "./neon-setup";
-import { setupPrismaPostgres } from "./prisma-postgres-setup";
-import { setupTurso } from "./turso-setup";
-
 export async function setupDatabase(config: ProjectConfig): Promise<void> {
-  const { projectName, database, orm, dbSetup, backend } = config;
+  const { database, orm, dbSetup, backend, projectDir } = config;
 
   if (backend === "convex" || database === "none") {
     if (backend !== "convex") {
-      const projectDir = path.resolve(process.cwd(), projectName);
       const serverDir = path.join(projectDir, "apps/server");
       const serverDbDir = path.join(serverDir, "src/db");
       if (await fs.pathExists(serverDbDir)) {
@@ -28,7 +27,6 @@ export async function setupDatabase(config: ProjectConfig): Promise<void> {
     return;
   }
 
-  const projectDir = path.resolve(process.cwd(), projectName);
   const s = spinner();
   const serverDir = path.join(projectDir, "apps/server");
 
@@ -78,14 +76,16 @@ export async function setupDatabase(config: ProjectConfig): Promise<void> {
         await setupPrismaPostgres(config);
       } else if (dbSetup === "neon") {
         await setupNeonPostgres(config);
+      } else if (dbSetup === "supabase") {
+        await setupSupabase(config);
       }
     } else if (database === "mongodb" && dbSetup === "mongodb-atlas") {
       await setupMongoDBAtlas(config);
     }
   } catch (error) {
-    s.stop(pc.red("Failed to set up database"));
+    s.stop(re.red("Failed to set up database"));
     if (error instanceof Error) {
-      consola.error(pc.red(error.message));
+      relinka("error", re.red(error.message));
     }
   }
 }

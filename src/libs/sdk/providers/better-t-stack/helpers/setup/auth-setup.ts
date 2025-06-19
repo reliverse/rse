@@ -1,20 +1,17 @@
 import fs from "@reliverse/relifso";
-import consola from "consola";
+import { relinka } from "@reliverse/relinka";
 import path from "node:path";
-import pc from "picocolors";
 
 import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
 
 import { addPackageDependency } from "~/libs/sdk/providers/better-t-stack/utils/add-package-deps";
 
 export async function setupAuth(config: ProjectConfig): Promise<void> {
-  const { projectName, auth, frontend, backend } = config;
-
+  const { auth, frontend, backend, projectDir } = config;
   if (backend === "convex" || !auth) {
     return;
   }
 
-  const projectDir = path.resolve(process.cwd(), projectName);
   const serverDir = path.join(projectDir, "apps/server");
   const clientDir = path.join(projectDir, "apps/web");
   const nativeDir = path.join(projectDir, "apps/native");
@@ -39,6 +36,7 @@ export async function setupAuth(config: ProjectConfig): Promise<void> {
         "next",
         "nuxt",
         "svelte",
+        "solid",
       ].includes(f),
     );
 
@@ -49,7 +47,11 @@ export async function setupAuth(config: ProjectConfig): Promise<void> {
       });
     }
 
-    if (frontend.includes("native") && nativeDirExists) {
+    if (
+      (frontend.includes("native-nativewind") ||
+        frontend.includes("native-unistyles")) &&
+      nativeDirExists
+    ) {
       await addPackageDependency({
         dependencies: ["better-auth", "@better-auth/expo"],
         projectDir: nativeDir,
@@ -62,9 +64,9 @@ export async function setupAuth(config: ProjectConfig): Promise<void> {
       }
     }
   } catch (error) {
-    consola.error(pc.red("Failed to configure authentication dependencies"));
+    relinka("error", "Failed to configure authentication dependencies");
     if (error instanceof Error) {
-      consola.error(pc.red(error.message));
+      relinka("error", error.message);
     }
   }
 }

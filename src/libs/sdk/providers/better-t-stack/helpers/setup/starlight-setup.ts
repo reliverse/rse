@@ -1,16 +1,15 @@
-import { spinner } from "@clack/prompts";
-import consola from "consola";
+import { re } from "@reliverse/relico";
+import { relinka } from "@reliverse/relinka";
+import { spinner } from "@reliverse/rempts";
 import { execa } from "execa";
 import path from "node:path";
-import pc from "picocolors";
 
 import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
 
 import { getPackageExecutionCommand } from "~/libs/sdk/providers/better-t-stack/utils/get-package-execution-command";
 
 export async function setupStarlight(config: ProjectConfig): Promise<void> {
-  const { projectName, packageManager } = config;
-  const projectDir = path.resolve(process.cwd(), projectName);
+  const { packageManager, projectDir } = config;
   const s = spinner();
 
   try {
@@ -45,9 +44,9 @@ export async function setupStarlight(config: ProjectConfig): Promise<void> {
 
     s.stop("Starlight docs setup successfully!");
   } catch (error) {
-    s.stop(pc.red("Failed to set up Starlight docs"));
+    s.stop(re.red("Failed to set up Starlight docs"));
     if (error instanceof Error) {
-      consola.error(pc.red(error.message));
+      relinka("error", error.message);
     }
   }
 }

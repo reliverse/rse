@@ -49,9 +49,7 @@ async function processAndCopyFiles(
       } else {
         await fs.copy(srcPath, destPath, { overwrite: true });
       }
-    } catch {
-      /* empty */
-    }
+    } catch (_error) {}
   }
 }
 
@@ -73,10 +71,13 @@ export async function setupFrontendTemplates(
   );
   const hasNuxtWeb = context.frontend.includes("nuxt");
   const hasSvelteWeb = context.frontend.includes("svelte");
-  const hasNative = context.frontend.includes("native");
+  const hasSolidWeb = context.frontend.includes("solid");
+  const hasNativeWind = context.frontend.includes("native-nativewind");
+  const hasUnistyles = context.frontend.includes("native-unistyles");
+  const _hasNative = hasNativeWind || hasUnistyles;
   const isConvex = context.backend === "convex";
 
-  if (hasReactWeb || hasNuxtWeb || hasSvelteWeb) {
+  if (hasReactWeb || hasNuxtWeb || hasSvelteWeb || hasSolidWeb) {
     const webAppDir = path.join(projectDir, "apps/web");
     await fs.ensureDir(webAppDir);
 
@@ -87,6 +88,7 @@ export async function setupFrontendTemplates(
       );
       if (await fs.pathExists(webBaseDir)) {
         await processAndCopyFiles("**/*", webBaseDir, webAppDir, context);
+      } else {
       }
       const reactFramework = context.frontend.find((f) =>
         ["tanstack-router", "react-router", "tanstack-start", "next"].includes(
@@ -105,7 +107,9 @@ export async function setupFrontendTemplates(
             webAppDir,
             context,
           );
+        } else {
         }
+
         if (!isConvex && context.api !== "none") {
           const apiWebBaseDir = path.join(
             PKG_ROOT,
@@ -118,6 +122,7 @@ export async function setupFrontendTemplates(
               webAppDir,
               context,
             );
+          } else {
           }
         }
       }
@@ -125,21 +130,26 @@ export async function setupFrontendTemplates(
       const nuxtBaseDir = path.join(PKG_ROOT, "templates/frontend/nuxt");
       if (await fs.pathExists(nuxtBaseDir)) {
         await processAndCopyFiles("**/*", nuxtBaseDir, webAppDir, context);
+      } else {
       }
-      if (!isConvex && context.api !== "none") {
+
+      if (!isConvex && context.api === "orpc") {
         const apiWebNuxtDir = path.join(
           PKG_ROOT,
           `templates/api/${context.api}/web/nuxt`,
         );
         if (await fs.pathExists(apiWebNuxtDir)) {
           await processAndCopyFiles("**/*", apiWebNuxtDir, webAppDir, context);
+        } else {
         }
       }
     } else if (hasSvelteWeb) {
       const svelteBaseDir = path.join(PKG_ROOT, "templates/frontend/svelte");
       if (await fs.pathExists(svelteBaseDir)) {
         await processAndCopyFiles("**/*", svelteBaseDir, webAppDir, context);
+      } else {
       }
+
       if (!isConvex && context.api === "orpc") {
         const apiWebSvelteDir = path.join(
           PKG_ROOT,
@@ -152,18 +162,66 @@ export async function setupFrontendTemplates(
             webAppDir,
             context,
           );
+        } else {
+        }
+      }
+    } else if (hasSolidWeb) {
+      const solidBaseDir = path.join(PKG_ROOT, "templates/frontend/solid");
+      if (await fs.pathExists(solidBaseDir)) {
+        await processAndCopyFiles("**/*", solidBaseDir, webAppDir, context);
+      } else {
+      }
+
+      if (!isConvex && context.api === "orpc") {
+        const apiWebSolidDir = path.join(
+          PKG_ROOT,
+          `templates/api/${context.api}/web/solid`,
+        );
+        if (await fs.pathExists(apiWebSolidDir)) {
+          await processAndCopyFiles("**/*", apiWebSolidDir, webAppDir, context);
+        } else {
         }
       }
     }
   }
 
-  if (hasNative) {
+  if (hasNativeWind || hasUnistyles) {
     const nativeAppDir = path.join(projectDir, "apps/native");
     await fs.ensureDir(nativeAppDir);
 
-    const nativeBaseDir = path.join(PKG_ROOT, "templates/frontend/native");
-    if (await fs.pathExists(nativeBaseDir)) {
-      await processAndCopyFiles("**/*", nativeBaseDir, nativeAppDir, context);
+    const nativeBaseCommonDir = path.join(
+      PKG_ROOT,
+      "templates/frontend/native/native-base",
+    );
+    if (await fs.pathExists(nativeBaseCommonDir)) {
+      await processAndCopyFiles(
+        "**/*",
+        nativeBaseCommonDir,
+        nativeAppDir,
+        context,
+      );
+    } else {
+    }
+
+    let nativeFrameworkPath = "";
+    if (hasNativeWind) {
+      nativeFrameworkPath = "nativewind";
+    } else if (hasUnistyles) {
+      nativeFrameworkPath = "unistyles";
+    }
+
+    const nativeSpecificDir = path.join(
+      PKG_ROOT,
+      `templates/frontend/native/${nativeFrameworkPath}`,
+    );
+    if (await fs.pathExists(nativeSpecificDir)) {
+      await processAndCopyFiles(
+        "**/*",
+        nativeSpecificDir,
+        nativeAppDir,
+        context,
+        true,
+      );
     }
 
     if (!isConvex && (context.api === "trpc" || context.api === "orpc")) {
@@ -187,15 +245,23 @@ export async function setupBackendFramework(
   projectDir: string,
   context: ProjectConfig,
 ): Promise<void> {
+  if (context.backend === "none") {
+    return;
+  }
+
+  const serverAppDir = path.join(projectDir, "apps/server");
+
   if (context.backend === "convex") {
+    if (await fs.pathExists(serverAppDir)) {
+      await fs.remove(serverAppDir);
+    }
+
     const convexBackendDestDir = path.join(projectDir, "packages/backend");
     const convexSrcDir = path.join(
       PKG_ROOT,
       "templates/backend/convex/packages/backend",
     );
-
     await fs.ensureDir(convexBackendDestDir);
-
     if (await fs.pathExists(convexSrcDir)) {
       await processAndCopyFiles(
         "**/*",
@@ -204,15 +270,9 @@ export async function setupBackendFramework(
         context,
       );
     }
-
-    const serverAppDir = path.join(projectDir, "apps/server");
-    if (await fs.pathExists(serverAppDir)) {
-      await fs.remove(serverAppDir);
-    }
     return;
   }
 
-  const serverAppDir = path.join(projectDir, "apps/server");
   await fs.ensureDir(serverAppDir);
 
   const serverBaseDir = path.join(
@@ -221,6 +281,7 @@ export async function setupBackendFramework(
   );
   if (await fs.pathExists(serverBaseDir)) {
     await processAndCopyFiles("**/*", serverBaseDir, serverAppDir, context);
+  } else {
   }
 
   const frameworkSrcDir = path.join(
@@ -235,6 +296,7 @@ export async function setupBackendFramework(
       context,
       true,
     );
+  } else {
   }
 
   if (context.api !== "none") {
@@ -250,6 +312,7 @@ export async function setupBackendFramework(
         context,
         true,
       );
+    } else {
     }
 
     const apiServerFrameworkDir = path.join(
@@ -264,6 +327,7 @@ export async function setupBackendFramework(
         context,
         true,
       );
+    } else {
     }
   }
 }
@@ -289,6 +353,7 @@ export async function setupDbOrmTemplates(
 
   if (await fs.pathExists(dbOrmSrcDir)) {
     await processAndCopyFiles("**/*", dbOrmSrcDir, serverAppDir, context);
+  } else {
   }
 }
 
@@ -311,7 +376,10 @@ export async function setupAuthTemplate(
   );
   const hasNuxtWeb = context.frontend.includes("nuxt");
   const hasSvelteWeb = context.frontend.includes("svelte");
-  const hasNative = context.frontend.includes("native");
+  const hasSolidWeb = context.frontend.includes("solid");
+  const hasNativeWind = context.frontend.includes("native-nativewind");
+  const hasUnistyles = context.frontend.includes("native-unistyles");
+  const hasNative = hasNativeWind || hasUnistyles;
 
   if (serverAppDirExists) {
     const authServerBaseSrc = path.join(PKG_ROOT, "templates/auth/server/base");
@@ -322,6 +390,7 @@ export async function setupAuthTemplate(
         serverAppDir,
         context,
       );
+    } else {
     }
 
     if (context.backend === "next") {
@@ -336,6 +405,7 @@ export async function setupAuthTemplate(
           serverAppDir,
           context,
         );
+      } else {
       }
     }
 
@@ -361,11 +431,15 @@ export async function setupAuthTemplate(
       }
       if (authDbSrc && (await fs.pathExists(authDbSrc))) {
         await processAndCopyFiles("**/*", authDbSrc, serverAppDir, context);
+      } else if (authDbSrc) {
       }
     }
   }
 
-  if ((hasReactWeb || hasNuxtWeb || hasSvelteWeb) && webAppDirExists) {
+  if (
+    (hasReactWeb || hasNuxtWeb || hasSvelteWeb || hasSolidWeb) &&
+    webAppDirExists
+  ) {
     if (hasReactWeb) {
       const authWebBaseSrc = path.join(
         PKG_ROOT,
@@ -373,7 +447,9 @@ export async function setupAuthTemplate(
       );
       if (await fs.pathExists(authWebBaseSrc)) {
         await processAndCopyFiles("**/*", authWebBaseSrc, webAppDir, context);
+      } else {
       }
+
       const reactFramework = context.frontend.find((f) =>
         ["tanstack-router", "react-router", "tanstack-start", "next"].includes(
           f,
@@ -391,12 +467,14 @@ export async function setupAuthTemplate(
             webAppDir,
             context,
           );
+        } else {
         }
       }
     } else if (hasNuxtWeb) {
       const authWebNuxtSrc = path.join(PKG_ROOT, "templates/auth/web/nuxt");
       if (await fs.pathExists(authWebNuxtSrc)) {
         await processAndCopyFiles("**/*", authWebNuxtSrc, webAppDir, context);
+      } else {
       }
     } else if (hasSvelteWeb) {
       if (context.api === "orpc") {
@@ -411,15 +489,59 @@ export async function setupAuthTemplate(
             webAppDir,
             context,
           );
+        } else {
+        }
+      }
+    } else if (hasSolidWeb) {
+      if (context.api === "orpc") {
+        const authWebSolidSrc = path.join(PKG_ROOT, "templates/auth/web/solid");
+        if (await fs.pathExists(authWebSolidSrc)) {
+          await processAndCopyFiles(
+            "**/*",
+            authWebSolidSrc,
+            webAppDir,
+            context,
+          );
+        } else {
         }
       }
     }
   }
 
   if (hasNative && nativeAppDirExists) {
-    const authNativeSrc = path.join(PKG_ROOT, "templates/auth/native");
-    if (await fs.pathExists(authNativeSrc)) {
-      await processAndCopyFiles("**/*", authNativeSrc, nativeAppDir, context);
+    const authNativeBaseSrc = path.join(
+      PKG_ROOT,
+      "templates/auth/native/native-base",
+    );
+    if (await fs.pathExists(authNativeBaseSrc)) {
+      await processAndCopyFiles(
+        "**/*",
+        authNativeBaseSrc,
+        nativeAppDir,
+        context,
+      );
+    }
+
+    let nativeFrameworkAuthPath = "";
+    if (hasNativeWind) {
+      nativeFrameworkAuthPath = "nativewind";
+    } else if (hasUnistyles) {
+      nativeFrameworkAuthPath = "unistyles";
+    }
+
+    if (nativeFrameworkAuthPath) {
+      const authNativeFrameworkSrc = path.join(
+        PKG_ROOT,
+        `templates/auth/native/${nativeFrameworkAuthPath}`,
+      );
+      if (await fs.pathExists(authNativeFrameworkSrc)) {
+        await processAndCopyFiles(
+          "**/*",
+          authNativeFrameworkSrc,
+          nativeAppDir,
+          context,
+        );
+      }
     }
   }
 }
@@ -437,15 +559,27 @@ export async function setupAddonsTemplate(
     let addonDestDir = projectDir;
 
     if (addon === "pwa") {
-      addonSrcDir = path.join(PKG_ROOT, "templates/addons/pwa/apps/web");
-      addonDestDir = path.join(projectDir, "apps/web");
-      if (!(await fs.pathExists(addonDestDir))) {
+      const webAppDir = path.join(projectDir, "apps/web");
+      if (!(await fs.pathExists(webAppDir))) {
+        continue;
+      }
+      addonDestDir = webAppDir;
+      if (context.frontend.includes("next")) {
+        addonSrcDir = path.join(PKG_ROOT, "templates/addons/pwa/apps/web/next");
+      } else if (
+        context.frontend.some((f) =>
+          ["tanstack-router", "react-router", "solid"].includes(f),
+        )
+      ) {
+        addonSrcDir = path.join(PKG_ROOT, "templates/addons/pwa/apps/web/vite");
+      } else {
         continue;
       }
     }
 
     if (await fs.pathExists(addonSrcDir)) {
       await processAndCopyFiles("**/*", addonSrcDir, addonDestDir, context);
+    } else {
     }
   }
 }
@@ -454,95 +588,110 @@ export async function setupExamplesTemplate(
   projectDir: string,
   context: ProjectConfig,
 ): Promise<void> {
+  if (
+    !context.examples ||
+    context.examples.length === 0 ||
+    context.examples[0] === "none"
+  ) {
+    return;
+  }
+
   const serverAppDir = path.join(projectDir, "apps/server");
   const webAppDir = path.join(projectDir, "apps/web");
 
   const serverAppDirExists = await fs.pathExists(serverAppDir);
   const webAppDirExists = await fs.pathExists(webAppDir);
+  const nativeAppDir = path.join(projectDir, "apps/native");
+  const nativeAppDirExists = await fs.pathExists(nativeAppDir);
 
   const hasReactWeb = context.frontend.some((f) =>
     ["tanstack-router", "react-router", "tanstack-start", "next"].includes(f),
   );
   const hasNuxtWeb = context.frontend.includes("nuxt");
   const hasSvelteWeb = context.frontend.includes("svelte");
+  const hasSolidWeb = context.frontend.includes("solid");
 
   for (const example of context.examples) {
-    if (
-      !context.examples ||
-      context.examples.length === 0 ||
-      context.examples[0] === "none"
-    )
-      continue;
-
     if (example === "none") continue;
 
     const exampleBaseDir = path.join(PKG_ROOT, `templates/examples/${example}`);
 
-    if (example === "ai" && context.backend === "next" && serverAppDirExists) {
-      const aiNextServerSrc = path.join(exampleBaseDir, "server/next");
-
-      if (await fs.pathExists(aiNextServerSrc)) {
-        await processAndCopyFiles(
-          "**/*",
-          aiNextServerSrc,
-          serverAppDir,
-          context,
-          false,
-        );
-      }
-    }
-
-    if (serverAppDirExists) {
+    if (
+      serverAppDirExists &&
+      context.backend !== "convex" &&
+      context.backend !== "none"
+    ) {
       const exampleServerSrc = path.join(exampleBaseDir, "server");
-      if (await fs.pathExists(exampleServerSrc)) {
-        if (context.backend !== "convex") {
-          if (context.orm !== "none" && context.database !== "none") {
-            const exampleOrmBaseSrc = path.join(
-              exampleServerSrc,
-              context.orm,
-              "base",
-            );
-            if (await fs.pathExists(exampleOrmBaseSrc)) {
-              await processAndCopyFiles(
-                "**/*",
-                exampleOrmBaseSrc,
-                serverAppDir,
-                context,
-                false,
-              );
-            }
 
-            const exampleDbSchemaSrc = path.join(
-              exampleServerSrc,
-              context.orm,
-              context.database,
-            );
-            if (await fs.pathExists(exampleDbSchemaSrc)) {
-              await processAndCopyFiles(
-                "**/*",
-                exampleDbSchemaSrc,
-                serverAppDir,
-                context,
-                false,
-              );
-            }
-          }
-          const generalServerFiles = await globby(["*.ts", "*.hbs"], {
-            cwd: exampleServerSrc,
-            onlyFiles: true,
-            deep: 1,
-            ignore: [`${context.orm}/**`],
-          });
-          for (const file of generalServerFiles) {
-            const srcPath = path.join(exampleServerSrc, file);
-            const destPath = path.join(serverAppDir, file.replace(".hbs", ""));
-            if (srcPath.endsWith(".hbs")) {
-              await processTemplate(srcPath, destPath, context);
-            } else {
+      if (example === "ai" && context.backend === "next") {
+        const aiNextServerSrc = path.join(exampleServerSrc, "next");
+        if (await fs.pathExists(aiNextServerSrc)) {
+          await processAndCopyFiles(
+            "**/*",
+            aiNextServerSrc,
+            serverAppDir,
+            context,
+            false,
+          );
+        }
+      }
+
+      if (context.orm !== "none" && context.database !== "none") {
+        const exampleOrmBaseSrc = path.join(
+          exampleServerSrc,
+          context.orm,
+          "base",
+        );
+        if (await fs.pathExists(exampleOrmBaseSrc)) {
+          await processAndCopyFiles(
+            "**/*",
+            exampleOrmBaseSrc,
+            serverAppDir,
+            context,
+            false,
+          );
+        }
+
+        const exampleDbSchemaSrc = path.join(
+          exampleServerSrc,
+          context.orm,
+          context.database,
+        );
+        if (await fs.pathExists(exampleDbSchemaSrc)) {
+          await processAndCopyFiles(
+            "**/*",
+            exampleDbSchemaSrc,
+            serverAppDir,
+            context,
+            false,
+          );
+        }
+      }
+
+      const ignorePatterns = [`${context.orm}/**`];
+      if (example === "ai" && context.backend === "next") {
+        ignorePatterns.push("next/**");
+      }
+
+      const generalServerFiles = await globby(["**/*.ts", "**/*.hbs"], {
+        cwd: exampleServerSrc,
+        onlyFiles: true,
+        deep: 1,
+        ignore: ignorePatterns,
+      });
+
+      for (const file of generalServerFiles) {
+        const srcPath = path.join(exampleServerSrc, file);
+        const destPath = path.join(serverAppDir, file.replace(".hbs", ""));
+        try {
+          if (srcPath.endsWith(".hbs")) {
+            await processTemplate(srcPath, destPath, context);
+          } else {
+            if (!(await fs.pathExists(destPath))) {
               await fs.copy(srcPath, destPath, { overwrite: false });
             }
           }
-        }
+        } catch (_error) {}
       }
     }
 
@@ -571,6 +720,7 @@ export async function setupExamplesTemplate(
                 context,
                 false,
               );
+            } else {
             }
           }
         }
@@ -584,6 +734,7 @@ export async function setupExamplesTemplate(
             context,
             false,
           );
+        } else {
         }
       } else if (hasSvelteWeb) {
         const exampleWebSvelteSrc = path.join(exampleBaseDir, "web/svelte");
@@ -592,6 +743,47 @@ export async function setupExamplesTemplate(
             "**/*",
             exampleWebSvelteSrc,
             webAppDir,
+            context,
+            false,
+          );
+        } else {
+        }
+      } else if (hasSolidWeb) {
+        const exampleWebSolidSrc = path.join(exampleBaseDir, "web/solid");
+        if (await fs.pathExists(exampleWebSolidSrc)) {
+          await processAndCopyFiles(
+            "**/*",
+            exampleWebSolidSrc,
+            webAppDir,
+            context,
+            false,
+          );
+        } else {
+        }
+      }
+    }
+
+    if (nativeAppDirExists) {
+      const hasNativeWind = context.frontend.includes("native-nativewind");
+      const hasUnistyles = context.frontend.includes("native-unistyles");
+
+      if (hasNativeWind || hasUnistyles) {
+        let nativeFramework = "";
+        if (hasNativeWind) {
+          nativeFramework = "nativewind";
+        } else if (hasUnistyles) {
+          nativeFramework = "unistyles";
+        }
+
+        const exampleNativeSrc = path.join(
+          exampleBaseDir,
+          `native/${nativeFramework}`,
+        );
+        if (await fs.pathExists(exampleNativeSrc)) {
+          await processAndCopyFiles(
+            "**/*",
+            exampleNativeSrc,
+            nativeAppDir,
             context,
             false,
           );
@@ -606,6 +798,9 @@ export async function handleExtras(
   context: ProjectConfig,
 ): Promise<void> {
   const extrasDir = path.join(PKG_ROOT, "templates/extras");
+  const hasNativeWind = context.frontend.includes("native-nativewind");
+  const hasUnistyles = context.frontend.includes("native-unistyles");
+  const hasNative = hasNativeWind || hasUnistyles;
 
   if (context.packageManager === "pnpm") {
     const pnpmWorkspaceSrc = path.join(extrasDir, "pnpm-workspace.yaml");
@@ -617,12 +812,25 @@ export async function handleExtras(
 
   if (
     context.packageManager === "pnpm" &&
-    (context.frontend.includes("native") || context.frontend.includes("nuxt"))
+    (hasNative || context.frontend.includes("nuxt"))
   ) {
     const npmrcTemplateSrc = path.join(extrasDir, "_npmrc.hbs");
     const npmrcDest = path.join(projectDir, ".npmrc");
     if (await fs.pathExists(npmrcTemplateSrc)) {
       await processTemplate(npmrcTemplateSrc, npmrcDest, context);
+    }
+  }
+
+  if (context.runtime === "workers") {
+    const runtimeWorkersDir = path.join(PKG_ROOT, "templates/runtime/workers");
+    if (await fs.pathExists(runtimeWorkersDir)) {
+      await processAndCopyFiles(
+        "**/*",
+        runtimeWorkersDir,
+        projectDir,
+        context,
+        false,
+      );
     }
   }
 }

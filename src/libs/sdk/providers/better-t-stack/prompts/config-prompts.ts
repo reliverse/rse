@@ -1,72 +1,72 @@
-import { cancel, group } from "@clack/prompts";
-import pc from "picocolors";
+import { re } from "@reliverse/relico";
+import { cancel, group } from "@reliverse/rempts";
 
 import type {
-  ProjectAddons,
-  ProjectApi,
-  ProjectBackend,
+  API,
+  Addons,
+  Backend,
+  Database,
+  DatabaseSetup,
+  Examples,
+  Frontend,
+  ORM,
+  PackageManager,
   ProjectConfig,
-  ProjectDBSetup,
-  ProjectDatabase,
-  ProjectExamples,
-  ProjectFrontend,
-  ProjectOrm,
-  ProjectPackageManager,
-  ProjectRuntime,
+  Runtime,
 } from "~/libs/sdk/providers/better-t-stack/types";
 
 import { getAddonsChoice } from "./addons";
 import { getApiChoice } from "./api";
 import { getAuthChoice } from "./auth";
-import { getBackendFrameworkChoice } from "./backend-framework";
+import { getBackendFrameworkChoice } from "./backend";
 import { getDatabaseChoice } from "./database";
-import { getDBSetupChoice } from "./db-setup";
+import { getDBSetupChoice } from "./database-setup";
 import { getExamplesChoice } from "./examples";
-import { getFrontendChoice } from "./frontend-option";
+import { getFrontendChoice } from "./frontend";
 import { getGitChoice } from "./git";
 import { getinstallChoice } from "./install";
 import { getORMChoice } from "./orm";
 import { getPackageManagerChoice } from "./package-manager";
-import { getProjectName } from "./project-name";
 import { getRuntimeChoice } from "./runtime";
 
 interface PromptGroupResults {
-  projectName: string;
-  frontend: ProjectFrontend[];
-  backend: ProjectBackend;
-  runtime: ProjectRuntime;
-  database: ProjectDatabase;
-  orm: ProjectOrm;
-  api: ProjectApi;
+  frontend: Frontend[];
+  backend: Backend;
+  runtime: Runtime;
+  database: Database;
+  orm: ORM;
+  api: API;
   auth: boolean;
-  addons: ProjectAddons[];
-  examples: ProjectExamples[];
-  dbSetup: ProjectDBSetup;
+  addons: Addons[];
+  examples: Examples[];
+  dbSetup: DatabaseSetup;
   git: boolean;
-  packageManager: ProjectPackageManager;
+  packageManager: PackageManager;
   install: boolean;
 }
 
 export async function gatherConfig(
   flags: Partial<ProjectConfig>,
+  projectName: string,
+  projectDir: string,
+  relativePath: string,
 ): Promise<ProjectConfig> {
   const result = await group<PromptGroupResults>(
     {
-      projectName: async () => {
-        return getProjectName(flags.projectName);
-      },
-      frontend: () => getFrontendChoice(flags.frontend),
-      backend: () => getBackendFrameworkChoice(flags.backend),
+      frontend: () => getFrontendChoice(flags.frontend, flags.backend),
+      backend: ({ results }) =>
+        getBackendFrameworkChoice(flags.backend, results.frontend),
       runtime: ({ results }) =>
         getRuntimeChoice(flags.runtime, results.backend),
       database: ({ results }) =>
-        getDatabaseChoice(flags.database, results.backend),
+        getDatabaseChoice(flags.database, results.backend, results.runtime),
       orm: ({ results }) =>
         getORMChoice(
           flags.orm,
           results.database !== "none",
           results.database,
           results.backend,
+          results.runtime,
         ),
       api: ({ results }) =>
         getApiChoice(flags.api, results.frontend, results.backend),
@@ -79,6 +79,7 @@ export async function gatherConfig(
           results.database,
           results.frontend,
           results.backend,
+          results.api,
         ),
       dbSetup: ({ results }) =>
         getDBSetupChoice(
@@ -93,7 +94,7 @@ export async function gatherConfig(
     },
     {
       onCancel: () => {
-        cancel(pc.red("Operation cancelled"));
+        cancel(re.red("Operation cancelled"));
         process.exit(0);
       },
     },
@@ -106,10 +107,23 @@ export async function gatherConfig(
     result.api = "none";
     result.auth = false;
     result.dbSetup = "none";
+    result.examples = ["todo"];
+  }
+
+  if (result.backend === "none") {
+    result.runtime = "none";
+    result.database = "none";
+    result.orm = "none";
+    result.api = "none";
+    result.auth = false;
+    result.dbSetup = "none";
+    result.examples = [];
   }
 
   return {
-    projectName: result.projectName,
+    projectName: projectName,
+    projectDir: projectDir,
+    relativePath: relativePath,
     frontend: result.frontend,
     backend: result.backend,
     runtime: result.runtime,

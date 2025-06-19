@@ -283,7 +283,7 @@ export async function downloadRepo({
 }: DownloadRepoOptions): Promise<DownloadResult> {
   relinka("verbose", `Downloading repo ${repoURL}...`);
   const startTime = Date.now();
-  let tempCloneDir: string | undefined = undefined;
+  let tempCloneDir: string | undefined;
   const maxConcurrentProcesses = 6;
 
   // Decide where to create the project

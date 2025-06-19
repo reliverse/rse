@@ -1,5 +1,5 @@
 import fs from "@reliverse/relifso";
-import consola from "consola";
+import { relinka } from "@reliverse/relinka";
 import handlebars from "handlebars";
 import path from "node:path";
 
@@ -24,14 +24,14 @@ export async function processTemplate(
     await fs.ensureDir(path.dirname(destPath));
     await fs.writeFile(destPath, processedContent);
   } catch (error) {
-    consola.error(`Error processing template ${srcPath}:`, error);
+    relinka("error", `Error processing template ${srcPath}:`, error);
     throw new Error(`Failed to process template ${srcPath}`);
   }
 }
 
-handlebars.registerHelper("or", (a, b) => a || b);
-
 handlebars.registerHelper("eq", (a, b) => a === b);
+handlebars.registerHelper("and", (a, b) => a && b);
+handlebars.registerHelper("or", (a, b) => a || b);
 
 handlebars.registerHelper(
   "includes",

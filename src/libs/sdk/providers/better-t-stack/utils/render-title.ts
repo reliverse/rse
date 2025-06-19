@@ -38,7 +38,7 @@ export const renderTitle = () => {
   if (terminalWidth < titleWidth) {
     const simplifiedTitle = `
     ╔══════════════════╗
-    ║  Better T-Stack  ║
+    ║  Better T Stack  ║
     ╚══════════════════╝
     `;
     console.log(

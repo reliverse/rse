@@ -11,11 +11,13 @@ export const PKG_ROOT = path.join(distPath, "../");
 
 export const DEFAULT_CONFIG: ProjectConfig = {
   projectName: "my-better-t-app",
+  projectDir: path.resolve(process.cwd(), "my-better-t-app"),
+  relativePath: "my-better-t-app",
   frontend: ["tanstack-router"],
   database: "sqlite",
   orm: "drizzle",
   auth: true,
-  addons: [],
+  addons: ["turborepo"],
   examples: [],
   git: true,
   packageManager: getUserPkgManager(),
@@ -27,8 +29,8 @@ export const DEFAULT_CONFIG: ProjectConfig = {
 };
 
 export const dependencyVersionMap = {
-  "better-auth": "^1.2.7",
-  "@better-auth/expo": "^1.2.7",
+  "better-auth": "^1.2.9",
+  "@better-auth/expo": "^1.2.9",
 
   "drizzle-orm": "^0.38.4",
   "drizzle-kit": "^0.30.5",
@@ -39,8 +41,8 @@ export const dependencyVersionMap = {
 
   mysql2: "^3.14.0",
 
-  "@prisma/client": "^6.7.0",
-  prisma: "^6.7.0",
+  "@prisma/client": "^6.9.0",
+  prisma: "^6.9.0",
 
   mongoose: "^8.14.0",
 
@@ -74,20 +76,22 @@ export const dependencyVersionMap = {
   "@types/express": "^5.0.1",
   "@types/cors": "^2.8.17",
 
-  turbo: "^2.4.2",
+  fastify: "^5.3.3",
+  "@fastify/cors": "^11.0.1",
 
-  ai: "^4.2.8",
+  turbo: "^2.5.4",
+
+  ai: "^4.3.16",
   "@ai-sdk/google": "^1.2.3",
   "@ai-sdk/vue": "^1.2.8",
   "@ai-sdk/svelte": "^2.1.9",
+  "@ai-sdk/react": "^1.2.12",
 
   "@prisma/extension-accelerate": "^1.3.0",
 
-  "@orpc/server": "^1.1.1",
-  "@orpc/client": "^1.1.1",
-  "@orpc/react-query": "^1.1.1",
-  "@orpc/vue-query": "^1.1.1",
-  "@orpc/svelte-query": "^1.1.1",
+  "@orpc/server": "^1.5.0",
+  "@orpc/client": "^1.5.0",
+  "@orpc/tanstack-query": "^1.5.0",
 
   "@trpc/tanstack-react-query": "^11.0.0",
   "@trpc/server": "^11.0.0",
@@ -98,8 +102,13 @@ export const dependencyVersionMap = {
   "convex-svelte": "^0.0.11",
 
   "@tanstack/svelte-query": "^5.74.4",
-  "@tanstack/react-query-devtools": "^5.69.0",
-  "@tanstack/react-query": "^5.69.0",
+  "@tanstack/react-query-devtools": "^5.80.5",
+  "@tanstack/react-query": "^5.80.5",
+
+  "@tanstack/solid-query": "^5.75.0",
+  "@tanstack/solid-query-devtools": "^5.75.0",
+
+  wrangler: "^4.20.0",
 } as const;
 
 export type AvailableDependencies = keyof typeof dependencyVersionMap;

@@ -1,11 +1,14 @@
-import { defineCommand, runMain } from "@reliverse/rempts";
+import { createCli } from "@reliverse/rempts";
 
-await runMain(
+await createCli({}); // 'await' has no effect on the type of this expression.ts(80007)
+
+// deprecated
+/* await runMain(
   defineCommand({
     // empty object activates file-based
     // commands in the src/app directory
   }),
-);
+); */
 
 /**
  * AVAILABLE COMMANDS

@@ -7,6 +7,7 @@ import { DLER_TPL_DB } from "./packed/db";
 import { DLER_TPL_EXAMPLES } from "./packed/examples";
 import { DLER_TPL_EXTRAS } from "./packed/extras";
 import { DLER_TPL_FRONTEND } from "./packed/frontend";
+import { DLER_TPL_RUNTIME } from "./packed/runtime";
 
 const DLER_TEMPLATES_OBJ = {
   addons: DLER_TPL_ADDONS,
@@ -18,6 +19,7 @@ const DLER_TEMPLATES_OBJ = {
   examples: DLER_TPL_EXAMPLES,
   extras: DLER_TPL_EXTRAS,
   frontend: DLER_TPL_FRONTEND,
+  runtime: DLER_TPL_RUNTIME,
 };
 
 export const DLER_TEMPLATES = DLER_TEMPLATES_OBJ;
@@ -34,4 +36,5 @@ export const dlerTemplatesMap: Record<string, DLER_TEMPLATE_NAMES> = {
   DLER_TPL_EXAMPLES: "examples",
   DLER_TPL_EXTRAS: "extras",
   DLER_TPL_FRONTEND: "frontend",
+  DLER_TPL_RUNTIME: "runtime",
 };

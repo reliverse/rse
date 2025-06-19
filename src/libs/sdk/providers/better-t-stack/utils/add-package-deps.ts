@@ -6,6 +6,16 @@ import {
   dependencyVersionMap,
 } from "~/libs/sdk/providers/better-t-stack/constants";
 
+interface PackageJson {
+  name?: string;
+  scripts?: Record<string, string>;
+  workspaces?: string[];
+  packageManager?: string;
+  "lint-staged"?: Record<string, string[]>;
+  dependencies?: Record<string, string>;
+  devDependencies?: Record<string, string>;
+}
+
 export const addPackageDependency = async (opts: {
   dependencies?: AvailableDependencies[];
   devDependencies?: AvailableDependencies[];
@@ -15,10 +25,7 @@ export const addPackageDependency = async (opts: {
 
   const pkgJsonPath = path.join(projectDir, "package.json");
 
-  const pkgJson = (await fs.readJson(pkgJsonPath)) as {
-    dependencies?: Record<string, string>;
-    devDependencies?: Record<string, string>;
-  };
+  const pkgJson = (await fs.readJson(pkgJsonPath)) as PackageJson;
 
   if (!pkgJson.dependencies) pkgJson.dependencies = {};
   if (!pkgJson.devDependencies) pkgJson.devDependencies = {};

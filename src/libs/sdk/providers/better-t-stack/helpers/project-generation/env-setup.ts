@@ -1,18 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */ // <dler-remove-line>
 import fs from "@reliverse/relifso";
 import path from "node:path";
 
 import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
 
-import { generateAuthSecret } from "./auth-setup";
+import { generateAuthSecret } from "~/libs/sdk/providers/better-t-stack/helpers/setup/auth-setup";
 
-interface EnvVariable {
+export interface EnvVariable {
   key: string;
   value: string | null | undefined;
   condition: boolean;
 }
 
-async function addEnvVariablesToFile(
+export async function addEnvVariablesToFile(
   filePath: string,
   variables: EnvVariable[],
 ): Promise<void> {
@@ -25,11 +24,13 @@ async function addEnvVariablesToFile(
 
   let modified = false;
   let contentToAdd = "";
+  const exampleVariables: string[] = [];
 
   for (const { key, value, condition } of variables) {
     if (condition) {
       const regex = new RegExp(`^${key}=.*$`, "m");
       const valueToWrite = value ?? "";
+      exampleVariables.push(`${key}=`);
 
       if (regex.test(envContent)) {
         const existingMatch = envContent.match(regex);
@@ -54,22 +55,42 @@ async function addEnvVariablesToFile(
   if (modified) {
     await fs.writeFile(filePath, envContent.trimEnd());
   }
+
+  const exampleFilePath = filePath.replace(/\.env$/, ".env.example");
+  let exampleEnvContent = "";
+  if (await fs.pathExists(exampleFilePath)) {
+    exampleEnvContent = await fs.readFile(exampleFilePath, "utf8");
+  }
+
+  let exampleModified = false;
+  let exampleContentToAdd = "";
+
+  for (const exampleVar of exampleVariables) {
+    const key = exampleVar.split("=")[0];
+    const regex = new RegExp(`^${key}=.*$`, "m");
+    if (!regex.test(exampleEnvContent)) {
+      exampleContentToAdd += `${exampleVar}\n`;
+      exampleModified = true;
+    }
+  }
+
+  if (exampleContentToAdd) {
+    if (exampleEnvContent.length > 0 && !exampleEnvContent.endsWith("\n")) {
+      exampleEnvContent += "\n";
+    }
+    exampleEnvContent += exampleContentToAdd;
+  }
+
+  if (exampleModified || !(await fs.pathExists(exampleFilePath))) {
+    await fs.writeFile(exampleFilePath, exampleEnvContent.trimEnd());
+  }
 }
 
 export async function setupEnvironmentVariables(
   config: ProjectConfig,
 ): Promise<void> {
-  const {
-    projectName,
-    backend,
-    frontend,
-    database,
-    orm,
-    auth,
-    examples,
-    dbSetup,
-  } = config;
-  const projectDir = path.resolve(process.cwd(), projectName);
+  const { backend, frontend, database, auth, examples, dbSetup, projectDir } =
+    config;
 
   const hasReactRouter = frontend.includes("react-router");
   const hasTanStackRouter = frontend.includes("tanstack-router");
@@ -77,12 +98,14 @@ export async function setupEnvironmentVariables(
   const hasNextJs = frontend.includes("next");
   const hasNuxt = frontend.includes("nuxt");
   const hasSvelte = frontend.includes("svelte");
+  const hasSolid = frontend.includes("solid");
   const hasWebFrontend =
     hasReactRouter ||
     hasTanStackRouter ||
     hasTanStackStart ||
     hasNextJs ||
     hasNuxt ||
+    hasSolid ||
     hasSvelte;
 
   if (hasWebFrontend) {
@@ -119,7 +142,10 @@ export async function setupEnvironmentVariables(
     }
   }
 
-  if (frontend.includes("native")) {
+  if (
+    frontend.includes("native-nativewind") ||
+    frontend.includes("native-unistyles")
+  ) {
     const nativeDir = path.join(projectDir, "apps/native");
     if (await fs.pathExists(nativeDir)) {
       let envVarName = "EXPO_PUBLIC_SERVER_URL";
@@ -161,13 +187,13 @@ export async function setupEnvironmentVariables(
     dbSetup === "turso" ||
     dbSetup === "prisma-postgres" ||
     dbSetup === "mongodb-atlas" ||
-    dbSetup === "neon";
+    dbSetup === "neon" ||
+    dbSetup === "supabase";
 
   if (database !== "none" && !specializedSetup) {
     switch (database) {
       case "postgres":
-        databaseUrl =
-          "postgresql://postgres:postgres@localhost:5432/mydb?schema=public";
+        databaseUrl = "postgresql://postgres:password@localhost:5432/postgres";
         break;
       case "mysql":
         databaseUrl = "mysql://root:password@localhost:3306/mydb";
@@ -176,7 +202,11 @@ export async function setupEnvironmentVariables(
         databaseUrl = "mongodb://localhost:27017/mydatabase";
         break;
       case "sqlite":
-        databaseUrl = "file:./local.db";
+        if (config.runtime === "workers") {
+          databaseUrl = "http://127.0.0.1:8080";
+        } else {
+          databaseUrl = "file:./local.db";
+        }
         break;
     }
   }
@@ -210,4 +240,11 @@ export async function setupEnvironmentVariables(
   ];
 
   await addEnvVariablesToFile(envPath, serverVars);
+
+  if (config.runtime === "workers") {
+    const devVarsPath = path.join(serverDir, ".dev.vars");
+    try {
+      await fs.copy(envPath, devVarsPath);
+    } catch (_err) {}
+  }
 }

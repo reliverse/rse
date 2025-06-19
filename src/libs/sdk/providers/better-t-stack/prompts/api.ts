@@ -1,20 +1,18 @@
-import { cancel, isCancel, select } from "@clack/prompts";
-import pc from "picocolors";
+import { re } from "@reliverse/relico";
+import { cancel, isCancel, select } from "@reliverse/rempts";
 
 import type {
-  ProjectApi,
-  ProjectBackend,
-  ProjectFrontend,
+  API,
+  Backend,
+  Frontend,
 } from "~/libs/sdk/providers/better-t-stack/types";
 
-import { DEFAULT_CONFIG } from "~/libs/sdk/providers/better-t-stack/constants";
-
 export async function getApiChoice(
-  Api?: ProjectApi,
-  frontend?: ProjectFrontend[],
-  backend?: ProjectBackend,
-): Promise<ProjectApi> {
-  if (backend === "convex") {
+  Api?: API,
+  frontend?: Frontend[],
+  backend?: Backend,
+): Promise<API> {
+  if (backend === "convex" || backend === "none") {
     return "none";
   }
 
@@ -22,6 +20,7 @@ export async function getApiChoice(
 
   const includesNuxt = frontend?.includes("nuxt");
   const includesSvelte = frontend?.includes("svelte");
+  const includesSolid = frontend?.includes("solid");
 
   let apiOptions = [
     {
@@ -34,33 +33,39 @@ export async function getApiChoice(
       label: "oRPC",
       hint: "End-to-end type-safe APIs that adhere to OpenAPI standards",
     },
+    {
+      value: "none" as const,
+      label: "None",
+      hint: "No API layer (e.g. for full-stack frameworks like Next.js with Route Handlers)",
+    },
   ];
 
-  if (includesNuxt || includesSvelte) {
+  if (includesNuxt || includesSvelte || includesSolid) {
     apiOptions = [
       {
         value: "orpc" as const,
         label: "oRPC",
-        hint: `End-to-end type-safe APIs (Required for ${
-          includesNuxt ? "Nuxt" : "Svelte"
+        hint: `End-to-end type-safe APIs (Recommended for ${
+          includesNuxt ? "Nuxt" : includesSvelte ? "Svelte" : "Solid"
         } frontend)`,
+      },
+      {
+        value: "none" as const,
+        label: "None",
+        hint: "No API layer",
       },
     ];
   }
 
-  const apiType = await select<ProjectApi>({
+  const apiType = await select<API>({
     message: "Select API type",
     options: apiOptions,
-    initialValue: includesNuxt || includesSvelte ? "orpc" : DEFAULT_CONFIG.api,
+    initialValue: apiOptions[0]?.value ?? "none",
   });
 
   if (isCancel(apiType)) {
-    cancel(pc.red("Operation cancelled"));
+    cancel(re.red("Operation cancelled"));
     process.exit(0);
-  }
-
-  if ((includesNuxt || includesSvelte) && apiType !== "orpc") {
-    return "orpc";
   }
 
   return apiType;

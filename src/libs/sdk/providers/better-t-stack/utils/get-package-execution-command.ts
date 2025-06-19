@@ -1,4 +1,4 @@
-import type { ProjectPackageManager } from "~/libs/sdk/providers/better-t-stack/types";
+import type { PackageManager } from "~/libs/sdk/providers/better-t-stack/types";
 
 /**
  * Returns the appropriate command for running a package without installing it globally,
@@ -9,7 +9,7 @@ import type { ProjectPackageManager } from "~/libs/sdk/providers/better-t-stack/
  * @returns The full command string (e.g., "npx prisma generate --schema=./prisma/schema.prisma").
  */
 export function getPackageExecutionCommand(
-  packageManager: ProjectPackageManager | null | undefined,
+  packageManager: PackageManager | null | undefined,
   commandWithArgs: string,
 ): string {
   switch (packageManager) {

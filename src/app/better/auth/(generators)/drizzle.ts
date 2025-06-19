@@ -172,7 +172,10 @@ export const generateDrizzleSchema: SchemaGenerator = async ({
 function generateImport({
   databaseType,
   tables,
-}: { databaseType: "sqlite" | "mysql" | "pg"; tables: BetterAuthDbSchema }) {
+}: {
+  databaseType: "sqlite" | "mysql" | "pg";
+  tables: BetterAuthDbSchema;
+}) {
   const imports: string[] = [];
 
   const hasBigint = Object.values(tables).some((table) =>

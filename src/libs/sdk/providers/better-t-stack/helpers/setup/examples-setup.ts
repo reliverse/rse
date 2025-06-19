@@ -7,7 +7,7 @@ import type { ProjectConfig } from "~/libs/sdk/providers/better-t-stack/types";
 import { addPackageDependency } from "~/libs/sdk/providers/better-t-stack/utils/add-package-deps";
 
 export async function setupExamples(config: ProjectConfig): Promise<void> {
-  const { projectName, examples, frontend, backend } = config;
+  const { examples, frontend, backend, projectDir } = config;
 
   if (
     backend === "convex" ||
@@ -18,8 +18,6 @@ export async function setupExamples(config: ProjectConfig): Promise<void> {
     return;
   }
 
-  const projectDir = path.resolve(process.cwd(), projectName);
-
   if (examples.includes("ai")) {
     const clientDir = path.join(projectDir, "apps/web");
     const serverDir = path.join(projectDir, "apps/server");
@@ -28,6 +26,13 @@ export async function setupExamples(config: ProjectConfig): Promise<void> {
 
     const hasNuxt = frontend.includes("nuxt");
     const hasSvelte = frontend.includes("svelte");
+    const hasReact =
+      frontend.includes("react-router") ||
+      frontend.includes("tanstack-router") ||
+      frontend.includes("next") ||
+      frontend.includes("tanstack-start") ||
+      frontend.includes("native-nativewind") ||
+      frontend.includes("native-unistyles");
 
     if (clientDirExists) {
       const dependencies: AvailableDependencies[] = ["ai"];
@@ -35,8 +40,8 @@ export async function setupExamples(config: ProjectConfig): Promise<void> {
         dependencies.push("@ai-sdk/vue");
       } else if (hasSvelte) {
         dependencies.push("@ai-sdk/svelte");
-      } else {
-        /* empty */
+      } else if (hasReact) {
+        dependencies.push("@ai-sdk/react");
       }
       await addPackageDependency({
         dependencies,
@@ -44,7 +49,7 @@ export async function setupExamples(config: ProjectConfig): Promise<void> {
       });
     }
 
-    if (serverDirExists) {
+    if (serverDirExists && backend !== "none") {
       await addPackageDependency({
         dependencies: ["ai", "@ai-sdk/google"],
         projectDir: serverDir,

@@ -8,13 +8,12 @@ import { addPackageDependency } from "~/libs/sdk/providers/better-t-stack/utils/
 export async function setupBackendDependencies(
   config: ProjectConfig,
 ): Promise<void> {
-  const { projectName, backend, runtime, api } = config;
+  const { backend, runtime, api, projectDir } = config;
 
   if (backend === "convex") {
     return;
   }
 
-  const projectDir = path.resolve(process.cwd(), projectName);
   const framework = backend;
   const serverDir = path.join(projectDir, "apps/server");
 
@@ -43,6 +42,12 @@ export async function setupBackendDependencies(
   } else if (framework === "express") {
     dependencies.push("express", "cors");
     devDependencies.push("@types/express", "@types/cors");
+
+    if (runtime === "node") {
+      devDependencies.push("tsx", "@types/node");
+    }
+  } else if (framework === "fastify") {
+    dependencies.push("fastify", "@fastify/cors");
 
     if (runtime === "node") {
       devDependencies.push("tsx", "@types/node");

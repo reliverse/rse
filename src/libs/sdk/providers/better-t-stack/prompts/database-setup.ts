@@ -1,23 +1,23 @@
-import { cancel, isCancel, select } from "@clack/prompts";
-import pc from "picocolors";
+import { re } from "@reliverse/relico";
+import { cancel, isCancel, select } from "@reliverse/rempts";
 
 import type {
-  ProjectBackend,
-  ProjectDBSetup,
-  ProjectOrm,
+  Backend,
+  DatabaseSetup,
+  ORM,
 } from "~/libs/sdk/providers/better-t-stack/types";
 
 export async function getDBSetupChoice(
   databaseType: string,
-  dbSetup: ProjectDBSetup | undefined,
-  orm?: ProjectOrm,
-  backend?: ProjectBackend,
-): Promise<ProjectDBSetup> {
+  dbSetup: DatabaseSetup | undefined,
+  orm?: ORM,
+  backend?: Backend,
+): Promise<DatabaseSetup> {
   if (backend === "convex") {
     return "none";
   }
 
-  if (dbSetup !== undefined) return dbSetup as ProjectDBSetup;
+  if (dbSetup !== undefined) return dbSetup as DatabaseSetup;
 
   if (databaseType === "none") {
     return "none";
@@ -27,7 +27,7 @@ export async function getDBSetupChoice(
     return "none";
   }
 
-  let options: { value: ProjectDBSetup; label: string; hint: string }[] = [];
+  let options: { value: DatabaseSetup; label: string; hint: string }[] = [];
 
   if (databaseType === "sqlite") {
     options = [
@@ -44,6 +44,11 @@ export async function getDBSetupChoice(
         value: "neon" as const,
         label: "Neon Postgres",
         hint: "Serverless Postgres with branching capability",
+      },
+      {
+        value: "supabase" as const,
+        label: "Supabase",
+        hint: "Local Supabase stack (requires Docker)",
       },
       ...(orm === "prisma"
         ? [
@@ -69,14 +74,14 @@ export async function getDBSetupChoice(
     return "none";
   }
 
-  const response = await select<ProjectDBSetup>({
+  const response = await select<DatabaseSetup>({
     message: `Select ${databaseType} setup option`,
     options,
     initialValue: "none",
   });
 
   if (isCancel(response)) {
-    cancel(pc.red("Operation cancelled"));
+    cancel(re.red("Operation cancelled"));
     process.exit(0);
   }
 

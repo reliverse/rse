@@ -324,7 +324,7 @@ export { askUsernameFrontend } from "./utils/prompts/askUsernameFrontend";
 export { askUsernameGithub } from "./utils/prompts/askUsernameGithub";
 export { shouldInitGit } from "./utils/prompts/shouldInitGit";
 export {
-  getReliverseMemory,
+  getOrCreateReliverseMemory,
   updateReliverseMemory,
 } from "./utils/reliverseMemory";
 export {

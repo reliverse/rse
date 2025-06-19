@@ -18,7 +18,6 @@
     "relinter-test.ts"
   ],
   "ignoreBinaries": [
-    "build",
     "code",
     "db:push",
     "brew",

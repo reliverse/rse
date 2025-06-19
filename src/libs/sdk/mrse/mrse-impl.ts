@@ -8,7 +8,7 @@ import { confirmPrompt } from "@reliverse/rempts";
 import { homeDir } from "~/libs/sdk/constants";
 import { initGithubSDK } from "~/libs/sdk/utils/instanceGithub";
 import { askUsernameFrontend } from "~/libs/sdk/utils/prompts/askUsernameFrontend";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getOrCreateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 /**
  * Determines if we log additional debug info.
@@ -136,7 +136,7 @@ export async function downloadFileFromGitHub(
     });
 
     // Memory used for storing credentials
-    const memory = await getReliverseMemory();
+    const memory = await getOrCreateReliverseMemory();
     const { config } = await getOrCreateRseConfig({
       projectPath: process.cwd(),
       isDev: false,

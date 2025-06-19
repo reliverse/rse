@@ -35,9 +35,9 @@ export async function app(params: ParamsOmitSkipPN) {
 
   if (!isDev) {
     await detectProject(cwd, isDev);
-    // Commented out to always show main menu
+    // TODO: remove, deprecated
     // if (rootProject) {
-    //   const updatedMemory = await getReliverseMemory();
+    //   const updatedMemory = await getOrCreateReliverseMemory();
     //   await handleOpenProjectMenu(
     //     [rootProject],
     //     isDev,
@@ -119,5 +119,5 @@ export async function app(params: ParamsOmitSkipPN) {
 }
 
 export async function showWebUiMenu({ isDev }: { isDev: boolean }) {
-  await runCmd(await getWebCmd(), [`--dev ${isDev}`]);
+  await runCmd(await getWebCmd(), [`--dev ${isDev}`]); // src/app/web/cmd.ts
 }

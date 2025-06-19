@@ -15,7 +15,7 @@ import type { ReliverseMemory } from "~/libs/sdk/utils/schemaMemory";
 
 import { cliDomainDocs, memoryPath } from "~/libs/sdk/constants";
 import { showAnykeyPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getOrCreateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { updateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 /**
@@ -258,7 +258,7 @@ export async function authCheck(
     await auth({ isDev, useLocalhost });
 
     // Re-check authentication after auth flow
-    const updatedMemory = await getReliverseMemory();
+    const updatedMemory = await getOrCreateReliverseMemory();
 
     const authSuccess =
       updatedMemory.code &&

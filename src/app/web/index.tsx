@@ -8,14 +8,15 @@ const server = serve({
     "/*": index,
 
     "/api/hello": {
-      async GET(_req) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      async GET(req) {
         return Response.json({
           message: "Hello, world!",
           method: "GET",
         });
       },
-
-      async PUT(_req) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      async PUT(req) {
         return Response.json({
           message: "Hello, world!",
           method: "PUT",

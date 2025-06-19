@@ -2,7 +2,7 @@ import { getOrCreateRseConfig } from "@reliverse/cfg";
 import { defineCommand } from "@reliverse/rempts";
 
 import { showDevToolsMenu } from "~/libs/sdk/toolbox/toolbox-impl";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getOrCreateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({
@@ -25,7 +25,7 @@ export default defineCommand({
       isDev,
       overrides: {},
     });
-    const memory = await getReliverseMemory();
+    const memory = await getOrCreateReliverseMemory();
     await showDevToolsMenu({
       projectName: "",
       cwd,

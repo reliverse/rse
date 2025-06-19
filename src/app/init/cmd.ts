@@ -7,7 +7,7 @@ import { defineCommand } from "@reliverse/rempts";
 import { showManualBuilderMenu } from "~/app/init/impl/init-impl";
 import { initMinimalrseProject } from "~/app/init/impl/init-utils";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getOrCreateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({
@@ -34,7 +34,7 @@ export default defineCommand({
       const cwd = getCurrentWorkingDirectory();
 
       // Retrieve project memory and configuration
-      const memory = await getReliverseMemory();
+      const memory = await getOrCreateReliverseMemory();
       const { config } = await getOrCreateRseConfig({
         projectPath: cwd,
         isDev,

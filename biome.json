@@ -56,6 +56,7 @@
         "useWhile": "off"
       },
       "correctness": {
+        "noUnusedFunctionParameters": "off",
         "noChildrenProp": "off",
         "noConstantCondition": "off",
         "noEmptyPattern": "off",

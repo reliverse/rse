@@ -13,7 +13,7 @@ import {
   type InstanceGithub,
 } from "~/libs/sdk/utils/instanceGithub";
 import { initVercelSDK } from "~/libs/sdk/utils/instanceVercel";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getOrCreateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 import { deployProject } from "./deploy";
 import { handleGithubRepo, initGitDir } from "./git";
@@ -112,7 +112,7 @@ export async function configureGithubRepo(
   }
 
   // Refresh memory to retrieve updated GitHub token.
-  const updatedMemory = await getReliverseMemory();
+  const updatedMemory = await getOrCreateReliverseMemory();
   if (!updatedMemory?.githubKey) {
     relinka("error", "GitHub token still not found after setup");
     return { success: false };

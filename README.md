@@ -23,31 +23,34 @@
 
 ## getting started
 
-make sure you have git, node.js, and bun/pnpm/yarn/npm installed.
+make sure you have git, node.js, and bun/pnpm/yarn/npm (**[bun](https://bun.sh/get) is highly recommended**) are installed. then:
 
-### install
+### get started
 
-1. **install globally**:
+#### 1. install
 
-   ```sh
-   bun i -g @reliverse/rse
-   ```
+- **globally**: `bun add -g @reliverse/rse`
+- **or as dev dep**: `bun add -D @reliverse/rse`
 
-   **or update**:
+(_if you want you can install rse globally and as dev dep in your project_)
 
-   ```sh
-   rse update
-   ```
+#### 2. update
 
-2. **run and enjoy**:
+- **if installed globally**: `rse update` (or: `bun update -g --latest`)
+- **if installed as dev dep**: `bun update -D @reliverse/rse`
 
-   ```sh
-   rse cli
-   ```
+#### 3. customize config
 
-a `.config/rse.{ts,jsonc}` file is generated on first run.  
-customize it to fit your project and tweak cli behavior.  
-changes apply on next launch (hot-reload coming soon).
+- a `.config/rse.{ts,jsonc}` file is generated on first run.  
+- customize it to fit your project and tweak cli behavior.  
+- changes apply on next launch (hot-reload coming soon).
+- config customization is optional, but recommended.
+
+#### 4. run and enjoy
+
+- **if installed globally**: `rse cli`
+- **if installed as dev dep**: `bun rse cli`
+- **usage without installing**: `bunx @reliverse/rse@latest cli`
 
 ## show some love 🫶
 
@@ -60,7 +63,7 @@ it helps more than you think! thanks for being here.
 
 ## commands
 
-from bootstrapping projects to ai superpowers — here's what rse cli can do.
+from bootstrapping projects to ai superpowers — here's what rse cli can do:
 
 ### notes
 

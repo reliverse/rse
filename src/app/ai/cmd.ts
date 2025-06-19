@@ -9,7 +9,7 @@ import { ensureOpenAIKey } from "~/libs/sdk/ai/ai-impl/ai-auth";
 import { AGENT_NAMES } from "~/libs/sdk/ai/ai-impl/ai-const";
 import { aiAgenticTool } from "~/libs/sdk/ai/ai-impl/ai-tools";
 import { aiMenu } from "~/libs/sdk/ai/ai-menu";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getOrCreateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { getCurrentWorkingDirectory } from "~/libs/sdk/utils/terminalHelpers";
 
 export default defineCommand({
@@ -47,7 +47,7 @@ export default defineCommand({
     if (!config) {
       throw new Error("Failed to read rse config");
     }
-    const memory = await getReliverseMemory();
+    const memory = await getOrCreateReliverseMemory();
     await ensureOpenAIKey(memory);
 
     const agent = args.agent as AiSdkAgent | undefined;

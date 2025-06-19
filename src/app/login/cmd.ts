@@ -4,7 +4,7 @@ import { defineCommand } from "@reliverse/rempts";
 import { useLocalhost } from "~/libs/sdk/constants";
 import { showAnykeyPrompt } from "~/libs/sdk/init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt";
 import { auth } from "~/libs/sdk/login/login-impl";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getOrCreateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 export default defineCommand({
   meta: {
@@ -22,7 +22,7 @@ export default defineCommand({
     const isDev = args.dev;
 
     // Check for existing keys in SQLite
-    const memory = await getReliverseMemory();
+    const memory = await getOrCreateReliverseMemory();
     const isAuthenticated = memory.code && memory.key;
 
     if (isAuthenticated) {

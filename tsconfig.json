@@ -2,7 +2,8 @@
   "compilerOptions": {
     "paths": {
       "~/*": ["./src/*"],
-      "@/*": ["./example/*"]
+      "@/*": ["./src/app/web/*"],
+      "#/*": ["./example/*"]
     },
     "baseUrl": ".",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
@@ -28,13 +29,6 @@
     "noPropertyAccessFromIndexSignature": false,
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.js",
-    ".*/**/*.ts",
-    "src/app/web/**/*.tsx",
-    "src/templates/**/*.tsx",
-    "src/templates/**/*.mjs"
-  ],
-  "exclude": ["node_modules", "dist*", "src/templates/**/*.cjs"]
+  "include": ["**/*.ts", "**/*.js", ".*/**/*.ts", "src/app/web/**/*.tsx"],
+  "exclude": ["node_modules", "dist*"]
 }

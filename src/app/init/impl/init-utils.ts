@@ -29,7 +29,7 @@ import { askInstallDeps } from "~/libs/sdk/utils/prompts/askInstallDeps";
 import { askOpenInIDE } from "~/libs/sdk/utils/prompts/askOpenInIDE";
 import { askProjectName } from "~/libs/sdk/utils/prompts/askProjectName";
 import { shouldInitGit } from "~/libs/sdk/utils/prompts/shouldInitGit";
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getOrCreateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 import { findTsconfigUp } from "~/libs/sdk/utils/tsconfigHelpers";
 
 /** Constants for menu option values */
@@ -166,7 +166,7 @@ export async function initMinimalrseProject(
       }
     } else {
       // In non-dev mode, prompt for Git deployment options
-      const memory = await getReliverseMemory();
+      const memory = await getOrCreateReliverseMemory();
       await promptGitDeploy({
         isLib: false,
         projectName,

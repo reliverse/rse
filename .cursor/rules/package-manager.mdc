@@ -1,6 +1,6 @@
 ---
-description: Use Bun instead of Node.js, npm, pnpm, or vite.
-globs: *.ts,package.json,*.js,*.tsx,*.html,*.css
+description: 
+globs: 
 alwaysApply: false
 ---
 

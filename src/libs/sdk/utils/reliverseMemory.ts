@@ -15,7 +15,7 @@ import type {
   UserDataMemory,
 } from "./schemaMemory";
 
-export async function getReliverseMemory(): Promise<ReliverseMemory> {
+export async function getOrCreateReliverseMemory(): Promise<ReliverseMemory> {
   // Ensure directory exists
   if (!(await fs.pathExists(path.dirname(memoryPath)))) {
     await ensuredir(path.dirname(memoryPath));

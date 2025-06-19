@@ -6,7 +6,7 @@ import { teamsGetTeams } from "@vercel/sdk/funcs/teamsGetTeams";
 
 import type { InstanceVercel } from "~/libs/sdk/utils/instanceVercel";
 
-import { getReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
+import { getOrCreateReliverseMemory } from "~/libs/sdk/utils/reliverseMemory";
 
 export interface VercelTeam {
   id: string;
@@ -50,7 +50,7 @@ export async function getPrimaryVercelTeam(
       memory.vercelTeamSlug = team.slug;
 
       // Re-read memory to ensure changes are persisted
-      await getReliverseMemory();
+      await getOrCreateReliverseMemory();
 
       return team;
     }

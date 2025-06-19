@@ -1,6 +1,8 @@
 import { createCli } from "@reliverse/rempts";
 
-await createCli({}); // 'await' has no effect on the type of this expression.ts(80007)
+// import { createCli, runMain, defineCommand } from "@reliverse/rempts";
+
+await createCli({});
 
 // deprecated
 /* await runMain(

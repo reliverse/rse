@@ -56,14 +56,14 @@ export async function getMainMenuOptions(
   // Base menu
   const options: MainMenuOption[] = [
     {
-      label: "💻 Open rse web ui",
-      hint: "experimental",
-      value: "web-ui",
-    },
-    {
       label: "✨ Create a project in terminal",
       hint: multiConfigMsg,
       value: "create",
+    },
+    {
+      label: "💻 Open rse web ui",
+      hint: "experimental",
+      value: "web-ui",
     },
     {
       label: "🔬 Create/edit project manually",

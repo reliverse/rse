@@ -301,7 +301,7 @@ const router = t.router({
             api: APISchema.optional(),
           })
           .optional()
-          .default({}),
+          .default({ yes: false }),
       ]),
     )
     .mutation(async ({ input }) => {

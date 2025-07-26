@@ -5,8 +5,7 @@
     "src/mod.ts",
     "src/app/**/cmd.ts",
     "src/libs/**/*.ts",
-    "src/providers/better-t-stack/**/*.ts",
-    "src/app/web/frontend.tsx"
+    "src/providers/better-t-stack/**/*.ts"
   ],
   "project": ["src/**/*.ts"],
   "ignoreExportsUsedInFile": true,
@@ -27,5 +26,21 @@
     "where",
     "which"
   ],
-  "ignoreDependencies": ["@webtui/css", "octokit", "querystring"]
+  "ignoreDependencies": [
+    "octokit",
+    "querystring",
+    "bun-plugin-tailwind",
+    "@hookform/resolvers",
+    "@radix-ui/react-label",
+    "@radix-ui/react-select",
+    "@radix-ui/react-slot",
+    "class-variance-authority",
+    "clsx",
+    "lucide-react",
+    "react-hook-form",
+    "tailwind-merge",
+    "tailwindcss-animate",
+    "autoprefixer",
+    "postcss"
+  ]
 }

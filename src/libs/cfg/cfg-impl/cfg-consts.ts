@@ -1,3 +1,5 @@
+// most of the things in this file are temporary
+
 import path from "@reliverse/pathkit";
 import os from "node:os";
 
@@ -5,9 +7,7 @@ import os from "node:os";
 export const PROJECT_ROOT = path.resolve(process.cwd());
 
 // CLI VERSION AND NAME
-const version= "1.7.12";
-export const cliVersion = version;
-export const cliName = "@reliverse/rse";
+export const rseName = "@reliverse/rse";
 
 // GENERAL CONFIG NAMES
 export const tsconfigJson = "tsconfig.json";
@@ -24,14 +24,14 @@ export const cliConfigTsBak = "rse.ts.bak";
 
 // DOCUMENTATION WEBSITE
 export const rseOrg = "https://reliverse.org";
-export const rseOrgBase = `reliverse.org`;
-export const cliDomainRoot = `https://docs.reliverse.org`;
-export const cliDomainDocs = `https://docs.reliverse.org/cli`;
-export const cliDomainEnv = `https://docs.reliverse.org/env`;
+export const rseOrgBase = "reliverse.org";
+export const cliDomainRoot = "https://docs.reliverse.org";
+export const cliDomainDocs = "https://docs.reliverse.org/cli";
+export const cliDomainEnv = "https://docs.reliverse.org/env";
 
 // HOMEDIR OF THE CLI
 export const homeDir = os.homedir();
-export const cliHomeDir = path.join(homeDir, ".reliverse", "rse");
+export const cliHomeDir = path.join(homeDir, ".reliverse");
 export const cliHomeTmp = path.join(cliHomeDir, "temp");
 export const cliHomeRepos = path.join(cliHomeDir, "repos");
 export const memoryPath = path.join(cliHomeDir, "memory.db");

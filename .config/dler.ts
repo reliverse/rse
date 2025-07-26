@@ -1,11 +1,11 @@
-import { defineConfigDler } from "@reliverse/cfg";
+import { defineConfig } from "@reliverse/dler-cfg";
 
 /**
  * Reliverse Bundler Configuration
  * Hover over a field to see more details
  * @see https://github.com/reliverse/dler
  */
-export default defineConfigDler({
+export default defineConfig({
   // Bump configuration
   bumpDisable: false,
   bumpFilter: ["package.json", ".config/rse.ts", "src/libs/sdk/constants.ts"],
@@ -51,10 +51,38 @@ export default defineConfigDler({
     "@reliverse/rse-sdk": {
       libDeclarations: true,
       libDescription:
-        "@reliverse/rse-sdk allows you to create new plugins for @reliverse/rse CLI, interact with reliverse.org, and even extend your own CLI functionality (you may also try @reliverse/dler-sdk for this case).",
+        "@reliverse/rse-sdk without cli. @reliverse/rse-sdk allows you to create new plugins for @reliverse/rse CLI, interact with reliverse.org, and even extend your own CLI functionality (you may also try @reliverse/dler-sdk for this case).",
       libDirName: "sdk",
       libMainFile: "sdk/sdk-mod.ts",
       libPkgKeepDeps: true,
+      libTranspileMinify: true,
+      libPubPause: true,
+      libPubRegistry: "npm-jsr",
+    },
+    "@reliverse/rse-cfg": {
+      libDeclarations: true,
+      libDescription: "config typescript definitions for @reliverse/rse",
+      libDirName: "cfg",
+      libMainFile: "cfg/cfg-mod.ts",
+      libPkgKeepDeps: true, // TODO: temp
+      /* libPkgKeepDeps: [
+        // most of the deps here are temporary at the moment
+        // TODO: move prompts and logs to dler's or rse's impl to reduce deps number
+        "@reliverse/relinka",
+        "@reliverse/runtime",
+        "@reliverse/relifso",
+        "@reliverse/pathkit",
+        "@sinclair/typebox",
+        "c12", // TODO: replace with @reliverse/reconf
+        "confbox",
+        "@reliverse/rempts",
+        "execa",
+        "destr",
+        "magic-string",
+        "jiti",
+        "jsonrepair", // TODO: migrate to @reliverse/relifso (jsonrepair is already built-in there)
+        "pkg-types",
+      ], */
       libTranspileMinify: true,
       libPubPause: false,
       libPubRegistry: "npm-jsr",
@@ -108,6 +136,10 @@ export default defineConfigDler({
     "dist-jsr": [],
     "dist-npm": [],
     "dist-libs": {
+      "@reliverse/rse-cfg": {
+        jsr: [],
+        npm: [],
+      },
       "@reliverse/rse-sdk": {
         jsr: [],
         npm: [],

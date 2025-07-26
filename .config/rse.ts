@@ -1,6 +1,6 @@
-import { defineConfigRse } from "@reliverse/cfg";
+import { defineConfig } from "~/libs/cfg/cfg-impl/cfg-define";
 
-export default defineConfigRse({
+export default defineConfig({
   // RSE CONFIG (https://docs.reliverse.org/cli)
   // Restart the CLI to apply your config changes
   $schema: "./schema.json",
@@ -10,7 +10,7 @@ export default defineConfigRse({
   projectAuthor: "reliverse",
   projectDescription:
     "@reliverse/rse is your all-in-one companion for bootstrapping and improving any kind of projects (especially web apps built with frameworks like Next.js) — whether you're kicking off something new or upgrading an existing app. It is also a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.",
-  version: "1.7.9",
+  version: "1.7.12",
   projectLicense: "MIT",
   projectState: "creating",
   projectRepository: "https://github.com/reliverse/rse",

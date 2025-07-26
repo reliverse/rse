@@ -1,15 +1,16 @@
-# rse (prev. reliverse cli) — [reliverse.org](https://reliverse.org)
+# rse cli (prev. reliverse cli) — [reliverse.org](https://reliverse.org)
 
-> **@reliverse/rse** is your all-in-one daily companion for bootstrapping and improving any kind of projects (especially web apps built with frameworks like Next.js) — whether you're kicking off something new or upgrading an existing app. It is also a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.
+> **@reliverse/rse** is your all-in-one daily dev companion — not just for bootstrapping projects, but for extending your entire dev toolchain. rse brings smart automation, framework-aware support (like next.js), and an ai-powered toolbox into your terminal. code, refactor, generate, integrate — all in one flow.
 
 [sponsor](https://github.com/sponsors/blefnk) — [discord](https://discord.gg/Pb8uKbwpsJ) — [github](https://github.com/reliverse/rse) — [npm](https://npmjs.com/@reliverse/rse) — [introduction](https://blefnk.reliverse.org/blog/my-projects/cli)
 
 ## features
 
-- 🦾 **superapp for devs**: one cli, tons of features. spin up, refactor, deploy, ai — all in one place.
-- 🚀 **start new or load up**: templates in seconds.
-- 🌐 **all in one go**: bootstrapping, pushing to github, deploying to vercel, and more.
-- 😉 **bootstrap modes**: clone some already existing `template`, or build a new project from scratch with preferred `stack`.
+- 🦾 **superapp for devs**: one cli, endless power. spin up, refactor, deploy, use ai, and more.
+- ⚖️ **reliverse.org cli**: rse is the official cli for [reliverse.org](https://reliverse.org) app.
+- 🚀 **start fast or load up**: use ready-to-go templates or pick up where you left off.
+- 🌐 **one-shot ops**: bootstrap, push to github, deploy to vercel — all in one go.
+- 😉 **flexible bootstrapping**: clone an existing `template` or create a new project with your preferred `stack`.
 - 😊 **different templates**: select specific template (from the list or by providing a custom link to a github repo) or ask rse to narrow the list to templates which contain your prefferences.
 - 🤝 **different stack providers**: `reliverse-stack`, `better-t-stack` (and more coming soon). you have a freedom to use any provider for your project bootstrap.
 - 😜 **not limited to web apps**: you can bootstrap any kind of project — web/mobile/desktop apps, npm/jsr libraries (incl. shadcn-based component libraries), cli tools, vscode/browser/eslint extensions, better-auth/eslint plugins, etc. everything can be bootstrapped as a single repo or monorepo. (please note: at the moment, not everything described in this list point is fully implemented, but it's coming soon)
@@ -18,8 +19,7 @@
 - ⚙️ **automate**: boring setup (eslint, env files, etc) — let the cli handle it.
 - 🏗️ **works great with next.js**: plays well with other frameworks too.
 - ⏬ **auto-clones repos/templates**: and configures them smartly.
-- 🔌 **integrate**: tools into your codebase. use `create/edit project manually` (or `rse init`).
-- 🤖 **built-in local reliverse ai**: chat with terminal version of [reliverse ai](https://reliverse.org) (use your provider's api, or 🔜 ollama, or 🔜 reliverse.org api), or ask it to use agentic tools, like relinter (an ai-based alternative to eslint) which suggests improvements to your codebase (🔜 reliverse ai then can apply the changes based on the generated suggestions file). follows rules from the dirs like `.cursor/rules`, and the files like `.config/rse.ts`.
+- 🔌 **integrate**: tools into your codebase. use `create/edit project manually`.
 
 ## getting started
 

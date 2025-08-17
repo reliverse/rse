@@ -4,15 +4,11 @@
     "biomejs.biome",
     "chunsen.bracket-select",
     "davidanson.vscode-markdownlint",
-    "dbaeumer.vscode-eslint",
     "fabiospampinato.vscode-open-multiple-files",
     "oven.bun-vscode",
     "usernamehw.errorlens",
     "usernamehw.remove-empty-lines",
     "yoavbls.pretty-ts-errors",
-    "yzhang.markdown-all-in-one",
-    "vue.volar",
-    "astro-build.astro-vscode",
-    "svelte.svelte-vscode"
+    "yzhang.markdown-all-in-one"
   ]
 }

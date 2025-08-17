@@ -1,7 +1,7 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": [
-    ".config/**/*.ts",
+    "**/*.ts",
     "src/mod.ts",
     "src/app/**/cmd.ts",
     "src/libs/**/*.ts",
@@ -25,22 +25,5 @@
     "turso",
     "where",
     "which"
-  ],
-  "ignoreDependencies": [
-    "octokit",
-    "querystring",
-    "bun-plugin-tailwind",
-    "@hookform/resolvers",
-    "@radix-ui/react-label",
-    "@radix-ui/react-select",
-    "@radix-ui/react-slot",
-    "class-variance-authority",
-    "clsx",
-    "lucide-react",
-    "react-hook-form",
-    "tailwind-merge",
-    "tailwindcss-animate",
-    "autoprefixer",
-    "postcss"
   ]
 }

@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "Rse postinstall step not performed."
+echo "The postinstall replaces this placeholder script with a native Go binary for your operating system, making Rse lightning fast. If you see this message, it means you didn't run the postinstall step, or your package manager blocked running it."
+exit 1

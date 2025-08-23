@@ -9,6 +9,7 @@
     "usernamehw.errorlens",
     "usernamehw.remove-empty-lines",
     "yoavbls.pretty-ts-errors",
-    "yzhang.markdown-all-in-one"
+    "yzhang.markdown-all-in-one",
+    "rust-lang.rust-analyzer"
   ]
 }

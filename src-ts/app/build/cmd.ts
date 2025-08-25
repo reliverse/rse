@@ -1,31 +1,40 @@
+import { createPerfTimer, dlerBuild, finalizeBuild, getConfigDler } from "@reliverse/dler";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
-import { common } from "~/const/msg";
+import { commonArgs } from "~/impl/args";
+import { msgs } from "~/impl/msgs";
+import type { CmdName } from "~/impl/types";
+import { commonEndActions, commonStartActions } from "~/impl/utils";
 
 export default defineCommand({
   meta: {
-    name: "build",
-    description: "Build the project",
+    name: "build" as CmdName,
+    description: msgs.cmds.build,
   },
   args: defineArgs({
-    ci: {
+    ...commonArgs,
+    debugOnlyCopyNonBuildFiles: {
       type: "boolean",
-      description: "Whether to run in CI mode",
+      description: "Only copy non-build files to dist directories",
     },
-    dev: {
+    debugDontCopyNonBuildFiles: {
       type: "boolean",
-      description: "Whether to run in dev mode",
+      description:
+        "Don't copy non-build files to dist directories, only build buildPreExtensions files",
     },
   }),
   run: async ({ args }) => {
-    if (args.ci) {
-      console.log(common.ci);
-    }
-    if (args.dev) {
-      console.log(common.dev);
-    }
+    const { ci, dev, debugOnlyCopyNonBuildFiles, debugDontCopyNonBuildFiles } = args;
 
-    console.log("Building the project... Args:", args);
+    const timer = createPerfTimer();
 
-    process.exit(0);
+    await commonStartActions({ ci, dev });
+
+    const config = await getConfigDler();
+
+    await dlerBuild(timer, dev, config, debugOnlyCopyNonBuildFiles, debugDontCopyNonBuildFiles);
+
+    await finalizeBuild(timer, false, "build");
+
+    await commonEndActions();
   },
 });

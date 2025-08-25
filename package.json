@@ -1,24 +1,28 @@
 {
   "name": "@reliverse/rse",
-  "version": "1.7.12",
+  "version": "1.7.13",
   "type": "module",
   "license": "Apache-2.0",
   "description": "@reliverse/rse is your all-in-one daily dev companion: not just for bootstrapping projects, but for extending your entire dev toolchain. Rse CLI brings smart automation, framework-aware support (like Next.js), and an AI-powered toolbox into your terminal. Code, refactor, generate, integrate — all in one flow.",
   "scripts": {
+    "pub": "bun dler pub",
     "dev": "bun src-ts/rse.ts",
-    "pub": "bun dev pub"
+    "build": "bun dev build --dev",
+    "latest": "bun update --latest",
+    "check": "tsc --noEmit && biome check --fix --unsafe"
   },
   "dependencies": {
-    "@reliverse/dler": "^1.7.92"
+    "@reliverse/dler": "^1.7.108",
+    "@reliverse/rempts": "^1.7.52"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.2.0",
+    "@biomejs/biome": "^2.2.2",
     "@total-typescript/ts-reset": "^0.6.1",
     "@types/bun": "^1.2.20",
     "@types/node": "^24.3.0",
-    "knip": "^5.62.0",
+    "knip": "^5.63.0",
     "typescript": "^5.9.2",
-    "ultracite": "^5.2.4"
+    "ultracite": "^5.2.5"
   },
   "keywords": [
     "rse",

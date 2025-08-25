@@ -4,7 +4,7 @@
 name = "rse-rust"
 version = "0.1.0"
 edition = "2024"
-description = "Orchestrates and caches builds for JS monorepos"
+description = "@reliverse/rse is your all-in-one daily dev companion: not just for bootstrapping projects, but for extending your entire dev toolchain. Rse CLI brings smart automation, framework-aware support (like Next.js), and an AI-powered toolbox into your terminal. Code, refactor, generate, integrate — all in one flow."
 authors = ["Reliverse <team@reliverse.dev>"]
 license = "Apache-2.0"
 repository = "https://github.com/reliverse/dler"

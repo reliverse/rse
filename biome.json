@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.2.2/schema.json",
   "extends": ["ultracite"],
   "vcs": {
     "enabled": false,
@@ -43,6 +43,7 @@
     "rules": {
       "recommended": true,
       "suspicious": {
+        "noVar": "off",
         "useGetterReturn": "off",
         "noThenProperty": "off",
         "useGuardForIn": "off",
@@ -95,6 +96,7 @@
         "useKeyWithClickEvents": "off"
       },
       "style": {
+        "noNamespace": "off",
         "useGraphqlNamingConvention": "off",
         "useFilenamingConvention": "off",
         "useConsistentObjectDefinitions": "off",

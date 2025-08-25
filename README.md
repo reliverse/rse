@@ -6,16 +6,17 @@
 
 ## Documentation
 
-Please visit [docs.reliverse.org/libraries/rse](https://docs.reliverse.org/libraries/rse) to learn how to install and use `@reliverse/rse` CLI.
-
-## Stand With Ukraine
-
-Help fund drones, medkits, and victory. [Donate now](https://u24.gov.ua), it matters. Every dollar helps stop [russia's war crimes](https://war.ukraine.ua/russia-war-crimes) and saves lives.
+Visit [docs.reliverse.org/libraries/rse](https://docs.reliverse.org/libraries/rse) to learn how to install and use `@reliverse/rse` CLI.
 
 ## Stand With Reliverse
 
-Please [star the project repo](https://github.com/reliverse/rse) to help Reliverse community grow. Follow this project's author, [Nazar Kornienko](https://github.com/blefnk) & [Reliverse](https://github.com/reliverse), to get updates about new projects. [Become a sponsor](https://github.com/sponsors/blefnk) and power the next wave of tools that _just feel right_.
+[Star the project repo](https://github.com/reliverse/rse) to help Reliverse community grow; Follow this project's author, [Nazar Kornienko](https://github.com/blefnk) & [Reliverse](https://github.com/reliverse), to get updates about new projects; [Become a sponsor](https://github.com/sponsors/blefnk) and power the next wave of tools that _just feel right_.
+
+## Stand With Ukraine
+
+- 💙 Please help fund drones, medkits, and victory. [Donate now](https://u24.gov.ua), it matters.
+- 💛 Every dollar helps stop [russia's war crimes](https://war.ukraine.ua/russia-war-crimes) and saves lives.
 
 ## License
 
-Licensed under [Apache-2.0](LICENSE) © [Nazar Kornienko (blefnk)](https://github.com/blefnk), [Bleverse](https://bleverse.com), [Reliverse](https://github.com/reliverse)
+Licensed under [Apache-2.0](LICENSE) © 2025 [Nazar Kornienko (blefnk)](https://github.com/blefnk), [Bleverse](https://bleverse.com), [Reliverse](https://github.com/reliverse)

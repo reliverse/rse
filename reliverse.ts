@@ -3,73 +3,31 @@ import { defineConfig } from "./reltypes";
 /**
  * Reliverse Bundler Configuration
  * Hover over a field to see more details
- * @see https://github.com/reliverse/dler
+ * @see https://github.com/reliverse/reliverse
  */
 export default defineConfig({
-  // RSE CONFIG (https://docs.reliverse.org/cli)
-  // Restart the CLI to apply your config changes
-  $schema: "./schema.json",
-
-  // General project information
+  // Project configuration
   projectName: "@reliverse/rse",
   projectAuthor: "reliverse",
   projectDescription:
     "@reliverse/rse is your all-in-one daily dev companion: not just for bootstrapping projects, but for extending your entire dev toolchain. Rse CLI brings smart automation, framework-aware support (like Next.js), and an AI-powered toolbox into your terminal. Code, refactor, generate, integrate — all in one flow.",
-  version: "1.7.12",
+  version: "1.7.13",
   projectLicense: "Apache-2.0",
-
-  // Bump configuration
-  bumpDisable: false,
-  bumpFilter: ["package.json", "reliverse.ts"],
-  bumpMode: "patch",
-
-  // Common configuration
-  commonPubPause: false,
-  commonPubRegistry: "npm-jsr",
-  commonVerbose: true,
-
-  // Core configuration
-  coreBuildOutDir: "bin",
-  coreDeclarations: true,
-  coreDescription:
-    "@reliverse/rse is your all-in-one companion for bootstrapping and improving any kind of projects (especially web apps built with frameworks like Next.js) — whether you're kicking off something new or upgrading an existing app. It is also a little AI-powered toolbox in your terminal, ready to help with coding, refactoring, image gen, and more.",
-  coreEntryFile: "mod.ts",
-  coreEntrySrcDir: "src",
-  coreIsCLI: { enabled: true, scripts: { rse: "cli.ts" } },
-
-  // JSR-only config
-  distJsrAllowDirty: true,
-  distJsrBuilder: "jsr",
-  distJsrDirName: "dist-jsr",
-  distJsrDryRun: false,
-  distJsrFailOnWarn: false,
-  distJsrGenTsconfig: false,
-  distJsrOutFilesExt: "ts",
-  distJsrSlowTypes: true,
-
-  // NPM-only config
-  distNpmBuilder: "mkdist",
-  distNpmDirName: "dist-npm",
-  distNpmOutFilesExt: "js",
-
-  // Project configuration
-  projectState: "creating",
-  projectRepository: "https://github.com/reliverse/rse",
-  projectDomain: "https://docs.reliverse.org/cli",
+  projectState: "unknown",
+  projectRepository: "unknown",
+  projectDomain: "unknown",
   projectCategory: "unknown",
   projectSubcategory: "unknown",
   projectTemplate: "unknown",
   projectTemplateDate: "unknown",
   projectArchitecture: "unknown",
   repoPrivacy: "unknown",
-  projectGitService: "github",
-  projectDeployService: "vercel",
-  repoBranch: "main",
-
-  // Primary tech stack/framework
-  projectFramework: "rempts",
-  projectPackageManager: "bun",
-  projectRuntime: "bun",
+  projectGitService: "unknown",
+  projectDeployService: "unknown",
+  repoBranch: "unknown",
+  projectFramework: "unknown",
+  projectPackageManager: "unknown",
+  projectRuntime: "unknown",
   preferredLibraries: {
     stateManagement: "unknown",
     formManagement: "unknown",
@@ -77,9 +35,9 @@ export default defineConfig({
     uiComponents: "unknown",
     testing: "unknown",
     authentication: "unknown",
-    databaseLibrary: "drizzle",
-    databaseProvider: "sqlite",
-    api: "trpc",
+    databaseLibrary: "unknown",
+    databaseProvider: "unknown",
+    api: "unknown",
     linting: "unknown",
     formatting: "unknown",
     payment: "unknown",
@@ -90,7 +48,7 @@ export default defineConfig({
     notifications: "unknown",
     search: "unknown",
     uploads: "unknown",
-    validation: "zod",
+    validation: "unknown",
     documentation: "unknown",
     icons: "unknown",
     mail: "unknown",
@@ -108,61 +66,41 @@ export default defineConfig({
     routing: "unknown",
   },
   monorepo: {
-    type: "none",
+    type: "unknown",
     packages: [],
     sharedPackages: [],
   },
-
-  // List dependencies to exclude from checks
   ignoreDependencies: [],
-
-  // Provide custom rules for Reliverse AI
-  // You can use any json type here in {}
   customRules: {},
-
-  // Project features
   features: {
     i18n: false,
     analytics: false,
-    themeMode: "dark-light",
-    authentication: true,
-    api: true,
-    database: true,
+    themeMode: "unknown",
+    authentication: false,
+    api: false,
+    database: false,
     testing: false,
     docker: false,
     ci: false,
-    commands: [
-      "pub",
-      "example",
-      "db",
-      "latest",
-      "check",
-      "dev:cli",
-      "dev:add",
-      "dev:ai",
-      "dev:clone",
-      "dev:cmod",
-    ],
-    webview: ["react-native"],
-    language: ["typescript"],
-    themes: ["default", "eslint", "biome", "sonner", "uploadthing", "zod", "typebox", "lucide"],
+    commands: [],
+    webview: [],
+    language: [],
+    themes: [],
   },
-
-  // Code style preferences
   codeStyle: {
-    dontRemoveComments: true,
-    shouldAddComments: true,
-    typeOrInterface: "type",
-    importOrRequire: "import",
-    quoteMark: "double",
+    dontRemoveComments: false,
+    shouldAddComments: false,
+    typeOrInterface: "unknown",
+    importOrRequire: "unknown",
+    quoteMark: "unknown",
     semicolons: true,
     lineWidth: 80,
-    indentStyle: "space",
+    indentStyle: "unknown",
     indentSize: 2,
-    importSymbol: "~",
-    trailingComma: "all",
+    importSymbol: "unknown",
+    trailingComma: "unknown",
     bracketSpacing: true,
-    arrowParens: "always",
+    arrowParens: "unknown",
     tabWidth: 2,
     jsToTs: false,
     cjsToEsm: false,
@@ -175,115 +113,77 @@ export default defineConfig({
       replaceEvents: false,
     },
   },
-
-  // Settings for cloning an existing repo
   multipleRepoCloneMode: false,
   customUserFocusedRepos: [],
   customDevsFocusedRepos: [],
   hideRepoSuggestions: false,
   customReposOnNewProject: false,
-
-  // Set to false to disable opening the browser during env composing
   envComposerOpenBrowser: true,
-
-  // Enable auto-answering for prompts to skip manual confirmations.
-  // Make sure you have unknown values configured above.
   skipPromptsUseAutoBehavior: false,
+  deployBehavior: "unknown",
+  depsBehavior: "unknown",
+  gitBehavior: "unknown",
+  i18nBehavior: "unknown",
+  scriptsBehavior: "unknown",
+  existingRepoBehavior: "unknown",
+  relinterConfirm: "unknown",
 
-  // Prompt behavior for deployment
-  // Options: prompt | autoYes | autoNo
-  deployBehavior: "prompt",
-  depsBehavior: "prompt",
-  gitBehavior: "prompt",
-  i18nBehavior: "prompt",
-  scriptsBehavior: "prompt",
+  // Bump configuration
+  bumpDisable: false,
+  bumpFilter: ["package.json", "reliverse.ts", "src-ts/rse.ts"],
+  bumpMode: "patch",
+  bumpSet: "",
 
-  // Behavior for existing GitHub repos during project creation
-  // Options: prompt | autoYes | autoYesSkipCommit | autoNo
-  existingRepoBehavior: "prompt",
+  // Common configuration
+  commonPubPause: false,
+  commonPubRegistry: "npm",
+  commonVerbose: false,
+  displayBuildPubLogs: true,
 
-  // Behavior for Reliverse AI chat and agent mode
-  // Options: promptOnce | promptEachFile | autoYes
-  relinterConfirm: "promptOnce",
+  // Core configuration
+  coreBuildOutDir: "bin",
+  coreDeclarations: true,
+  coreDescription:
+    "@reliverse/rse is your all-in-one daily dev companion: not just for bootstrapping projects, but for extending your entire dev toolchain. Rse CLI brings smart automation, framework-aware support (like Next.js), and an AI-powered toolbox into your terminal. Code, refactor, generate, integrate — all in one flow.",
+  coreEntryFile: "rse.ts",
+  coreEntrySrcDir: "src-ts",
+  coreIsCLI: {
+    enabled: true,
+    scripts: { rse: "rse.ts" },
+  },
 
-  // Libraries Dler Plugin
+  // JSR-only config
+  distJsrAllowDirty: true,
+  distJsrBuilder: "jsr",
+  distJsrDirName: "dist-jsr",
+  distJsrDryRun: false,
+  distJsrFailOnWarn: false,
+  distJsrGenTsconfig: false,
+  distJsrOutFilesExt: "ts",
+  distJsrSlowTypes: true,
+
+  // NPM-only config
+  distNpmBuilder: "mkdist",
+  distNpmDirName: "dist-npm",
+  distNpmOutFilesExt: "js",
+
+  // Libraries Reliverse Plugin
   // Publish specific dirs as separate packages
   // This feature is experimental at the moment
   // Please commit your changes before using it
-  libsActMode: "main-and-libs",
+  libsActMode: "main-project-only",
   libsDirDist: "dist-libs",
   libsDirSrc: "src/libs",
-  libsList: {
-    "@reliverse/rse-sdk": {
-      libDeclarations: true,
-      libDescription:
-        "@reliverse/rse-sdk without cli. @reliverse/rse-sdk allows you to create new plugins for @reliverse/rse CLI, interact with reliverse.org, and even extend your own CLI functionality (you may also try @reliverse/dler-sdk for this case).",
-      libDirName: "sdk",
-      libMainFile: "sdk/sdk-mod.ts",
-      libPkgKeepDeps: true,
-      libTranspileMinify: true,
-      libPubPause: true,
-      libPubRegistry: "npm-jsr",
-    },
-    "@reliverse/rse-cfg": {
-      libDeclarations: true,
-      libDescription: "config typescript definitions for @reliverse/rse",
-      libDirName: "cfg",
-      libMainFile: "cfg/cfg-mod.ts",
-      libPkgKeepDeps: true, // TODO: temp
-      /* libPkgKeepDeps: [
-        // most of the deps here are temporary at the moment
-        // TODO: move prompts and logs to dler's or rse's impl to reduce deps number
-        "@reliverse/relinka",
-        "@reliverse/runtime",
-        "@reliverse/relifso",
-        "@reliverse/pathkit",
-        "@sinclair/typebox",
-        "c12", // TODO: replace with @reliverse/reconf
-        "confbox",
-        "@reliverse/rempts",
-        "execa",
-        "destr",
-        "magic-string",
-        "jiti",
-        "jsonrepair", // TODO: migrate to @reliverse/relifso (jsonrepair is already built-in there)
-        "pkg-types",
-      ], */
-      libTranspileMinify: true,
-      libPubPause: false,
-      libPubRegistry: "npm-jsr",
-    },
-  },
+  libsList: {},
 
-  // Specifies what resources to send to npm and jsr registries.
-  // coreBuildOutDir (e.g. "bin") dir is automatically included.
-  // The following is also included if publishArtifacts is {}:
-  // - global: ["package.json", "README.md", "LICENSE"]
-  // - dist-jsr,dist-libs/jsr: ["jsr.json"]
-  publishArtifacts: {
-    global: ["package.json", "README.md", "LICENSE", "LICENSES"],
-    "dist-jsr": [],
-    "dist-npm": [],
-    "dist-libs": {
-      "@reliverse/rse-sdk": {
-        jsr: [],
-        npm: [],
-      },
-    },
-  },
-
-  // Files with these extensions will be built
-  // Any other files will be copied as-is to dist
-  buildPreExtensions: ["ts", "js"],
-  // If you need to exclude some ts/js files from being built,
-  // you can store them in the dirs with buildTemplatesDir name
-  buildTemplatesDir: "templates",
+  // @reliverse/relinka logger setup
+  logsFileName: ".logs/relinka.log",
+  logsFreshFile: true,
 
   // Dependency filtering
   // Global is always applied
   filterDepsPatterns: {
     global: [
-      "bun",
       "@types",
       "biome",
       "eslint",
@@ -291,28 +191,19 @@ export default defineConfig({
       "prettier",
       "typescript",
       "@reliverse/rse",
-      "@reliverse/dler",
+      "@reliverse/reliverse",
       "!@reliverse/rse-sdk",
-      "!@reliverse/dler-sdk",
+      "!@reliverse/reliverse-sdk",
     ],
-    "dist-jsr": [],
     "dist-npm": [],
-    "dist-libs": {
-      "@reliverse/rse-cfg": {
-        jsr: [],
-        npm: [],
-      },
-      "@reliverse/rse-sdk": {
-        jsr: [],
-        npm: [],
-      },
-    },
+    "dist-jsr": [],
+    "dist-libs": {},
   },
 
   // Code quality tools
-  // Available: tsc, eslint, biome, knip, dler-check
+  // Available: tsc, eslint, biome, knip, reliverse-check
   runBeforeBuild: [],
-  // Available: dler-check
+  // Available: reliverse-check
   runAfterBuild: [],
 
   // Build hooks
@@ -361,39 +252,45 @@ export default defineConfig({
   transpileWatch: false,
   // transpileWatchOptions: undefined,
 
-  // @reliverse/relinka logger setup
-  logsFileName: ".logs/relinka.log",
-  logsFreshFile: true,
+  // Specifies what resources to send to npm and jsr registries.
+  // coreBuildOutDir (e.g. "bin") dir is automatically included.
+  // The following is also included if publishArtifacts is {}:
+  // - global: ["package.json", "README.md", "LICENSE"]
+  // - dist-jsr,dist-libs/jsr: ["jsr.json"]
+  publishArtifacts: {
+    global: ["package.json", "README.md", "LICENSE"],
+    "dist-jsr": [],
+    "dist-npm": [],
+    "dist-libs": {},
+  },
 
-  // Integrated relinka configuration
-  // https://github.com/reliverse/relinka
+  // Files with these extensions will be built
+  // Any other files will be copied as-is to dist
+  buildPreExtensions: ["ts", "js"],
+  // If you need to exclude some ts/js files from being built,
+  // you can store them in the dirs with buildTemplatesDir name
+  buildTemplatesDir: "templates",
+
+  // Relinka Logger Configuration
   relinka: {
     verbose: false,
-
-    // Timestamp configuration
-    timestamp: {
-      enabled: false,
-      format: "HH:mm:ss",
+    dirs: {
+      maxLogFiles: 5,
     },
-
-    // Control whether logs are saved to a file
-    saveLogsToFile: false,
-
-    // Disable colors in the console
     disableColors: false,
-
-    // Log file configuration
     logFile: {
       outputPath: "logs.log",
       nameWithDate: "disable",
       freshLogFile: true,
     },
-
-    // Dirs settings
-    dirs: {
-      maxLogFiles: 5,
+    saveLogsToFile: true,
+    timestamp: {
+      enabled: false,
+      format: "HH:mm:ss",
     },
-
+    cleanupInterval: 10000,
+    bufferSize: 4096,
+    maxBufferAge: 5000,
     levels: {
       success: {
         symbol: "✓",
@@ -437,13 +334,33 @@ export default defineConfig({
         color: "magentaBright",
         spacing: 3,
       },
-      log: { symbol: "│", fallbackSymbol: "|", color: "dim", spacing: 3 },
+      log: {
+        symbol: "│",
+        fallbackSymbol: "|",
+        color: "dim",
+        spacing: 3,
+      },
       message: {
         symbol: "🞠",
         fallbackSymbol: "[MSG]",
         color: "cyan",
         spacing: 3,
       },
+    },
+  },
+
+  // Remdn Configuration
+  remdn: {
+    title: "Directory Comparison",
+    output: "docs/files.html",
+    dirs: {
+      src: {},
+      "dist-npm/bin": {},
+      "dist-jsr/bin": {},
+      "dist-libs/sdk/npm/bin": {},
+    },
+    "ext-map": {
+      ts: ["ts", "js-d.ts", "ts"],
     },
   },
 });

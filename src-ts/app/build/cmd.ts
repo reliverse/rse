@@ -1,11 +1,10 @@
-import { createCli, defineArgs, defineCommand } from "@reliverse/rempts";
-import { common } from "./const/msg";
+import { defineArgs, defineCommand } from "@reliverse/rempts";
+import { common } from "~/const/msg";
 
-const main = defineCommand({
+export default defineCommand({
   meta: {
-    name: "rse",
-    description: "Rse CLI",
-    version: "1.7.13",
+    name: "build",
+    description: "Build the project",
   },
   args: defineArgs({
     ci: {
@@ -25,10 +24,8 @@ const main = defineCommand({
       console.log(common.dev);
     }
 
-    console.log("Running the CLI... Args:", args);
+    console.log("Building the project... Args:", args);
 
     process.exit(0);
   },
 });
-
-await createCli(main);

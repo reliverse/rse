@@ -19,9 +19,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@reliverse/dler": "^1.7.111",
+    "@reliverse/dler": "^1.7.114",
     "@reliverse/relinka": "^1.5.9",
-    "@reliverse/rempts": "^1.7.53"
+    "@reliverse/rempts": "^1.7.54"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.2",

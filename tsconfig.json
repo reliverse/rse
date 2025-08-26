@@ -1,30 +1,44 @@
 {
   "compilerOptions": {
     "paths": {
-      "~/*": ["./src-ts/*"],
-      "@/*": ["./examples/ts/*"]
+      "~/*": [
+        "./src-ts/*"
+      ],
+      "@/*": [
+        "./example/ts/*"
+      ]
     },
-    "lib": ["ESNext"],
+    "lib": [
+      "ESNext"
+    ],
     "baseUrl": ".",
     "target": "ESNext",
     "module": "preserve",
-    "moduleDetection": "force",
     "allowJs": true,
+    "noEmit": true,
+    "strict": true,
+    "moduleDetection": "force",
     "moduleResolution": "bundler",
     "verbatimModuleSyntax": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
-    "esModuleInterop": true,
-    "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noPropertyAccessFromIndexSignature": false
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "exactOptionalPropertyTypes": true,
+    "noPropertyAccessFromIndexSignature": true
   },
-  "include": ["examples/ts/**/*.ts", "src-ts/**/*.ts"],
-  "exclude": ["node_modules", "dist*"]
+  "include": [
+    "example/ts/**/*.ts",
+    "src-ts/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist*"
+  ]
 }

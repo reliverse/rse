@@ -1,9 +1,9 @@
 import { defineConfig } from "./reltypes";
 
 /**
- * Reliverse Bundler Configuration
- * Hover over a field to see more details
- * @see https://github.com/reliverse/reliverse
+ * @reliverse/* libraries & rse configuration
+ * Hover over the fields to learn more details
+ * @see https://docs.reliverse.org/libraries
  */
 export default defineConfig({
   // Project configuration
@@ -183,18 +183,7 @@ export default defineConfig({
   // Dependency filtering
   // Global is always applied
   filterDepsPatterns: {
-    global: [
-      "@types",
-      "biome",
-      "eslint",
-      "knip",
-      "prettier",
-      "typescript",
-      "@reliverse/rse",
-      "@reliverse/reliverse",
-      "!@reliverse/rse-sdk",
-      "!@reliverse/reliverse-sdk",
-    ],
+    global: ["@types", "biome", "eslint", "knip", "prettier", "@reliverse/rse"],
     "dist-npm": [],
     "dist-jsr": [],
     "dist-libs": {},

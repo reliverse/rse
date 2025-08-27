@@ -1,7 +1,9 @@
-// usage example: bun src-ts/dler.ts update --dry-run --with-install
+// usage example: bun src-ts/dler.ts update --dryRun --withInstall
 
 import {
   checkPackageUpdates,
+  commonEndActions,
+  commonStartActions,
   displayUpdateResults,
   displayUpdateSummary,
   getCurrentWorkingDirectory,
@@ -11,6 +13,7 @@ import {
   handleInstallation,
   handleInteractiveSelection,
   handleRecursiveUpdates,
+  handleToolUpgrades,
   handleWorkspaceUpdates,
   isMonorepo,
   prepareUpdateCandidates,
@@ -21,13 +24,11 @@ import {
 import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
 import { readPackageJSON } from "pkg-types";
-import { msgs } from "~/impl/msgs";
-import type { CmdName } from "~/impl/types";
-import { commonEndActions, commonStartActions } from "~/impl/utils";
+import { type CmdName, msgs } from "~/const";
 
 // By default tool recursively updates all dependencies to their latest available versions including catalogs.
 // Finds and updates ALL package.json files in the directory tree by default.
-// Use --no-recursive with --all-workspaces or --root-only for workspace-based behavior.
+// Use --no-recursive with --allWorkspaces or --rootOnly for workspace-based behavior.
 export default defineCommand({
   meta: {
     name: "update" as CmdName,
@@ -58,27 +59,27 @@ export default defineCommand({
       type: "array",
       description: "Dependencies to exclude from updates",
     },
-    "dev-only": {
+    devOnly: {
       type: "boolean",
       description: "Update only devDependencies",
     },
-    "prod-only": {
+    prodOnly: {
       type: "boolean",
       description: "Update only dependencies (production)",
     },
-    "peer-only": {
+    peerOnly: {
       type: "boolean",
       description: "Update only peerDependencies",
     },
-    "optional-only": {
+    optionalOnly: {
       type: "boolean",
       description: "Update only optionalDependencies",
     },
-    "catalogs-only": {
+    catalogsOnly: {
       type: "boolean",
       description: "Update ONLY catalog dependencies (catalogs are included by default)",
     },
-    "dry-run": {
+    dryRun: {
       type: "boolean",
       description: "Preview updates without making changes",
     },
@@ -87,7 +88,7 @@ export default defineCommand({
       description: "Number of concurrent version checks",
       default: 5,
     },
-    "with-check-script": {
+    withCheckScript: {
       type: "boolean",
       description: "Run `bun check` after updating (Bun only)",
     },
@@ -97,7 +98,7 @@ export default defineCommand({
       allowed: ["isolated", "hoisted"],
       default: "hoisted",
     },
-    "with-install": {
+    withInstall: {
       type: "boolean",
       description: "Run install after updating",
       alias: "with-i",
@@ -115,11 +116,11 @@ export default defineCommand({
       type: "array",
       description: "Filter workspaces (e.g., 'pkg-*', '!pkg-c')",
     },
-    "all-workspaces": {
+    allWorkspaces: {
       type: "boolean",
       description: "Update dependencies across all workspace packages (requires --no-recursive)",
     },
-    "root-only": {
+    rootOnly: {
       type: "boolean",
       description: "Update only the root package.json (requires --no-recursive)",
     },
@@ -130,39 +131,64 @@ export default defineCommand({
       alias: "r",
       default: true,
     },
-    "save-prefix": {
+    savePrefix: {
       type: "string",
       description: "Version prefix: '^', '~', or 'none' for exact",
       allowed: ["^", "~", "none"],
       default: "^",
     },
-    "allow-major": {
+    allowMajor: {
       type: "boolean",
-      description:
-        "Allow major version updates to latest available (disable with --no-allow-major)",
+      description: "Allow major version updates to latest available (disable with --no-allowMajor)",
       default: true,
     },
-    "upgrade-tools": {
+    upgradeTools: {
       type: "boolean",
       description: "Upgrade system development tools (dler, git, node.js, npm, bun, yarn, pnpm)",
       alias: "upgrade",
     },
-    "upgrade-interactive": {
-      type: "boolean",
-      description: "Interactively select which tools to upgrade (use with --upgrade-tools)",
-      default: true,
-    },
   }),
   run: async ({ args }) => {
-    const { ci, cwd, dev } = args;
+    const {
+      ci,
+      cwd,
+      dev,
+      global,
+      interactive,
+      concurrency,
+      recursive,
+      allowMajor,
+      upgradeTools,
+      savePrefix,
+      allWorkspaces,
+      rootOnly,
+      dryRun,
+    } = args;
     const isCI = Boolean(ci);
     const isDev = Boolean(dev);
     const strCwd = String(cwd);
-    await commonStartActions({ isCI, isDev, strCwd });
+    const isGlobal = Boolean(global);
+    const isInteractive = Boolean(interactive);
+    const isUpgradeTools = Boolean(upgradeTools);
+    const isRecursive = Boolean(recursive);
+    const isAllowMajor = Boolean(allowMajor);
+    const isAllWorkspaces = Boolean(allWorkspaces);
+    const isRootOnly = Boolean(rootOnly);
+    const strSavePrefix = String(savePrefix);
+    const numConcurrency = Number(concurrency);
+    const isDryRun = Boolean(dryRun);
+    await commonStartActions({
+      isCI,
+      isDev,
+      strCwd,
+      showRuntimeInfo: false,
+      clearConsole: false,
+      withStartPrompt: false,
+    });
 
     try {
       // Handle tool upgrades
-      if (args["upgrade-tools"]) {
+      if (isUpgradeTools) {
         await handleToolUpgrades(args);
         return;
       }
@@ -171,7 +197,7 @@ export default defineCommand({
       await validateUpdateArgs(args);
 
       // Handle global package updates
-      if (args.global) {
+      if (isGlobal) {
         return await handleGlobalUpdates(args);
       }
 
@@ -205,7 +231,7 @@ export default defineCommand({
       }
 
       // Handle interactive selection
-      if (args.interactive) {
+      if (isInteractive) {
         toUpdate = await handleInteractiveSelection(results);
         if (toUpdate.length === 0) {
           return;
@@ -213,7 +239,7 @@ export default defineCommand({
       }
 
       // Exit early for dry run
-      if (args["dry-run"]) {
+      if (isDryRun) {
         relinka("log", "Dry run mode - no changes were made");
         return;
       }
@@ -223,27 +249,26 @@ export default defineCommand({
         packageJsonPath,
         allDepsMap,
         toUpdate,
-        args["save-prefix"] as string,
+        strSavePrefix,
       );
 
       let totalUpdated = rootUpdated;
 
       // Prepare options for recursive/workspace updates
       const options = {
-        allowMajor: !!args["allow-major"],
-        savePrefix: args["save-prefix"] as string,
-        concurrency: args.concurrency || 5,
+        allowMajor: !!isAllowMajor,
+        savePrefix: strSavePrefix,
+        concurrency: numConcurrency || 5,
       };
 
       // Handle recursive updates
-      if (args.recursive) {
+      if (isRecursive) {
         const recursiveUpdated = await handleRecursiveUpdates(args, options);
         totalUpdated += recursiveUpdated;
       } else {
         // Handle workspace updates
         const isMonorepoProject = await isMonorepo(process.cwd());
-        const shouldUpdateWorkspaces =
-          args["all-workspaces"] || (!args["root-only"] && isMonorepoProject);
+        const shouldUpdateWorkspaces = isAllWorkspaces || (!isRootOnly && isMonorepoProject);
 
         const workspaceUpdated = await handleWorkspaceUpdates(args, options);
         totalUpdated += workspaceUpdated;
@@ -263,6 +288,6 @@ export default defineCommand({
       process.exit(1);
     }
 
-    await commonEndActions();
+    await commonEndActions({ withEndPrompt: false });
   },
 });

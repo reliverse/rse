@@ -1,4 +1,12 @@
-import type { CmdName } from "./types";
+export type CmdName =
+  | "rse"
+  | "build"
+  | "publish"
+  | "deploy"
+  | "native"
+  | "update"
+  | "agg"
+  | "upgrade";
 
 export const msgs = {
   args: {

@@ -1,86 +1,26 @@
-// reliverse.ts types version is 2025-08-24
-/**
- * Defines the configuration for building and publishing packages. This includes: versioning,
- * build settings, publishing options, libraries-dler-plugin built-in plugin, and more.
- * It customizes the build and publish pipeline for both NPM and JSR registries.
- */
+// reliverse.ts types version 2025-08-26 (this file is generated, don't edit it)
 export interface ReliverseConfig {
-  $schema: string;
-  projectName: string;
-  projectAuthor: string;
-  projectDescription: string;
-  version: string;
-  projectLicense: string;
-  // ==========================================================================
-  // Project configuration
-  // ==========================================================================
-  projectState?: string;
+  $schema?: string;
+  projectName?: UnknownLiteral | (string & {});
+  projectAuthor?: UnknownLiteral | (string & {});
+  projectDescription?: string;
+  version?: string;
+  projectLicense?: string;
   projectRepository?: string;
   projectDomain?: string;
-  projectCategory?: string;
-  projectSubcategory?: string;
-  projectTemplate?: string;
+  projectGitService?: ProjectGitService;
+  projectDeployService?: ProjectDeployService;
+  projectPackageManager?: ProjectPackageManager;
+  projectState?: ProjectState;
+  projectCategory?: ProjectCategory;
+  projectSubcategory?: ProjectSubcategory;
+  projectFramework?: ProjectFramework;
+  projectTemplate?: ProjectTemplate;
   projectTemplateDate?: string;
-  projectArchitecture?: string;
-  repoPrivacy?: string;
-  projectGitService?: string;
-  projectDeployService?: string;
-  repoBranch?: string;
-  // Primary tech stack/framework
-  projectFramework?: string;
-  projectPackageManager?: string;
-  projectRuntime?: string;
-  preferredLibraries?: {
-    stateManagement?: string;
-    formManagement?: string;
-    styling?: string;
-    uiComponents?: string;
-    testing?: string;
-    authentication?: string;
-    databaseLibrary?: string;
-    databaseProvider?: string;
-    api?: string;
-    linting?: string;
-    formatting?: string;
-    payment?: string;
-    analytics?: string;
-    monitoring?: string;
-    logging?: string;
-    forms?: string;
-    notifications?: string;
-    search?: string;
-    uploads?: string;
-    validation?: string;
-    documentation?: string;
-    icons?: string;
-    mail?: string;
-    cache?: string;
-    storage?: string;
-    cdn?: string;
-    cms?: string;
-    i18n?: string;
-    seo?: string;
-    motion?: string;
-    charts?: string;
-    dates?: string;
-    markdown?: string;
-    security?: string;
-    routing?: string;
-  };
-  monorepo?: {
-    type?: string;
-    packages?: string[];
-    sharedPackages?: string[];
-  };
-  // List dependencies to exclude from checks
-  ignoreDependencies?: string[];
-  // Provide custom rules for Reliverse AI
-  customRules?: Record<string, any>;
-  // Project features
   features?: {
     i18n?: boolean;
     analytics?: boolean;
-    themeMode?: string;
+    themeMode?: ThemeMode;
     authentication?: boolean;
     api?: boolean;
     database?: boolean;
@@ -92,23 +32,58 @@ export interface ReliverseConfig {
     language?: string[];
     themes?: string[];
   };
-  // Code style preferences
+  preferredLibraries?: {
+    stateManagement?: PreferredStateManagement;
+    formManagement?: PreferredForm;
+    styling?: PreferredStyling;
+    uiComponents?: PreferredUI;
+    testing?: PreferredTesting;
+    authentication?: PreferredAuth;
+    databaseLibrary?: PreferredDBLib;
+    databaseProvider?: PreferredDBProvider;
+    api?: PreferredAPI;
+    linting?: PreferredLint;
+    formatting?: PreferredFormat;
+    payment?: PreferredPayment;
+    analytics?: PreferredAnalytics;
+    monitoring?: PreferredMonitoring;
+    logging?: PreferredLogging;
+    forms?: PreferredForms;
+    notifications?: PreferredNotifications;
+    search?: PreferredSearch;
+    uploads?: PreferredUploads;
+    validation?: PreferredValidation;
+    documentation?: PreferredDocs;
+    icons?: PreferredIcons;
+    mail?: PreferredMail;
+    cache?: PreferredCache;
+    storage?: PreferredStorage;
+    cdn?: PreferredCDN;
+    cms?: PreferredCMS;
+    i18n?: PreferredI18n;
+    seo?: PreferredSEO;
+    motion?: PreferredMotion;
+    charts?: PreferredCharts;
+    dates?: PreferredDates;
+    markdown?: PreferredMarkdown;
+    security?: PreferredSecurity;
+    routing?: PreferredRouting;
+  };
   codeStyle?: {
-    dontRemoveComments?: boolean;
-    shouldAddComments?: boolean;
-    typeOrInterface?: string;
-    importOrRequire?: string;
-    quoteMark?: string;
-    semicolons?: boolean;
     lineWidth?: number;
-    indentStyle?: string;
     indentSize?: number;
-    importSymbol?: string;
-    trailingComma?: string;
+    indentStyle?: "space" | "tab";
+    quoteMark?: "single" | "double";
+    semicolons?: boolean;
+    trailingCommas?: "none" | "es5" | "all";
     bracketSpacing?: boolean;
-    arrowParens?: string;
+    arrowParens?: "always" | "avoid";
     tabWidth?: number;
     jsToTs?: boolean;
+    dontRemoveComments?: boolean;
+    shouldAddComments?: boolean;
+    typeOrInterface?: "type" | "interface" | "mixed";
+    importOrRequire?: "import" | "require" | "mixed";
     cjsToEsm?: boolean;
     modernize?: {
       replaceFs?: boolean;
@@ -118,27 +93,33 @@ export interface ReliverseConfig {
       replaceConsole?: boolean;
       replaceEvents?: boolean;
     };
+    importSymbol?: string;
   };
-  // Settings for cloning an existing repo
+  monorepo?: {
+    type?: "none" | "turborepo" | "nx" | "pnpm" | "bun";
+    packages?: string[];
+    sharedPackages?: string[];
+  };
+  ignoreDependencies?: string[];
+  customRules?: Record<string, unknown>;
   multipleRepoCloneMode?: boolean;
   customUserFocusedRepos?: string[];
   customDevsFocusedRepos?: string[];
   hideRepoSuggestions?: boolean;
   customReposOnNewProject?: boolean;
-  // Set to false to disable opening the browser during env composing
   envComposerOpenBrowser?: boolean;
-  // Enable auto-answering for prompts to skip manual confirmations.
+  repoBranch?: string;
+  repoPrivacy?: RepoPrivacy;
+  projectArchitecture?: ProjectArchitecture;
+  projectRuntime?: ProjectRuntime;
   skipPromptsUseAutoBehavior?: boolean;
-  // Prompt behavior for deployment
-  deployBehavior?: string;
-  depsBehavior?: string;
-  gitBehavior?: string;
-  i18nBehavior?: string;
-  scriptsBehavior?: string;
-  // Behavior for existing GitHub repos during project creation
-  existingRepoBehavior?: string;
-  // Behavior for Reliverse AI chat and agent mode
-  relinterConfirm?: string;
+  deployBehavior?: "prompt" | "autoYes" | "autoNo";
+  depsBehavior?: "prompt" | "autoYes" | "autoNo";
+  gitBehavior?: "prompt" | "autoYes" | "autoNo";
+  i18nBehavior?: "prompt" | "autoYes" | "autoNo";
+  scriptsBehavior?: "prompt" | "autoYes" | "autoNo";
+  existingRepoBehavior?: "prompt" | "autoYes" | "autoYesSkipCommit" | "autoNo";
+  relinterConfirm?: RelinterConfirm;
   // ==========================================================================
   // Bump configuration
   // ==========================================================================
@@ -377,6 +358,100 @@ export interface ReliverseConfig {
    * @default "js"
    */
   distNpmOutFilesExt: NpmOutExt;
+  // ==========================================================================
+  // Binary Build Configuration
+  // ==========================================================================
+  /**
+   * When `true`, enables binary build functionality to create standalone executables.
+   *
+   * @default false
+   */
+  binaryBuildEnabled: boolean;
+  /**
+   * Input TypeScript file to bundle for binary builds.
+   * If not specified, will use the coreEntryFile from the coreEntrySrcDir.
+   *
+   * @default undefined (uses coreEntryFile)
+   */
+  binaryBuildInputFile?: string;
+  /**
+   * Comma-separated list of targets to build for binary builds.
+   * Use 'all' for all targets, 'list' to show available targets.
+   * Target format is {prefix}-{platform}-{arch} where prefix is extracted from input filename.
+   * Platforms: linux, windows, darwin (macOS)
+   * Architectures: x64, arm64
+   * Examples: dler-linux-x64, dler-windows-arm64, dler-darwin-x64
+   *
+   * @default "all"
+   */
+  binaryBuildTargets: string;
+  /**
+   * Output directory for built binary executables.
+   *
+   * @default "dist"
+   */
+  binaryBuildOutDir: string;
+  /**
+   * When `true`, minifies the binary output.
+   *
+   * @default true
+   */
+  binaryBuildMinify: boolean;
+  /**
+   * When `true`, generates source maps for binary builds.
+   *
+   * @default true
+   */
+  binaryBuildSourcemap: boolean;
+  /**
+   * When `true`, enables bytecode compilation for faster startup (Bun v1.1.30+).
+   *
+   * @default false
+   */
+  binaryBuildBytecode: boolean;
+  /**
+   * When `true`, cleans output directory before building binaries.
+   *
+   * @default true
+   */
+  binaryBuildClean: boolean;
+  /**
+   * Path to Windows .ico file for executable icon.
+   *
+   * @default undefined
+   */
+  binaryBuildWindowsIcon?: string;
+  /**
+   * When `true`, hides console window on Windows.
+   *
+   * @default false
+   */
+  binaryBuildWindowsHideConsole: boolean;
+  /**
+   * Asset naming pattern for binary builds.
+   *
+   * @default "[name]-[hash].[ext]"
+   */
+  binaryBuildAssetNaming: string;
+  /**
+   * When `true`, builds binary targets in parallel.
+   *
+   * @default true
+   */
+  binaryBuildParallel: boolean;
+  /**
+   * External dependencies to exclude from binary bundle.
+   *
+   * @default ["c12", "terminal-kit"]
+   */
+  binaryBuildExternal: string[];
+  /**
+   * When `true`, creates a bundled script instead of standalone executable.
+   * Useful for debugging terminal issues.
+   *
+   * @default false
+   */
+  binaryBuildNoCompile: boolean;
   // ==========================================================================
   // Libraries Dler Plugin
   // ==========================================================================
@@ -617,7 +692,7 @@ export interface ReliverseConfig {
    *
    * @default "node"
    */
-  transpileTarget: transpileTarget;
+  transpileTarget: TranspileTarget;
   /**
    * Watch the src dir and rebuild on change (experimental).
    *
@@ -691,7 +766,86 @@ export interface ReliverseConfig {
    *
    * @default See DEFAULT_RELINKA_CONFIG in defaults
    */
-  relinka: RelinkaConfig;
+  relinka: {
+    /**
+     * Configuration options for the Relinka logger.
+     * All properties are optional to allow for partial configuration.
+     * Defaults will be applied during initialization.
+     */
+    /**
+     * Enables verbose (aka debug) mode for detailed logging.
+     *
+     * `true` here works only for end-users of CLIs/libs when theirs developers
+     * has been awaited for user's config via `@reliverse/relinka`'s `await relinkaConfig;`
+     */
+    verbose?: boolean;
+    /**
+     * Configuration for directory-related settings.
+     * - `maxLogFiles`: The maximum number of log files to keep before cleanup.
+     */
+    dirs?: RelinkaDirsConfig;
+    /**
+     * Disables color output in the console.
+     */
+    disableColors?: boolean;
+    /**
+     * Configuration for log file output.
+     */
+    logFile?: {
+      /**
+       * Path to the log file.
+       */
+      outputPath?: string;
+      /**
+       * How to handle date in the filename.
+       * - `disable`: No date prefix/suffix
+       * - `append-before`: Add date before the filename (e.g., "2024-01-15-log.txt")
+       * - `append-after`: Add date after the filename (e.g., "log-2024-01-15.txt")
+       */
+      nameWithDate?: "disable" | "append-before" | "append-after";
+      /**
+       * If true, clears the log file when relinkaConfig is executed with supportFreshLogFile: true.
+       * This is useful for starting with a clean log file on each run.
+       */
+      freshLogFile?: boolean;
+    };
+    /**
+     * If true, logs will be saved to a file.
+     */
+    saveLogsToFile?: boolean;
+    /**
+     * Configuration for timestamp in log messages.
+     */
+    timestamp?: {
+      /**
+       * If true, timestamps will be added to log messages.
+       */
+      enabled: boolean;
+      /**
+       * The format for timestamps. Default is YYYY-MM-DD HH:mm:ss.SSS
+       */
+      format?: string;
+    };
+    /**
+     * Allows to customize the log levels.
+     */
+    levels?: LogLevelsConfig;
+    /**
+     * Controls how often the log cleanup runs (in milliseconds)
+     * Default: 10000 (10 seconds)
+     */
+    cleanupInterval?: number;
+    /**
+     * Maximum size of the log write buffer before flushing to disk (in bytes)
+     * Default: 4096 (4KB)
+     */
+    bufferSize?: number;
+    /**
+     * Maximum time to hold logs in buffer before flushing to disk (in milliseconds)
+     * Default: 5000 (5 seconds)
+     */
+    maxBufferAge?: number;
+  };
   // ==========================================================================
   // Remdn Configuration
   // ==========================================================================
@@ -723,6 +877,46 @@ export interface ReliverseConfig {
     "ext-map"?: Record<string, string[]>;
   };
 }
+/** Configuration for directory-related settings. */
+export interface RelinkaDirsConfig {
+  maxLogFiles?: number;
+}
+/** Log level types used by the logger. */
+export type LogLevel =
+  | "error"
+  | "fatal"
+  | "info"
+  | "success"
+  | "verbose"
+  | "warn"
+  | "log"
+  | "internal"
+  | "null"
+  | "step"
+  | "box"
+  | "message";
+/** Configuration for a single log level. */
+export interface LogLevelConfig {
+  /**
+   * Symbol to display for this log level.
+   * @see https://symbl.cc
+   */
+  symbol: string;
+  /**
+   * Fallback symbol to use if Unicode is not supported.
+   */
+  fallbackSymbol: string;
+  /**
+   * Color to use for this log level.
+   */
+  color: string;
+  /**
+   * Number of spaces after the symbol/fallback
+   */
+  spacing?: number;
+}
+/** Configuration for all log levels. */
+export type LogLevelsConfig = Partial<Record<LogLevel, LogLevelConfig>>;
 export type BumpMode = "patch" | "minor" | "major" | "auto" | "manual";
 /**
  * Supported bundler names for building packages:
@@ -834,141 +1028,145 @@ export type Sourcemap = "external" | "inline" | "linked" | "none" | boolean;
  * - bun: Optimized for Bun.
  * - browser: Optimized for web browsers.
  */
-export type transpileTarget = "browser" | "bun" | "node";
-/** Configuration for directory-related settings. */
-export type RelinkaDirsConfig = {
-  maxLogFiles?: number;
-};
-/** Log level types used by the logger. */
-export type LogLevel =
-  | "error"
-  | "fatal"
-  | "info"
-  | "success"
-  | "verbose"
-  | "warn"
-  | "log"
-  | "internal"
-  | "null"
-  | "step"
-  | "box"
-  | "message";
-/** Configuration for a single log level. */
-export type LogLevelConfig = {
-  /**
-   * Symbol to display for this log level.
-   * @see https://symbl.cc
-   */
-  symbol: string;
-  /**
-   * Fallback symbol to use if Unicode is not supported.
-   */
-  fallbackSymbol: string;
-  /**
-   * Color to use for this log level.
-   */
-  color: string;
-  /**
-   * Number of spaces after the symbol/fallback
-   */
-  spacing?: number;
-};
-/** Configuration for all log levels. */
-export type LogLevelsConfig = Partial<Record<LogLevel, LogLevelConfig>>;
-/**
- * Configuration options for the Relinka logger.
- * All properties are optional to allow for partial configuration.
- * Defaults will be applied during initialization.
- */
-export type RelinkaConfig = {
-  /**
-   * Enables verbose (aka debug) mode for detailed logging.
-   *
-   * `true` here works only for end-users of CLIs/libs when theirs developers
-   * has been awaited for user's config via `@reliverse/relinka`'s `await relinkaConfig;`
-   */
-  verbose?: boolean;
-  /**
-   * Configuration for directory-related settings.
-   * - `maxLogFiles`: The maximum number of log files to keep before cleanup.
-   */
-  dirs?: RelinkaDirsConfig;
-  /**
-   * Disables color output in the console.
-   */
-  disableColors?: boolean;
-  /**
-   * Configuration for log file output.
-   */
-  logFile?: {
-    /**
-     * Path to the log file.
-     */
-    outputPath?: string;
-    /**
-     * How to handle date in the filename.
-     * - `disable`: No date prefix/suffix
-     * - `append-before`: Add date before the filename (e.g., "2024-01-15-log.txt")
-     * - `append-after`: Add date after the filename (e.g., "log-2024-01-15.txt")
-     */
-    nameWithDate?: "disable" | "append-before" | "append-after";
-    /**
-     * If true, clears the log file when relinkaConfig is executed with supportFreshLogFile: true.
-     * This is useful for starting with a clean log file on each run.
-     */
-    freshLogFile?: boolean;
-  };
-  /**
-   * If true, logs will be saved to a file.
-   */
-  saveLogsToFile?: boolean;
-  /**
-   * Configuration for timestamp in log messages.
-   */
-  timestamp?: {
-    /**
-     * If true, timestamps will be added to log messages.
-     */
-    enabled: boolean;
-    /**
-     * The format for timestamps. Default is YYYY-MM-DD HH:mm:ss.SSS
-     */
-    format?: string;
-  };
-  /**
-   * Allows to customize the log levels.
-   */
-  levels?: LogLevelsConfig;
-  /**
-   * Controls how often the log cleanup runs (in milliseconds)
-   * Default: 10000 (10 seconds)
-   */
-  cleanupInterval?: number;
-  /**
-   * Maximum size of the log write buffer before flushing to disk (in bytes)
-   * Default: 4096 (4KB)
-   */
-  bufferSize?: number;
-  /**
-   * Maximum time to hold logs in buffer before flushing to disk (in milliseconds)
-   * Default: 5000 (5 seconds)
-   */
-  maxBufferAge?: number;
-};
+export type TranspileTarget = "browser" | "bun" | "node";
+export type UnknownLiteral = "unknown";
+export type ProjectState = "creating" | "created";
+export type ProjectCategory =
+  | UnknownLiteral
+  | "website"
+  | "vscode"
+  | "browser"
+  | "cli"
+  | "library"
+  | "mobile";
+export type ProjectSubcategory = UnknownLiteral | "e-commerce" | "tool";
+export type ProjectFramework =
+  | UnknownLiteral
+  | "nextjs"
+  | "vite"
+  | "svelte"
+  | "remix"
+  | "astro"
+  | "nuxt"
+  | "solid"
+  | "qwik"
+  | "vue"
+  | "wxt"
+  | "lynx"
+  | "react-native"
+  | "expo"
+  | "capacitor"
+  | "ionic"
+  | "electron"
+  | "tauri"
+  | "neutralino"
+  | "rempts"
+  | "citty"
+  | "commander"
+  | "cac"
+  | "meow"
+  | "yargs"
+  | "vscode"
+  | "webextension"
+  | "browser-extension"
+  | "npm-jsr";
+export type ProjectTemplate =
+  | UnknownLiteral
+  | "blefnk/relivator-nextjs-template"
+  | "blefnk/relivator-docker-template"
+  | "blefnk/next-react-ts-src-minimal"
+  | "blefnk/all-in-one-nextjs-template"
+  | "blefnk/create-t3-app"
+  | "blefnk/create-next-app"
+  | "blefnk/astro-starlight-template"
+  | "blefnk/versator-nextjs-template"
+  | "blefnk/relivator-lynxjs-template"
+  | "blefnk/relivator-react-native-template"
+  | "reliverse/template-browser-extension"
+  | "microsoft/vscode-extension-samples"
+  | "microsoft/vscode-extension-template"
+  | "rsetarter-template"
+  | "blefnk/deno-cli-tutorial";
+export type RepoPrivacy = UnknownLiteral | "public" | "private";
+export type ProjectArchitecture = UnknownLiteral | "fullstack" | "separated";
+export type ProjectRuntime = "node" | "deno" | "bun";
+export type ProjectPackageManager = "npm" | "pnpm" | "yarn" | "bun";
+export type ProjectGitService = "github" | "gitlab" | "bitbucket" | "none";
+export type ProjectDeployService = "vercel" | "netlify" | "railway" | "deno" | "none";
+export type ThemeMode = "light" | "dark" | "dark-light";
+export type PreferredStateManagement = "zustand" | "jotai" | "redux-toolkit" | UnknownLiteral;
+export type PreferredForm = "react-hook-form" | "formik" | UnknownLiteral;
+export type PreferredStyling =
+  | "tailwind"
+  | "styled-components"
+  | "css-modules"
+  | "sass"
+  | UnknownLiteral;
+export type PreferredUI = "shadcn-ui" | "chakra-ui" | "material-ui" | UnknownLiteral;
+export type PreferredTesting =
+  | "bun"
+  | "vitest"
+  | "jest"
+  | "playwright"
+  | "cypress"
+  | UnknownLiteral;
+export type PreferredAuth =
+  | "better-auth"
+  | "clerk"
+  | "next-auth"
+  | "supabase-auth"
+  | "auth0"
+  | UnknownLiteral;
+export type PreferredDBLib = "drizzle" | "prisma" | "supabase" | UnknownLiteral;
+export type PreferredDBProvider = "pg" | "mysql" | "sqlite" | "mongodb" | UnknownLiteral;
+export type PreferredAPI = "hono" | "trpc" | "graphql" | "rest" | UnknownLiteral;
+export type PreferredLint = "eslint" | UnknownLiteral;
+export type PreferredFormat = "biome" | UnknownLiteral;
+export type PreferredPayment = "stripe" | UnknownLiteral;
+export type PreferredAnalytics = "vercel" | UnknownLiteral;
+export type PreferredMonitoring = "sentry" | UnknownLiteral;
+export type PreferredLogging = "axiom" | UnknownLiteral;
+export type PreferredForms = "react-hook-form" | UnknownLiteral;
+export type PreferredNotifications = "sonner" | UnknownLiteral;
+export type PreferredSearch = "algolia" | UnknownLiteral;
+export type PreferredUploads = "uploadthing" | UnknownLiteral;
+export type PreferredValidation = "zod" | "typebox" | "valibot" | UnknownLiteral;
+export type PreferredDocs = "starlight" | "nextra" | UnknownLiteral;
+export type PreferredIcons = "lucide" | UnknownLiteral;
+export type PreferredMail = "resend" | UnknownLiteral;
+export type PreferredCache = "redis" | UnknownLiteral;
+export type PreferredStorage = "cloudflare" | UnknownLiteral;
+export type PreferredCDN = "cloudflare" | UnknownLiteral;
+export type PreferredCMS = "contentlayer" | UnknownLiteral;
+export type PreferredI18n = "next-intl" | UnknownLiteral;
+export type PreferredSEO = "next-seo" | UnknownLiteral;
+export type PreferredMotion = "framer" | UnknownLiteral;
+export type PreferredCharts = "recharts" | UnknownLiteral;
+export type PreferredDates = "dayjs" | UnknownLiteral;
+export type PreferredMarkdown = "mdx" | UnknownLiteral;
+export type PreferredSecurity = "auth" | UnknownLiteral;
+export type PreferredRouting = "next" | "react-router" | "tanstack-router" | UnknownLiteral;
+export type RelinterConfirm = "promptOnce" | "promptEachFile" | "autoYes";
 /**
  * Default configuration for the build and publish logic.
  */
 export const DEFAULT_CONFIG_RELIVERSE: ReliverseConfig = {
+  // RSE CONFIG (https://docs.reliverse.org/cli)
+  // Restart the CLI to apply your config changes
   $schema: "./schema.json",
-  projectName: "",
-  projectAuthor: "",
-  projectDescription: "",
-  version: "",
-  projectLicense: "",
+  // General project information
+  projectName: "@reliverse/dler",
+  projectAuthor: "reliverse",
+  projectDescription:
+    "dler (prev. relidler) is a flexible, unified, and fully automated bundler for TypeScript and JavaScript projects, as well as an NPM and JSR publishing tool.",
+  version: "1.7.114",
+  projectLicense: "MIT",
+  // Bump version
   bumpDisable: false,
   bumpFilter: ["package.json", "reliverse.ts"],
   bumpMode: "patch",
   bumpSet: "",
+  // Build & Publishing
   commonPubPause: true,
   commonPubRegistry: "npm",
   commonVerbose: false,
@@ -990,6 +1188,20 @@ export const DEFAULT_CONFIG_RELIVERSE: ReliverseConfig = {
   distNpmBuilder: "mkdist",
   distNpmDirName: "dist-npm",
   distNpmOutFilesExt: "js",
+  binaryBuildEnabled: false,
+  binaryBuildInputFile: undefined,
+  binaryBuildTargets: "all",
+  binaryBuildOutDir: "dist",
+  binaryBuildMinify: true,
+  binaryBuildSourcemap: true,
+  binaryBuildBytecode: false,
+  binaryBuildClean: true,
+  binaryBuildWindowsIcon: undefined,
+  binaryBuildWindowsHideConsole: false,
+  binaryBuildAssetNaming: "[name]-[hash].[ext]",
+  binaryBuildParallel: true,
+  binaryBuildExternal: ["c12", "terminal-kit"],
+  binaryBuildNoCompile: false,
   libsActMode: "main-project-only",
   libsDirDist: "dist-libs",
   libsDirSrc: "src/libs",
@@ -998,7 +1210,7 @@ export const DEFAULT_CONFIG_RELIVERSE: ReliverseConfig = {
   logsFreshFile: true,
   // Dependency filtering
   filterDepsPatterns: {
-    global: ["@types", "biome", "eslint", "knip", "prettier", "@reliverse/rse"],
+    global: ["@types", "biome", "eslint", "knip", "prettier", "typescript", "@reliverse/dler"],
     "dist-npm": [],
     "dist-jsr": [],
     "dist-libs": {},
@@ -1116,6 +1328,148 @@ export const DEFAULT_CONFIG_RELIVERSE: ReliverseConfig = {
       },
     },
   },
+  // Project configuration
+  projectState: "creating",
+  projectRepository: "https://github.com/reliverse/rse",
+  projectDomain: "https://docs.reliverse.org/cli",
+  projectCategory: "unknown",
+  projectSubcategory: "unknown",
+  projectTemplate: "unknown",
+  projectTemplateDate: "unknown",
+  projectArchitecture: "unknown",
+  repoPrivacy: "unknown",
+  projectGitService: "github",
+  projectDeployService: "vercel",
+  repoBranch: "main",
+  // Primary tech stack/framework
+  projectFramework: "rempts",
+  projectPackageManager: "bun",
+  projectRuntime: "bun",
+  preferredLibraries: {
+    stateManagement: "unknown",
+    formManagement: "unknown",
+    styling: "unknown",
+    uiComponents: "unknown",
+    testing: "unknown",
+    authentication: "unknown",
+    databaseLibrary: "drizzle",
+    databaseProvider: "sqlite",
+    api: "trpc",
+    linting: "unknown",
+    formatting: "unknown",
+    payment: "unknown",
+    analytics: "unknown",
+    monitoring: "unknown",
+    logging: "unknown",
+    forms: "unknown",
+    notifications: "unknown",
+    search: "unknown",
+    uploads: "unknown",
+    validation: "zod",
+    documentation: "unknown",
+    icons: "unknown",
+    mail: "unknown",
+    cache: "unknown",
+    storage: "unknown",
+    cdn: "unknown",
+    cms: "unknown",
+    i18n: "unknown",
+    seo: "unknown",
+    motion: "unknown",
+    charts: "unknown",
+    dates: "unknown",
+    markdown: "unknown",
+    security: "unknown",
+    routing: "unknown",
+  },
+  monorepo: {
+    type: "none",
+    packages: [],
+    sharedPackages: [],
+  },
+  // List dependencies to exclude from checks
+  ignoreDependencies: [],
+  // Provide custom rules for Reliverse AI
+  // You can use any json type here in {}
+  customRules: {},
+  // Project features
+  features: {
+    i18n: false,
+    analytics: false,
+    themeMode: "dark-light",
+    authentication: true,
+    api: true,
+    database: true,
+    testing: false,
+    docker: false,
+    ci: false,
+    commands: [
+      "pub",
+      "example",
+      "db",
+      "latest",
+      "check",
+      "dev:cli",
+      "dev:add",
+      "dev:ai",
+      "dev:clone",
+      "dev:cmod",
+    ],
+    webview: ["react-native"],
+    language: ["typescript"],
+    themes: ["default", "eslint", "biome", "sonner", "uploadthing", "zod", "typebox", "lucide"],
+  },
+  // Code style preferences
+  codeStyle: {
+    dontRemoveComments: true,
+    shouldAddComments: true,
+    typeOrInterface: "type",
+    importOrRequire: "import",
+    quoteMark: "double",
+    semicolons: true,
+    lineWidth: 80,
+    indentStyle: "space",
+    indentSize: 2,
+    importSymbol: "~",
+    trailingCommas: "all",
+    bracketSpacing: true,
+    arrowParens: "always",
+    tabWidth: 2,
+    jsToTs: false,
+    cjsToEsm: false,
+    modernize: {
+      replaceFs: false,
+      replacePath: false,
+      replaceHttp: false,
+      replaceProcess: false,
+      replaceConsole: false,
+      replaceEvents: false,
+    },
+  },
+  // Settings for cloning an existing repo
+  multipleRepoCloneMode: false,
+  customUserFocusedRepos: [],
+  customDevsFocusedRepos: [],
+  hideRepoSuggestions: false,
+  customReposOnNewProject: false,
+  // Set to false to disable opening the browser during env composing
+  envComposerOpenBrowser: true,
+  // Enable auto-answering for prompts to skip manual confirmations.
+  // Make sure you have unknown values configured above.
+  skipPromptsUseAutoBehavior: false,
+  // Prompt behavior for deployment
+  // Options: prompt | autoYes | autoNo
+  deployBehavior: "prompt",
+  depsBehavior: "prompt",
+  gitBehavior: "prompt",
+  i18nBehavior: "prompt",
+  scriptsBehavior: "prompt",
+  // Behavior for existing GitHub repos during project creation
+  // Options: prompt | autoYes | autoYesSkipCommit | autoNo
+  existingRepoBehavior: "prompt",
+  // Behavior for Reliverse AI chat and agent mode
+  // Options: promptOnce | promptEachFile | autoYes
+  relinterConfirm: "promptOnce",
   // Remdn Configuration
   remdn: {
     title: "Directory Comparison",

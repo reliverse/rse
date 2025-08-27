@@ -1,9 +1,7 @@
-import { getCurrentWorkingDirectory } from "@reliverse/dler";
+import { commonEndActions, commonStartActions, getCurrentWorkingDirectory } from "@reliverse/dler";
 import { callCmd, defineArgs, defineCommand } from "@reliverse/rempts";
 import { default as updateCmd } from "~/app/update/cmd";
-import { msgs } from "~/impl/msgs";
-import type { CmdName } from "~/impl/types";
-import { commonEndActions, commonStartActions } from "~/impl/utils";
+import { type CmdName, msgs } from "~/const";
 
 export default defineCommand({
   meta: {
@@ -34,13 +32,20 @@ export default defineCommand({
     const isCI = Boolean(ci);
     const isDev = Boolean(dev);
     const strCwd = String(cwd);
-    await commonStartActions({ isCI, isDev, strCwd });
+    await commonStartActions({
+      isCI,
+      isDev,
+      strCwd,
+      showRuntimeInfo: false,
+      clearConsole: false,
+      withStartPrompt: false,
+    });
 
     await callCmd(updateCmd, {
       ...args,
-      "upgrade-tools": true,
+      upgradeTools: true,
     });
 
-    await commonEndActions();
+    await commonEndActions({ withEndPrompt: false });
   },
 });

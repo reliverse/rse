@@ -1,10 +1,13 @@
-import { getCurrentWorkingDirectory, useAggregator } from "@reliverse/dler";
+import {
+  commonEndActions,
+  commonStartActions,
+  getCurrentWorkingDirectory,
+  useAggregator,
+} from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import { defineArgs, defineCommand, inputPrompt } from "@reliverse/rempts";
-
-import { msgs } from "~/impl/msgs";
-import type { CmdName } from "~/impl/types";
-import { commonEndActions, commonStartActions } from "~/impl/utils";
+import type { CmdName } from "~/const";
+import { msgs } from "~/const";
 
 export default defineCommand({
   meta: {
@@ -145,7 +148,14 @@ export default defineCommand({
     const disableInteractivePrompts = Boolean(nonInteractive);
 
     // Start actions
-    await commonStartActions({ isCI, isDev, strCwd });
+    await commonStartActions({
+      isCI,
+      isDev,
+      strCwd,
+      showRuntimeInfo: false,
+      clearConsole: false,
+      withStartPrompt: true,
+    });
 
     // Redefine args by using mutable variables for interactive prompts
     let resolvedInput = String(input || "");
@@ -215,6 +225,6 @@ export default defineCommand({
       separateTypesFile: createSeparateTypesFile,
     });
 
-    await commonEndActions();
+    await commonEndActions({ withEndPrompt: true });
   },
 });

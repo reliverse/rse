@@ -10,7 +10,7 @@ Visit [docs.reliverse.org/libraries/rse](https://docs.reliverse.org/libraries/rs
 
 ## Stand With Reliverse
 
-[Star the project repo](https://github.com/reliverse/rse) to help Reliverse community grow; Follow this project's author, [Nazar Kornienko](https://github.com/blefnk) & [Reliverse](https://github.com/reliverse), to get updates about new projects; [Become a sponsor](https://github.com/sponsors/blefnk) and power the next wave of tools that _just feel right_.
+[Star the project repo](https://github.com/reliverse/rse) to help Reliverse community grow; Follow this project's author, [Nazar Kornienko](https://github.com/blefnk) & [Reliverse](https://github.com/reliverse), to get updates about new projects; [Become a sponsor](https://github.com/sponsors/blefnk) and power the next wave of tools that just feel right.
 
 ## Stand With Ukraine
 

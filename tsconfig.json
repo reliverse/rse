@@ -30,8 +30,8 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "strictNullChecks": true,
-    "exactOptionalPropertyTypes": true,
-    "noPropertyAccessFromIndexSignature": true
+    "exactOptionalPropertyTypes": false,
+    "noPropertyAccessFromIndexSignature": false
   },
   "include": [
     "example/ts/**/*.ts",

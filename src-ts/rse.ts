@@ -1,17 +1,18 @@
 import {
   ad,
   aiMenu,
+  commonEndActions,
+  commonStartActions,
   detectProject,
-  detectProjectsWithRseConfig,
+  detectProjectsWithReliverseConfig,
   getConfigDler,
   getCurrentWorkingDirectory,
   getOrCreateReliverseMemory,
   getRandomMessage,
   getWelcomeTitle,
   premium,
-  type RseConfig,
+  type ReliverseConfig,
   showCloneProjectMenu,
-  showDevToolsMenu,
   showEndPrompt,
   showManualBuilderMenu,
   showNewProjectMenu,
@@ -22,16 +23,12 @@ import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
 import { callCmd, createCli, defineArgs, defineCommand, selectPrompt } from "@reliverse/rempts";
+import type { CommonArgs } from "node_modules/@reliverse/dler/bin/app/types/mod";
 import { generate } from "random-words";
-import { default as aggCmd } from "./app/agg/cmd";
-import { default as buildCmd } from "./app/build/cmd";
-import { default as deployCmd } from "./app/deploy/cmd";
+
 import { default as nativeCmd } from "./app/native/cmd";
-import { default as publishCmd } from "./app/publish/cmd";
-import { default as updateCmd } from "./app/update/cmd";
-import { msgs } from "./impl/msgs";
-import type { CommonArgs } from "./impl/types";
-import { commonEndActions, commonStartActions } from "./impl/utils";
+import { msgs } from "./const";
+import { showToolboxMenu } from "./menu/toolbox";
 
 async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
   const memory = await getOrCreateReliverseMemory();
@@ -51,7 +48,7 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
   await detectProject(strCwd, isDev);
 
   // Initial multi-config hint (if relevant)
-  const mrse: RseConfig[] = [];
+  const mrse: ReliverseConfig[] = [];
   const multiConfigMsg =
     mrse.length > 0 ? re.dim(`multi-config mode with ${mrse.length} projects`) : "";
 
@@ -59,7 +56,7 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
   const rseSearchPath = isDev ? path.join(strCwd, "tests-runtime") : strCwd;
   let detectedCount = 0;
   if (await fs.pathExists(rseSearchPath)) {
-    const detectedProjects = await detectProjectsWithRseConfig(rseSearchPath, isDev);
+    const detectedProjects = await detectProjectsWithReliverseConfig(rseSearchPath, isDev);
     detectedCount = detectedProjects.length;
   }
 
@@ -73,8 +70,6 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
     displayInstructions: true,
     endTitle: "✋ User pressed Ctrl+C, exiting...",
     options: [
-      { value: "utils", label: "open utils menu" },
-
       {
         label: "✨ Create a project in terminal",
         hint: multiConfigMsg,
@@ -100,10 +95,11 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
         hint: multiConfigMsg,
         value: "clone",
       },
-      { label: "💬 Chat with Reliverse AI", value: "ai" },
+      { label: "💬 Open chat with Rse AI", value: "ai" },
       {
         label: "🧰 Open developer toolkit",
-        value: "devTools",
+        value: "toolbox",
+        hint: "build, publish to npm, deploy to vercel, and more",
       },
       {
         label: "👈 Exit",
@@ -114,14 +110,10 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
   });
 
   switch (cmdToRun) {
-    case "utils": {
-      await showUtilsMenu({ strCwd, isCI, isDev });
-      break;
-    }
     case "create": {
       await showNewProjectMenu({
         projectName,
-        strCwd,
+        cwd: strCwd,
         isDev,
         memory,
         config,
@@ -131,13 +123,13 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
       break;
     }
     case "clone": {
-      await showCloneProjectMenu({ isDev, strCwd, config, memory });
+      await showCloneProjectMenu({ isDev, cwd: strCwd, config, memory });
       break;
     }
     case "manual": {
       await showManualBuilderMenu({
         projectName,
-        strCwd,
+        cwd: strCwd,
         isDev,
         memory,
         config,
@@ -148,7 +140,7 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
     case "detected-projects": {
       await showOpenProjectMenu({
         projectName,
-        strCwd,
+        cwd: strCwd,
         isDev,
         memory,
         config,
@@ -157,9 +149,9 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
       });
       break;
     }
-    case "devTools": {
-      await showDevToolsMenu({
-        projectName,
+    case "toolbox": {
+      await showToolboxMenu({
+        isCI,
         strCwd,
         isDev,
         config,
@@ -183,52 +175,11 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
   }
 }
 
-async function showUtilsMenu({ strCwd, isCI, isDev }: CommonArgs) {
-  const cmdToRun = await selectPrompt({
-    title: "Select an utility to run",
-    options: [
-      { value: "build", label: msgs.cmds.build },
-      { value: "publish", label: msgs.cmds.publish },
-      { value: "deploy", label: msgs.cmds.deploy },
-      { value: "update", label: msgs.cmds.update },
-      { value: "agg", label: msgs.cmds.agg },
-      { value: "exit", label: "exit" },
-    ],
-  });
-
-  switch (cmdToRun) {
-    case "build": {
-      await callCmd(buildCmd, { strCwd, isCI, isDev });
-      break;
-    }
-    case "publish": {
-      await callCmd(publishCmd, { strCwd, isCI, isDev });
-      break;
-    }
-    case "deploy": {
-      await callCmd(deployCmd, { strCwd, isCI, isDev });
-      break;
-    }
-    case "update": {
-      await callCmd(updateCmd, { strCwd, isCI, isDev });
-      break;
-    }
-    case "agg": {
-      await callCmd(aggCmd, { strCwd, isCI, isDev });
-      break;
-    }
-    default: {
-      await showEndPrompt();
-      process.exit(0);
-    }
-  }
-}
-
 const main = defineCommand({
   meta: {
     name: "rse",
     description: msgs.cmds.rse,
-    version: "1.7.13",
+    version: "1.7.18",
   },
   args: defineArgs({
     // Common args
@@ -253,12 +204,19 @@ const main = defineCommand({
     const { ci, cwd, dev } = args;
     const isCI = Boolean(ci);
     const isDev = Boolean(dev);
-    const workDir = String(cwd);
-    await commonStartActions({ strCwd, isCI, isDev });
+    const strCwd = String(cwd);
+    await commonStartActions({
+      isCI,
+      isDev,
+      strCwd,
+      showRuntimeInfo: false,
+      clearConsole: false,
+      withStartPrompt: true,
+    });
 
     await showMainMenu({ strCwd, isCI, isDev });
 
-    await commonEndActions();
+    await commonEndActions({ withEndPrompt: true });
   },
 });
 

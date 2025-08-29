@@ -1,10 +1,7 @@
+import type { MkdistOptions } from "@reliverse/dler";
+import { createPerfTimer, dlerBuild, ensureReliverseConfig, mkdist } from "@reliverse/dler";
 import { resolve } from "@reliverse/pathkit";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
-import { dlerBuild } from "~/app/build/impl";
-import { mkdist } from "~/app/build/providers/mkdist/mkdist-impl/make";
-import { ensureReliverseConfig } from "~/app/config/prepare";
-import type { MkdistOptions } from "~/app/types/mod";
-import { createPerfTimer } from "../utils/utils-perf";
 
 // TODO: merge this command with 'build' command in the future
 
@@ -94,7 +91,7 @@ export default defineCommand({
     },
   }),
   async run({ args }) {
-    const isDev = args.dev;
+    const { dev: isDev } = args;
 
     if (args.mkdistOnly) {
       const {
@@ -125,6 +122,14 @@ export default defineCommand({
 
     await ensureReliverseConfig(isDev, "ts");
     const timer = createPerfTimer();
-    await dlerBuild(timer, isDev);
+    await dlerBuild({
+      flow: "build",
+      timer,
+      isDev,
+      config: undefined,
+      debugOnlyCopyNonBuildFiles: false,
+      debugDontCopyNonBuildFiles: false,
+      disableOwnSpinner: false,
+    });
   },
 });

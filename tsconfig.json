@@ -1,16 +1,10 @@
 {
   "compilerOptions": {
     "paths": {
-      "~/*": [
-        "./src-ts/*"
-      ],
-      "@/*": [
-        "./example/ts/*"
-      ]
+      "~/*": ["./src-ts/*"],
+      "@/*": ["./example/ts/*"]
     },
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "baseUrl": ".",
     "target": "ESNext",
     "module": "preserve",
@@ -33,12 +27,6 @@
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": [
-    "example/ts/**/*.ts",
-    "src-ts/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist*"
-  ]
+  "include": ["example/ts/**/*.ts", "src-ts/**/*.ts"],
+  "exclude": ["node_modules", "dist*"]
 }

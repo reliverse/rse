@@ -1,15 +1,17 @@
 // rse cmd is your buddy for bootstrapping the boring stuff, so you can jump straight into building the good stuff.
 
+import {
+  askProjectName,
+  getCurrentWorkingDirectory,
+  getOrCreateReliverseConfig,
+  getOrCreateReliverseMemory,
+  initMinimalrseProject,
+  showManualBuilderMenu,
+} from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
-import { getOrCreateReliverseConfig } from "~/app/config/core-cfg";
-import { showManualBuilderMenu } from "~/app/init/init-utils/init-impl";
-import { initMinimalrseProject } from "~/app/init/init-utils/init-utils";
-import { askProjectName } from "~/app/utils/prompts/askProjectName";
-import { getOrCreateReliverseMemory } from "~/app/utils/reliverseMemory";
-import { getCurrentWorkingDirectory } from "~/app/utils/terminalHelpers";
 
 export default defineCommand({
   meta: {

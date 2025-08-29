@@ -1,9 +1,11 @@
+import {
+  getCurrentWorkingDirectory,
+  getOrCreateReliverseConfig,
+  getOrCreateReliverseMemory,
+  showManualBuilderMenu,
+} from "@reliverse/dler";
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
-import { getOrCreateReliverseConfig } from "~/app/config/core-cfg";
-import { showManualBuilderMenu } from "~/app/init/init-utils/init-impl";
-import { getOrCreateReliverseMemory } from "~/app/utils/reliverseMemory";
-import { getCurrentWorkingDirectory } from "~/app/utils/terminalHelpers";
 
 export default defineCommand({
   meta: {
@@ -27,9 +29,6 @@ export default defineCommand({
       type: "string",
       description: "Path to the file or directory (skips Relinter's prompt)",
     },
-  },
-  subCommands: {
-    rule: () => import("~/app/add/add-rule/add-rule-mod").then((r) => r.default),
   },
   run: async ({ args }) => {
     const isDev = args.dev;

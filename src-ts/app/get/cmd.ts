@@ -10,14 +10,9 @@
 import fs from "node:fs/promises";
 import { homedir, platform } from "node:os";
 import path from "node:path";
+import { checkPowerShellVersion, installDlerStandalone, installFromGitHub } from "@reliverse/dler";
 import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
-
-import {
-  checkPowerShellVersion,
-  installDlerStandalone,
-  installFromGitHub,
-} from "./get-impl/get-core";
 
 export default defineCommand({
   meta: {

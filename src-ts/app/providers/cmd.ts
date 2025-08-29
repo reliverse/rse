@@ -1,27 +1,30 @@
 import path from "node:path";
+import type { CreateInput, ProjectConfig } from "@reliverse/dler";
+import {
+  createProject,
+  DEFAULT_CONFIG,
+  displayConfig,
+  gatherConfig,
+  generateReproducibleCommand,
+  getLatestCLIVersion,
+  getProjectName,
+  getProvidedFlags,
+  processAndValidateFlags,
+  renderTitle,
+  trackProjectCreation,
+} from "@reliverse/dler";
 import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import {
   cancel,
+  createSpinner,
   defineCommand,
   intro,
   isCancel,
   outro,
   selectPrompt,
-  spinner,
 } from "@reliverse/rempts";
-import { DEFAULT_CONFIG } from "./better-t-stack/constants";
-import { createProject } from "./better-t-stack/helpers/project-generation/create-project";
-import { gatherConfig } from "./better-t-stack/prompts/config-prompts";
-import { getProjectName } from "./better-t-stack/prompts/project-name";
-import type { CreateInput, ProjectConfig } from "./better-t-stack/types";
-import { trackProjectCreation } from "./better-t-stack/utils/analytics";
-import { displayConfig } from "./better-t-stack/utils/display-config";
-import { generateReproducibleCommand } from "./better-t-stack/utils/generate-reproducible-command";
-import { getLatestCLIVersion } from "./better-t-stack/utils/get-latest-cli-version";
-import { renderTitle } from "./better-t-stack/utils/render-title";
-import { getProvidedFlags, processAndValidateFlags } from "./better-t-stack/validation";
 
 async function handleDirectoryConflict(currentPathInput: string): Promise<{
   finalPathInput: string;
@@ -108,15 +111,15 @@ async function setupProjectDirectory(
   }
 
   if (shouldClearDirectory) {
-    const s = spinner({
+    const s = createSpinner({
       text: `Clearing directory "${finalResolvedPath}"...`,
     });
     s.start(`Clearing directory "${finalResolvedPath}"...`);
     try {
       await fs.emptyDir(finalResolvedPath);
-      s.stop(`Directory "${finalResolvedPath}" cleared.`);
+      s.stopAndPersist({ text: `Directory "${finalResolvedPath}" cleared.` });
     } catch (error) {
-      s.stop(re.red(`Failed to clear directory "${finalResolvedPath}".`));
+      s.stopAndPersist({ text: re.red(`Failed to clear directory "${finalResolvedPath}".`) });
       relinka("error", String(error));
       process.exit(1);
     }

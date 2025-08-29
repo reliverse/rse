@@ -1,6 +1,7 @@
-import { cliConfigJsonc } from "@reliverse/dler";
+import { cliConfigJsonc, generateSchemaFile } from "@reliverse/dler";
+import path from "@reliverse/pathkit";
 import { relinka } from "@reliverse/relinka";
-import { defineCommand } from "@reliverse/rempts";
+import { defineArgs, defineCommand } from "@reliverse/rempts";
 
 export default defineCommand({
   meta: {
@@ -8,9 +9,27 @@ export default defineCommand({
     description: `Generate schema.json for ${cliConfigJsonc} configuration`,
     hidden: true,
   },
-  run: async () => {
+  args: defineArgs({
+    cwd: {
+      type: "string",
+      description: "The directory to generate the schema.json file",
+      required: true,
+    },
+  }),
+  run: async ({ args }) => {
+    const { cwd } = args;
+    const cwdStr = String(cwd);
     try {
-      await generateSchemaFile({}); // TODO: should generate schema.json file
+      await generateSchemaFile({
+        filePath: path.resolve(cwdStr, "schema.json"),
+        schemaOrFactory: {
+          title: "My Schema",
+          type: "object",
+          properties: { name: { type: "string" } },
+          required: ["name"],
+          additionalProperties: false,
+        },
+      });
       relinka("success", `Generated schema.json for ${cliConfigJsonc} successfully!`);
     } catch (error) {
       relinka(

@@ -1,4 +1,4 @@
-import { defineConfig } from "./reltypes";
+import { defineConfig } from "@reliverse/dler";
 
 /**
  * @reliverse/* libraries & rse configuration
@@ -7,12 +7,12 @@ import { defineConfig } from "./reltypes";
  */
 export default defineConfig({
   // Project configuration
-  projectName: "@reliverse/rse",
-  projectAuthor: "reliverse",
+  projectName: "unknown",
+  projectAuthor: "unknown",
   projectDescription:
-    "@reliverse/rse is your all-in-one daily dev companion: not just for bootstrapping projects, but for extending your entire dev toolchain. Rse CLI brings smart automation, framework-aware support (like Next.js), and an AI-powered toolbox into your terminal. Code, refactor, generate, integrate — all in one flow.",
-  version: "1.7.18",
-  projectLicense: "Apache-2.0",
+    "reliverse (prev. dler) is a flexible, unified, and fully automated bundler for TypeScript and JavaScript projects, as well as an NPM and JSR publishing tool.",
+  version: "unknown",
+  projectLicense: "unknown",
   projectState: "created",
   projectRepository: "unknown",
   projectDomain: "unknown",
@@ -136,21 +136,18 @@ export default defineConfig({
 
   // Common configuration
   commonPubPause: false,
-  commonPubRegistry: "npm",
-  commonVerbose: false,
+  commonPubRegistry: "npm-jsr",
+  commonVerbose: true,
   displayBuildPubLogs: true,
 
   // Core configuration
   coreBuildOutDir: "bin",
   coreDeclarations: true,
   coreDescription:
-    "@reliverse/rse is your all-in-one daily dev companion: not just for bootstrapping projects, but for extending your entire dev toolchain. Rse CLI brings smart automation, framework-aware support (like Next.js), and an AI-powered toolbox into your terminal. Code, refactor, generate, integrate — all in one flow.",
+    "reliverse (prev. dler) is a flexible, unified, and fully automated bundler for TypeScript and JavaScript projects, as well as an NPM and JSR publishing tool.",
   coreEntryFile: "rse.ts",
   coreEntrySrcDir: "src-ts",
-  coreIsCLI: {
-    enabled: true,
-    scripts: { rse: "rse.ts" },
-  },
+  coreIsCLI: { enabled: true, scripts: { rse: "rse.ts" } },
 
   // JSR-only config
   distJsrAllowDirty: true,
@@ -167,13 +164,29 @@ export default defineConfig({
   distNpmDirName: "dist-npm",
   distNpmOutFilesExt: "js",
 
+  // Binary Build Configuration
+  binaryBuildEnabled: false,
+  binaryBuildInputFile: undefined,
+  binaryBuildTargets: "all",
+  binaryBuildOutDir: "dist",
+  binaryBuildMinify: true,
+  binaryBuildSourcemap: true,
+  binaryBuildBytecode: false,
+  binaryBuildClean: true,
+  binaryBuildWindowsIcon: undefined,
+  binaryBuildWindowsHideConsole: false,
+  binaryBuildAssetNaming: "[name]-[hash].[ext]",
+  binaryBuildParallel: true,
+  binaryBuildExternal: ["c12", "terminal-kit"],
+  binaryBuildNoCompile: false,
+
   // Libraries Reliverse Plugin
   // Publish specific dirs as separate packages
   // This feature is experimental at the moment
   // Please commit your changes before using it
-  libsActMode: "main-project-only",
+  libsActMode: "main-and-libs",
   libsDirDist: "dist-libs",
-  libsDirSrc: "src/libs",
+  libsDirSrc: "src-ts/libs",
   libsList: {},
 
   // @reliverse/relinka logger setup
@@ -183,9 +196,9 @@ export default defineConfig({
   // Dependency filtering
   // Global is always applied
   filterDepsPatterns: {
-    global: ["@types", "biome", "eslint", "knip", "prettier", "@reliverse/rse"],
+    global: ["@types", "biome", "eslint", "knip", "prettier", "typescript", "@reliverse/rse"],
     "dist-npm": [],
-    "dist-jsr": [],
+    "dist-jsr": ["+bun"],
     "dist-libs": {},
   },
 
@@ -247,10 +260,15 @@ export default defineConfig({
   // - global: ["package.json", "README.md", "LICENSE"]
   // - dist-jsr,dist-libs/jsr: ["jsr.json"]
   publishArtifacts: {
-    global: ["package.json", "README.md", "LICENSE"],
+    global: ["package.json", "README.md", "LICENSE", "LICENSES"],
     "dist-jsr": [],
     "dist-npm": [],
-    "dist-libs": {},
+    "dist-libs": {
+      "@reliverse/reliverse-sdk": {
+        jsr: [],
+        npm: [],
+      },
+    },
   },
 
   // Files with these extensions will be built

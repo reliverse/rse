@@ -1,23 +1,23 @@
+import type { AllowedFileExtensionsType, DirectoryType, FinderOptions } from "@reliverse/dler";
+import {
+  analyzeDependencies,
+  checkFileExtensions,
+  checkMissingDependencies,
+  checkNoDynamicImports,
+  checkNoIndexFiles,
+  checkPackageJsonHealth,
+  checkPathExtensions,
+  checkReliverseConfigHealth,
+  checkSelfInclude,
+  checkTsConfigHealth,
+  displayCheckResults,
+  ensureReliverseConfig,
+  formatOutput,
+} from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
 import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand, multiselectPrompt, selectPrompt } from "@reliverse/rempts";
-import { ensureReliverseConfig } from "~/app/config/prepare";
-import { checkReliverseConfigHealth } from "~/app/rules/reliverse/dler-config-health/dler-config-health";
-import { checkFileExtensions } from "~/app/rules/reliverse/file-extensions/file-extensions";
-import { analyzeDependencies } from "~/app/rules/reliverse/missing-deps/analyzer";
-import { checkMissingDependencies } from "~/app/rules/reliverse/missing-deps/deps-mod";
-import type { FinderOptions } from "~/app/rules/reliverse/missing-deps/deps-types";
-import { formatOutput } from "~/app/rules/reliverse/missing-deps/formatter";
-import { checkNoDynamicImports } from "~/app/rules/reliverse/no-dynamic-imports/no-dynamic-imports";
-import { checkNoIndexFiles } from "~/app/rules/reliverse/no-index-files/no-index-files";
-import { checkPackageJsonHealth } from "~/app/rules/reliverse/package-json-health/package-json-health";
-import { checkPathExtensions } from "~/app/rules/reliverse/path-extensions/path-extensions";
-import { checkSelfInclude } from "~/app/rules/reliverse/self-include/self-include";
-import { checkTsConfigHealth } from "~/app/rules/reliverse/tsconfig-health/tsconfig-health";
-import type { AllowedFileExtensionsType } from "~/app/rules/rules-consts";
-import { displayCheckResults } from "~/app/rules/rules-mod";
-import type { DirectoryType } from "~/app/types/mod";
 
 export default defineCommand({
   meta: {

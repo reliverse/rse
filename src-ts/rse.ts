@@ -1,6 +1,7 @@
 import {
   ad,
   aiMenu,
+  type CommonCliArgs,
   commonEndActions,
   commonStartActions,
   detectProject,
@@ -23,14 +24,15 @@ import path from "@reliverse/pathkit";
 import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
 import { callCmd, createCli, defineArgs, defineCommand, selectPrompt } from "@reliverse/rempts";
-import type { CommonArgs } from "node_modules/@reliverse/dler/bin/app/types/mod";
 import { generate } from "random-words";
 
 import { default as nativeCmd } from "./app/native/cmd";
 import { msgs } from "./const";
 import { showToolboxMenu } from "./menu/toolbox";
 
-async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
+const version= "1.7.22";
+
+async function showMainMenu({ cwdStr, isCI, isDev }: CommonCliArgs) {
   const memory = await getOrCreateReliverseMemory();
 
   // await authCheck(isDev, memory, useLocalhost);
@@ -45,7 +47,7 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
     ? generate({ exactly: 2, join: "-" })
     : (config.projectName ?? UNKNOWN_VALUE);
 
-  await detectProject(strCwd, isDev);
+  await detectProject(cwdStr, isDev);
 
   // Initial multi-config hint (if relevant)
   const mrse: ReliverseConfig[] = [];
@@ -53,7 +55,7 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
     mrse.length > 0 ? re.dim(`multi-config mode with ${mrse.length} projects`) : "";
 
   // Detect local projects from the current directory or tests-runtime in dev mode
-  const rseSearchPath = isDev ? path.join(strCwd, "tests-runtime") : strCwd;
+  const rseSearchPath = isDev ? path.join(cwdStr, "tests-runtime") : cwdStr;
   let detectedCount = 0;
   if (await fs.pathExists(rseSearchPath)) {
     const detectedProjects = await detectProjectsWithReliverseConfig(rseSearchPath, isDev);
@@ -113,7 +115,7 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
     case "create": {
       await showNewProjectMenu({
         projectName,
-        cwd: strCwd,
+        cwd: cwdStr,
         isDev,
         memory,
         config,
@@ -123,13 +125,13 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
       break;
     }
     case "clone": {
-      await showCloneProjectMenu({ isDev, cwd: strCwd, config, memory });
+      await showCloneProjectMenu({ isDev, cwd: cwdStr, config, memory });
       break;
     }
     case "manual": {
       await showManualBuilderMenu({
         projectName,
-        cwd: strCwd,
+        cwd: cwdStr,
         isDev,
         memory,
         config,
@@ -140,7 +142,7 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
     case "detected-projects": {
       await showOpenProjectMenu({
         projectName,
-        cwd: strCwd,
+        cwd: cwdStr,
         isDev,
         memory,
         config,
@@ -152,7 +154,7 @@ async function showMainMenu({ strCwd, isCI, isDev }: CommonArgs) {
     case "toolbox": {
       await showToolboxMenu({
         isCI,
-        strCwd,
+        cwdStr,
         isDev,
         config,
         memory,
@@ -179,7 +181,7 @@ const main = defineCommand({
   meta: {
     name: "rse",
     description: msgs.cmds.rse,
-    version: "1.7.18",
+    version,
   },
   args: defineArgs({
     // Common args
@@ -204,17 +206,17 @@ const main = defineCommand({
     const { ci, cwd, dev } = args;
     const isCI = Boolean(ci);
     const isDev = Boolean(dev);
-    const strCwd = String(cwd);
+    const cwdStr = String(cwd);
     await commonStartActions({
       isCI,
       isDev,
-      strCwd,
+      cwdStr,
       showRuntimeInfo: false,
       clearConsole: false,
       withStartPrompt: true,
     });
 
-    await showMainMenu({ strCwd, isCI, isDev });
+    await showMainMenu({ cwdStr, isCI, isDev });
 
     await commonEndActions({ withEndPrompt: true });
   },

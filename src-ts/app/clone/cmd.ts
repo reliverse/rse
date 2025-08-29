@@ -1,9 +1,8 @@
+import { handleDownload } from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, defineCommand, inputPrompt, selectPrompt } from "@reliverse/rempts";
-
-import { handleDownload } from "~/app/utils/downloading/handleDownload";
 
 export default defineCommand({
   meta: {

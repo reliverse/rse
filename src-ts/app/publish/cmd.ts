@@ -31,23 +31,39 @@ export default defineCommand({
       description: msgs.args.dev,
     },
     // Command specific args
-    // ...
+    "no-spinner": {
+      type: "boolean",
+      description: "Disable progress spinners and show detailed publish logs",
+    },
+    "force-spinner": {
+      type: "boolean",
+      description: "Force enable spinners even in CI/non-TTY environments",
+    },
   }),
   run: async ({ args }) => {
-    const { ci, cwd, dev } = args;
+    const { ci, cwd, dev, "no-spinner": noSpinner, "force-spinner": forceSpinner } = args;
     const isCI = Boolean(ci);
     const isDev = Boolean(dev);
-    const strCwd = String(cwd);
+    const cwdStr = String(cwd);
     await commonStartActions({
       isCI,
       isDev,
-      strCwd,
+      cwdStr,
       showRuntimeInfo: false,
       clearConsole: false,
       withStartPrompt: true,
     });
     const timer = createPerfTimer();
     const config = await getConfigDler();
+
+    // CLI-specific spinner overrides
+    if (noSpinner) {
+      config.displayBuildPubLogs = true; // Force detailed logs
+    }
+    if (forceSpinner) {
+      config.displayBuildPubLogs = false; // Force spinners
+    }
+
     await dlerPub(timer, isDev, config);
 
     await commonEndActions({ withEndPrompt: true });

@@ -3,7 +3,7 @@ import path from "node:path";
 import { getConfig, getGenerator } from "@reliverse/dler";
 import { re } from "@reliverse/relico";
 import fs from "@reliverse/relifso";
-import { confirmPrompt, defineCommand, useSpinner } from "@reliverse/rempts";
+import { confirmPrompt, createSpinner, defineCommand } from "@reliverse/rempts";
 import { logger } from "better-auth";
 import { getAdapter } from "better-auth/db";
 import { z } from "zod";
@@ -66,7 +66,8 @@ export default defineCommand({
       process.exit(1);
     });
 
-    const spinner = useSpinner({ text: "preparing schema..." }).start();
+    const spinner = createSpinner({ text: "preparing schema..." });
+    spinner.start("Preparing schema...");
 
     const schema = await getGenerator({
       adapter,
@@ -74,7 +75,7 @@ export default defineCommand({
       options: config,
     });
 
-    spinner.stop();
+    spinner.stopAndPersist({ text: "Preparing schema..." });
     if (!schema.code) {
       logger.info("Your schema is already up to date.");
       process.exit(0);

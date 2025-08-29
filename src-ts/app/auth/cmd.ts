@@ -5,14 +5,14 @@
  * example: `rse auth better-auth generate`
  */
 
+// import { default as betterAuthGenerateCmd } from "~/app/better/auth/generate/cmd";
+import { configPath, schemaPath } from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
 import { execaCommand } from "execa";
 import MagicString from "magic-string";
-// import { default as betterAuthGenerateCmd } from "~/app/better/auth/generate/cmd";
-import { configPath, schemaPath } from "./consts";
 
 const notice = `/**
  * THIS FILE IS AUTO-GENERATED - DO NOT EDIT DIRECTLY

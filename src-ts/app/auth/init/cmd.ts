@@ -10,6 +10,7 @@ import {
   getPackageManager,
   getTsconfigInfo,
   installDependencies,
+  type OperationOptions,
   optionsSchema,
   outroText,
   type SupportedDatabases,
@@ -25,13 +26,13 @@ import { relinka } from "@reliverse/relinka";
 import {
   cancel,
   confirm,
+  createSpinner,
   defineCommand,
   intro,
   isCancel,
   multiselect,
   outro,
   select,
-  spinner,
   text,
 } from "@reliverse/rempts";
 import fs from "fs/promises";
@@ -158,7 +159,7 @@ export default defineCommand({
     }
 
     // ===== install better-auth =====
-    const s = spinner({ indicator: "dots", text: "Checking better-auth installation" });
+    const s = createSpinner({ text: "Checking better-auth installation" });
     s.start(`Checking better-auth installation`);
 
     let latest_betterauth_version: string;
@@ -174,8 +175,8 @@ export default defineCommand({
       !packageInfo.dependencies ||
       !Object.keys(packageInfo.dependencies).includes("better-auth")
     ) {
-      s.stop("Finished fetching latest version of better-auth.");
-      const s2 = spinner({ indicator: "dots", text: "Installing Better Auth" });
+      s.stopAndPersist({ text: "Finished fetching latest version of better-auth." });
+      const s2 = createSpinner({ text: "Installing Better Auth" });
       const shouldInstallBetterAuthDep = await confirm({
         message: `Would you like to install Better Auth?`,
       });
@@ -194,14 +195,14 @@ export default defineCommand({
             dependencies: ["better-auth@latest"],
             packageManager: packageManagerPreference,
             cwd: cwd,
+          } as OperationOptions);
+          s2.stopAndPersist({
+            text: `Better Auth installed ${re.greenBright(`successfully`)}! ${re.gray(
+              `(${formatMilliseconds(Date.now() - start)})`,
+            )}`,
           });
-          s2.stop(
-            `Better Auth installed ${re.greenBright(
-              `successfully`,
-            )}! ${re.gray(`(${formatMilliseconds(Date.now() - start)})`)}`,
-          );
         } catch (error: any) {
-          s2.stop(`Failed to install Better Auth:`);
+          s2.stopAndPersist({ text: `Failed to install Better Auth:` });
           console.error(error);
           process.exit(1);
         }
@@ -213,7 +214,7 @@ export default defineCommand({
         semver.clean(latest_betterauth_version) ?? "",
       )
     ) {
-      s.stop("Finished fetching latest version of better-auth.");
+      s.stopAndPersist({ text: "Finished fetching latest version of better-auth." });
       const shouldInstallBetterAuthDep = await confirm({
         message: `Your current Better Auth dependency is out-of-date. Would you like to update it? (${re.bold(
           packageInfo.dependencies["better-auth"],
@@ -227,7 +228,7 @@ export default defineCommand({
         if (packageManagerPreference === undefined) {
           packageManagerPreference = await getPackageManager();
         }
-        const s = spinner({ indicator: "dots", text: "Updating Better Auth" });
+        const s = createSpinner({ text: "Updating Better Auth" });
         s.start(`Updating Better Auth using ${re.bold(packageManagerPreference)}`);
         try {
           const start = Date.now();
@@ -235,20 +236,22 @@ export default defineCommand({
             dependencies: ["better-auth@latest"],
             packageManager: packageManagerPreference,
             cwd: cwd,
+          } as OperationOptions);
+          s.stopAndPersist({
+            text: `Better Auth updated ${re.greenBright(`successfully`)}! ${re.gray(
+              `(${formatMilliseconds(Date.now() - start)})`,
+            )}`,
           });
-          s.stop(
-            `Better Auth updated ${re.greenBright(
-              `successfully`,
-            )}! ${re.gray(`(${formatMilliseconds(Date.now() - start)})`)}`,
-          );
         } catch (error: any) {
-          s.stop(`Failed to update Better Auth:`);
+          s.stopAndPersist({ text: `Failed to update Better Auth:` });
           relinka("error", error.message);
           process.exit(1);
         }
       }
     } else {
-      s.stop(`Better Auth dependencies are ${re.greenBright(`up to date`)}!`);
+      s.stopAndPersist({
+        text: `Better Auth dependencies are ${re.greenBright(`up to date`)}!`,
+      });
     }
 
     // ===== appName =====
@@ -465,7 +468,7 @@ export default defineCommand({
               process.exit(0);
             }
             if (shouldInstallDeps) {
-              const s = spinner({ indicator: "dots", text: "Installing dependencies" });
+              const s = createSpinner({ text: "Installing dependencies" });
               if (packageManagerPreference === undefined) {
                 packageManagerPreference = await getPackageManager();
               }
@@ -476,14 +479,16 @@ export default defineCommand({
                   dependencies: dependencies,
                   packageManager: packageManagerPreference,
                   cwd: cwd,
+                } as OperationOptions);
+                s.stopAndPersist({
+                  text: `Dependencies installed ${re.greenBright(`successfully`)} ${re.gray(
+                    `(${formatMilliseconds(Date.now() - start)})`,
+                  )}`,
                 });
-                s.stop(
-                  `Dependencies installed ${re.greenBright(
-                    `successfully`,
-                  )} ${re.gray(`(${formatMilliseconds(Date.now() - start)})`)}`,
-                );
               } catch (error: any) {
-                s.stop(`Failed to install dependencies using ${packageManagerPreference}:`);
+                s.stopAndPersist({
+                  text: `Failed to install dependencies using ${packageManagerPreference}:`,
+                });
                 relinka("error", error.message);
                 process.exit(1);
               }

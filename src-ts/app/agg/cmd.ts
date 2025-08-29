@@ -131,7 +131,7 @@ export default defineCommand({
     // Common args
     const isCI = Boolean(ci);
     const isDev = Boolean(dev);
-    const strCwd = String(cwd);
+    const cwdStr = String(cwd);
 
     // Command specific args
     const hasInput = Boolean(input);
@@ -151,7 +151,7 @@ export default defineCommand({
     await commonStartActions({
       isCI,
       isDev,
-      strCwd,
+      cwdStr,
       showRuntimeInfo: false,
       clearConsole: false,
       withStartPrompt: true,

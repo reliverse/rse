@@ -3,6 +3,17 @@
 // - `bun dev:mrse --ts`
 // - `bun dev:mrse --jsonc project1 project2 project3`
 
+import {
+  downloadFileFromGitHub,
+  ensureEnvCacheDir,
+  type GenCfg,
+  type GenCfgJsonc,
+  generateReliverseConfig,
+  getEnvCacheDir,
+  getEnvCachePath,
+  logVerbose,
+  UNKNOWN_VALUE,
+} from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import fs, { ensuredir } from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
@@ -11,17 +22,6 @@ import { parseJSONC } from "confbox";
 import { execaCommand } from "execa";
 import { jsonrepair } from "jsonrepair";
 import { builders, loadFile, writeFile } from "magicast";
-import { UNKNOWN_VALUE } from "~/app/config/constants";
-import { generateReliverseConfig } from "~/app/config/create";
-import {
-  downloadFileFromGitHub,
-  ensureEnvCacheDir,
-  type GenCfg,
-  type GenCfgJsonc,
-  getEnvCacheDir,
-  getEnvCachePath,
-  logVerbose,
-} from "~/app/mrse/mrse-impl";
 
 /**
  * Generates rse config files for multiple projects

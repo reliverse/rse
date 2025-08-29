@@ -14,47 +14,7 @@ import {
   isCatalogSupported,
 } from "@reliverse/dler";
 import { relinka } from "@reliverse/relinka";
-import { defineArgs, defineCommand, selectPrompt } from "@reliverse/rempts";
-
-const temp2 = defineCommand({
-  meta: {
-    name: "install",
-    description: "Install global NPM packages or desktop apps",
-  },
-  args: {
-    // The user can optionally specify one or more items to install
-    items: {
-      type: "positional",
-      required: false,
-      array: true,
-      description: "Apps or packages to install",
-    },
-  },
-  run: async ({ args }) => {
-    // If the user provided one or more items, skip interactive menu
-    const items = [args.items];
-    if (items && items.length > 0) {
-      return await handleDirectInstall(items);
-    }
-
-    // Otherwise, interactive selection
-    relinka("info", "\n◆ Select Installation Type");
-    const installType = await selectPrompt({
-      title: "installType",
-      content: "What do you want to install?",
-      options: [
-        { value: "cli apps", label: "CLI apps" },
-        { value: "desktop apps", label: "Desktop apps" },
-      ],
-    });
-
-    if (installType === "cli apps") {
-      await handleCliApps();
-    } else {
-      await handleDesktopApps();
-    }
-  },
-});
+import { defineArgs, defineCommand } from "@reliverse/rempts";
 
 export default defineCommand({
   meta: {

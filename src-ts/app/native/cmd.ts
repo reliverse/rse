@@ -34,11 +34,11 @@ export default defineCommand({
     const { ci, cwd, dev } = args;
     const isCI = Boolean(ci);
     const isDev = Boolean(dev);
-    const strCwd = String(cwd);
+    const cwdStr = String(cwd);
     await commonStartActions({
       isCI,
       isDev,
-      strCwd,
+      cwdStr,
       showRuntimeInfo: false,
       clearConsole: false,
       withStartPrompt: true,

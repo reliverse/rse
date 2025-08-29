@@ -1,9 +1,7 @@
+import { deleteMemory, memoryPath } from "@reliverse/dler";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, defineCommand, deleteLastLine, msg } from "@reliverse/rempts";
-
-import { memoryPath } from "~/app/config/constants";
-import { deleteMemory } from "~/app/logout/logout-impl";
 
 const isConfigExists = async () => {
   if (await fs.pathExists(memoryPath)) {

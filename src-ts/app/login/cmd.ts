@@ -1,10 +1,6 @@
+import { auth, getOrCreateReliverseMemory, showAnykeyPrompt, useLocalhost } from "@reliverse/dler";
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
-
-import { useLocalhost } from "~/app/config/constants";
-import { showAnykeyPrompt } from "~/app/init/use-template/cp-modules/cli-main-modules/modules/showAnykeyPrompt";
-import { auth } from "~/app/login/login-impl";
-import { getOrCreateReliverseMemory } from "~/app/utils/reliverseMemory";
 
 export default defineCommand({
   meta: {

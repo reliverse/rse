@@ -17,14 +17,14 @@ import { msgs } from "~/const";
 
 export async function showToolboxMenu({
   isCI,
-  strCwd,
+  cwdStr,
   isDev,
   memory,
   config,
   skipPrompts,
 }: {
   isCI: boolean;
-  strCwd: string;
+  cwdStr: string;
   isDev: boolean;
   memory: ReliverseMemory;
   config: ReliverseConfig;
@@ -56,27 +56,27 @@ export async function showToolboxMenu({
 
   switch (cmdToRun) {
     case "build": {
-      await callCmd(buildCmd, { strCwd, isCI, isDev });
+      await callCmd(buildCmd, { cwd: cwdStr, ci: isCI, dev: isDev });
       break;
     }
     case "publish": {
-      await callCmd(publishCmd, { strCwd, isCI, isDev });
+      await callCmd(publishCmd, { cwd: cwdStr, ci: isCI, dev: isDev });
       break;
     }
     case "deploy": {
-      await callCmd(deployCmd, { strCwd, isCI, isDev });
+      await callCmd(deployCmd, { cwd: cwdStr, ci: isCI, dev: isDev });
       break;
     }
     case "update": {
-      await callCmd(updateCmd, { strCwd, isCI, isDev });
+      await callCmd(updateCmd, { cwd: cwdStr, ci: isCI, dev: isDev });
       break;
     }
     case "agg": {
-      await callCmd(aggCmd, { strCwd, isCI, isDev });
+      await callCmd(aggCmd, { cwd: cwdStr, ci: isCI, dev: isDev });
       break;
     }
     case "rm-tests-runtime": {
-      await rmTestsRuntime(strCwd);
+      await rmTestsRuntime(cwdStr);
       break;
     }
     case "download-template": {
@@ -85,7 +85,7 @@ export async function showToolboxMenu({
         config,
         memory,
         isDev,
-        strCwd,
+        cwdStr,
         skipPrompts,
       );
       break;

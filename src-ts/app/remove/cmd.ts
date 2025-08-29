@@ -7,16 +7,18 @@
  */
 
 import { homedir, platform } from "node:os";
+import {
+  detectPackageManager,
+  isCatalogSupported,
+  removeDependency,
+  removeFromCatalog,
+} from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
 import { execa } from "execa";
 import { lookpath } from "lookpath";
-
-import { removeDependency } from "~/app/utils/pm/pm-api";
-import { isCatalogSupported, removeFromCatalog } from "~/app/utils/pm/pm-catalog";
-import { detectPackageManager } from "~/app/utils/pm/pm-detect";
 
 interface MetaInfo {
   version: string;

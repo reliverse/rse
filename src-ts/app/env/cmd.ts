@@ -1,6 +1,5 @@
+import { envArgImpl } from "@reliverse/dler";
 import { defineCommand } from "@reliverse/rempts";
-
-import { envArgImpl } from "~/app/env/env-impl";
 
 export default defineCommand({
   meta: {

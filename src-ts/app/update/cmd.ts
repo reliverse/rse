@@ -166,7 +166,7 @@ export default defineCommand({
     } = args;
     const isCI = Boolean(ci);
     const isDev = Boolean(dev);
-    const strCwd = String(cwd);
+    const cwdStr = String(cwd);
     const isGlobal = Boolean(global);
     const isInteractive = Boolean(interactive);
     const isUpgradeTools = Boolean(upgradeTools);
@@ -180,7 +180,7 @@ export default defineCommand({
     await commonStartActions({
       isCI,
       isDev,
-      strCwd,
+      cwdStr,
       showRuntimeInfo: false,
       clearConsole: false,
       withStartPrompt: false,

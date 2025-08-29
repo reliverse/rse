@@ -6,13 +6,10 @@
  * - dler create --mode files --multiple - creates multiple file types
  */
 
+import type { FileType, InitFileRequest } from "@reliverse/dler";
+import { detectPackageManager, FILE_TYPES, initFile, initFiles, x } from "@reliverse/dler";
 import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand, multiselectPrompt, selectPrompt } from "@reliverse/rempts";
-import { x } from "~/app/utils/exec/exec-mod";
-import { FILE_TYPES } from "~/app/utils/init/init-const";
-import { initFile, initFiles } from "~/app/utils/init/init-impl";
-import type { FileType, InitFileRequest } from "~/app/utils/init/init-types";
-import { detectPackageManager } from "~/app/utils/pm/pm-detect";
 
 export default defineCommand({
   meta: {

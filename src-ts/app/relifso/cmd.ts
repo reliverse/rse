@@ -1,6 +1,7 @@
 // [copy] simple example: `bun dler fs --mode copy --s "src/**/*.ts" --d "dist"`
 // [copy] advanced example: `bun dler fs --mode copy --s ".temp/packages/*/lib/**/*" --d "src-ts/app/rules/external"`
 
+import { createPerfTimer, getElapsedPerfTime, prepareCLIFiles, safeRename } from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
@@ -8,8 +9,6 @@ import { defineArgs, defineCommand, inputPrompt, selectPrompt } from "@reliverse
 import pMap from "p-map";
 import prettyMilliseconds from "pretty-ms";
 import { glob } from "tinyglobby";
-import { prepareCLIFiles, safeRename } from "~/app/utils/fs-rename";
-import { createPerfTimer, getElapsedPerfTime } from "~/app/utils/utils-perf";
 
 async function fileExists(path: string): Promise<boolean> {
   try {

@@ -99,6 +99,15 @@ export default defineCommand({
       type: "boolean",
       description: "Create a bundled script instead of standalone executable (overrides config)",
     },
+    // Command specific args
+    "no-spinner": {
+      type: "boolean",
+      description: "Disable progress spinners and show detailed build logs",
+    },
+    "force-spinner": {
+      type: "boolean",
+      description: "Force enable spinners even in CI/non-TTY environments",
+    },
   }),
   run: async ({ args }) => {
     const {
@@ -121,18 +130,20 @@ export default defineCommand({
       "binary-parallel": binaryParallel,
       "binary-external": binaryExternal,
       "binary-no-compile": binaryNoCompile,
+      "no-spinner": noSpinner,
+      "force-spinner": forceSpinner,
     } = args;
 
     const isCI = Boolean(ci);
     const isDev = Boolean(dev);
-    const strCwd = String(cwd);
+    const cwdStr = String(cwd);
     const isDebugOnlyCopyNonBuildFiles = Boolean(debugOnlyCopyNonBuildFiles);
     const isDebugDontCopyNonBuildFiles = Boolean(debugDontCopyNonBuildFiles);
 
     await commonStartActions({
       isCI,
       isDev,
-      strCwd,
+      cwdStr,
       showRuntimeInfo: false,
       clearConsole: false,
       withStartPrompt: true,
@@ -140,6 +151,14 @@ export default defineCommand({
 
     const timer = createPerfTimer();
     const config = await getConfigDler();
+
+    // CLI-specific spinner overrides
+    if (noSpinner) {
+      config.displayBuildPubLogs = true; // Force detailed logs
+    }
+    if (forceSpinner) {
+      config.displayBuildPubLogs = false; // Force spinners
+    }
 
     // Override binary build config with command line args if provided
     // @see https://bun.com/docs/bundler/executables
@@ -186,14 +205,16 @@ export default defineCommand({
       config.binaryBuildNoCompile = Boolean(binaryNoCompile);
     }
 
-    await dlerBuild(
+    await dlerBuild({
+      flow: "build",
       timer,
       isDev,
       config,
-      isDebugOnlyCopyNonBuildFiles,
-      isDebugDontCopyNonBuildFiles,
-    );
-    await finalizeBuild(timer, false, "build");
+      debugOnlyCopyNonBuildFiles: isDebugOnlyCopyNonBuildFiles,
+      debugDontCopyNonBuildFiles: isDebugDontCopyNonBuildFiles,
+    });
+    const shouldShowSpinner = config.displayBuildPubLogs === false && !noSpinner;
+    await finalizeBuild(shouldShowSpinner, timer, false, "build");
 
     await commonEndActions({ withEndPrompt: true });
   },

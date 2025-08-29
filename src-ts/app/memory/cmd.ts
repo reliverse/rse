@@ -1,7 +1,6 @@
+import { getOrCreateReliverseMemory } from "@reliverse/dler";
 import { relinka } from "@reliverse/relinka";
 import { defineCommand } from "@reliverse/rempts";
-
-import { getOrCreateReliverseMemory } from "~/app/utils/reliverseMemory";
 
 export default defineCommand({
   meta: {

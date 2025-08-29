@@ -1,10 +1,8 @@
 // `rse cmod` runs selected codemods
 
+import { runCodemods } from "@reliverse/dler";
 import { re } from "@reliverse/relico";
-import { defineCommand } from "@reliverse/rempts";
-import { prompt } from "enquirer";
-
-import { runCodemods } from "~/app/cmod/cmod-impl";
+import { defineCommand, multiselectPrompt } from "@reliverse/rempts";
 
 /**
  * A small sample set of codemods we currently show the user in interactive mode.
@@ -65,11 +63,9 @@ export default defineCommand({
     // 2. Otherwise, go into interactive mode
     console.log(re.green("\n◆ Rse Codemod Selection\n"));
 
-    const { chosen } = await prompt<{ chosen: string[] }>({
-      type: "multiselect",
-      name: "chosen",
-      message: "Select one or more codemods to run:",
-      choices: sampleCodemods.map((cm) => ({ name: cm })),
+    const chosen = await multiselectPrompt({
+      title: "Select one or more codemods to run:",
+      options: sampleCodemods.map((cm) => ({ label: cm, value: cm })),
     });
 
     if (!chosen || chosen.length === 0) {

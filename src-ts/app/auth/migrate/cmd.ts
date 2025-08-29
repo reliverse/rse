@@ -1,7 +1,7 @@
 import { configPath, getConfig } from "@reliverse/dler";
 import { re } from "@reliverse/relico";
 import { pathExists } from "@reliverse/relifso";
-import { confirmPrompt, defineArgs, defineCommand, useSpinner } from "@reliverse/rempts";
+import { confirmPrompt, createSpinner, defineArgs, defineCommand } from "@reliverse/rempts";
 import { logger } from "better-auth";
 import { getAdapter, getMigrations } from "better-auth/db";
 import path from "path";
@@ -63,17 +63,18 @@ export async function migrateAction(opts: MigrateActionOpts) {
     process.exit(1);
   }
 
-  const spinner = useSpinner({ text: "preparing migration..." }).start();
+  const spinner = createSpinner({ text: "preparing migration..." });
+  spinner.start("Preparing migration...");
 
   const { toBeAdded, toBeCreated, runMigrations } = await getMigrations(config);
 
   if (!toBeAdded.length && !toBeCreated.length) {
-    spinner.stop();
+    spinner.stopAndPersist({ text: "Preparing migration..." });
     logger.info("🚀 No migrations needed.");
     process.exit(0);
   }
 
-  spinner.stop();
+  spinner.stopAndPersist({ text: "Preparing migration..." });
   logger.info("🔑 The migration will affect the following:");
 
   for (const table of [...toBeCreated, ...toBeAdded]) {
@@ -103,7 +104,7 @@ export async function migrateAction(opts: MigrateActionOpts) {
 
   spinner?.start("migrating...");
   await runMigrations();
-  spinner.stop();
+  spinner.stopAndPersist({ text: "Migrating..." });
   logger.info("🚀 migration was completed successfully!");
   process.exit(0);
 }

@@ -1,7 +1,5 @@
+import { applyMagicSpells, formatError } from "@reliverse/dler";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
-
-import { applyMagicSpells } from "~/app/magic/magic-apply";
-import { formatError } from "~/app/utils/utils-error-cwd";
 
 export default defineCommand({
   meta: {

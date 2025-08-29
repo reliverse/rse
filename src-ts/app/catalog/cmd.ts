@@ -1,8 +1,6 @@
+import { detectPackageManager, isCatalogSupported, listCatalogs } from "@reliverse/dler";
 import { relinka } from "@reliverse/relinka";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
-
-import { isCatalogSupported, listCatalogs } from "~/app/utils/pm/pm-catalog";
-import { detectPackageManager } from "~/app/utils/pm/pm-detect";
 
 export default defineCommand({
   meta: {

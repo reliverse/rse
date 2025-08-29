@@ -1,11 +1,10 @@
 // rules-mod.ts
 
+import { handleDirectRules, showRulesMenu } from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import { ensuredir } from "@reliverse/relifso";
 import { defineCommand } from "@reliverse/rempts";
 import os from "os";
-
-import { handleDirectRules, showRulesMenu } from "./add-rule-impl";
 
 export default defineCommand({
   meta: {

@@ -1,22 +1,22 @@
+import {
+  consoleToRelinka,
+  detectPackageManager,
+  displayMigrationResults,
+  isCatalogSupported,
+  isMonorepo,
+  type MigrationResult,
+  migrateAnythingToBun,
+  migrateFromCatalog,
+  migrateFsToRelifso,
+  migrateModuleResolution,
+  migratePathToPathkit,
+  migrateReaddirToGlob,
+  migrateToCatalog,
+} from "@reliverse/dler";
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, defineArgs, defineCommand } from "@reliverse/rempts";
-import { isMonorepo } from "~/app/update/utils";
-import { isCatalogSupported } from "~/app/utils/pm/pm-catalog";
-import { detectPackageManager } from "~/app/utils/pm/pm-detect";
-import { migrateAnythingToBun } from "./codemods/anything-bun";
-import { consoleToRelinka } from "./codemods/console-relinka";
-import { migrateFsToRelifso } from "./codemods/fs-relifso";
-import {
-  displayMigrationResults,
-  type MigrationResult,
-  migrateFromCatalog,
-  migrateToCatalog,
-} from "./codemods/monorepo-catalog";
-import { migrateModuleResolution } from "./codemods/nodenext-bundler";
-import { migratePathToPathkit } from "./codemods/path-pathkit";
-import { migrateReaddirToGlob } from "./codemods/readdir-glob";
 
 type LogFormat =
   | "console"

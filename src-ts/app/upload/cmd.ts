@@ -1,8 +1,7 @@
 import fs from "node:fs/promises";
 import { formatBytes, readFilesFromPaths, uploadToProvider } from "@reliverse/dler";
 import { relinka } from "@reliverse/relinka";
-import { defineCommand } from "@reliverse/rempts";
-import ora from "ora";
+import { defineCommand, ora } from "@reliverse/rempts";
 
 export default defineCommand({
   meta: {

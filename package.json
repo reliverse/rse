@@ -1,9 +1,10 @@
 {
   "name": "@reliverse/rse",
-  "version": "1.7.22",
+  "version": "1.7.28",
   "type": "module",
   "license": "Apache-2.0",
   "description": "@reliverse/rse is your all-in-one daily dev companion: not just for bootstrapping projects, but for extending your entire dev toolchain. Rse CLI brings smart automation, framework-aware support (like Next.js), and an AI-powered toolbox into your terminal. Code, refactor, generate, integrate — all in one flow.",
+  "packageManager": "bun@1.2.21",
   "engines": {
     "bun": ">=1.2.21",
     "node": ">=v22.18.0"
@@ -12,19 +13,19 @@
     "dev": "bun cli --dev",
     "cli": "bun src-ts/rse.ts",
     "pub": "bun cli publish --dev",
-    "build": "bun cli build --dev",
-    "latest": "bun cli update --dev && bun install",
+    "latest": "bun cli update && bun install && bun check",
     "check": "bun tsc --noEmit && bun biome check --fix --unsafe"
   },
   "dependencies": {
     "@ai-sdk/openai": "^2.0.23",
-    "@reliverse/dler": "^1.7.134",
+    "@reliverse/bleump": "^1.2.0",
+    "@reliverse/dler": "^1.7.143",
     "@reliverse/pathkit": "^1.3.4",
     "@reliverse/reglob": "^1.0.0",
-    "@reliverse/relico": "^1.3.9",
+    "@reliverse/relico": "^1.4.0",
     "@reliverse/relifso": "^1.4.5",
     "@reliverse/relinka": "^1.6.1",
-    "@reliverse/rempts": "^1.7.58",
+    "@reliverse/rempts": "^1.7.62",
     "ai": "^5.0.28",
     "better-auth": "^1.3.7",
     "buffer": "^6.0.3",
@@ -35,7 +36,6 @@
     "lookpath": "^1.2.3",
     "magic-string": "^0.30.18",
     "magicast": "^0.3.5",
-    "ora": "^8.2.0",
     "p-map": "^7.0.3",
     "pkg-types": "^2.3.0",
     "pretty-ms": "^9.2.0",
@@ -52,7 +52,7 @@
     "@types/semver": "^7.7.0",
     "knip": "^5.63.0",
     "typescript": "^5.9.2",
-    "ultracite": "^5.2.10"
+    "ultracite": "^5.2.17"
   },
   "keywords": [
     "rse",

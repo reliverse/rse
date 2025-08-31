@@ -68,7 +68,7 @@ export async function showToolboxMenu({
       break;
     }
     case "update": {
-      await callCmd(updateCmd, { cwd: cwdStr, ci: isCI, dev: isDev });
+      await callCmd(updateCmd, { cwd: cwdStr, ci: isCI });
       break;
     }
     case "agg": {

@@ -136,9 +136,9 @@ export default defineConfig({
 
   // Common configuration
   commonPubPause: false,
-  commonPubRegistry: "npm-jsr",
-  commonVerbose: true,
-  displayBuildPubLogs: true,
+  commonPubRegistry: "npm",
+  commonVerbose: false,
+  displayBuildPubLogs: false,
 
   // Core configuration
   coreBuildOutDir: "bin",

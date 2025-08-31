@@ -1,10 +1,9 @@
 import { openai } from "@ai-sdk/openai";
 import { uploadToProvider } from "@reliverse/dler";
 import { relinka } from "@reliverse/relinka";
-import { defineCommand } from "@reliverse/rempts";
+import { defineCommand, ora } from "@reliverse/rempts";
 import { experimental_generateImage as generateImage } from "ai";
 import { Buffer } from "buffer";
-import ora from "ora";
 
 export default defineCommand({
   meta: {

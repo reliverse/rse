@@ -1,6 +1,6 @@
 import { commonEndActions, commonStartActions, getCurrentWorkingDirectory } from "@reliverse/dler";
-import { callCmd, defineArgs, defineCommand } from "@reliverse/rempts";
-import { default as updateCmd } from "~/app/update/cmd";
+import { relinka } from "@reliverse/relinka";
+import { defineArgs, defineCommand } from "@reliverse/rempts";
 import { type CmdName, msgs } from "~/const";
 
 export default defineCommand({
@@ -41,10 +41,12 @@ export default defineCommand({
       withStartPrompt: false,
     });
 
-    await callCmd(updateCmd, {
-      ...args,
-      upgradeTools: true,
-    });
+    relinka("warn", "Upgrade command is not implemented yet");
+    // await callCmd(updateCmd, {
+    // ...args,
+    // upgradeTools: true, // TODO: implement lightweight --tools flag (e.g. --tools=node,bun,powershell)
+    // TODO: implement --global flag
+    // });
 
     await commonEndActions({ withEndPrompt: false });
   },

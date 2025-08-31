@@ -3,7 +3,6 @@ import {
   detectPackageManager,
   displayMigrationResults,
   isCatalogSupported,
-  isMonorepo,
   type MigrationResult,
   migrateAnythingToBun,
   migrateFromCatalog,
@@ -14,9 +13,9 @@ import {
   migrateToCatalog,
 } from "@reliverse/dler";
 import path from "@reliverse/pathkit";
-import fs from "@reliverse/relifso";
 import { relinka } from "@reliverse/relinka";
 import { confirmPrompt, defineArgs, defineCommand } from "@reliverse/rempts";
+import { findPackage } from "pkg-types";
 
 type LogFormat =
   | "console"
@@ -263,14 +262,8 @@ async function handleCatalogMigration(args: any): Promise<void> {
     const packageJsonPath = path.resolve(cwd, "package.json");
 
     // Check if package.json exists
-    if (!(await fs.pathExists(packageJsonPath))) {
+    if (!(await findPackage(packageJsonPath))) {
       relinka("error", "No package.json found in current directory");
-      return process.exit(1);
-    }
-
-    // Check if we're in a monorepo
-    if (!(await isMonorepo(cwd))) {
-      relinka("error", "This command requires a monorepo with workspace configuration");
       return process.exit(1);
     }
 

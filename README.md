@@ -4,6 +4,21 @@
 
 [Sponsor](https://github.com/sponsors/blefnk) — [Discord](https://discord.gg/Pb8uKbwpsJ) — [GitHub](https://github.com/reliverse/rse) — [NPM](https://npmjs.com/@reliverse/rse) — [Introduction](https://blefnk.reliverse.org/blog/articles/cli)
 
+## Installation
+
+```bash
+bun add -D @reliverse/rse
+# or globally: bun add -g @reliverse/rse
+```
+
+## Usage
+
+```bash
+bun rse # display main menu
+bun rse <command> [options]
+# or globally: rse <command> [options]
+```
+
 ## Documentation
 
 Visit [docs.reliverse.org/libraries/rse](https://docs.reliverse.org/libraries/rse) to learn how to install and use `@reliverse/rse` CLI.

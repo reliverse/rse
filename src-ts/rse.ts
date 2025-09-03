@@ -30,7 +30,7 @@ import { default as nativeCmd } from "./app/native/cmd";
 import { msgs } from "./const";
 import { showToolboxMenu } from "./menu/toolbox";
 
-const version= "1.7.28";
+const version= "1.7.29";
 
 async function showMainMenu({ cwdStr, isCI, isDev }: CommonCliArgs) {
   const memory = await getOrCreateReliverseMemory();

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
-      "~/*": ["./src-ts/*"],
+      "~/*": ["./src/*"],
       "@/*": ["./example/ts/*"]
     },
     "lib": ["ESNext"],
@@ -27,6 +27,6 @@
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false
   },
-  "include": ["example/ts/**/*.ts", "src-ts/**/*.ts"],
+  "include": ["example/ts/**/*.ts", "src/**/*.ts"],
   "exclude": ["node_modules", "dist*"]
 }

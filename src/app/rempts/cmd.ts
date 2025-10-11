@@ -33,11 +33,11 @@ export default defineCommand({
     outFile: {
       type: "string",
       description: "Output file path for exports (relative to workspace root)",
-      default: "src-ts/app/cmds.ts",
+      default: "src/app/cmds.ts",
     },
     cmdDirs: {
       type: "array",
-      description: "Command directories to scan (relative to src-ts/app)",
+      description: "Command directories to scan (relative to src/app)",
     },
   }),
   async run({ args }) {
@@ -78,7 +78,7 @@ export default defineCommand({
       }
 
       if (!cmdsRoot) {
-        const defaultCmdsRoot = path.resolve("src-ts/app");
+        const defaultCmdsRoot = path.resolve("src/app");
         if (await fs.pathExists(defaultCmdsRoot)) {
           cmdsRoot = defaultCmdsRoot;
         } else {
@@ -118,8 +118,8 @@ export default defineCommand({
     // --- 2. (Re)generate the exports file if requirements are met ---
     // If no args.init, just (re)generate cmds.ts if at least one cmd.{ts,js} exists
     if (!args.init) {
-      const root = path.resolve("src-ts/app");
-      const outPath = path.resolve(args.outFile ?? "src-ts/app/cmds.ts");
+      const root = path.resolve("src/app");
+      const outPath = path.resolve(args.outFile ?? "src/app/cmds.ts");
 
       const cmdDirs =
         (args.cmdDirs ?? []).length > 0 ? (args.cmdDirs ?? []) : await findCommandDirs(root);
@@ -146,8 +146,8 @@ export default defineCommand({
     }
 
     // If we got here, it means --init was used and handled above, and we always (re)generate exports after that
-    const root = path.resolve("src-ts/app");
-    const outPath = path.resolve(args.outFile ?? "src-ts/app/cmds.ts");
+    const root = path.resolve("src/app");
+    const outPath = path.resolve(args.outFile ?? "src/app/cmds.ts");
 
     if ((await fs.pathExists(outPath)) && !args.overwrite) {
       relinka("warn", `❌ File "${outPath}" already exists. Use --overwrite to overwrite.`);

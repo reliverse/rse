@@ -130,7 +130,7 @@ export default defineConfig({
 
   // Bump configuration
   bumpDisable: false,
-  bumpFilter: ["package.json", "reliverse.ts", "src-ts/rse.ts"],
+  bumpFilter: ["package.json", "reliverse.ts", "src/mod.ts"],
   bumpMode: "patch",
   bumpSet: "",
 
@@ -145,9 +145,9 @@ export default defineConfig({
   coreDeclarations: true,
   coreDescription:
     "reliverse (prev. dler) is a flexible, unified, and fully automated bundler for TypeScript and JavaScript projects, as well as an NPM and JSR publishing tool.",
-  coreEntryFile: "rse.ts",
-  coreEntrySrcDir: "src-ts",
-  coreIsCLI: { enabled: true, scripts: { rse: "rse.ts" } },
+  coreEntryFile: "mod.ts",
+  coreEntrySrcDir: "src",
+  coreIsCLI: { enabled: true, scripts: { rse: "mod.ts" } },
 
   // JSR-only config
   distJsrAllowDirty: true,
@@ -186,7 +186,7 @@ export default defineConfig({
   // Please commit your changes before using it
   libsActMode: "main-and-libs",
   libsDirDist: "dist-libs",
-  libsDirSrc: "src-ts/libs",
+  libsDirSrc: "src/libs",
   libsList: {},
 
   // @reliverse/relinka logger setup

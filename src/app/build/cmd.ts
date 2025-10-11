@@ -8,27 +8,26 @@ import {
   getCurrentWorkingDirectory,
 } from "@reliverse/dler";
 import { defineArgs, defineCommand } from "@reliverse/rempts";
-import { type CmdName, msgs } from "~/const";
 
 export default defineCommand({
   meta: {
-    name: "build" as CmdName,
-    description: msgs.cmds.build,
+    name: "build",
+    description: "Build the project",
   },
   args: defineArgs({
     // Common args
     ci: {
       type: "boolean",
-      description: msgs.args.ci,
+      description: "Run in CI mode",
       default: !process.stdout.isTTY || !!process.env["CI"],
     },
     dev: {
       type: "boolean",
-      description: msgs.args.dev,
+      description: "Run in dev mode",
     },
     cwd: {
       type: "string",
-      description: msgs.args.cwd,
+      description: "Current working directory",
       default: getCurrentWorkingDirectory(),
     },
     // Command specific args

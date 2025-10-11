@@ -61,7 +61,7 @@ export default defineCommand({
     typesPath: {
       type: "string",
       description: "Custom path to type definitions for TypeScript configs",
-      default: "../src-ts/app/types/mod",
+      default: "../src/app/types/mod",
     },
     _: {
       type: "array",

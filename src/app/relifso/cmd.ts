@@ -1,5 +1,5 @@
 // [copy] simple example: `bun dler fs --mode copy --s "src/**/*.ts" --d "dist"`
-// [copy] advanced example: `bun dler fs --mode copy --s ".temp/packages/*/lib/**/*" --d "src-ts/app/rules/external"`
+// [copy] advanced example: `bun dler fs --mode copy --s ".temp/packages/*/lib/**/*" --d "src/app/rules/external"`
 
 import { createPerfTimer, getElapsedPerfTime, prepareCLIFiles, safeRename } from "@reliverse/dler";
 import path from "@reliverse/pathkit";
@@ -190,7 +190,7 @@ export default defineCommand({
       if (!finalDestination) {
         finalDestination = await inputPrompt({
           title: "Enter destination path",
-          placeholder: "e.g., src-ts/app/rules/putout",
+          placeholder: "e.g., src/app/rules/putout",
         });
       }
 

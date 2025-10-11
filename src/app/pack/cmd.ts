@@ -427,11 +427,12 @@ export default defineCommand({
     }
 
     // Log binary files count
-    const binaryCount = Object.values(existingTemplates).reduce((count, template) => {
-      return (
-        count + Object.values(template.config.files).filter((file) => file.type === "binary").length
-      );
-    }, 0);
+    const binaryCount = Object.values(existingTemplates).reduce(
+      (count, template) =>
+        count +
+        Object.values(template.config.files).filter((file) => file.type === "binary").length,
+      0,
+    );
 
     if (binaryCount > 0) {
       relinka("info", `  - ${TPLS_DIR}/${BINARIES_DIR}/* (${binaryCount} binary files)`);

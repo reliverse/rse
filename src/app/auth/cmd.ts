@@ -65,9 +65,10 @@ export default defineCommand({
 
     const s = new MagicString(originalContent);
     s.prepend(notice);
-    s.replace(/export const (\w+) = pgTable/g, (_match: string, tableName: string) => {
-      return `export const ${tableName}Table = pgTable`;
-    });
+    s.replace(
+      /export const (\w+) = pgTable/g,
+      (_match: string, tableName: string) => `export const ${tableName}Table = pgTable`,
+    );
 
     const tableNames: string[] = [];
     const tableMatches = originalContent.matchAll(/export const (\w+) = pgTable/g);
@@ -81,9 +82,9 @@ export default defineCommand({
     console.log("√ Ensured better-auth tables:", tableNames);
 
     for (const tableName of tableNames) {
-      s.replace(new RegExp(`\\(\\)\\s*=>\\s*${tableName}\\s*\\.`, "g"), (match: string) => {
-        return match.replace(tableName, `${tableName}Table`);
-      });
+      s.replace(new RegExp(`\\(\\)\\s*=>\\s*${tableName}\\s*\\.`, "g"), (match: string) =>
+        match.replace(tableName, `${tableName}Table`),
+      );
     }
 
     await fs.writeFile(filePath, s.toString(), "utf8");

@@ -1,6 +1,6 @@
 // The command philosophy is: "Find all package.json files, update everything you find, skip only non-updateable specifiers (workspace:, catalog:, npm:, etc.)"
 
-// usage examples (rse=example/ts/app/update/cmd.ts):
+// usage examples (rse=example/app/update/cmd.ts):
 // - bun rse update --dryRun --withInstall
 // - bun rse update --name "@types/*" --name "react*"     # glob patterns for selective updates
 // - bun rse update --ignore "eslint-*" --ignore "@babel/*"  # ignore patterns

@@ -1,7 +1,6 @@
 {
-  "typescript.tsdk": "node_modules\\typescript\\lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "openMultipleFiles.limit": 700,
+  "typescript.preferences.importModuleSpecifier": "project-relative",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
     "source.biome": "explicit",
@@ -9,6 +8,9 @@
     "source.organizeImports.biome": "explicit"
   },
   "markdownlint.config": {
+    "MD031": false,
+    "MD032": false,
+    "MD022": false,
     "MD033": false,
     "MD041": false
   }

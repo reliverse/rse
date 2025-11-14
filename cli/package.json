@@ -1,0 +1,39 @@
+{
+  "name": "@reliverse/rse",
+  "description": "@reliverse/rse",
+  "author": "reliverse",
+  "version": "2.0.2",
+  "private": false,
+  "type": "module",
+  "bin": {
+    "rse": "dist/cli.js"
+  },
+  "dependencies": {
+    "@reliverse/dler-logger": "catalog:",
+    "@reliverse/dler-matcher": "catalog:",
+    "@reliverse/dler-launcher": "catalog:",
+    "@reliverse/dler-prompt": "catalog:",
+    "@reliverse/dler-helpers": "catalog:",
+    "@reliverse/dler-pkg-tsc": "catalog:",
+    "@reliverse/dler-mapper": "catalog:"
+  },
+  "keywords": [
+    "rse"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@p/tsconfig": "workspace:*",
+    "@types/bun": "catalog:",
+    "typescript": "catalog:"
+  },
+  "scripts": {
+    "dler": "bun src/cli.ts"
+  }
+}

@@ -1,5 +1,0 @@
-export const content = `@import 'tailwindcss';
-@import 'uniwind';
-@import 'heroui-native/styles';
-
-@source './node_modules/heroui-native/lib';`;

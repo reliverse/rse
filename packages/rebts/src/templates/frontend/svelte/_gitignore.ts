@@ -1,0 +1,25 @@
+export const content = `node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+.alchemy
+/.svelte-kit
+/build
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+`;

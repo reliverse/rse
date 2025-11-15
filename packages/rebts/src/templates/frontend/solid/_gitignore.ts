@@ -1,0 +1,11 @@
+export const content = `node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
+.env
+.env.*
+
+.wrangler
+.alchemy
+.dev.vars*`;

@@ -25,6 +25,7 @@
         "@reliverse/dler-prompt": "catalog:",
         "@reliverse/rse-addons": "workspace:*",
         "@reliverse/rse-escaper": "workspace:*",
+        "@reliverse/rse-rebts": "workspace:*",
         "@reliverse/rse-rules": "workspace:*",
       },
       "devDependencies": {
@@ -92,6 +93,7 @@
       "dependencies": {
         "@reliverse/dler-launcher": "catalog:",
         "@reliverse/dler-logger": "catalog:",
+        "@reliverse/rse-escaper": "workspace:*",
       },
       "devDependencies": {
         "@p/tsconfig": "workspace:*",

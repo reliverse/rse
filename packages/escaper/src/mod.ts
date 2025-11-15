@@ -1,4 +1,4 @@
-import { statSync } from "node:fs";
+import { statSync, unlinkSync } from "node:fs";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, extname, join, relative, resolve } from "node:path";
 
@@ -323,4 +323,80 @@ export async function bootstrapEscapedFiles(
   }
 
   return outputFiles;
+}
+
+/**
+ * Find all files in a directory recursively, excluding .hbs files
+ */
+export async function findAllTemplateFiles(
+  inputPath: string,
+  excludeExtensions: string[] = [".hbs"],
+): Promise<string[]> {
+  const files: string[] = [];
+  const inputStat = statSync(inputPath);
+
+  if (!inputStat.isDirectory()) {
+    throw new Error(`Input path is not a directory: ${inputPath}`);
+  }
+
+  async function walkDir(dir: string): Promise<void> {
+    const entries = await readdir(dir, { withFileTypes: true });
+
+    for (const entry of entries) {
+      const fullPath = join(dir, entry.name);
+
+      if (entry.isDirectory()) {
+        await walkDir(fullPath);
+      } else if (entry.isFile()) {
+        const ext = extname(entry.name);
+        // Exclude files with specified extensions
+        if (!excludeExtensions.includes(ext)) {
+          files.push(fullPath);
+        }
+      }
+    }
+  }
+
+  await walkDir(inputPath);
+  return files;
+}
+
+/**
+ * Get output path with double extension (e.g., loader.tsx -> loader.tsx.ts)
+ */
+export function getDoubleExtensionOutputPath(
+  inputPath: string,
+  filePath: string,
+  baseDir: string,
+): string {
+  const relPath = relative(baseDir, filePath);
+  return join(inputPath, `${relPath}.ts`);
+}
+
+/**
+ * Escape all template files in a directory (except excluded extensions)
+ * Creates escaped files with double extensions (e.g., loader.tsx.ts)
+ * Deletes original files after escaping
+ */
+export async function escapeTemplateFiles(
+  templatesDir: string,
+  outputDir: string,
+  excludeExtensions: string[] = [".hbs"],
+): Promise<string[]> {
+  const files = await findAllTemplateFiles(templatesDir, excludeExtensions);
+  const escapedFiles: string[] = [];
+
+  for (const file of files) {
+    const outputPath = getDoubleExtensionOutputPath(
+      outputDir,
+      file,
+      templatesDir,
+    );
+    await convertFile(file, outputPath);
+    escapedFiles.push(outputPath);
+    // Delete original file after escaping
+    unlinkSync(file);
+  }
+
+  return escapedFiles;
 }

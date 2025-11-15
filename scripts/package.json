@@ -7,7 +7,8 @@
   "type": "module",
   "dependencies": {
     "@reliverse/dler-launcher": "catalog:",
-    "@reliverse/dler-logger": "catalog:"
+    "@reliverse/dler-logger": "catalog:",
+    "@reliverse/rse-escaper": "workspace:*"
   },
   "devDependencies": {
     "@p/tsconfig": "workspace:*",

@@ -1,9 +1,7 @@
-import { createProjectHandler } from "./impl/helpers/core/command-handlers";
-
-import type {
-  API,
+export type {
   AddInput,
   Addons,
+  API,
   Backend,
   BetterTStackConfig,
   CreateInput,
@@ -18,33 +16,12 @@ import type {
   ProjectConfig,
   Runtime,
   ServerDeploy,
-  WebDeploy
-} from "./impl/types";
-
-export async function init(projectName?: string, options?: CreateInput) {
-	const opts = (options ?? {}) as CreateInput;
-	const programmaticOpts = { ...opts, verbose: true };
-	
-	return result as InitResult;
-}
-
-export type {
-	Database,
-	ORM,
-	Backend,
-	Runtime,
-	Frontend,
-	Addons,
-	Examples,
-	PackageManager,
-	DatabaseSetup,
-	API,
-	WebDeploy,
-	ServerDeploy,
-	DirectoryConflict,
-	CreateInput,
-	AddInput,
-	ProjectConfig,
-	BetterTStackConfig,
-	InitResult,
-};
+  WebDeploy,
+} from "./impl/index";
+export {
+  add,
+  builder,
+  docs,
+  init,
+  sponsors,
+} from "./impl/index";

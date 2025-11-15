@@ -17,6 +17,12 @@
     "access": "public"
   },
   "license": "MIT",
+  "dependencies": {
+    "@reliverse/dler-colors": "catalog:",
+    "@reliverse/dler-logger": "catalog:",
+    "@reliverse/dler-prompt": "catalog:",
+    "zod": "catalog:"
+  },
   "devDependencies": {
     "@p/tsconfig": "workspace:*",
     "typescript": "catalog:",

@@ -1,6 +1,7 @@
 {
-  "name": "@reliverse/dler-escaper",
-  "version": "2.0.2",
+  "name": "@reliverse/rse-escaper",
+  "description": "@reliverse/rse-escaper provides powerful utilities for escaping and unescaping template files.",
+  "version": "2.0.7",
   "type": "module",
   "exports": {
     ".": {

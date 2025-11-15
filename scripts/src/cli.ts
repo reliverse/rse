@@ -1,7 +1,7 @@
 #!/usr/bin/env bun
 
-// 👉 bun scripts <cmd> <args>
-// 💡 scripts === scripts/src/cli.ts
+// 👉 bun rse <cmd> <args>
+// 💡 rse === cli/src/cli.ts
 
 import { runLauncher } from "@reliverse/dler-launcher";
 

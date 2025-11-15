@@ -1,0 +1,18 @@
+{{#if (or (eq webDeploy "alchemy") (eq webDeploy "wrangler"))}}
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+{{/if}}
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+	typedRoutes: true,
+    reactCompiler: true,
+	{{#if (includes examples "ai")}}
+    transpilePackages: ["shiki"],
+    {{/if}}
+};
+
+export default nextConfig;
+
+{{#if (or (eq webDeploy "alchemy") (eq webDeploy "wrangler"))}}
+initOpenNextCloudflareForDev();
+{{/if}}

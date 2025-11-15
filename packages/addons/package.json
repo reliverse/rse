@@ -1,0 +1,36 @@
+{
+  "name": "@reliverse/rse-addons",
+  "version": "2.0.7",
+  "private": false,
+  "type": "module",
+  "description": "@reliverse/rse-addons is a collection of integrations for your project.",
+  "exports": {
+    ".": {
+      "types": "./src/mod.ts",
+      "default": "./src/mod.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@reliverse/rse-escaper": "workspace:*",
+    "@reliverse/dler-logger": "catalog:",
+    "@reliverse/dler-matcher": "catalog:",
+    "@reliverse/dler-launcher": "catalog:",
+    "@reliverse/dler-prompt": "catalog:",
+    "@reliverse/dler-helpers": "catalog:",
+    "@reliverse/dler-pkg-tsc": "catalog:",
+    "@reliverse/dler-mapper": "catalog:"
+  },
+  "devDependencies": {
+    "@p/tsconfig": "workspace:*",
+    "typescript": "catalog:",
+    "@types/bun": "catalog:"
+  }
+}

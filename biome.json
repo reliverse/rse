@@ -16,10 +16,14 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "suspicious": {},
+      "suspicious": {
+        "noExplicitAny": "off"
+      },
       "security": {},
       "a11y": {},
-      "style": {},
+      "style": {
+        "noNonNullAssertion": "off"
+      },
       "correctness": {},
       "complexity": {},
       "performance": {},

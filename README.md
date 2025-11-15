@@ -27,24 +27,26 @@ rse [command] [options]
 Both CLI and framework packages work independently, you're not required to install both.
 
 ```bash
-bun add @reliverse/rse-logger
+bun add @reliverse/rse-rules
 ```
 
 ## Framework Usage
 
 ```ts
-import { logger } from "@reliverse/ai-rules";
+import { bootstrap, getAvailableFiles } from "@reliverse/rse-rules";
 ```
 
 ## Available Packages
 
-1. `@reliverse/ai-rules`
+1. `@reliverse/rse-rules`
 
 ## Available CLI Commands
 
 All `@reliverse/rse` v2+ commands support both monorepo (recommended) and single-repo (not tested too much yet) contexts.
 
-1. `rse rules` generates AI rules for your project.
+1. `rse add` generates AI rules for your project.
+2. `rse init` generates AI rules for your project.
+3. `rse rules` generates AI rules for your project.
 
 ## v2 Docs
 

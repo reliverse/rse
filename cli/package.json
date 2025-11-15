@@ -2,13 +2,16 @@
   "name": "@reliverse/rse",
   "description": "@reliverse/rse",
   "author": "reliverse",
-  "version": "2.0.2",
+  "version": "2.0.7",
   "private": false,
   "type": "module",
   "bin": {
     "rse": "dist/cli.js"
   },
   "dependencies": {
+    "@reliverse/rse-addons": "workspace:*",
+    "@reliverse/rse-escaper": "workspace:*",
+    "@reliverse/rse-rules": "workspace:*",
     "@reliverse/dler-logger": "catalog:",
     "@reliverse/dler-matcher": "catalog:",
     "@reliverse/dler-launcher": "catalog:",

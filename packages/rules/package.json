@@ -1,0 +1,29 @@
+{
+  "name": "@reliverse/rse-rules",
+  "version": "2.0.7",
+  "private": false,
+  "type": "module",
+  "description": "@reliverse/rse-rules is a collection of AI rules for your project.",
+  "exports": {
+    ".": {
+      "types": "./src/mod.ts",
+      "default": "./src/mod.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@reliverse/rse-escaper": "workspace:*"
+  },
+  "devDependencies": {
+    "@p/tsconfig": "workspace:*",
+    "typescript": "catalog:",
+    "@types/bun": "catalog:"
+  }
+}

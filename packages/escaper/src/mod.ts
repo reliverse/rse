@@ -170,6 +170,14 @@ export async function findFiles(
   return files;
 }
 
+function isDeclarationFile(filename: string): boolean {
+  return (
+    filename.endsWith(".d.ts") ||
+    filename.endsWith(".d.mts") ||
+    filename.endsWith(".d.cts")
+  );
+}
+
 export async function findEscapedFiles(
   inputPath: string,
   recursive: boolean,
@@ -178,7 +186,9 @@ export async function findEscapedFiles(
   const inputStat = statSync(inputPath);
 
   if (inputStat.isFile()) {
-    if (extname(inputPath) === ".ts") {
+    const ext = extname(inputPath);
+    const fileName = basename(inputPath);
+    if ((ext === ".ts" || ext === ".js") && !isDeclarationFile(fileName)) {
       return [inputPath];
     }
     return [];
@@ -200,8 +210,14 @@ export async function findEscapedFiles(
         if (recursive) {
           await walkDir(fullPath);
         }
-      } else if (entry.isFile() && extname(entry.name) === ".ts") {
-        files.push(fullPath);
+      } else if (entry.isFile()) {
+        const ext = extname(entry.name);
+        if (
+          (ext === ".ts" || ext === ".js") &&
+          !isDeclarationFile(entry.name)
+        ) {
+          files.push(fullPath);
+        }
       }
     }
   }
@@ -247,10 +263,18 @@ export function getUnescapeOutputPath(
     const outputDir = join(inputDir, outputDirName);
     const relPath = relative(inputPath, filePath);
     const outputFile = join(outputDir, relPath);
-    return outputFile.slice(0, -3);
+    const ext = extname(outputFile);
+    if (ext === ".ts" || ext === ".js") {
+      return outputFile.slice(0, -ext.length);
+    }
+    return outputFile;
   }
 
-  const outputName = basename(inputPath, ".ts");
+  const ext = extname(inputPath);
+  const outputName =
+    ext === ".ts" || ext === ".js"
+      ? basename(inputPath, ext)
+      : basename(inputPath, ".ts");
   return join(dirname(inputPath), outputName);
 }
 
@@ -278,4 +302,25 @@ export async function unconvertFile(
   const outputDir = dirname(outputPath);
   await mkdir(outputDir, { recursive: true });
   await writeFile(outputPath, content, "utf-8");
+}
+
+export async function bootstrapEscapedFiles(
+  escapedDir: string,
+  outputDir: string,
+): Promise<string[]> {
+  const files = await findEscapedFiles(escapedDir, true);
+  const outputFiles: string[] = [];
+
+  for (const file of files) {
+    const relPath = relative(escapedDir, file);
+    const ext = extname(relPath);
+    const outputFile =
+      ext === ".ts" || ext === ".js"
+        ? join(outputDir, relPath.slice(0, -ext.length))
+        : join(outputDir, relPath.slice(0, -3));
+    await unconvertFile(file, outputFile);
+    outputFiles.push(outputFile);
+  }
+
+  return outputFiles;
 }

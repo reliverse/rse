@@ -1,37 +1,17 @@
 {
   "name": "@s/scripts",
   "private": true,
-  "description": "Scripts for @reliverse/dler",
+  "description": "Scripts for @reliverse/rse",
   "author": "reliverse",
   "version": "0.1.0",
   "type": "module",
-  "scripts": {
-    "scripts": "bun src/cli.ts"
-  },
-  "keywords": [
-    "rse"
-  ],
-  "publishConfig": {
-    "access": "public"
-  },
-  "files": [
-    "dist",
-    "package.json"
-  ],
-  "license": "MIT",
   "dependencies": {
-    "@reliverse/dler-escaper": "workspace:*",
-    "@reliverse/dler-logger": "catalog:",
-    "@reliverse/dler-matcher": "catalog:",
     "@reliverse/dler-launcher": "catalog:",
-    "@reliverse/dler-prompt": "catalog:",
-    "@reliverse/dler-helpers": "catalog:",
-    "@reliverse/dler-pkg-tsc": "catalog:",
-    "@reliverse/dler-mapper": "catalog:"
+    "@reliverse/dler-logger": "catalog:"
   },
   "devDependencies": {
     "@p/tsconfig": "workspace:*",
-    "@types/bun": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "@types/bun": "catalog:"
   }
 }

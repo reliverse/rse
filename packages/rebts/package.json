@@ -1,0 +1,25 @@
+{
+  "name": "@reliverse/rse-rebts",
+  "description": "@reliverse/rse-rebts",
+  "version": "2.0.7",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/mod.ts",
+      "default": "./src/mod.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@p/tsconfig": "workspace:*",
+    "typescript": "catalog:",
+    "@types/bun": "catalog:"
+  }
+}

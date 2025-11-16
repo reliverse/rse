@@ -1,9 +1,10 @@
-import path from "node:path";
-import fs from "fs-extra";
-import type { ImportDeclaration } from "ts-morph";
-import type { PackageManager } from "../../../types";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
 import { addPackageDependency } from "../../../utils/add-package-deps";
 import { tsProject } from "../../../utils/ts-morph";
+import type { ImportDeclaration } from "ts-morph";
+import type { PackageManager } from "../../../types";
 
 export async function setupSvelteWorkersDeploy(
 	projectDir: string,
@@ -19,13 +20,13 @@ export async function setupSvelteWorkersDeploy(
 
 	const pkgPath = path.join(webAppDir, "package.json");
 	if (await fs.pathExists(pkgPath)) {
-		const pkg = await fs.readJson(pkgPath);
+		const pkg = await readPackageJSON(path.dirname(pkgPath));
 		pkg.scripts = {
 			...pkg.scripts,
 			deploy: `${packageManager} run build && wrangler deploy`,
 			"cf-typegen": "wrangler types ./src/worker-configuration.d.ts",
 		};
-		await fs.writeJson(pkgPath, pkg, { spaces: 2 });
+		await writePackageJSON(path.dirname(pkgPath), pkg);
 	}
 
 	const possibleConfigFiles = [

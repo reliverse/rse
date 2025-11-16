@@ -1,9 +1,8 @@
-import path from "node:path";
-import { spinner } from "@clack/prompts";
-import consola from "consola";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { logger } from "@reliverse/dler-logger";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { setupCloudflareD1 } from "../database-providers/d1-setup";
 import { setupDockerCompose } from "../database-providers/docker-compose-setup";
@@ -13,6 +12,7 @@ import { setupPlanetScale } from "../database-providers/planetscale-setup";
 import { setupPrismaPostgres } from "../database-providers/prisma-postgres-setup";
 import { setupSupabase } from "../database-providers/supabase-setup";
 import { setupTurso } from "../database-providers/turso-setup";
+import type { ProjectConfig } from "../../types";
 
 export async function setupDatabase(
 	config: ProjectConfig,
@@ -31,7 +31,7 @@ export async function setupDatabase(
 		return;
 	}
 
-	const s = spinner();
+	const s = createSpinner();
 	const dbPackageDir = path.join(projectDir, "packages/db");
 
 	if (!(await fs.pathExists(dbPackageDir))) {
@@ -145,9 +145,9 @@ export async function setupDatabase(
 			await setupMongoDBAtlas(config, cliInput);
 		}
 	} catch (error) {
-		s.stop(pc.red("Failed to set up database"));
+		s.stop(re.red("Failed to set up database"));
 		if (error instanceof Error) {
-			consola.error(pc.red(error.message));
+			logger.error(re.red(error.message));
 		}
 	}
 }

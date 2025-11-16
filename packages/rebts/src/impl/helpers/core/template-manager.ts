@@ -1,9 +1,9 @@
-import path from "node:path";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { glob } from "tinyglobby";
 import { PKG_ROOT } from "../../constants";
-import type { ProjectConfig } from "../../types";
 import { processTemplate } from "../../utils/template-processor";
+import type { ProjectConfig } from "../../types";
 
 export async function processAndCopyFiles(
 	sourcePattern: string | string[],

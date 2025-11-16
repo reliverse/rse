@@ -1,6 +1,5 @@
-import { log } from "@clack/prompts";
-import fs from "fs-extra";
-import type { ProjectConfig } from "../../types";
+import { logger } from "@reliverse/dler-logger";
+import fs from "@reliverse/relifso";
 import { writeBtsConfig } from "../../utils/bts-config";
 import { exitWithError } from "../../utils/errors";
 import { setupCatalogs } from "../../utils/setup-catalogs";
@@ -20,6 +19,7 @@ import { installDependencies } from "./install-dependencies";
 import { setupPayments } from "./payments-setup";
 import { displayPostInstallInstructions } from "./post-installation";
 import { updatePackageConfigurations } from "./project-config";
+import type { ProjectConfig } from "../../types";
 import {
 	copyBaseTemplate,
 	handleExtras,
@@ -104,7 +104,7 @@ export async function createProject(
 
 		await writeBtsConfig(options);
 
-		log.success("Project template successfully scaffolded!");
+		logger.success("Project template successfully scaffolded!");
 
 		if (options.install) {
 			await installDependencies({

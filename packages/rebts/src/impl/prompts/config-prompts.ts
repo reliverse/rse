@@ -1,21 +1,4 @@
-import { group } from "@clack/prompts";
-import type {
-	Addons,
-	API,
-	Auth,
-	Backend,
-	Database,
-	DatabaseSetup,
-	Examples,
-	Frontend,
-	ORM,
-	PackageManager,
-	Payments,
-	ProjectConfig,
-	Runtime,
-	ServerDeploy,
-	WebDeploy,
-} from "../types";
+import { logger } from "@reliverse/dler-logger";
 import { exitCancelled } from "../utils/errors";
 import { getAddonsChoice } from "./addons";
 import { getApiChoice } from "./api";
@@ -33,6 +16,23 @@ import { getPaymentsChoice } from "./payments";
 import { getRuntimeChoice } from "./runtime";
 import { getServerDeploymentChoice } from "./server-deploy";
 import { getDeploymentChoice } from "./web-deploy";
+import type {
+	Addons,
+	API,
+	Auth,
+	Backend,
+	Database,
+	DatabaseSetup,
+	Examples,
+	Frontend,
+	ORM,
+	PackageManager,
+	Payments,
+	ProjectConfig,
+	Runtime,
+	ServerDeploy,
+	WebDeploy,
+} from "../types";
 
 type PromptGroupResults = {
 	frontend: Frontend[];

@@ -21,6 +21,13 @@
     "@reliverse/dler-colors": "catalog:",
     "@reliverse/dler-logger": "catalog:",
     "@reliverse/dler-prompt": "catalog:",
+    "@reliverse/dler-spinner": "catalog:",
+    "@reliverse/dler-pkg-tsc": "catalog:",
+    "@reliverse/relifso": "catalog:",
+    "@reliverse/pathkit": "catalog:",
+    "jsonc-parser": "catalog:",
+    "ts-morph": "catalog:",
+    "execa": "catalog:",
     "zod": "catalog:"
   },
   "devDependencies": {

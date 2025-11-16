@@ -1,11 +1,12 @@
-import { groupMultiselect, isCancel } from "@clack/prompts";
+import { logger } from "@reliverse/dler-logger";
+import { isCancel } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
-import { type Addons, AddonsSchema, type Auth, type Frontend } from "../types";
+import { AddonsSchema, type Addons, type Auth, type Frontend } from "../types";
+import { exitCancelled } from "../utils/errors";
 import {
 	getCompatibleAddons,
 	validateAddonCompatibility,
 } from "../utils/compatibility-rules";
-import { exitCancelled } from "../utils/errors";
 
 type AddonOption = {
 	value: Addons;
@@ -121,7 +122,7 @@ export async function getAddonsChoice(
 	);
 
 	const response = await groupMultiselect<Addons>({
-		message: "Select addons",
+		title: "Select addons",
 		options: groupedOptions,
 		initialValues: initialValues,
 		required: false,
@@ -177,7 +178,7 @@ export async function getAddonsToAdd(
 	}
 
 	const response = await groupMultiselect<Addons>({
-		message: "Select addons to add",
+		title: "Select addons to add",
 		options: groupedOptions,
 		required: false,
 		selectableGroups: false,

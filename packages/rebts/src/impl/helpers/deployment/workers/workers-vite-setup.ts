@@ -1,13 +1,13 @@
-import path from "node:path";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
+import { addPackageDependency } from "../../../utils/add-package-deps";
+import { ensureArrayProperty, tsProject } from "../../../utils/ts-morph";
 import {
 	type CallExpression,
 	Node,
 	type ObjectLiteralExpression,
 	SyntaxKind,
 } from "ts-morph";
-import { addPackageDependency } from "../../../utils/add-package-deps";
-import { ensureArrayProperty, tsProject } from "../../../utils/ts-morph";
 
 export async function setupWorkersVitePlugin(projectDir: string) {
 	const webAppDir = path.join(projectDir, "apps/web");

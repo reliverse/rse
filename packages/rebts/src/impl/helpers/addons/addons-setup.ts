@@ -1,9 +1,10 @@
-import path from "node:path";
-import { log, spinner } from "@clack/prompts";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import { logger } from "@reliverse/dler-logger";
+import { createSpinner } from "@reliverse/dler-spinner";
 import { execa } from "execa";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { Frontend, PackageManager, ProjectConfig } from "../../types";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
 import { setupFumadocs } from "./fumadocs-setup";
@@ -12,6 +13,7 @@ import { setupStarlight } from "./starlight-setup";
 import { setupTauri } from "./tauri-setup";
 import { setupUltracite } from "./ultracite-setup";
 import { addPwaToViteConfig } from "./vite-pwa-setup";
+import type { Frontend, PackageManager, ProjectConfig } from "../../types";
 
 export async function setupAddons(config: ProjectConfig, isAddCommand = false) {
 	const { addons, frontend, projectDir, packageManager } = config;
@@ -31,16 +33,16 @@ export async function setupAddons(config: ProjectConfig, isAddCommand = false) {
 		});
 
 		if (isAddCommand) {
-			log.info(`${pc.yellow("Update your package.json scripts:")}
+			logger.info(`${re.yellow("Update your package.json scripts:")}
 
-${pc.dim("Replace:")} ${pc.yellow('"pnpm -r dev"')} ${pc.dim("→")} ${pc.green(
+${re.dim("Replace:")} ${re.yellow('"pnpm -r dev"')} ${re.dim("→")} ${re.green(
 				'"turbo dev"',
 			)}
-${pc.dim("Replace:")} ${pc.yellow('"pnpm --filter web dev"')} ${pc.dim(
+${re.dim("Replace:")} ${re.yellow('"pnpm --filter web dev"')} ${re.dim(
 				"→",
-			)} ${pc.green('"turbo -F web dev"')}
+			)} ${re.green('"turbo -F web dev"')}
 
-${pc.cyan("Docs:")} ${pc.underline("https://turborepo.com/docs")}
+${re.cyan("Docs:")} ${re.underline("https://turborepo.com/docs")}
 		`);
 		}
 	}
@@ -116,14 +118,14 @@ export async function setupBiome(projectDir: string) {
 
 	const packageJsonPath = path.join(projectDir, "package.json");
 	if (await fs.pathExists(packageJsonPath)) {
-		const packageJson = await fs.readJson(packageJsonPath);
+		const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
 		packageJson.scripts = {
 			...packageJson.scripts,
 			check: "biome check --write .",
 		};
 
-		await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+		await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 	}
 }
 
@@ -138,7 +140,7 @@ export async function setupHusky(
 
 	const packageJsonPath = path.join(projectDir, "package.json");
 	if (await fs.pathExists(packageJsonPath)) {
-		const packageJson = await fs.readJson(packageJsonPath);
+		const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
 		packageJson.scripts = {
 			...packageJson.scripts,
@@ -161,7 +163,7 @@ export async function setupHusky(
 			};
 		}
 
-		await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+		await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 	}
 }
 
@@ -185,14 +187,14 @@ async function setupPwa(projectDir: string, frontends: Frontend[]) {
 
 	const clientPackageJsonPath = path.join(clientPackageDir, "package.json");
 	if (await fs.pathExists(clientPackageJsonPath)) {
-		const packageJson = await fs.readJson(clientPackageJsonPath);
+		const packageJson = await readPackageJSON(path.dirname(clientPackageJsonPath));
 
 		packageJson.scripts = {
 			...packageJson.scripts,
 			"generate-pwa-assets": "pwa-assets-generator",
 		};
 
-		await fs.writeJson(clientPackageJsonPath, packageJson, { spaces: 2 });
+		await writePackageJSON(path.dirname(clientPackageJsonPath), packageJson);
 	}
 
 	const viteConfigTs = path.join(clientPackageDir, "vite.config.ts");
@@ -210,14 +212,14 @@ async function setupOxlint(projectDir: string, packageManager: PackageManager) {
 
 	const packageJsonPath = path.join(projectDir, "package.json");
 	if (await fs.pathExists(packageJsonPath)) {
-		const packageJson = await fs.readJson(packageJsonPath);
+		const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
 		packageJson.scripts = {
 			...packageJson.scripts,
 			check: "oxlint",
 		};
 
-		await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+		await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 	}
 
 	const oxlintInitCommand = getPackageExecutionCommand(
@@ -225,7 +227,7 @@ async function setupOxlint(projectDir: string, packageManager: PackageManager) {
 		"oxlint@latest --init",
 	);
 
-	const s = spinner();
+	const s = createSpinner();
 	s.start("Initializing oxlint...");
 
 	await execa(oxlintInitCommand, {

@@ -1,6 +1,6 @@
-import path from "node:path";
-import consola from "consola";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import fs from "@reliverse/relifso";
 import type {
 	Addons,
 	API,
@@ -20,7 +20,7 @@ export async function createReadme(projectDir: string, options: ProjectConfig) {
 	try {
 		await fs.writeFile(readmePath, content);
 	} catch (error) {
-		consola.error("Failed to create README.md file:", error);
+		logger.error("Failed to create README.md file:", error);
 	}
 }
 

@@ -1,13 +1,13 @@
-import path from "node:path";
-import { isCancel, log, select } from "@clack/prompts";
-import { consola } from "consola";
-import { type ExecaError, execa } from "execa";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { PackageManager, ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
+import { execa, type ExecaError } from "execa";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { exitCancelled } from "../../utils/errors";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
 import { addEnvVariablesToFile, type EnvVariable } from "../core/env-setup";
+import type { PackageManager, ProjectConfig } from "../../types";
 
 async function writeSupabaseEnvFile(
 	projectDir: string,
@@ -34,9 +34,9 @@ async function writeSupabaseEnvFile(
 		await addEnvVariablesToFile(envPath, variables);
 		return true;
 	} catch (error) {
-		consola.error(pc.red("Failed to update .env file for Supabase."));
+		logger.error(re.red("Failed to update .env file for Supabase."));
 		if (error instanceof Error) {
-			consola.error(error.message);
+			logger.error(error.message);
 		}
 		return false;
 	}
@@ -55,7 +55,7 @@ async function initializeSupabase(
 	serverDir: string,
 	packageManager: PackageManager,
 ) {
-	log.info("Initializing Supabase project...");
+	logger.info("Initializing Supabase project...");
 	try {
 		const supabaseInitCommand = getPackageExecutionCommand(
 			packageManager,
@@ -66,22 +66,22 @@ async function initializeSupabase(
 			stdio: "inherit",
 			shell: true,
 		});
-		log.success("Supabase project initialized");
+		logger.success("Supabase project initialized");
 		return true;
 	} catch (error) {
-		consola.error(pc.red("Failed to initialize Supabase project."));
+		logger.error(re.red("Failed to initialize Supabase project."));
 		if (error instanceof Error) {
-			consola.error(error.message);
+			logger.error(error.message);
 		} else {
-			consola.error(String(error));
+			logger.error(String(error));
 		}
 		if (error instanceof Error && error.message.includes("ENOENT")) {
-			log.error(
-				pc.red(
+			logger.error(
+				re.red(
 					"Supabase CLI not found. Please install it globally or ensure it's in your PATH.",
 				),
 			);
-			log.info("You can install it using: npm install -g supabase");
+			logger.info("You can install it using: npm install -g supabase");
 		}
 		return false;
 	}
@@ -91,7 +91,7 @@ async function startSupabase(
 	serverDir: string,
 	packageManager: PackageManager,
 ) {
-	log.info("Starting Supabase services (this may take a moment)...");
+	logger.info("Starting Supabase services (this may take a moment)...");
 	const supabaseStartCommand = getPackageExecutionCommand(
 		packageManager,
 		"supabase start",
@@ -122,24 +122,24 @@ async function startSupabase(
 
 		return stdoutData;
 	} catch (error) {
-		consola.error(pc.red("Failed to start Supabase services."));
+		logger.error(re.red("Failed to start Supabase services."));
 		const execaError = error as ExecaError;
 		if (execaError?.message) {
-			consola.error(`Error details: ${execaError.message}`);
+			logger.error(`Error details: ${execaError.message}`);
 			if (execaError.message.includes("Docker is not running")) {
-				log.error(
-					pc.red("Docker is not running. Please start Docker and try again."),
+				logger.error(
+					re.red("Docker is not running. Please start Docker and try again."),
 				);
 			}
 		} else {
-			consola.error(String(error));
+			logger.error(String(error));
 		}
 		return null;
 	}
 }
 
 function displayManualSupabaseInstructions(output?: string | null) {
-	log.info(
+	logger.info(
 		`"Manual Supabase Setup Instructions:"
 1. Ensure Docker is installed and running.
 2. Install the Supabase CLI (e.g., \`npm install -g supabase\`).
@@ -148,12 +148,12 @@ function displayManualSupabaseInstructions(output?: string | null) {
 5. Copy the 'DB URL' from the output.${
 			output
 				? `
-${pc.bold("Relevant output from `supabase start`:")}
-${pc.dim(output)}`
+${re.bold("Relevant output from `supabase start`:")}
+${re.dim(output)}`
 				: ""
 		}
 6. Add the DB URL to the .env file in \`packages/db/.env\` as \`DATABASE_URL\`:
-			${pc.gray('DATABASE_URL="your_supabase_db_url"')}`,
+			${re.gray('DATABASE_URL="your_supabase_db_url"')}`,
 	);
 }
 
@@ -175,8 +175,8 @@ export async function setupSupabase(
 			return;
 		}
 
-		const mode = await select({
-			message: "Supabase setup: choose mode",
+		const mode = await selectPrompt({
+			title: "Supabase setup: choose mode",
 			options: [
 				{
 					label: "Automatic",
@@ -189,7 +189,6 @@ export async function setupSupabase(
 					hint: "Manual setup, add env vars yourself",
 				},
 			],
-			initialValue: "auto",
 		});
 
 		if (isCancel(mode)) return exitCancelled("Operation cancelled");
@@ -218,18 +217,18 @@ export async function setupSupabase(
 			const envUpdated = await writeSupabaseEnvFile(projectDir, backend, dbUrl);
 
 			if (envUpdated) {
-				log.success(pc.green("Supabase local development setup ready!"));
+				logger.success(re.green("Supabase local development setup ready!"));
 			} else {
-				log.error(
-					pc.red(
+				logger.error(
+					re.red(
 						"Supabase setup completed, but failed to update .env automatically.",
 					),
 				);
 				displayManualSupabaseInstructions(supabaseOutput);
 			}
 		} else {
-			log.error(
-				pc.yellow(
+			logger.error(
+				re.yellow(
 					"Supabase started, but could not extract DB URL automatically.",
 				),
 			);
@@ -237,10 +236,10 @@ export async function setupSupabase(
 		}
 	} catch (error) {
 		if (error instanceof Error) {
-			consola.error(pc.red(`Error during Supabase setup: ${error.message}`));
+			logger.error(re.red(`Error during Supabase setup: ${error.message}`));
 		} else {
-			consola.error(
-				pc.red(
+			logger.error(
+				re.red(
 					`An unknown error occurred during Supabase setup: ${String(error)}`,
 				),
 			);

@@ -1,7 +1,8 @@
-import path from "node:path";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
+import { dependencyVersionMap, type AvailableDependencies } from "../constants";
 
-import { type AvailableDependencies, dependencyVersionMap } from "../constants";
 
 export const addPackageDependency = async (opts: {
 	dependencies?: AvailableDependencies[];
@@ -20,7 +21,7 @@ export const addPackageDependency = async (opts: {
 
 	const pkgJsonPath = path.join(projectDir, "package.json");
 
-	const pkgJson = await fs.readJson(pkgJsonPath);
+	const pkgJson = await readPackageJSON(path.dirname(pkgJsonPath));
 
 	if (!pkgJson.dependencies) pkgJson.dependencies = {};
 	if (!pkgJson.devDependencies) pkgJson.devDependencies = {};
@@ -53,7 +54,5 @@ export const addPackageDependency = async (opts: {
 		pkgJson.devDependencies[pkgName] = version;
 	}
 
-	await fs.writeJson(pkgJsonPath, pkgJson, {
-		spaces: 2,
-	});
+	await writePackageJSON(path.dirname(pkgJsonPath), pkgJson);
 };

@@ -1,7 +1,8 @@
-import path from "node:path";
-import fs from "fs-extra";
-import type { Backend, ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
 import { addPackageDependency } from "../../utils/add-package-deps";
+import type { Backend, ProjectConfig } from "../../types";
 
 export async function setupRuntime(config: ProjectConfig) {
 	const { runtime, backend, projectDir } = config;
@@ -27,7 +28,7 @@ async function setupBunRuntime(serverDir: string, _backend: Backend) {
 	const packageJsonPath = path.join(serverDir, "package.json");
 	if (!(await fs.pathExists(packageJsonPath))) return;
 
-	const packageJson = await fs.readJson(packageJsonPath);
+	const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
 	packageJson.scripts = {
 		...packageJson.scripts,
@@ -35,7 +36,7 @@ async function setupBunRuntime(serverDir: string, _backend: Backend) {
 		start: "bun run dist/index.js",
 	};
 
-	await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+	await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 
 	await addPackageDependency({
 		devDependencies: ["@types/bun"],
@@ -47,7 +48,7 @@ async function setupNodeRuntime(serverDir: string, backend: Backend) {
 	const packageJsonPath = path.join(serverDir, "package.json");
 	if (!(await fs.pathExists(packageJsonPath))) return;
 
-	const packageJson = await fs.readJson(packageJsonPath);
+	const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
 	packageJson.scripts = {
 		...packageJson.scripts,
@@ -55,7 +56,7 @@ async function setupNodeRuntime(serverDir: string, backend: Backend) {
 		start: "node dist/index.js",
 	};
 
-	await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+	await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 
 	await addPackageDependency({
 		devDependencies: ["tsx", "@types/node"],

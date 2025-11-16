@@ -1,6 +1,6 @@
-import { isCancel, select } from "@clack/prompts";
-import type { Backend, DatabaseSetup, ORM, Runtime } from "../types";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { exitCancelled } from "../utils/errors";
+import type { Backend, DatabaseSetup, ORM, Runtime } from "../types";
 
 export async function getDBSetupChoice(
 	databaseType: string,
@@ -101,10 +101,9 @@ export async function getDBSetupChoice(
 		return "none";
 	}
 
-	const response = await select<DatabaseSetup>({
-		message: `Select ${databaseType} setup option`,
+	const response = await selectPrompt<DatabaseSetup>({
+		title: `Select ${databaseType} setup option`,
 		options,
-		initialValue: "none",
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

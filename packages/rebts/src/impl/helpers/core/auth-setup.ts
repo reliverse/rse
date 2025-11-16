@@ -1,10 +1,10 @@
-import path from "node:path";
-import consola from "consola";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { setupBetterAuthPlugins } from "../../utils/better-auth-plugin-setup";
+import type { ProjectConfig } from "../../types";
 
 export async function setupAuth(config: ProjectConfig) {
 	const { auth, frontend, backend, projectDir } = config;
@@ -192,9 +192,9 @@ export async function setupAuth(config: ProjectConfig) {
 			await setupBetterAuthPlugins(projectDir, config);
 		}
 	} catch (error) {
-		consola.error(pc.red("Failed to configure authentication dependencies"));
+		logger.error(re.red("Failed to configure authentication dependencies"));
 		if (error instanceof Error) {
-			consola.error(pc.red(error.message));
+			logger.error(re.red(error.message));
 		}
 	}
 }

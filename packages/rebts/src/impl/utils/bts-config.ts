@@ -1,8 +1,8 @@
-import path from "node:path";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import * as JSONC from "jsonc-parser";
-import type { BetterTStackConfig, ProjectConfig } from "../types";
 import { getLatestCLIVersion } from "./get-latest-cli-version";
+import type { BetterTStackConfig, ProjectConfig } from "../types";
 
 const BTS_CONFIG_FILE = "bts.jsonc";
 

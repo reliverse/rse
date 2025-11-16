@@ -1,12 +1,14 @@
-import path from "node:path";
-import { isCancel, log, select, spinner } from "@clack/prompts";
-import consola from "consola";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import { logger } from "@reliverse/dler-logger";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { execa } from "execa";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { ProjectConfig } from "../../types";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { exitCancelled } from "../../utils/errors";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
+import type { ProjectConfig } from "../../types";
 
 type FumadocsTemplate =
 	| "next-mdx"
@@ -47,16 +49,15 @@ export async function setupFumadocs(config: ProjectConfig) {
 	const { packageManager, projectDir } = config;
 
 	try {
-		log.info("Setting up Fumadocs...");
+		logger.info("Setting up Fumadocs...");
 
-		const template = await select<FumadocsTemplate>({
-			message: "Choose a template",
+		const template = await selectPrompt<FumadocsTemplate>({
+			title: "Choose a template",
 			options: Object.entries(TEMPLATES).map(([key, template]) => ({
 				value: key as FumadocsTemplate,
 				label: template.label,
 				hint: template.hint,
 			})),
-			initialValue: "next-mdx",
 		});
 
 		if (isCancel(template)) return exitCancelled("Operation cancelled");
@@ -73,7 +74,7 @@ export async function setupFumadocs(config: ProjectConfig) {
 		const appsDir = path.join(projectDir, "apps");
 		await fs.ensureDir(appsDir);
 
-		const s = spinner();
+		const s = createSpinner();
 		s.start("Running Fumadocs create command...");
 
 		await execa(fumadocsInitCommand, {
@@ -86,21 +87,21 @@ export async function setupFumadocs(config: ProjectConfig) {
 		const packageJsonPath = path.join(fumadocsDir, "package.json");
 
 		if (await fs.pathExists(packageJsonPath)) {
-			const packageJson = await fs.readJson(packageJsonPath);
+			const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 			packageJson.name = "fumadocs";
 
 			if (packageJson.scripts?.dev) {
 				packageJson.scripts.dev = `${packageJson.scripts.dev} --port=4000`;
 			}
 
-			await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+			await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 		}
 
 		s.stop("Fumadocs setup complete!");
 	} catch (error) {
-		log.error(pc.red("Failed to set up Fumadocs"));
+		logger.error(re.red("Failed to set up Fumadocs"));
 		if (error instanceof Error) {
-			consola.error(pc.red(error.message));
+			logger.error(re.red(error.message));
 		}
 	}
 }

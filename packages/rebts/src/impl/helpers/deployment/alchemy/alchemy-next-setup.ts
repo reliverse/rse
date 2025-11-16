@@ -1,7 +1,9 @@
-import path from "node:path";
-import fs from "fs-extra";
-import type { PackageManager } from "../../../types";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
 import { addPackageDependency } from "../../../utils/add-package-deps";
+import { defineCloudflareConfig } from "@opennextjs/cloudflare";
+import type { PackageManager } from "../../../types";
 
 export async function setupNextAlchemyDeploy(
 	projectDir: string,
@@ -19,7 +21,7 @@ export async function setupNextAlchemyDeploy(
 
 	const pkgPath = path.join(webAppDir, "package.json");
 	if (await fs.pathExists(pkgPath)) {
-		const pkg = await fs.readJson(pkgPath);
+		const pkg = await readPackageJSON(path.dirname(pkgPath));
 
 		if (!options?.skipAppScripts) {
 			pkg.scripts = {
@@ -28,12 +30,11 @@ export async function setupNextAlchemyDeploy(
 				destroy: "alchemy destroy",
 			};
 		}
-		await fs.writeJson(pkgPath, pkg, { spaces: 2 });
+		await writePackageJSON(path.dirname(pkgPath), pkg);
 	}
 
 	const openNextConfigPath = path.join(webAppDir, "open-next.config.ts");
-	const openNextConfigContent = `import { defineCloudflareConfig } from "@opennextjs/cloudflare";
-
+	const openNextConfigContent = `
 export default defineCloudflareConfig({});
 `;
 

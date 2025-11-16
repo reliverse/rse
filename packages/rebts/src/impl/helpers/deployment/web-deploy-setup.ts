@@ -1,6 +1,6 @@
-import path from "node:path";
-import fs from "fs-extra";
-import type { PackageManager, ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { setupCombinedAlchemyDeploy } from "./alchemy/alchemy-combined-setup";
 import { setupNextAlchemyDeploy } from "./alchemy/alchemy-next-setup";
@@ -15,6 +15,7 @@ import { setupNuxtWorkersDeploy } from "./workers/workers-nuxt-setup";
 import { setupSvelteWorkersDeploy } from "./workers/workers-svelte-setup";
 import { setupTanstackStartWorkersDeploy } from "./workers/workers-tanstack-start-setup";
 import { setupWorkersVitePlugin } from "./workers/workers-vite-setup";
+import type { PackageManager, ProjectConfig } from "../../types";
 
 export async function setupWebDeploy(config: ProjectConfig) {
 	const { webDeploy, serverDeploy, frontend, projectDir } = config;
@@ -83,7 +84,7 @@ async function setupWorkersWebDeploy(
 
 	const packageJsonPath = path.join(webAppDir, "package.json");
 	if (await fs.pathExists(packageJsonPath)) {
-		const packageJson = await fs.readJson(packageJsonPath);
+		const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
 		packageJson.scripts = {
 			...packageJson.scripts,
@@ -91,7 +92,7 @@ async function setupWorkersWebDeploy(
 			deploy: `${pkgManager} run build && wrangler deploy`,
 		};
 
-		await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+		await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 	}
 
 	await setupWorkersVitePlugin(projectDir);

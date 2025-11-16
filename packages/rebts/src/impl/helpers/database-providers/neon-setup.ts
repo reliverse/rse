@@ -1,13 +1,14 @@
-import path from "node:path";
-import { isCancel, log, select, spinner, text } from "@clack/prompts";
-import { consola } from "consola";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { inputPrompt, isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { execa } from "execa";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { PackageManager, ProjectConfig } from "../../types";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { exitCancelled } from "../../utils/errors";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
 import { addEnvVariablesToFile, type EnvVariable } from "../core/env-setup";
+import type { PackageManager, ProjectConfig } from "../../types";
 
 type NeonConfig = {
 	connectionString: string;
@@ -37,7 +38,7 @@ async function executeNeonCommand(
 	commandArgsString: string,
 	spinnerText?: string,
 ) {
-	const s = spinner();
+	const s = createSpinner();
 	try {
 		const fullCommand = getPackageExecutionCommand(
 			packageManager,
@@ -48,11 +49,11 @@ async function executeNeonCommand(
 		const result = await execa(fullCommand, { shell: true });
 		if (spinnerText)
 			s.stop(
-				pc.green(spinnerText.replace("...", "").replace("ing ", "ed ").trim()),
+				re.green(spinnerText.replace("...", "").replace("ing ", "ed ").trim()),
 			);
 		return result;
 	} catch (error) {
-		if (s) s.stop(pc.red(`Failed: ${spinnerText || "Command execution"}`));
+		if (s) s.stop(re.red(`Failed: ${spinnerText || "Command execution"}`));
 		throw error;
 	}
 }
@@ -88,12 +89,12 @@ async function createNeonProject(
 				roleName: params.role,
 			};
 		}
-		consola.error(
-			pc.red("Failed to extract connection information from response"),
+		logger.error(
+			re.red("Failed to extract connection information from response"),
 		);
 		return null;
 	} catch (_error) {
-		consola.error(pc.red("Failed to create Neon project"));
+		logger.error(re.red("Failed to create Neon project"));
 	}
 }
 
@@ -124,7 +125,7 @@ async function setupWithNeonDb(
 	backend: ProjectConfig["backend"],
 ) {
 	try {
-		const s = spinner();
+		const s = createSpinner();
 		s.start("Creating Neon database using get-db...");
 
 		const targetApp = backend === "self" ? "apps/web" : "apps/server";
@@ -141,17 +142,17 @@ async function setupWithNeonDb(
 			cwd: targetDir,
 		});
 
-		s.stop(pc.green("Neon database created successfully!"));
+		s.stop(re.green("Neon database created successfully!"));
 
 		return true;
 	} catch (error) {
-		consola.error(pc.red("Failed to create database with get-db"));
+		logger.error(re.red("Failed to create database with get-db"));
 		throw error;
 	}
 }
 
 function displayManualSetupInstructions(target: "apps/web" | "apps/server") {
-	log.info(`Manual Neon PostgreSQL Setup Instructions:
+	logger.info(`Manual Neon PostgreSQL Setup Instructions:
 
 1. Visit https://neon.tech and create an account
 2. Create a new project from the dashboard
@@ -177,8 +178,8 @@ export async function setupNeonPostgres(
 			return;
 		}
 
-		const mode = await select({
-			message: "Neon setup: choose mode",
+		const mode = await selectPrompt({
+			title: "Neon setup: choose mode",
 			options: [
 				{
 					label: "Automatic",
@@ -191,7 +192,6 @@ export async function setupNeonPostgres(
 					hint: "Manual setup, add env vars yourself",
 				},
 			],
-			initialValue: "auto",
 		});
 
 		if (isCancel(mode)) return exitCancelled("Operation cancelled");
@@ -204,8 +204,8 @@ export async function setupNeonPostgres(
 			return;
 		}
 
-		const setupMethod = await select({
-			message: "Choose your Neon setup method:",
+		const setupMethod = await selectPrompt({
+			title: "Choose your Neon setup method:",
 			options: [
 				{
 					label: "Quick setup with get-db",
@@ -218,7 +218,6 @@ export async function setupNeonPostgres(
 					hint: "More control - choose project name and region",
 				},
 			],
-			initialValue: "neondb",
 		});
 
 		if (isCancel(setupMethod)) return exitCancelled("Operation cancelled");
@@ -227,16 +226,14 @@ export async function setupNeonPostgres(
 			await setupWithNeonDb(projectDir, packageManager, backend);
 		} else {
 			const suggestedProjectName = path.basename(projectDir);
-			const projectName = await text({
-				message: "Enter a name for your Neon project:",
+			const projectName = await inputPrompt({
+				title: "Enter a name for your Neon project:",
 				defaultValue: suggestedProjectName,
-				initialValue: suggestedProjectName,
 			});
 
-			const regionId = await select({
-				message: "Select a region for your Neon project:",
-				options: NEON_REGIONS,
-				initialValue: NEON_REGIONS[0].value,
+			const regionId = await selectPrompt({
+				title: "Select a region for your Neon project:",
+				options: NEON_REGIONS].value,
 			});
 
 			if (isCancel(projectName) || isCancel(regionId))
@@ -254,7 +251,7 @@ export async function setupNeonPostgres(
 				);
 			}
 
-			const finalSpinner = spinner();
+			const finalSpinner = createSpinner();
 			finalSpinner.start("Configuring database connection");
 
 			await writeEnvFile(projectDir, backend, neonConfig);
@@ -263,7 +260,7 @@ export async function setupNeonPostgres(
 		}
 	} catch (error) {
 		if (error instanceof Error) {
-			consola.error(pc.red(error.message));
+			logger.error(re.red(error.message));
 		}
 
 		await writeEnvFile(projectDir, backend);

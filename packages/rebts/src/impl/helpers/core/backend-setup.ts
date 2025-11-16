@@ -1,7 +1,7 @@
-import path from "node:path";
+import path from "@reliverse/pathkit";
+import { addPackageDependency } from "../../utils/add-package-deps";
 import type { AvailableDependencies } from "../../constants";
 import type { ProjectConfig } from "../../types";
-import { addPackageDependency } from "../../utils/add-package-deps";
 
 export async function setupBackendDependencies(config: ProjectConfig) {
 	const { backend, runtime, api, auth, examples, projectDir } = config;

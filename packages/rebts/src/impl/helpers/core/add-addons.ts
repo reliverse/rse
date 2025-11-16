@@ -1,17 +1,17 @@
-import path from "node:path";
-import { log } from "@clack/prompts";
-import pc from "picocolors";
-import type { AddInput, Addons, ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import { re } from "@reliverse/dler-colors";
 import { updateBtsConfig } from "../../utils/bts-config";
 import { validateAddonCompatibility } from "../../utils/compatibility-rules";
 import { exitWithError } from "../../utils/errors";
 import { setupAddons } from "../addons/addons-setup";
+import { installDependencies } from "./install-dependencies";
+import { setupAddonsTemplate } from "./template-manager";
+import type { AddInput, Addons, ProjectConfig } from "../../types";
 import {
 	detectProjectConfig,
 	isBetterTStackProject,
 } from "./detect-project-config";
-import { installDependencies } from "./install-dependencies";
-import { setupAddonsTemplate } from "./template-manager";
 
 export async function addAddonsToProject(
 	input: AddInput & { addons: Addons[]; suppressInstallMessage?: boolean },
@@ -82,16 +82,16 @@ export async function addAddonsToProject(
 				packageManager: config.packageManager,
 			});
 		} else if (!input.suppressInstallMessage) {
-			log.info(
-				pc.yellow(
-					`Run ${pc.bold(
+			logger.info(
+				re.yellow(
+					`Run ${re.bold(
 						`${config.packageManager} install`,
 					)} to install dependencies`,
 				),
 			);
 		}
 	} catch (error) {
-		const message = error instanceof Error ? error.message : String(error);
+		const message = error instanceof Error ? error.title: String(error);
 		exitWithError(`Error adding addons: ${message}`);
 	}
 }

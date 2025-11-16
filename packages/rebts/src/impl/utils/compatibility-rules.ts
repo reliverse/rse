@@ -1,4 +1,6 @@
 import { ADDON_COMPATIBILITY } from "../constants";
+import { WEB_FRAMEWORKS } from "./compatibility";
+import { exitWithError } from "./errors";
 import type {
 	Addons,
 	API,
@@ -11,8 +13,6 @@ import type {
 	ServerDeploy,
 	WebDeploy,
 } from "../types";
-import { WEB_FRAMEWORKS } from "./compatibility";
-import { exitWithError } from "./errors";
 
 export function isWebFrontend(value: Frontend) {
 	return WEB_FRAMEWORKS.includes(value);

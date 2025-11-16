@@ -1,8 +1,8 @@
-import { isCancel, multiselect, select } from "@clack/prompts";
+import { isCancel, multiselectPrompt, selectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
-import type { Backend, Frontend } from "../types";
 import { isFrontendAllowedWithBackend } from "../utils/compatibility-rules";
 import { exitCancelled } from "../utils/errors";
+import type { Backend, Frontend } from "../types";
 
 export async function getFrontendChoice(
 	frontendOptions?: Frontend[],
@@ -11,8 +11,8 @@ export async function getFrontendChoice(
 ) {
 	if (frontendOptions !== undefined) return frontendOptions;
 
-	const frontendTypes = await multiselect({
-		message: "Select project type",
+	const frontendTypes = await multiselectPrompt({
+		title: "Select project type",
 		options: [
 			{
 				value: "web",
@@ -76,10 +76,9 @@ export async function getFrontendChoice(
 			isFrontendAllowedWithBackend(option.value, backend, auth),
 		);
 
-		const webFramework = await select<Frontend>({
-			message: "Choose web",
-			options: webOptions,
-			initialValue: DEFAULT_CONFIG.frontend[0],
+		const webFramework = await selectPrompt<Frontend>({
+			title: "Choose web",
+			options: webOptions],
 		});
 
 		if (isCancel(webFramework)) return exitCancelled("Operation cancelled");
@@ -88,8 +87,8 @@ export async function getFrontendChoice(
 	}
 
 	if (frontendTypes.includes("native")) {
-		const nativeFramework = await select<Frontend>({
-			message: "Choose native",
+		const nativeFramework = await selectPrompt<Frontend>({
+			title: "Choose native",
 			options: [
 				{
 					value: "native-bare" as const,
@@ -107,7 +106,6 @@ export async function getFrontendChoice(
 					hint: "Consistent styling for React Native",
 				},
 			],
-			initialValue: "native-bare",
 		});
 
 		if (isCancel(nativeFramework)) return exitCancelled("Operation cancelled");

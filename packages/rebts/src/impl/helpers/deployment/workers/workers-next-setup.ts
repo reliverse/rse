@@ -1,7 +1,8 @@
-import path from "node:path";
-import fs from "fs-extra";
-import type { PackageManager } from "../../../types";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
 import { addPackageDependency } from "../../../utils/add-package-deps";
+import type { PackageManager } from "../../../types";
 
 export async function setupNextWorkersDeploy(
 	projectDir: string,
@@ -18,7 +19,7 @@ export async function setupNextWorkersDeploy(
 
 	const packageJsonPath = path.join(webAppDir, "package.json");
 	if (await fs.pathExists(packageJsonPath)) {
-		const pkg = await fs.readJson(packageJsonPath);
+		const pkg = await readPackageJSON(path.dirname(packageJsonPath));
 
 		pkg.scripts = {
 			...pkg.scripts,
@@ -29,6 +30,6 @@ export async function setupNextWorkersDeploy(
 				"wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
 		};
 
-		await fs.writeJson(packageJsonPath, pkg, { spaces: 2 });
+		await writePackageJSON(path.dirname(packageJsonPath), pkg);
 	}
 }

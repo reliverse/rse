@@ -1,7 +1,7 @@
-import { isCancel, select } from "@clack/prompts";
-import type { API, Backend, Frontend } from "../types";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { allowedApisForFrontends } from "../utils/compatibility-rules";
 import { exitCancelled } from "../utils/errors";
+import type { API, Backend, Frontend } from "../types";
 
 export async function getApiChoice(
 	Api?: API | undefined,
@@ -37,10 +37,9 @@ export async function getApiChoice(
 					},
 	);
 
-	const apiType = await select<API>({
-		message: "Select API type",
-		options: apiOptions,
-		initialValue: apiOptions[0].value,
+	const apiType = await selectPrompt<API>({
+		title: "Select API type",
+		options: apiOptions].value,
 	});
 
 	if (isCancel(apiType)) return exitCancelled("Operation cancelled");

@@ -1,22 +1,22 @@
-import path from "node:path";
-import { log } from "@clack/prompts";
-import pc from "picocolors";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import { re } from "@reliverse/dler-colors";
+import { updateBtsConfig } from "../../utils/bts-config";
+import { exitWithError } from "../../utils/errors";
+import { setupServerDeploy } from "../deployment/server-deploy-setup";
+import { setupWebDeploy } from "../deployment/web-deploy-setup";
+import { installDependencies } from "./install-dependencies";
+import { setupDeploymentTemplates } from "./template-manager";
 import type {
 	AddInput,
 	ProjectConfig,
 	ServerDeploy,
 	WebDeploy,
 } from "../../types";
-import { updateBtsConfig } from "../../utils/bts-config";
-import { exitWithError } from "../../utils/errors";
-import { setupServerDeploy } from "../deployment/server-deploy-setup";
-import { setupWebDeploy } from "../deployment/web-deploy-setup";
 import {
 	detectProjectConfig,
 	isBetterTStackProject,
 } from "./detect-project-config";
-import { installDependencies } from "./install-dependencies";
-import { setupDeploymentTemplates } from "./template-manager";
 
 export async function addDeploymentToProject(
 	input: AddInput & {
@@ -81,15 +81,15 @@ export async function addDeploymentToProject(
 		};
 
 		if (input.webDeploy && input.webDeploy !== "none") {
-			log.info(
-				pc.green(
+			logger.info(
+				re.green(
 					`Adding ${input.webDeploy} web deployment to ${config.frontend.join("/")}`,
 				),
 			);
 		}
 
 		if (input.serverDeploy && input.serverDeploy !== "none") {
-			log.info(pc.green(`Adding ${input.serverDeploy} server deployment`));
+			logger.info(re.green(`Adding ${input.serverDeploy} server deployment`));
 		}
 
 		await setupDeploymentTemplates(projectDir, config);
@@ -107,16 +107,16 @@ export async function addDeploymentToProject(
 				packageManager: config.packageManager,
 			});
 		} else if (!input.suppressInstallMessage) {
-			log.info(
-				pc.yellow(
-					`Run ${pc.bold(
+			logger.info(
+				re.yellow(
+					`Run ${re.bold(
 						`${config.packageManager} install`,
 					)} to install dependencies`,
 				),
 			);
 		}
 	} catch (error) {
-		const message = error instanceof Error ? error.message : String(error);
+		const message = error instanceof Error ? error.title: String(error);
 		exitWithError(`Error adding deployment: ${message}`);
 	}
 }

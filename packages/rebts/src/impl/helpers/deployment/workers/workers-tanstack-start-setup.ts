@@ -1,5 +1,8 @@
-import path from "node:path";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
+import { addPackageDependency } from "../../../utils/add-package-deps";
+import { ensureArrayProperty, tsProject } from "../../../utils/ts-morph";
 import {
 	type CallExpression,
 	Node,
@@ -7,8 +10,6 @@ import {
 	SyntaxKind,
 } from "ts-morph";
 import type { PackageManager } from "../../../types";
-import { addPackageDependency } from "../../../utils/add-package-deps";
-import { ensureArrayProperty, tsProject } from "../../../utils/ts-morph";
 
 export async function setupTanstackStartWorkersDeploy(
 	projectDir: string,
@@ -24,13 +25,13 @@ export async function setupTanstackStartWorkersDeploy(
 
 	const pkgPath = path.join(webAppDir, "package.json");
 	if (await fs.pathExists(pkgPath)) {
-		const pkg = await fs.readJson(pkgPath);
+		const pkg = await readPackageJSON(path.dirname(pkgPath));
 		pkg.scripts = {
 			...pkg.scripts,
 			deploy: `${packageManager} run build && wrangler deploy`,
 			"cf-typegen": "wrangler types --env-interface Env",
 		};
-		await fs.writeJson(pkgPath, pkg, { spaces: 2 });
+		await writePackageJSON(path.dirname(pkgPath), pkg);
 	}
 
 	const viteConfigPath = path.join(webAppDir, "vite.config.ts");

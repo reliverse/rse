@@ -1,7 +1,7 @@
-import { isCancel, select } from "@clack/prompts";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
-import type { Backend, Runtime } from "../types";
 import { exitCancelled } from "../utils/errors";
+import type { Backend, Runtime } from "../types";
 
 export async function getRuntimeChoice(runtime?: Runtime, backend?: Backend) {
 	if (backend === "convex" || backend === "none" || backend === "self") {
@@ -35,10 +35,9 @@ export async function getRuntimeChoice(runtime?: Runtime, backend?: Backend) {
 		});
 	}
 
-	const response = await select<Runtime>({
-		message: "Select runtime",
+	const response = await selectPrompt<Runtime>({
+		title: "Select runtime",
 		options: runtimeOptions,
-		initialValue: DEFAULT_CONFIG.runtime,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

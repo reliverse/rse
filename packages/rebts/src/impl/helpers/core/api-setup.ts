@@ -1,8 +1,9 @@
-import path from "node:path";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
+import { addPackageDependency } from "../../utils/add-package-deps";
 import type { AvailableDependencies } from "../../constants";
 import type { API, Backend, Frontend, ProjectConfig } from "../../types";
-import { addPackageDependency } from "../../utils/add-package-deps";
 
 async function addBackendWorkspaceDependency(
 	projectDir: string,
@@ -11,12 +12,12 @@ async function addBackendWorkspaceDependency(
 ) {
 	const pkgJsonPath = path.join(projectDir, "package.json");
 	try {
-		const pkgJson = await fs.readJson(pkgJsonPath);
+		const pkgJson = await readPackageJSON(path.dirname(pkgJsonPath));
 		if (!pkgJson.dependencies) {
 			pkgJson.dependencies = {};
 		}
 		pkgJson.dependencies[backendPackageName] = workspaceVersion;
-		await fs.writeJson(pkgJsonPath, pkgJson, { spaces: 2 });
+		await writePackageJSON(path.dirname(pkgJsonPath), pkgJson);
 	} catch (_error) {}
 }
 

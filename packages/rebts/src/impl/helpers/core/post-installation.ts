@@ -1,5 +1,6 @@
-import { consola } from "consola";
-import pc from "picocolors";
+import { logger } from "@reliverse/dler-logger";
+import { re } from "@reliverse/dler-colors";
+import { getDockerStatus } from "../../utils/docker-utils";
 import type {
 	Database,
 	DatabaseSetup,
@@ -7,7 +8,6 @@ import type {
 	ProjectConfig,
 	Runtime,
 } from "../../types";
-import { getDockerStatus } from "../../utils/docker-utils";
 export async function displayPostInstallInstructions(
 	config: ProjectConfig & { depsInstalled: boolean },
 ) {
@@ -117,11 +117,11 @@ export async function displayPostInstallInstructions(
 	const hasSvelte = frontend?.includes("svelte");
 	const webPort = hasReactRouter || hasSvelte ? "5173" : "3001";
 
-	let output = `${pc.bold("Next steps")}\n${pc.cyan("1.")} ${cdCmd}\n`;
+	let output = `${re.bold("Next steps")}\n${re.cyan("1.")} ${cdCmd}\n`;
 	let stepCounter = 2;
 
 	if (!depsInstalled) {
-		output += `${pc.cyan(`${stepCounter++}.`)} ${packageManager} install\n`;
+		output += `${re.cyan(`${stepCounter++}.`)} ${packageManager} install\n`;
 	}
 
 	if (
@@ -132,70 +132,70 @@ export async function displayPostInstallInstructions(
 			webDeploy === "wrangler" ||
 			webDeploy === "alchemy")
 	) {
-		output += `${pc.cyan(`${stepCounter++}.`)} ${runCmd} db:local\n${pc.dim(
+		output += `${re.cyan(`${stepCounter++}.`)} ${runCmd} db:local\n${re.dim(
 			"   (starts local SQLite server for Workers compatibility)",
 		)}\n`;
 	}
 
 	if (isConvex) {
-		output += `${pc.cyan(`${stepCounter++}.`)} ${runCmd} dev:setup\n${pc.dim(
+		output += `${re.cyan(`${stepCounter++}.`)} ${runCmd} dev:setup\n${re.dim(
 			"   (this will guide you through Convex project setup)",
 		)}\n`;
 
-		output += `${pc.cyan(
+		output += `${re.cyan(
 			`${stepCounter++}.`,
-		)} Copy environment variables from\n${pc.white(
+		)} Copy environment variables from\n${re.white(
 			"   packages/backend/.env.local",
-		)} to ${pc.white("apps/*/.env")}\n`;
-		output += `${pc.cyan(`${stepCounter++}.`)} ${runCmd} dev\n\n`;
+		)} to ${re.white("apps/*/.env")}\n`;
+		output += `${re.cyan(`${stepCounter++}.`)} ${runCmd} dev\n\n`;
 	} else if (isBackendSelf) {
-		output += `${pc.cyan(`${stepCounter++}.`)} ${runCmd} dev\n`;
+		output += `${re.cyan(`${stepCounter++}.`)} ${runCmd} dev\n`;
 	} else {
 		if (runtime !== "workers") {
-			output += `${pc.cyan(`${stepCounter++}.`)} ${runCmd} dev\n`;
+			output += `${re.cyan(`${stepCounter++}.`)} ${runCmd} dev\n`;
 		}
 
 		if (runtime === "workers") {
 			if (dbSetup === "d1") {
-				output += `${pc.yellow(
+				output += `${re.yellow(
 					"IMPORTANT:",
 				)} Complete D1 database setup first\n   (see Database commands below)\n`;
 			}
-			output += `${pc.cyan(`${stepCounter++}.`)} ${runCmd} dev\n`;
+			output += `${re.cyan(`${stepCounter++}.`)} ${runCmd} dev\n`;
 			if (serverDeploy === "wrangler") {
-				output += `${pc.cyan(`${stepCounter++}.`)} cd apps/server && ${runCmd} cf-typegen\n`;
+				output += `${re.cyan(`${stepCounter++}.`)} cd apps/server && ${runCmd} cf-typegen\n`;
 			}
 		}
 	}
 
-	output += `${pc.bold("Your project will be available at:")}\n`;
+	output += `${re.bold("Your project will be available at:")}\n`;
 
 	if (hasWeb) {
-		output += `${pc.cyan("•")} Frontend: http://localhost:${webPort}\n`;
+		output += `${re.cyan("•")} Frontend: http://localhost:${webPort}\n`;
 	} else if (!hasNative && !addons?.includes("starlight")) {
-		output += `${pc.yellow(
+		output += `${re.yellow(
 			"NOTE:",
 		)} You are creating a backend-only app\n   (no frontend selected)\n`;
 	}
 
 	if (!isConvex && !isBackendSelf) {
-		output += `${pc.cyan("•")} Backend API: http://localhost:3000\n`;
+		output += `${re.cyan("•")} Backend API: http://localhost:3000\n`;
 
 		if (api === "orpc") {
-			output += `${pc.cyan("•")} OpenAPI (Scalar UI): http://localhost:3000/api-reference\n`;
+			output += `${re.cyan("•")} OpenAPI (Scalar UI): http://localhost:3000/api-reference\n`;
 		}
 	}
 
 	if (isBackendSelf && api === "orpc") {
-		output += `${pc.cyan("•")} OpenAPI (Scalar UI): http://localhost:${webPort}/api/rpc/api-reference\n`;
+		output += `${re.cyan("•")} OpenAPI (Scalar UI): http://localhost:${webPort}/api/rpc/api-reference\n`;
 	}
 
 	if (addons?.includes("starlight")) {
-		output += `${pc.cyan("•")} Docs: http://localhost:4321\n`;
+		output += `${re.cyan("•")} Docs: http://localhost:4321\n`;
 	}
 
 	if (addons?.includes("fumadocs")) {
-		output += `${pc.cyan("•")} Fumadocs: http://localhost:4000\n`;
+		output += `${re.cyan("•")} Fumadocs: http://localhost:4000\n`;
 	}
 
 	if (nativeInstructions) output += `\n${nativeInstructions.trim()}\n`;
@@ -214,12 +214,12 @@ export async function displayPostInstallInstructions(
 	if (noOrmWarning) output += `\n${noOrmWarning.trim()}\n`;
 	if (bunWebNativeWarning) output += `\n${bunWebNativeWarning.trim()}\n`;
 
-	output += `\n${pc.bold(
+	output += `\n${re.bold(
 		"Like Better-T-Stack?",
 	)} Please consider giving us a star\n   on GitHub:\n`;
-	output += pc.cyan("https://github.com/AmanVarshney01/create-better-t-stack");
+	output += re.cyan("https://github.com/AmanVarshney01/create-better-t-stack");
 
-	consola.box(output);
+	logger.info(output);
 }
 
 function getNativeInstructions(
@@ -238,12 +238,12 @@ function getNativeInstructions(
 		? "your Convex deployment URL (find after running 'dev:setup')"
 		: "your local IP address";
 
-	let instructions = `${pc.yellow(
+	let instructions = `${re.yellow(
 		"NOTE:",
 	)} For Expo connectivity issues, update\n   apps/native/${envFileName} with ${ipNote}:\n   ${`${envVar}=${exampleUrl}`}\n`;
 
 	if (isConvex) {
-		instructions += `\n${pc.yellow(
+		instructions += `\n${re.yellow(
 			"IMPORTANT:",
 		)} When using local development with Convex and native apps,\n   ensure you use your local IP address instead of localhost or 127.0.0.1\n   for proper connectivity.\n`;
 	}
@@ -252,7 +252,7 @@ function getNativeInstructions(
 }
 
 function getLintingInstructions(runCmd?: string) {
-	return `${pc.bold("Linting and formatting:")}\n${pc.cyan(
+	return `${re.bold("Linting and formatting:")}\n${re.cyan(
 		"•",
 	)} Format and lint fix: ${`${runCmd} check`}\n`;
 }
@@ -280,7 +280,7 @@ async function getDatabaseInstructions(
 	if (serverDeploy === "wrangler" && dbSetup === "d1") {
 		if (orm === "prisma" && runtime === "workers") {
 			instructions.push(
-				`\n${pc.yellow(
+				`\n${re.yellow(
 					"WARNING:",
 				)} Prisma + D1 on Workers with Wrangler has migration issues.\n   Consider using Alchemy deploy instead of Wrangler for D1 projects.\n`,
 			);
@@ -288,33 +288,33 @@ async function getDatabaseInstructions(
 		const packageManager = runCmd === "npm run" ? "npm" : runCmd || "npm";
 
 		instructions.push(
-			`${pc.cyan("1.")} Login to Cloudflare: ${pc.white(
+			`${re.cyan("1.")} Login to Cloudflare: ${re.white(
 				`${packageManager} wrangler login`,
 			)}`,
 		);
 		instructions.push(
-			`${pc.cyan("2.")} Create D1 database: ${pc.white(
+			`${re.cyan("2.")} Create D1 database: ${re.white(
 				`${packageManager} wrangler d1 create your-database-name`,
 			)}`,
 		);
 		const wranglerPath = backend === "self" ? "apps/web" : "apps/server";
 		instructions.push(
-			`${pc.cyan(
+			`${re.cyan(
 				"3.",
 			)} Update ${wranglerPath}/wrangler.jsonc with database_id and database_name`,
 		);
 		instructions.push(
-			`${pc.cyan("4.")} Generate migrations: ${pc.white(
+			`${re.cyan("4.")} Generate migrations: ${re.white(
 				`cd ${wranglerPath} && ${runCmd} db:generate`,
 			)}`,
 		);
 		instructions.push(
-			`${pc.cyan("5.")} Apply migrations locally: ${pc.white(
+			`${re.cyan("5.")} Apply migrations locally: ${re.white(
 				`${packageManager} wrangler d1 migrations apply YOUR_DB_NAME --local`,
 			)}`,
 		);
 		instructions.push(
-			`${pc.cyan("6.")} Apply migrations to production: ${pc.white(
+			`${re.cyan("6.")} Apply migrations to production: ${re.white(
 				`${packageManager} wrangler d1 migrations apply YOUR_DB_NAME`,
 			)}`,
 		);
@@ -323,16 +323,16 @@ async function getDatabaseInstructions(
 	if (dbSetup === "d1" && serverDeploy === "alchemy") {
 		if (orm === "drizzle") {
 			instructions.push(
-				`${pc.yellow(
+				`${re.yellow(
 					"NOTE:",
 				)} D1 migrations are automatically handled by Alchemy`,
 			);
 		} else if (orm === "prisma") {
 			instructions.push(
-				`${pc.cyan("•")} Generate migrations: ${`${runCmd} db:generate`}`,
+				`${re.cyan("•")} Generate migrations: ${`${runCmd} db:generate`}`,
 			);
 			instructions.push(
-				`${pc.cyan("•")} Apply migrations: ${`${runCmd} db:migrate`}`,
+				`${re.cyan("•")} Apply migrations: ${`${runCmd} db:migrate`}`,
 			);
 		}
 	}
@@ -340,14 +340,14 @@ async function getDatabaseInstructions(
 	if (dbSetup === "planetscale") {
 		if (database === "mysql" && orm === "drizzle") {
 			instructions.push(
-				`${pc.yellow(
+				`${re.yellow(
 					"NOTE:",
 				)} Enable foreign key constraints in PlanetScale database settings`,
 			);
 		}
 		if (database === "mysql" && orm === "prisma") {
 			instructions.push(
-				`${pc.yellow(
+				`${re.yellow(
 					"NOTE:",
 				)} How to handle Prisma migrations with PlanetScale:\n   https://github.com/prisma/prisma/issues/7292`,
 			);
@@ -357,87 +357,87 @@ async function getDatabaseInstructions(
 	if (orm === "prisma") {
 		if (database === "mongodb" && dbSetup === "docker") {
 			instructions.push(
-				`${pc.yellow(
+				`${re.yellow(
 					"WARNING:",
 				)} Prisma + MongoDB + Docker combination\n   may not work.`,
 			);
 		}
 		if (dbSetup === "docker") {
 			instructions.push(
-				`${pc.cyan("•")} Start docker container: ${`${runCmd} db:start`}`,
+				`${re.cyan("•")} Start docker container: ${`${runCmd} db:start`}`,
 			);
 		}
 		if (!(dbSetup === "d1" && serverDeploy === "alchemy")) {
-			instructions.push(`${pc.cyan("•")} Apply schema: ${`${runCmd} db:push`}`);
+			instructions.push(`${re.cyan("•")} Apply schema: ${`${runCmd} db:push`}`);
 		}
 		if (!(dbSetup === "d1" && serverDeploy === "alchemy")) {
 			instructions.push(
-				`${pc.cyan("•")} Database UI: ${`${runCmd} db:studio`}`,
+				`${re.cyan("•")} Database UI: ${`${runCmd} db:studio`}`,
 			);
 		}
 	} else if (orm === "drizzle") {
 		if (dbSetup === "docker") {
 			instructions.push(
-				`${pc.cyan("•")} Start docker container: ${`${runCmd} db:start`}`,
+				`${re.cyan("•")} Start docker container: ${`${runCmd} db:start`}`,
 			);
 		}
 		if (dbSetup !== "d1") {
-			instructions.push(`${pc.cyan("•")} Apply schema: ${`${runCmd} db:push`}`);
+			instructions.push(`${re.cyan("•")} Apply schema: ${`${runCmd} db:push`}`);
 		}
 		if (!(dbSetup === "d1" && serverDeploy === "alchemy")) {
 			instructions.push(
-				`${pc.cyan("•")} Database UI: ${`${runCmd} db:studio`}`,
+				`${re.cyan("•")} Database UI: ${`${runCmd} db:studio`}`,
 			);
 		}
 	} else if (orm === "mongoose") {
 		if (dbSetup === "docker") {
 			instructions.push(
-				`${pc.cyan("•")} Start docker container: ${`${runCmd} db:start`}`,
+				`${re.cyan("•")} Start docker container: ${`${runCmd} db:start`}`,
 			);
 		}
 	} else if (orm === "none") {
 		instructions.push(
-			`${pc.yellow("NOTE:")} Manual database schema setup\n   required.`,
+			`${re.yellow("NOTE:")} Manual database schema setup\n   required.`,
 		);
 	}
 
 	return instructions.length
-		? `${pc.bold("Database commands:")}\n${instructions.join("\n")}`
+		? `${re.bold("Database commands:")}\n${instructions.join("\n")}`
 		: "";
 }
 
 function getTauriInstructions(runCmd?: string) {
-	return `\n${pc.bold("Desktop app with Tauri:")}\n${pc.cyan(
+	return `\n${re.bold("Desktop app with Tauri:")}\n${re.cyan(
 		"•",
-	)} Start desktop app: ${`cd apps/web && ${runCmd} desktop:dev`}\n${pc.cyan(
+	)} Start desktop app: ${`cd apps/web && ${runCmd} desktop:dev`}\n${re.cyan(
 		"•",
-	)} Build desktop app: ${`cd apps/web && ${runCmd} desktop:build`}\n${pc.yellow(
+	)} Build desktop app: ${`cd apps/web && ${runCmd} desktop:build`}\n${re.yellow(
 		"NOTE:",
 	)} Tauri requires Rust and platform-specific dependencies.\n   See: ${"https://v2.tauri.app/start/prerequisites/"}`;
 }
 
 function getPwaInstructions() {
-	return `\n${pc.bold("PWA with React Router v7:")}\n${pc.yellow(
+	return `\n${re.bold("PWA with React Router v7:")}\n${re.yellow(
 		"NOTE:",
 	)} There is a known compatibility issue between VitePWA\n   and React Router v7. See:\n   https://github.com/vite-pwa/vite-plugin-pwa/issues/809`;
 }
 
 function getStarlightInstructions(runCmd?: string) {
-	return `\n${pc.bold("Documentation with Starlight:")}\n${pc.cyan(
+	return `\n${re.bold("Documentation with Starlight:")}\n${re.cyan(
 		"•",
-	)} Start docs site: ${`cd apps/docs && ${runCmd} dev`}\n${pc.cyan(
+	)} Start docs site: ${`cd apps/docs && ${runCmd} dev`}\n${re.cyan(
 		"•",
 	)} Build docs site: ${`cd apps/docs && ${runCmd} build`}`;
 }
 
 function getNoOrmWarning() {
-	return `\n${pc.yellow(
+	return `\n${re.yellow(
 		"WARNING:",
 	)} Database selected without an ORM. Features requiring\n   database access (e.g., examples, auth) need manual setup.`;
 }
 
 function getBunWebNativeWarning() {
-	return `\n${pc.yellow(
+	return `\n${re.yellow(
 		"WARNING:",
 	)} 'bun' might cause issues with web + native apps in a monorepo.\n   Use 'pnpm' if problems arise.`;
 }
@@ -453,12 +453,12 @@ function getWranglerDeployInstructions(
 	if (webDeploy === "wrangler") {
 		const deployPath = backend === "self" ? "apps/web" : "apps/web";
 		instructions.push(
-			`${pc.bold("Deploy web to Cloudflare Workers:")}\n${pc.cyan("•")} Deploy: ${`cd ${deployPath} && ${runCmd} deploy`}`,
+			`${re.bold("Deploy web to Cloudflare Workers:")}\n${re.cyan("•")} Deploy: ${`cd ${deployPath} && ${runCmd} deploy`}`,
 		);
 	}
 	if (serverDeploy === "wrangler" && backend !== "self") {
 		instructions.push(
-			`${pc.bold("Deploy server to Cloudflare Workers:")}\n${pc.cyan("•")} Deploy: ${`cd apps/server && ${runCmd} deploy`}`,
+			`${re.bold("Deploy server to Cloudflare Workers:")}\n${re.cyan("•")} Deploy: ${`cd apps/server && ${runCmd} deploy`}`,
 		);
 	}
 
@@ -466,12 +466,12 @@ function getWranglerDeployInstructions(
 }
 
 function getClerkInstructions() {
-	return `${pc.bold("Clerk Authentication Setup:")}\n${pc.cyan("•")} Follow the guide: ${pc.underline("https://docs.convex.dev/auth/clerk")}\n${pc.cyan("•")} Set CLERK_JWT_ISSUER_DOMAIN in Convex Dashboard\n${pc.cyan("•")} Set CLERK_PUBLISHABLE_KEY in apps/*/.env`;
+	return `${re.bold("Clerk Authentication Setup:")}\n${re.cyan("•")} Follow the guide: ${re.underline("https://docs.convex.dev/auth/clerk")}\n${re.cyan("•")} Set CLERK_JWT_ISSUER_DOMAIN in Convex Dashboard\n${re.cyan("•")} Set CLERK_PUBLISHABLE_KEY in apps/*/.env`;
 }
 
 function getPolarInstructions(backend?: string) {
 	const envPath = backend === "self" ? "apps/web/.env" : "apps/server/.env";
-	return `${pc.bold("Polar Payments Setup:")}\n${pc.cyan("•")} Get access token & product ID from ${pc.underline("https://sandbox.polar.sh/")}\n${pc.cyan("•")} Set POLAR_ACCESS_TOKEN in ${envPath}`;
+	return `${re.bold("Polar Payments Setup:")}\n${re.cyan("•")} Get access token & product ID from ${re.underline("https://sandbox.polar.sh/")}\n${re.cyan("•")} Set POLAR_ACCESS_TOKEN in ${envPath}`;
 }
 
 function getAlchemyDeployInstructions(
@@ -485,7 +485,7 @@ function getAlchemyDeployInstructions(
 
 	if (webDeploy === "alchemy" && serverDeploy !== "alchemy") {
 		instructions.push(
-			`${pc.bold("Deploy web with Alchemy:")}\n${pc.cyan("•")} Dev: ${`cd apps/web && ${runCmd} dev`}\n${pc.cyan("•")} Deploy: ${`cd apps/web && ${runCmd} deploy`}\n${pc.cyan("•")} Destroy: ${`cd apps/web && ${runCmd} destroy`}`,
+			`${re.bold("Deploy web with Alchemy:")}\n${re.cyan("•")} Dev: ${`cd apps/web && ${runCmd} dev`}\n${re.cyan("•")} Deploy: ${`cd apps/web && ${runCmd} deploy`}\n${re.cyan("•")} Destroy: ${`cd apps/web && ${runCmd} destroy`}`,
 		);
 	} else if (
 		serverDeploy === "alchemy" &&
@@ -493,14 +493,14 @@ function getAlchemyDeployInstructions(
 		!isBackendSelf
 	) {
 		instructions.push(
-			`${pc.bold("Deploy server with Alchemy:")}\n${pc.cyan("•")} Dev: ${`cd apps/server && ${runCmd} dev`}\n${pc.cyan("•")} Deploy: ${`cd apps/server && ${runCmd} deploy`}\n${pc.cyan("•")} Destroy: ${`cd apps/server && ${runCmd} destroy`}`,
+			`${re.bold("Deploy server with Alchemy:")}\n${re.cyan("•")} Dev: ${`cd apps/server && ${runCmd} dev`}\n${re.cyan("•")} Deploy: ${`cd apps/server && ${runCmd} deploy`}\n${re.cyan("•")} Destroy: ${`cd apps/server && ${runCmd} destroy`}`,
 		);
 	} else if (
 		webDeploy === "alchemy" &&
 		(serverDeploy === "alchemy" || isBackendSelf)
 	) {
 		instructions.push(
-			`${pc.bold("Deploy with Alchemy:")}\n${pc.cyan("•")} Dev: ${`${runCmd} dev`}\n${pc.cyan("•")} Deploy: ${`${runCmd} deploy`}\n${pc.cyan("•")} Destroy: ${`${runCmd} destroy`}`,
+			`${re.bold("Deploy with Alchemy:")}\n${re.cyan("•")} Dev: ${`${runCmd} dev`}\n${re.cyan("•")} Deploy: ${`${runCmd} deploy`}\n${re.cyan("•")} Destroy: ${`${runCmd} destroy`}`,
 		);
 	}
 

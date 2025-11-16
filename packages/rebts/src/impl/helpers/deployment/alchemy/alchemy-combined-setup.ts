@@ -1,6 +1,6 @@
-import path from "node:path";
-import fs from "fs-extra";
-import type { PackageManager, ProjectConfig } from "../../../types";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
 import { addPackageDependency } from "../../../utils/add-package-deps";
 import { setupAlchemyServerDeploy } from "../server-deploy-setup";
 import { setupNextAlchemyDeploy } from "./alchemy-next-setup";
@@ -10,6 +10,7 @@ import { setupSolidAlchemyDeploy } from "./alchemy-solid-setup";
 import { setupSvelteAlchemyDeploy } from "./alchemy-svelte-setup";
 import { setupTanStackRouterAlchemyDeploy } from "./alchemy-tanstack-router-setup";
 import { setupTanStackStartAlchemyDeploy } from "./alchemy-tanstack-start-setup";
+import type { PackageManager, ProjectConfig } from "../../../types";
 
 export async function setupCombinedAlchemyDeploy(
 	projectDir: string,
@@ -23,7 +24,7 @@ export async function setupCombinedAlchemyDeploy(
 
 	const rootPkgPath = path.join(projectDir, "package.json");
 	if (await fs.pathExists(rootPkgPath)) {
-		const pkg = await fs.readJson(rootPkgPath);
+		const pkg = await readPackageJSON(path.dirname(rootPkgPath));
 
 		pkg.scripts = {
 			...pkg.scripts,
@@ -31,7 +32,7 @@ export async function setupCombinedAlchemyDeploy(
 			destroy: "alchemy destroy",
 			dev: "alchemy dev",
 		};
-		await fs.writeJson(rootPkgPath, pkg, { spaces: 2 });
+		await writePackageJSON(path.dirname(rootPkgPath), pkg);
 	}
 
 	const serverDir = path.join(projectDir, "apps/server");

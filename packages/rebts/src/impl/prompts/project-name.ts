@@ -1,8 +1,8 @@
-import path from "node:path";
-import { isCancel, text } from "@clack/prompts";
-import consola from "consola";
-import fs from "fs-extra";
-import pc from "picocolors";
+import path from "@reliverse/pathkit";
+import { inputPrompt, isCancel } from "@reliverse/dler-prompt";
+import { logger } from "@reliverse/dler-logger";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { DEFAULT_CONFIG } from "../constants";
 import { ProjectNameSchema } from "../types";
 import { exitCancelled } from "../utils/errors";
@@ -35,7 +35,7 @@ export async function getProjectName(initialName?: string) {
 			if (isPathWithinCwd(projectDir)) {
 				return initialName;
 			}
-			consola.error(pc.red("Project path must be within current directory"));
+			logger.error(re.red("Project path must be within current directory"));
 		}
 	}
 
@@ -53,11 +53,9 @@ export async function getProjectName(initialName?: string) {
 	}
 
 	while (!isValid) {
-		const response = await text({
-			message:
+		const response = await inputPrompt({
+			title:
 				"Enter your project name or path (relative to current directory)",
-			placeholder: defaultName,
-			initialValue: initialName,
 			defaultValue: defaultName,
 			validate: (value) => {
 				const nameToUse = String(value ?? "").trim() || defaultName;

@@ -1,7 +1,7 @@
-import path from "node:path";
-import fs from "fs-extra";
-import type { ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { addEnvVariablesToFile, type EnvVariable } from "../core/env-setup";
+import type { ProjectConfig } from "../../types";
 
 export async function setupPlanetScale(config: ProjectConfig) {
 	const { projectDir, database, orm, backend } = config;

@@ -1,6 +1,6 @@
-import { log, outro, spinner } from "@clack/prompts";
-import { consola } from "consola";
-import pc from "picocolors";
+import { logger } from "@reliverse/dler-logger";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { re } from "@reliverse/dler-colors";
 
 type SponsorSummary = {
 	total_sponsors: number;
@@ -42,12 +42,12 @@ export const SPONSORS_JSON_URL =
 	"https://sponsors.better-t-stack.dev/sponsors.json";
 
 export async function fetchSponsors(url: string = SPONSORS_JSON_URL) {
-	const s = spinner();
+	const s = createSpinner();
 	s.start("Fetching sponsors…");
 
 	const response = await fetch(url);
 	if (!response.ok) {
-		s.stop(pc.red(`Failed to fetch sponsors: ${response.statusText}`));
+		s.stop(re.red(`Failed to fetch sponsors: ${response.statusText}`));
 		throw new Error(`Failed to fetch sponsors: ${response.statusText}`);
 	}
 
@@ -59,9 +59,9 @@ export async function fetchSponsors(url: string = SPONSORS_JSON_URL) {
 export function displaySponsors(sponsors: SponsorEntry) {
 	const { total_sponsors } = sponsors.summary;
 	if (total_sponsors === 0) {
-		log.info("No sponsors found. You can be the first one! ✨");
-		outro(
-			pc.cyan(
+		logger.info("No sponsors found. You can be the first one! ✨");
+		logger.info(
+			re.cyan(
 				"Visit https://github.com/sponsors/AmanVarshney01 to become a sponsor.",
 			),
 		);
@@ -71,14 +71,14 @@ export function displaySponsors(sponsors: SponsorEntry) {
 	displaySponsorsBox(sponsors);
 
 	if (total_sponsors - sponsors.specialSponsors.length > 0) {
-		log.message(
-			pc.blue(
+		logger.log(
+			re.blue(
 				`+${total_sponsors - sponsors.specialSponsors.length} more amazing sponsors.\n`,
 			),
 		);
 	}
-	outro(
-		pc.magenta(
+	logger.info(
+		re.magenta(
 			"Visit https://github.com/sponsors/AmanVarshney01 to become a sponsor.",
 		),
 	);
@@ -89,20 +89,20 @@ function displaySponsorsBox(sponsors: SponsorEntry) {
 		return;
 	}
 
-	let output = `${pc.bold(pc.cyan("-> Special Sponsors"))}\n\n`;
+	let output = `${re.bold(re.cyan("-> Special Sponsors"))}\n\n`;
 
 	sponsors.specialSponsors.forEach((sponsor: Sponsor, idx: number) => {
 		const displayName = sponsor.name ?? sponsor.githubId;
 		const tier = sponsor.tierName
-			? ` ${pc.yellow(`(${sponsor.tierName})`)}`
+			? ` ${re.yellow(`(${sponsor.tierName})`)}`
 			: "";
 
-		output += `${pc.green(`• ${displayName}`)}${tier}\n`;
-		output += `  ${pc.dim("GitHub:")} https://github.com/${sponsor.githubId}\n`;
+		output += `${re.green(`• ${displayName}`)}${tier}\n`;
+		output += `  ${re.dim("GitHub:")} https://github.com/${sponsor.githubId}\n`;
 
 		const website = sponsor.websiteUrl ?? sponsor.githubUrl;
 		if (website) {
-			output += `  ${pc.dim("Website:")} ${website}\n`;
+			output += `  ${re.dim("Website:")} ${website}\n`;
 		}
 
 		if (idx < sponsors.specialSponsors.length - 1) {
@@ -110,5 +110,5 @@ function displaySponsorsBox(sponsors: SponsorEntry) {
 		}
 	});
 
-	consola.box(output);
+	logger.info(output);
 }

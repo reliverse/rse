@@ -1,9 +1,9 @@
-import path from "node:path";
-import consola from "consola";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import fs from "@reliverse/relifso";
 import handlebars from "handlebars";
-import type { ProjectConfig } from "../types";
 import { formatFileWithBiome } from "./biome-formatter";
+import type { ProjectConfig } from "../types";
 
 const BINARY_EXTENSIONS = new Set([".png", ".ico", ".svg"]);
 
@@ -41,12 +41,12 @@ export async function processTemplate(
 				content = formattedContent;
 			}
 		} catch (formatError) {
-			consola.debug(`Failed to format ${destPath}:`, formatError);
+			logger.debug(`Failed to format ${destPath}:`, formatError);
 		}
 
 		await fs.writeFile(destPath, content);
 	} catch (error) {
-		consola.error(`Error processing template ${srcPath}:`, error);
+		logger.error(`Error processing template ${srcPath}:`, error);
 		throw new Error(`Failed to process template ${srcPath}`);
 	}
 }

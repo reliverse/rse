@@ -1,11 +1,13 @@
-import path from "node:path";
-import { log, spinner } from "@clack/prompts";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import { logger } from "@reliverse/dler-logger";
+import { createSpinner } from "@reliverse/dler-spinner";
 import { execa } from "execa";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { PackageManager, ProjectConfig } from "../../types";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
+import type { PackageManager, ProjectConfig } from "../../types";
 
 export async function setupServerDeploy(config: ProjectConfig) {
 	const { serverDeploy, webDeploy, projectDir } = config;
@@ -35,7 +37,7 @@ async function setupWorkersServerDeploy(
 	const packageJsonPath = path.join(serverDir, "package.json");
 	if (!(await fs.pathExists(packageJsonPath))) return;
 
-	const packageJson = await fs.readJson(packageJsonPath);
+	const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
 	packageJson.scripts = {
 		...packageJson.scripts,
@@ -46,7 +48,7 @@ async function setupWorkersServerDeploy(
 		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
 	};
 
-	await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+	await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 
 	await addPackageDependency({
 		devDependencies: ["wrangler", "@types/node"],
@@ -62,7 +64,7 @@ async function generateCloudflareWorkerTypes({
 	packageManager: ProjectConfig["packageManager"];
 }) {
 	if (!(await fs.pathExists(serverDir))) return;
-	const s = spinner();
+	const s = createSpinner();
 	try {
 		s.start("Generating Cloudflare Workers types...");
 		const runCmd = getPackageExecutionCommand(
@@ -72,9 +74,9 @@ async function generateCloudflareWorkerTypes({
 		await execa(runCmd, { cwd: serverDir, shell: true });
 		s.stop("Cloudflare Workers types generated successfully!");
 	} catch {
-		s.stop(pc.yellow("Failed to generate Cloudflare Workers types"));
+		s.stop(re.yellow("Failed to generate Cloudflare Workers types"));
 		const managerCmd = `${packageManager} run`;
-		log.warn(
+		logger.warn(
 			`Note: You can manually run 'cd apps/server && ${managerCmd} cf-typegen' in the project directory later`,
 		);
 	}
@@ -103,7 +105,7 @@ export async function setupAlchemyServerDeploy(
 
 	const packageJsonPath = path.join(serverDir, "package.json");
 	if (await fs.pathExists(packageJsonPath)) {
-		const packageJson = await fs.readJson(packageJsonPath);
+		const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
 		packageJson.scripts = {
 			...packageJson.scripts,
@@ -112,7 +114,7 @@ export async function setupAlchemyServerDeploy(
 			destroy: "alchemy destroy",
 		};
 
-		await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
+		await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 	}
 }
 

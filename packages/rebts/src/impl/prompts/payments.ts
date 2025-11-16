@@ -1,8 +1,8 @@
-import { isCancel, select } from "@clack/prompts";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
-import type { Auth, Backend, Frontend, Payments } from "../types";
 import { splitFrontends } from "../utils/compatibility-rules";
 import { exitCancelled } from "../utils/errors";
+import type { Auth, Backend, Frontend, Payments } from "../types";
 
 export async function getPaymentsChoice(
 	payments?: Payments,
@@ -38,10 +38,9 @@ export async function getPaymentsChoice(
 		},
 	];
 
-	const response = await select<Payments>({
-		message: "Select payments provider",
+	const response = await selectPrompt<Payments>({
+		title: "Select payments provider",
 		options,
-		initialValue: DEFAULT_CONFIG.payments,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

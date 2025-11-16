@@ -1,6 +1,6 @@
-import path from "node:path";
-import type { Database, ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
 import { addEnvVariablesToFile, type EnvVariable } from "../core/env-setup";
+import type { Database, ProjectConfig } from "../../types";
 
 export async function setupDockerCompose(config: ProjectConfig) {
 	const { database, projectDir, projectName, backend } = config;

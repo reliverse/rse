@@ -1,28 +1,26 @@
-import path from "node:path";
-import {
-	autocompleteMultiselect,
-	isCancel,
-	log,
-	spinner,
-} from "@clack/prompts";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import { logger } from "@reliverse/dler-logger";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { isCancel } from "@reliverse/dler-prompt";
 import { execa } from "execa";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { ProjectConfig } from "../../types";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { exitCancelled } from "../../utils/errors";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
+import type { ProjectConfig } from "../../types";
 
 export async function setupRuler(config: ProjectConfig) {
 	const { packageManager, projectDir } = config;
 
 	try {
-		log.info("Setting up Ruler...");
+		logger.info("Setting up Ruler...");
 
 		const rulerDir = path.join(projectDir, ".ruler");
 
 		if (!(await fs.pathExists(rulerDir))) {
-			log.error(
-				pc.red(
+			logger.error(
+				re.red(
 					"Ruler template directory not found. Please ensure ruler addon is properly installed.",
 				),
 			);
@@ -59,7 +57,7 @@ export async function setupRuler(config: ProjectConfig) {
 		} as const;
 
 		const selectedEditors = await autocompleteMultiselect({
-			message: "Select AI assistants for Ruler",
+			title: "Select AI assistants for Ruler",
 			options: Object.entries(EDITORS).map(([key, v]) => ({
 				value: key,
 				label: v.label,
@@ -70,9 +68,9 @@ export async function setupRuler(config: ProjectConfig) {
 		if (isCancel(selectedEditors)) return exitCancelled("Operation cancelled");
 
 		if (selectedEditors.length === 0) {
-			log.info("No AI assistants selected. To apply rules later, run:");
-			log.info(
-				pc.cyan(
+			logger.info("No AI assistants selected. To apply rules later, run:");
+			logger.info(
+				re.cyan(
 					`${getPackageExecutionCommand(packageManager, "@intellectronica/ruler@latest apply --local-only")}`,
 				),
 			);
@@ -94,7 +92,7 @@ export async function setupRuler(config: ProjectConfig) {
 
 		await addRulerScriptToPackageJson(projectDir, packageManager);
 
-		const s = spinner();
+		const s = createSpinner();
 		s.start("Applying rules with Ruler...");
 
 		try {
@@ -110,12 +108,12 @@ export async function setupRuler(config: ProjectConfig) {
 
 			s.stop("Applied rules with Ruler");
 		} catch (_error) {
-			s.stop(pc.red("Failed to apply rules"));
+			s.stop(re.red("Failed to apply rules"));
 		}
 	} catch (error) {
-		log.error(pc.red("Failed to set up Ruler"));
+		logger.error(re.red("Failed to set up Ruler"));
 		if (error instanceof Error) {
-			console.error(pc.red(error.message));
+			console.error(re.red(error.message));
 		}
 	}
 }
@@ -127,13 +125,13 @@ async function addRulerScriptToPackageJson(
 	const rootPackageJsonPath = path.join(projectDir, "package.json");
 
 	if (!(await fs.pathExists(rootPackageJsonPath))) {
-		log.warn(
+		logger.warn(
 			"Root package.json not found, skipping ruler:apply script addition",
 		);
 		return;
 	}
 
-	const packageJson = await fs.readJson(rootPackageJsonPath);
+	const packageJson = await readPackageJSON(path.dirname(rootPackageJsonPath));
 
 	if (!packageJson.scripts) {
 		packageJson.scripts = {};
@@ -145,5 +143,5 @@ async function addRulerScriptToPackageJson(
 	);
 	packageJson.scripts["ruler:apply"] = rulerApplyCommand;
 
-	await fs.writeJson(rootPackageJsonPath, packageJson, { spaces: 2 });
+	await writePackageJSON(path.dirname(rootPackageJsonPath), packageJson);
 }

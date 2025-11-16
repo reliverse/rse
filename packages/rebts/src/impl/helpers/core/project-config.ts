@@ -1,9 +1,10 @@
-import path from "node:path";
-import { log } from "@clack/prompts";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import { logger } from "@reliverse/dler-logger";
 import { execa } from "execa";
-import fs from "fs-extra";
-import type { ProjectConfig } from "../../types";
+import fs from "@reliverse/relifso";
 import { setupWorkspaceDependencies } from "./workspace-setup";
+import type { ProjectConfig } from "../../types";
 
 export async function updatePackageConfigurations(
 	projectDir: string,
@@ -32,7 +33,7 @@ async function updateRootPackageJson(
 	const rootPackageJsonPath = path.join(projectDir, "package.json");
 	if (!(await fs.pathExists(rootPackageJsonPath))) return;
 
-	const packageJson = await fs.readJson(rootPackageJsonPath);
+	const packageJson = await readPackageJSON(path.dirname(rootPackageJsonPath));
 	packageJson.name = options.projectName;
 
 	if (!packageJson.scripts) {
@@ -217,7 +218,7 @@ async function updateRootPackageJson(
 		});
 		packageJson.packageManager = `${options.packageManager}@${stdout.trim()}`;
 	} catch (_e) {
-		log.warn(`Could not determine ${options.packageManager} version.`);
+		logger.warn(`Could not determine ${options.packageManager} version.`);
 	}
 
 	if (!packageJson.workspaces) {
@@ -243,7 +244,7 @@ async function updateRootPackageJson(
 		}
 	}
 
-	await fs.writeJson(rootPackageJsonPath, packageJson, { spaces: 2 });
+	await writePackageJSON(path.dirname(rootPackageJsonPath), packageJson);
 }
 
 async function updateServerPackageJson(
@@ -257,15 +258,13 @@ async function updateServerPackageJson(
 
 	if (!(await fs.pathExists(serverPackageJsonPath))) return;
 
-	const serverPackageJson = await fs.readJson(serverPackageJsonPath);
+	const serverPackageJson = await readPackageJSON(path.dirname(serverPackageJsonPath));
 
 	if (!serverPackageJson.scripts) {
 		serverPackageJson.scripts = {};
 	}
 
-	await fs.writeJson(serverPackageJsonPath, serverPackageJson, {
-		spaces: 2,
-	});
+	await writePackageJSON(path.dirname(serverPackageJsonPath), serverPackageJson);
 
 	await updateDbPackageJson(projectDir, options);
 }
@@ -275,7 +274,7 @@ async function updateDbPackageJson(projectDir: string, options: ProjectConfig) {
 
 	if (!(await fs.pathExists(dbPackageJsonPath))) return;
 
-	const dbPackageJson = await fs.readJson(dbPackageJsonPath);
+	const dbPackageJson = await readPackageJSON(path.dirname(dbPackageJsonPath));
 	dbPackageJson.name = `@${options.projectName}/db`;
 
 	if (!dbPackageJson.scripts) {
@@ -318,9 +317,7 @@ async function updateDbPackageJson(projectDir: string, options: ProjectConfig) {
 		scripts["db:down"] = "docker compose down";
 	}
 
-	await fs.writeJson(dbPackageJsonPath, dbPackageJson, {
-		spaces: 2,
-	});
+	await writePackageJSON(path.dirname(dbPackageJsonPath), dbPackageJson);
 }
 
 async function updateAuthPackageJson(
@@ -334,12 +331,10 @@ async function updateAuthPackageJson(
 
 	if (!(await fs.pathExists(authPackageJsonPath))) return;
 
-	const authPackageJson = await fs.readJson(authPackageJsonPath);
+	const authPackageJson = await readPackageJSON(path.dirname(authPackageJsonPath));
 	authPackageJson.name = `@${options.projectName}/auth`;
 
-	await fs.writeJson(authPackageJsonPath, authPackageJson, {
-		spaces: 2,
-	});
+	await writePackageJSON(path.dirname(authPackageJsonPath), authPackageJson);
 }
 
 async function updateApiPackageJson(
@@ -350,12 +345,10 @@ async function updateApiPackageJson(
 
 	if (!(await fs.pathExists(apiPackageJsonPath))) return;
 
-	const apiPackageJson = await fs.readJson(apiPackageJsonPath);
+	const apiPackageJson = await readPackageJSON(path.dirname(apiPackageJsonPath));
 	apiPackageJson.name = `@${options.projectName}/api`;
 
-	await fs.writeJson(apiPackageJsonPath, apiPackageJson, {
-		spaces: 2,
-	});
+	await writePackageJSON(path.dirname(apiPackageJsonPath), apiPackageJson);
 }
 
 async function updateConvexPackageJson(
@@ -369,12 +362,12 @@ async function updateConvexPackageJson(
 
 	if (!(await fs.pathExists(convexPackageJsonPath))) return;
 
-	const convexPackageJson = await fs.readJson(convexPackageJsonPath);
+	const convexPackageJson = await readPackageJSON(path.dirname(convexPackageJsonPath));
 	convexPackageJson.name = `@${options.projectName}/backend`;
 
 	if (!convexPackageJson.scripts) {
 		convexPackageJson.scripts = {};
 	}
 
-	await fs.writeJson(convexPackageJsonPath, convexPackageJson, { spaces: 2 });
+	await writePackageJSON(path.dirname(convexPackageJsonPath), convexPackageJson);
 }

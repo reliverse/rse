@@ -1,5 +1,6 @@
-import path from "node:path";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
 import yaml from "yaml";
 import type { ProjectConfig } from "../types";
 
@@ -41,7 +42,7 @@ export async function setupCatalogs(
 		const pkgJsonPath = path.join(fullPath, "package.json");
 
 		if (await fs.pathExists(pkgJsonPath)) {
-			const pkgJson = await fs.readJson(pkgJsonPath);
+			const pkgJson = await readPackageJSON(path.dirname(pkgJsonPath));
 			packagesInfo.push({
 				path: fullPath,
 				dependencies: pkgJson.dependencies || {},
@@ -114,7 +115,7 @@ async function setupBunCatalogs(
 	catalog: Record<string, string>,
 ) {
 	const rootPkgJsonPath = path.join(projectDir, "package.json");
-	const rootPkgJson = await fs.readJson(rootPkgJsonPath);
+	const rootPkgJson = await readPackageJSON(path.dirname(rootPkgJsonPath));
 
 	if (!rootPkgJson.workspaces) {
 		rootPkgJson.workspaces = {};
@@ -135,7 +136,7 @@ async function setupBunCatalogs(
 		};
 	}
 
-	await fs.writeJson(rootPkgJsonPath, rootPkgJson, { spaces: 2 });
+	await writePackageJSON(path.dirname(rootPkgJsonPath), rootPkgJson);
 }
 
 async function setupPnpmCatalogs(
@@ -169,7 +170,7 @@ async function updatePackageJsonsWithCatalogs(
 ) {
 	for (const pkg of packagesInfo) {
 		const pkgJsonPath = path.join(pkg.path, "package.json");
-		const pkgJson = await fs.readJson(pkgJsonPath);
+		const pkgJson = await readPackageJSON(path.dirname(pkgJsonPath));
 
 		let updated = false;
 
@@ -192,7 +193,7 @@ async function updatePackageJsonsWithCatalogs(
 		}
 
 		if (updated) {
-			await fs.writeJson(pkgJsonPath, pkgJson, { spaces: 2 });
+			await writePackageJSON(path.dirname(pkgJsonPath), pkgJson);
 		}
 	}
 }

@@ -1,7 +1,7 @@
-import { isCancel, select } from "@clack/prompts";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
-import type { Backend, Runtime, ServerDeploy, WebDeploy } from "../types";
 import { exitCancelled } from "../utils/errors";
+import type { Backend, Runtime, ServerDeploy, WebDeploy } from "../types";
 
 type DeploymentOption = {
 	value: ServerDeploy;
@@ -62,15 +62,9 @@ export async function getServerDeploymentChoice(
 		});
 	});
 
-	const response = await select<ServerDeploy>({
-		message: "Select server deployment",
+	const response = await selectPrompt<ServerDeploy>({
+		title: "Select server deployment",
 		options,
-		initialValue:
-			webDeploy === "alchemy"
-				? "alchemy"
-				: runtime === "workers"
-					? "wrangler"
-					: DEFAULT_CONFIG.serverDeploy,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");
@@ -120,11 +114,9 @@ export async function getServerDeploymentToAdd(
 		return "none";
 	}
 
-	const response = await select<ServerDeploy>({
-		message: "Select server deployment",
+	const response = await selectPrompt<ServerDeploy>({
+		title: "Select server deployment",
 		options,
-		initialValue:
-			runtime === "workers" ? "wrangler" : DEFAULT_CONFIG.serverDeploy,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

@@ -1,6 +1,9 @@
 import { SyntaxKind } from "ts-morph";
-import type { ProjectConfig } from "../types";
 import { ensureArrayProperty, tsProject } from "./ts-morph";
+import { reactStartCookies } from "better-auth/react-start";
+import { nextCookies } from "better-auth/next-js";
+import { expo } from "@better-auth/expo";
+import type { ProjectConfig } from "../types";
 
 export async function setupBetterAuthPlugins(
 	projectDir: string,
@@ -22,13 +25,13 @@ export async function setupBetterAuthPlugins(
 	) {
 		pluginsToAdd.push("reactStartCookies()");
 		importsToAdd.push(
-			'import { reactStartCookies } from "better-auth/react-start";',
+			'',
 		);
 	}
 
 	if (config.backend === "self" && config.frontend?.includes("next")) {
 		pluginsToAdd.push("nextCookies()");
-		importsToAdd.push('import { nextCookies } from "better-auth/next-js";');
+		importsToAdd.push('');
 	}
 
 	if (
@@ -37,7 +40,7 @@ export async function setupBetterAuthPlugins(
 		config.frontend?.includes("native-unistyles")
 	) {
 		pluginsToAdd.push("expo()");
-		importsToAdd.push('import { expo } from "@better-auth/expo";');
+		importsToAdd.push('');
 	}
 
 	if (pluginsToAdd.length === 0) {

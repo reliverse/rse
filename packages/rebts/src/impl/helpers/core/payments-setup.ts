@@ -1,7 +1,7 @@
-import path from "node:path";
-import fs from "fs-extra";
-import type { ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { addPackageDependency } from "../../utils/add-package-deps";
+import type { ProjectConfig } from "../../types";
 
 export async function setupPayments(config: ProjectConfig) {
 	const { payments, projectDir, frontend } = config;

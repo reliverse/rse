@@ -1,7 +1,7 @@
-import { isCancel, select } from "@clack/prompts";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
-import type { Backend, Frontend } from "../types";
 import { exitCancelled } from "../utils/errors";
+import type { Backend, Frontend } from "../types";
 
 // Temporarily restrict to Next.js and TanStack Start only for backend="self"
 const FULLSTACK_FRONTENDS: readonly Frontend[] = [
@@ -73,10 +73,9 @@ export async function getBackendFrameworkChoice(
 		hint: "No backend server",
 	});
 
-	const response = await select<Backend>({
-		message: "Select backend",
+	const response = await selectPrompt<Backend>({
+		title: "Select backend",
 		options: backendOptions,
-		initialValue: hasFullstackFrontend ? "self" : DEFAULT_CONFIG.backend,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

@@ -1,7 +1,7 @@
-import { spinner } from "@clack/prompts";
-import consola from "consola";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { logger } from "@reliverse/dler-logger";
 import { $ } from "execa";
-import pc from "picocolors";
+import { re } from "@reliverse/dler-colors";
 import type { Addons, PackageManager } from "../../types";
 
 export async function installDependencies({
@@ -12,7 +12,7 @@ export async function installDependencies({
 	packageManager: PackageManager;
 	addons?: Addons[];
 }) {
-	const s = spinner();
+	const s = createSpinner();
 
 	try {
 		s.start(`Running ${packageManager} install...`);
@@ -24,9 +24,9 @@ export async function installDependencies({
 
 		s.stop("Dependencies installed successfully");
 	} catch (error) {
-		s.stop(pc.red("Failed to install dependencies"));
+		s.stop(re.red("Failed to install dependencies"));
 		if (error instanceof Error) {
-			consola.error(pc.red(`Installation error: ${error.message}`));
+			logger.error(re.red(`Installation error: ${error.message}`));
 		}
 	}
 }

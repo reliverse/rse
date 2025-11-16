@@ -1,13 +1,15 @@
-import path from "node:path";
-import { isCancel, log, select, spinner, text } from "@clack/prompts";
-import { consola } from "consola";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { inputPrompt, isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { execa } from "execa";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { PackageManager, ProjectConfig } from "../../types";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { exitCancelled } from "../../utils/errors";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
 import { addEnvVariablesToFile, type EnvVariable } from "../core/env-setup";
+import dotenv from "dotenv";
+import type { PackageManager, ProjectConfig } from "../../types";
 
 type PrismaConfig = {
 	databaseUrl: string;
@@ -38,12 +40,11 @@ async function setupWithCreateDb(
 	packageManager: PackageManager,
 ) {
 	try {
-		log.info("Starting Prisma Postgres setup with create-db.");
+		logger.info("Starting Prisma Postgres setup with create-db.");
 
-		const selectedRegion = await select({
-			message: "Select your preferred region:",
+		const selectedRegion = await selectPrompt({
+			title: "Select your preferred region:",
 			options: AVAILABLE_REGIONS,
-			initialValue: "ap-southeast-1",
 		});
 
 		if (isCancel(selectedRegion)) return null;
@@ -53,7 +54,7 @@ async function setupWithCreateDb(
 			`create-db@latest --json --region ${selectedRegion}`,
 		);
 
-		const s = spinner();
+		const s = createSpinner();
 		s.start("Creating Prisma Postgres database...");
 
 		const { stdout } = await execa(createDbCommand, {
@@ -67,7 +68,7 @@ async function setupWithCreateDb(
 		try {
 			createDbResponse = JSON.parse(stdout) as CreateDbResponse;
 		} catch {
-			consola.error("Failed to parse create-db response");
+			logger.error("Failed to parse create-db response");
 			return null;
 		}
 
@@ -77,7 +78,7 @@ async function setupWithCreateDb(
 		};
 	} catch (error) {
 		if (error instanceof Error) {
-			consola.error(error.message);
+			logger.error(error.message);
 		}
 		return null;
 	}
@@ -91,7 +92,7 @@ async function initPrismaDatabase(
 		const prismaDir = path.join(serverDir, "prisma");
 		await fs.ensureDir(prismaDir);
 
-		log.info("Starting Prisma PostgreSQL setup.");
+		logger.info("Starting Prisma PostgreSQL setup.");
 
 		const prismaInitCommand = getPackageExecutionCommand(
 			packageManager,
@@ -104,14 +105,14 @@ async function initPrismaDatabase(
 			shell: true,
 		});
 
-		log.info(
-			pc.yellow(
+		logger.info(
+			re.yellow(
 				"Please copy the Prisma Postgres URL.\nIt looks like: postgresql://user:password@host:5432/db?sslmode=require",
 			),
 		);
 
-		const databaseUrl = await text({
-			message: "Paste your Prisma Postgres database URL:",
+		const databaseUrl = await inputPrompt({
+			title: "Paste your Prisma Postgres database URL:",
 			validate(value) {
 				if (!value) return "Please enter a database URL";
 				if (!value.startsWith("postgresql://")) {
@@ -127,7 +128,7 @@ async function initPrismaDatabase(
 		};
 	} catch (error) {
 		if (error instanceof Error) {
-			consola.error(error.message);
+			logger.error(error.message);
 		}
 		return null;
 	}
@@ -161,7 +162,7 @@ async function writeEnvFile(
 
 		await addEnvVariablesToFile(envPath, variables);
 	} catch (_error) {
-		consola.error("Failed to update environment configuration");
+		logger.error("Failed to update environment configuration");
 	}
 }
 
@@ -177,15 +178,15 @@ async function addDotenvImportToPrismaConfig(
 		let content = await fs.readFile(prismaConfigPath, "utf8");
 		const envPath =
 			backend === "self" ? "../../apps/web/.env" : "../../apps/server/.env";
-		content = `import dotenv from "dotenv";\ndotenv.config({ path: "${envPath}" });\n${content}`;
+		content = `\ndotenv.config({ path: "${envPath}" });\n${content}`;
 		await fs.writeFile(prismaConfigPath, content);
 	} catch (_error) {
-		consola.error("Failed to update prisma.config.ts");
+		logger.error("Failed to update prisma.config.ts");
 	}
 }
 
 function displayManualSetupInstructions(target: "apps/web" | "apps/server") {
-	log.info(`Manual Prisma PostgreSQL Setup Instructions:
+	logger.info(`Manual Prisma PostgreSQL Setup Instructions:
 
 1. Visit https://console.prisma.io and create an account
 2. Create a new PostgreSQL database from the dashboard
@@ -214,8 +215,8 @@ export async function setupPrismaPostgres(
 			return;
 		}
 
-		const mode = await select({
-			message: "Prisma Postgres setup: choose mode",
+		const mode = await selectPrompt({
+			title: "Prisma Postgres setup: choose mode",
 			options: [
 				{
 					label: "Automatic",
@@ -228,7 +229,6 @@ export async function setupPrismaPostgres(
 					hint: "Manual setup, add env vars yourself",
 				},
 			],
-			initialValue: "auto",
 		});
 
 		if (isCancel(mode)) return exitCancelled("Operation cancelled");
@@ -257,10 +257,9 @@ export async function setupPrismaPostgres(
 			});
 		}
 
-		const setupMethod = await select({
-			message: "Choose your Prisma Postgres setup method:",
+		const setupMethod = await selectPrompt({
+			title: "Choose your Prisma Postgres setup method:",
 			options: setupOptions,
-			initialValue: "create-db",
 		});
 
 		if (isCancel(setupMethod)) return exitCancelled("Operation cancelled");
@@ -280,12 +279,12 @@ export async function setupPrismaPostgres(
 				await addDotenvImportToPrismaConfig(projectDir, backend);
 			}
 
-			log.success(
-				pc.green("Prisma Postgres database configured successfully!"),
+			logger.success(
+				re.green("Prisma Postgres database configured successfully!"),
 			);
 
 			if (prismaConfig.claimUrl) {
-				log.info(pc.blue(`Claim URL saved to .env: ${prismaConfig.claimUrl}`));
+				logger.info(re.blue(`Claim URL saved to .env: ${prismaConfig.claimUrl}`));
 			}
 		} else {
 			await writeEnvFile(projectDir, backend);
@@ -294,10 +293,10 @@ export async function setupPrismaPostgres(
 			);
 		}
 	} catch (error) {
-		consola.error(
-			pc.red(
+		logger.error(
+			re.red(
 				`Error during Prisma Postgres setup: ${
-					error instanceof Error ? error.message : String(error)
+					error instanceof Error ? error.title: String(error)
 				}`,
 			),
 		);
@@ -309,6 +308,6 @@ export async function setupPrismaPostgres(
 			);
 		} catch {}
 
-		log.info("Setup completed with manual configuration required.");
+		logger.info("Setup completed with manual configuration required.");
 	}
 }

@@ -1,8 +1,8 @@
 import os from "node:os";
 import { $ } from "execa";
-import pc from "picocolors";
-import type { Database } from "../types";
+import { re } from "@reliverse/dler-colors";
 import { commandExists } from "./command-exists";
+import type { Database } from "../types";
 
 export async function isDockerInstalled() {
 	return commandExists("docker");
@@ -47,7 +47,7 @@ export function getDockerInstallInstructions(
 				? "MySQL"
 				: "PostgreSQL";
 
-	return `${pc.yellow("IMPORTANT:")} Docker required for ${databaseName}. Install for ${platformName}:\n${pc.blue(installUrl)}`;
+	return `${re.yellow("IMPORTANT:")} Docker required for ${databaseName}. Install for ${platformName}:\n${re.blue(installUrl)}`;
 }
 
 export async function getDockerStatus(database: Database) {
@@ -58,7 +58,7 @@ export async function getDockerStatus(database: Database) {
 		return {
 			installed: false,
 			running: false,
-			message: getDockerInstallInstructions(platform, database),
+			title: getDockerInstallInstructions(platform, database),
 		};
 	}
 
@@ -67,7 +67,7 @@ export async function getDockerStatus(database: Database) {
 		return {
 			installed: true,
 			running: false,
-			message: `${pc.yellow("IMPORTANT:")} Docker is installed but not running.`,
+			title: `${re.yellow("IMPORTANT:")} Docker is installed but not running.`,
 		};
 	}
 

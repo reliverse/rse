@@ -1,8 +1,9 @@
-import path from "node:path";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
 import { IndentationText, Node, Project, QuoteKind } from "ts-morph";
-import type { PackageManager } from "../../../types";
 import { addPackageDependency } from "../../../utils/add-package-deps";
+import type { PackageManager } from "../../../types";
 
 export async function setupNuxtAlchemyDeploy(
 	projectDir: string,
@@ -19,7 +20,7 @@ export async function setupNuxtAlchemyDeploy(
 
 	const pkgPath = path.join(webAppDir, "package.json");
 	if (await fs.pathExists(pkgPath)) {
-		const pkg = await fs.readJson(pkgPath);
+		const pkg = await readPackageJSON(path.dirname(pkgPath));
 
 		if (!options?.skipAppScripts) {
 			pkg.scripts = {
@@ -28,7 +29,7 @@ export async function setupNuxtAlchemyDeploy(
 				destroy: "alchemy destroy",
 			};
 		}
-		await fs.writeJson(pkgPath, pkg, { spaces: 2 });
+		await writePackageJSON(path.dirname(pkgPath), pkg);
 	}
 
 	const nuxtConfigPath = path.join(webAppDir, "nuxt.config.ts");

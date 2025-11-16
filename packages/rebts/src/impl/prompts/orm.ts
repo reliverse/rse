@@ -1,7 +1,7 @@
-import { isCancel, select } from "@clack/prompts";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
-import type { Backend, Database, ORM, Runtime } from "../types";
 import { exitCancelled } from "../utils/errors";
+import type { Backend, Database, ORM, Runtime } from "../types";
 
 const ormOptions = {
 	prisma: {
@@ -41,15 +41,9 @@ export async function getORMChoice(
 			: [ormOptions.drizzle, ormOptions.prisma]),
 	];
 
-	const response = await select<ORM>({
-		message: "Select ORM",
+	const response = await selectPrompt<ORM>({
+		title: "Select ORM",
 		options,
-		initialValue:
-			database === "mongodb"
-				? "prisma"
-				: runtime === "workers"
-					? "drizzle"
-					: DEFAULT_CONFIG.orm,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

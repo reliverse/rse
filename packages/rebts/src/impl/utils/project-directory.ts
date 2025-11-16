@@ -1,7 +1,9 @@
-import path from "node:path";
-import { isCancel, log, select, spinner } from "@clack/prompts";
-import fs from "fs-extra";
-import pc from "picocolors";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { getProjectName } from "../prompts/project-name";
 import { exitCancelled, handleError } from "./errors";
 
@@ -25,14 +27,14 @@ export async function handleDirectoryConflict(
 			);
 		}
 
-		log.warn(
-			`Directory "${pc.yellow(
+		logger.warn(
+			`Directory "${re.yellow(
 				currentPathInput,
 			)}" already exists and is not empty.`,
 		);
 
-		const action = await select<"overwrite" | "merge" | "rename" | "cancel">({
-			message: "What would you like to do?",
+		const action = await selectPrompt<"overwrite" | "merge" | "rename" | "cancel">({
+			title: "What would you like to do?",
 			options: [
 				{
 					value: "overwrite",
@@ -51,7 +53,6 @@ export async function handleDirectoryConflict(
 				},
 				{ value: "cancel", label: "Cancel", hint: "Abort the process" },
 			],
-			initialValue: "rename",
 		});
 
 		if (isCancel(action)) return exitCancelled("Operation cancelled.");
@@ -60,8 +61,8 @@ export async function handleDirectoryConflict(
 			case "overwrite":
 				return { finalPathInput: currentPathInput, shouldClearDirectory: true };
 			case "merge":
-				log.info(
-					`Proceeding into existing directory "${pc.yellow(
+				logger.info(
+					`Proceeding into existing directory "${re.yellow(
 						currentPathInput,
 					)}". Files may be overwritten.`,
 				);
@@ -70,7 +71,7 @@ export async function handleDirectoryConflict(
 					shouldClearDirectory: false,
 				};
 			case "rename": {
-				log.info("Please choose a different project name or path.");
+				logger.info("Please choose a different project name or path.");
 				const newPathInput = await getProjectName(undefined);
 				return await handleDirectoryConflict(newPathInput);
 			}
@@ -96,13 +97,13 @@ export async function setupProjectDirectory(
 	}
 
 	if (shouldClearDirectory) {
-		const s = spinner();
+		const s = createSpinner();
 		s.start(`Clearing directory "${finalResolvedPath}"...`);
 		try {
 			await fs.emptyDir(finalResolvedPath);
 			s.stop(`Directory "${finalResolvedPath}" cleared.`);
 		} catch (error) {
-			s.stop(pc.red(`Failed to clear directory "${finalResolvedPath}".`));
+			s.stop(re.red(`Failed to clear directory "${finalResolvedPath}".`));
 			handleError(error);
 		}
 	} else {

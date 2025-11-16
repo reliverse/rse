@@ -1,6 +1,6 @@
-import path from "node:path";
+import path from "@reliverse/pathkit";
 import { Biome } from "@biomejs/js-api/nodejs";
-import consola from "consola";
+import { logger } from "@reliverse/dler-logger";
 
 function initializeBiome() {
 	try {
@@ -72,7 +72,7 @@ export function formatFileWithBiome(filePath: string, content: string) {
 		});
 
 		if (result.diagnostics && result.diagnostics.length > 0) {
-			consola.debug(
+			logger.debug(
 				`Biome formatting diagnostics for ${filePath}:`,
 				result.diagnostics,
 			);

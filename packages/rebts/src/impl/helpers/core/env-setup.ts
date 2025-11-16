@@ -1,7 +1,7 @@
-import path from "node:path";
-import fs from "fs-extra";
-import type { ProjectConfig } from "../../types";
+import path from "@reliverse/pathkit";
+import fs from "@reliverse/relifso";
 import { generateAuthSecret } from "./auth-setup";
+import type { ProjectConfig } from "../../types";
 
 function getClientServerVar(
 	frontend: string[],

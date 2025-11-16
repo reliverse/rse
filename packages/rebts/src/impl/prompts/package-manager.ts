@@ -1,15 +1,15 @@
-import { isCancel, select } from "@clack/prompts";
-import type { PackageManager } from "../types";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { exitCancelled } from "../utils/errors";
 import { getUserPkgManager } from "../utils/get-package-manager";
+import type { PackageManager } from "../types";
 
 export async function getPackageManagerChoice(packageManager?: PackageManager) {
 	if (packageManager !== undefined) return packageManager;
 
 	const detectedPackageManager = getUserPkgManager();
 
-	const response = await select<PackageManager>({
-		message: "Choose package manager",
+	const response = await selectPrompt<PackageManager>({
+		title: "Choose package manager",
 		options: [
 			{ value: "npm", label: "npm", hint: "Node Package Manager" },
 			{
@@ -23,7 +23,6 @@ export async function getPackageManagerChoice(packageManager?: PackageManager) {
 				hint: "All-in-one JavaScript runtime & toolkit",
 			},
 		],
-		initialValue: detectedPackageManager,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

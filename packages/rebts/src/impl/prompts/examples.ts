@@ -1,11 +1,11 @@
-import { isCancel, multiselect } from "@clack/prompts";
+import { isCancel, multiselectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
+import { exitCancelled } from "../utils/errors";
 import type { API, Backend, Database, Examples, Frontend } from "../types";
 import {
 	isExampleAIAllowed,
 	isExampleTodoAllowed,
 } from "../utils/compatibility-rules";
-import { exitCancelled } from "../utils/errors";
 
 export async function getExamplesChoice(
 	examples?: Examples[],
@@ -54,8 +54,8 @@ export async function getExamplesChoice(
 
 	if (options.length === 0) return [];
 
-	response = await multiselect<Examples>({
-		message: "Include examples",
+	response = await multiselectPrompt<Examples>({
+		title: "Include examples",
 		options: options,
 		required: false,
 		initialValues: DEFAULT_CONFIG.examples?.filter((ex) =>

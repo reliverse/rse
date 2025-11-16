@@ -1,7 +1,7 @@
-import path from "node:path";
+import path from "@reliverse/pathkit";
 import { execa } from "execa";
-import type { PackageManager } from "../../types";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
+import type { PackageManager } from "../../types";
 
 // having problems running this in convex + better-auth
 export async function runConvexCodegen(

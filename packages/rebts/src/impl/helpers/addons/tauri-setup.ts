@@ -1,16 +1,17 @@
-import path from "node:path";
-import { spinner } from "@clack/prompts";
-import { consola } from "consola";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { logger } from "@reliverse/dler-logger";
 import { execa } from "execa";
-import fs from "fs-extra";
-import pc from "picocolors";
-import type { ProjectConfig } from "../../types";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
+import type { ProjectConfig } from "../../types";
 
 export async function setupTauri(config: ProjectConfig) {
 	const { packageManager, frontend, projectDir } = config;
-	const s = spinner();
+	const s = createSpinner();
 	const clientPackageDir = path.join(projectDir, "apps/web");
 
 	if (!(await fs.pathExists(clientPackageDir))) {
@@ -27,7 +28,7 @@ export async function setupTauri(config: ProjectConfig) {
 
 		const clientPackageJsonPath = path.join(clientPackageDir, "package.json");
 		if (await fs.pathExists(clientPackageJsonPath)) {
-			const packageJson = await fs.readJson(clientPackageJsonPath);
+			const packageJson = await readPackageJSON(path.dirname(clientPackageJsonPath));
 
 			packageJson.scripts = {
 				...packageJson.scripts,
@@ -36,7 +37,7 @@ export async function setupTauri(config: ProjectConfig) {
 				"desktop:build": "tauri build",
 			};
 
-			await fs.writeJson(clientPackageJsonPath, packageJson, { spaces: 2 });
+			await writePackageJSON(path.dirname(clientPackageJsonPath), packageJson);
 		}
 
 		const _hasTanstackRouter = frontend.includes("tanstack-router");
@@ -91,9 +92,9 @@ export async function setupTauri(config: ProjectConfig) {
 
 		s.stop("Tauri desktop app support configured successfully!");
 	} catch (error) {
-		s.stop(pc.red("Failed to set up Tauri"));
+		s.stop(re.red("Failed to set up Tauri"));
 		if (error instanceof Error) {
-			consola.error(pc.red(error.message));
+			logger.error(re.red(error.message));
 		}
 	}
 }

@@ -8,7 +8,9 @@
   "dependencies": {
     "@reliverse/dler-launcher": "catalog:",
     "@reliverse/dler-logger": "catalog:",
-    "@reliverse/rse-escaper": "workspace:*"
+    "@reliverse/rse-escaper": "workspace:*",
+    "magic-string": "^0.30.21",
+    "ts-morph": "catalog:"
   },
   "devDependencies": {
     "@p/tsconfig": "workspace:*",

@@ -1,4 +1,5 @@
-import { confirm, isCancel } from "@clack/prompts";
+import { logger } from "@reliverse/dler-logger";
+import { isCancel } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
 import { exitCancelled } from "../utils/errors";
 
@@ -6,8 +7,7 @@ export async function getGitChoice(git?: boolean) {
 	if (git !== undefined) return git;
 
 	const response = await confirm({
-		message: "Initialize git repository?",
-		initialValue: DEFAULT_CONFIG.git,
+		title: "Initialize git repository?",
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

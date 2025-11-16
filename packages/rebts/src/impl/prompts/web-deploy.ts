@@ -1,8 +1,8 @@
-import { isCancel, select } from "@clack/prompts";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
-import type { Backend, Frontend, Runtime, WebDeploy } from "../types";
 import { WEB_FRAMEWORKS } from "../utils/compatibility";
 import { exitCancelled } from "../utils/errors";
+import type { Backend, Frontend, Runtime, WebDeploy } from "../types";
 
 function hasWebFrontend(frontends: Frontend[]) {
 	return frontends.some((f) => WEB_FRAMEWORKS.includes(f));
@@ -58,10 +58,9 @@ export async function getDeploymentChoice(
 		};
 	});
 
-	const response = await select<WebDeploy>({
-		message: "Select web deployment",
+	const response = await selectPrompt<WebDeploy>({
+		title: "Select web deployment",
 		options,
-		initialValue: DEFAULT_CONFIG.webDeploy,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");
@@ -113,10 +112,9 @@ export async function getDeploymentToAdd(
 		return "none";
 	}
 
-	const response = await select<WebDeploy>({
-		message: "Select web deployment",
+	const response = await selectPrompt<WebDeploy>({
+		title: "Select web deployment",
 		options,
-		initialValue: DEFAULT_CONFIG.webDeploy,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

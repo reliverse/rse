@@ -1,7 +1,7 @@
-import { isCancel, select } from "@clack/prompts";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
-import type { Auth, Backend } from "../types";
 import { exitCancelled } from "../utils/errors";
+import type { Auth, Backend } from "../types";
 
 export async function getAuthChoice(
 	auth: Auth | undefined,
@@ -56,17 +56,16 @@ export async function getAuthChoice(
 
 		options.push({ value: "none", label: "None", hint: "No auth" });
 
-		const response = await select({
-			message: "Select authentication provider",
+		const response = await selectPrompt({
+			title: "Select authentication provider",
 			options,
-			initialValue: "none",
 		});
 		if (isCancel(response)) return exitCancelled("Operation cancelled");
 		return response as Auth;
 	}
 
-	const response = await select({
-		message: "Select authentication provider",
+	const response = await selectPrompt({
+		title: "Select authentication provider",
 		options: [
 			{
 				value: "better-auth",
@@ -75,7 +74,6 @@ export async function getAuthChoice(
 			},
 			{ value: "none", label: "None" },
 		],
-		initialValue: DEFAULT_CONFIG.auth,
 	});
 
 	if (isCancel(response)) return exitCancelled("Operation cancelled");

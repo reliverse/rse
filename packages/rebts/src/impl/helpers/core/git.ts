@@ -1,6 +1,6 @@
-import { log } from "@clack/prompts";
+import { logger } from "@reliverse/dler-logger";
 import { $ } from "execa";
-import pc from "picocolors";
+import { re } from "@reliverse/dler-colors";
 
 export async function initializeGit(projectDir: string, useGit: boolean) {
 	if (!useGit) return;
@@ -12,7 +12,7 @@ export async function initializeGit(projectDir: string, useGit: boolean) {
 	})`git --version`;
 
 	if (gitVersionResult.exitCode !== 0) {
-		log.warn(pc.yellow("Git is not installed"));
+		logger.warn(re.yellow("Git is not installed"));
 		return;
 	}
 

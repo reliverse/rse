@@ -1,17 +1,13 @@
-import {
-	autocompleteMultiselect,
-	group,
-	log,
-	multiselect,
-	spinner,
-} from "@clack/prompts";
+import { logger } from "@reliverse/dler-logger";
+import { createSpinner } from "@reliverse/dler-spinner";
+import { multiselectPrompt } from "@reliverse/dler-prompt";
 import { execa } from "execa";
-import pc from "picocolors";
-import type { ProjectConfig } from "../../types";
+import { re } from "@reliverse/dler-colors";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { exitCancelled } from "../../utils/errors";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
 import { setupBiome } from "./addons-setup";
+import type { ProjectConfig } from "../../types";
 
 type UltraciteEditor = "vscode" | "zed";
 type UltraciteAgent =
@@ -140,15 +136,15 @@ export async function setupUltracite(config: ProjectConfig, hasHusky: boolean) {
 	const { packageManager, projectDir, frontend } = config;
 
 	try {
-		log.info("Setting up Ultracite...");
+		logger.info("Setting up Ultracite...");
 
 		await setupBiome(projectDir);
 
 		const result = await group(
 			{
 				editors: () =>
-					multiselect<UltraciteEditor>({
-						message: "Choose editors",
+					multiselectPrompt<UltraciteEditor>({
+						title: "Choose editors",
 						options: Object.entries(EDITORS).map(([key, editor]) => ({
 							value: key as UltraciteEditor,
 							label: editor.label,
@@ -157,7 +153,7 @@ export async function setupUltracite(config: ProjectConfig, hasHusky: boolean) {
 					}),
 				agents: () =>
 					autocompleteMultiselect<UltraciteAgent>({
-						message: "Choose agents",
+						title: "Choose agents",
 						options: Object.entries(AGENTS).map(([key, agent]) => ({
 							value: key as UltraciteAgent,
 							label: agent.label,
@@ -166,7 +162,7 @@ export async function setupUltracite(config: ProjectConfig, hasHusky: boolean) {
 					}),
 				hooks: () =>
 					autocompleteMultiselect<UltraciteHook>({
-						message: "Choose hooks",
+						title: "Choose hooks",
 						options: Object.entries(HOOKS).map(([key, hook]) => ({
 							value: key as UltraciteHook,
 							label: hook.label,
@@ -215,7 +211,7 @@ export async function setupUltracite(config: ProjectConfig, hasHusky: boolean) {
 			commandWithArgs,
 		);
 
-		const s = spinner();
+		const s = createSpinner();
 		s.start("Running Ultracite init command...");
 
 		await execa(ultraciteInitCommand, {
@@ -233,9 +229,9 @@ export async function setupUltracite(config: ProjectConfig, hasHusky: boolean) {
 
 		s.stop("Ultracite setup successfully!");
 	} catch (error) {
-		log.error(pc.red("Failed to set up Ultracite"));
+		logger.error(re.red("Failed to set up Ultracite"));
 		if (error instanceof Error) {
-			console.error(pc.red(error.message));
+			console.error(re.red(error.message));
 		}
 	}
 }

@@ -1,5 +1,8 @@
-import path from "node:path";
-import fs from "fs-extra";
+import path from "@reliverse/pathkit";
+import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
+import fs from "@reliverse/relifso";
+import { addPackageDependency } from "../../../utils/add-package-deps";
+import { tsProject } from "../../../utils/ts-morph";
 import {
 	type ArrayLiteralExpression,
 	type CallExpression,
@@ -9,8 +12,6 @@ import {
 	SyntaxKind,
 } from "ts-morph";
 import type { PackageManager } from "../../../types";
-import { addPackageDependency } from "../../../utils/add-package-deps";
-import { tsProject } from "../../../utils/ts-morph";
 
 export async function setupNuxtWorkersDeploy(
 	projectDir: string,
@@ -26,14 +27,14 @@ export async function setupNuxtWorkersDeploy(
 
 	const pkgPath = path.join(webAppDir, "package.json");
 	if (await fs.pathExists(pkgPath)) {
-		const pkg = await fs.readJson(pkgPath);
+		const pkg = await readPackageJSON(path.dirname(pkgPath));
 
 		pkg.scripts = {
 			...pkg.scripts,
 			deploy: `${packageManager} run build && wrangler deploy`,
 			"cf-typegen": "wrangler types",
 		};
-		await fs.writeJson(pkgPath, pkg, { spaces: 2 });
+		await writePackageJSON(path.dirname(pkgPath), pkg);
 	}
 
 	const nuxtConfigPath = path.join(webAppDir, "nuxt.config.ts");

@@ -1,4 +1,4 @@
-import { log } from "@clack/prompts";
+import { logger } from "@reliverse/dler-logger";
 import { execa } from "execa";
 
 export async function openUrl(url: string) {
@@ -20,6 +20,6 @@ export async function openUrl(url: string) {
 	try {
 		await execa(command, args, { stdio: "ignore" });
 	} catch {
-		log.message(`Please open ${url} in your browser.`);
+		logger.log(`Please open ${url} in your browser.`);
 	}
 }

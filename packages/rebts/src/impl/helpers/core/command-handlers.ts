@@ -1,41 +1,40 @@
-import path from "node:path";
-import { intro, log, outro } from "@clack/prompts";
-import consola from "consola";
-import fs from "fs-extra";
-import pc from "picocolors";
+import path from "@reliverse/pathkit";
+import { logger } from "@reliverse/dler-logger";
+import fs from "@reliverse/relifso";
+import { re } from "@reliverse/dler-colors";
 import { getDefaultConfig } from "../../constants";
 import { getAddonsToAdd } from "../../prompts/addons";
 import { gatherConfig } from "../../prompts/config-prompts";
 import { getProjectName } from "../../prompts/project-name";
 import { getServerDeploymentToAdd } from "../../prompts/server-deploy";
 import { getDeploymentToAdd } from "../../prompts/web-deploy";
+import { trackProjectCreation } from "../../utils/analytics";
+import { displayConfig } from "../../utils/display-config";
+import { exitWithError, handleError } from "../../utils/errors";
+import { generateReproducibleCommand } from "../../utils/generate-reproducible-command";
+import { renderTitle } from "../../utils/render-title";
+import { addAddonsToProject } from "./add-addons";
+import { addDeploymentToProject } from "./add-deployment";
+import { createProject } from "./create-project";
+import { detectProjectConfig } from "./detect-project-config";
+import { installDependencies } from "./install-dependencies";
 import type {
 	AddInput,
 	CreateInput,
 	DirectoryConflict,
 	ProjectConfig,
 } from "../../types";
-import { trackProjectCreation } from "../../utils/analytics";
 
-import { displayConfig } from "../../utils/display-config";
-import { exitWithError, handleError } from "../../utils/errors";
-import { generateReproducibleCommand } from "../../utils/generate-reproducible-command";
 import {
 	handleDirectoryConflict,
 	setupProjectDirectory,
 } from "../../utils/project-directory";
-import { renderTitle } from "../../utils/render-title";
 import {
 	getProvidedFlags,
 	processAndValidateFlags,
 	processProvidedFlagsWithoutValidation,
 	validateConfigCompatibility,
 } from "../../validation";
-import { addAddonsToProject } from "./add-addons";
-import { addDeploymentToProject } from "./add-deployment";
-import { createProject } from "./create-project";
-import { detectProjectConfig } from "./detect-project-config";
-import { installDependencies } from "./install-dependencies";
 
 export async function createProjectHandler(
 	input: CreateInput & { projectName?: string },
@@ -46,10 +45,10 @@ export async function createProjectHandler(
 	if (input.renderTitle !== false) {
 		renderTitle();
 	}
-	intro(pc.magenta("Creating a new Better-T-Stack project"));
+	logger.info(re.magenta("Creating a new Better-T-Stack project"));
 
 	if (input.yolo) {
-		consola.fatal("YOLO mode enabled - skipping checks. Things may break!");
+		logger.fatal("YOLO mode enabled - skipping checks. Things may break!");
 	}
 
 	let currentPathInput: string;
@@ -117,7 +116,7 @@ export async function createProjectHandler(
 			elapsedTimeMs,
 			projectDirectory: "",
 			relativePath: "",
-			error: error instanceof Error ? error.message : String(error),
+			error: error instanceof Error ? error.title: String(error),
 		};
 	}
 
@@ -150,9 +149,9 @@ export async function createProjectHandler(
 
 		validateConfigCompatibility(config, providedFlags, cliInput);
 
-		log.info(pc.yellow("Using default/flag options (config prompts skipped):"));
-		log.message(displayConfig(config));
-		log.message("");
+		logger.info(re.yellow("Using default/flag options (config prompts skipped):"));
+		logger.log(displayConfig(config));
+		logger.log("");
 	} else {
 		const flagConfig = processAndValidateFlags(
 			cliInput,
@@ -162,9 +161,9 @@ export async function createProjectHandler(
 		const { projectName: _projectNameFromFlags, ...otherFlags } = flagConfig;
 
 		if (Object.keys(otherFlags).length > 0) {
-			log.info(pc.yellow("Using these pre-selected options:"));
-			log.message(displayConfig(otherFlags));
-			log.message("");
+			logger.info(re.yellow("Using these pre-selected options:"));
+			logger.log(displayConfig(otherFlags));
+			logger.log("");
 		}
 
 		config = await gatherConfig(
@@ -178,8 +177,8 @@ export async function createProjectHandler(
 	await createProject(config, { manualDb: input.manualDb });
 
 	const reproducibleCommand = generateReproducibleCommand(config);
-	log.success(
-		pc.blue(
+	logger.success(
+		re.blue(
 			`You can reproduce this setup with the following command:\n${reproducibleCommand}`,
 		),
 	);
@@ -188,9 +187,9 @@ export async function createProjectHandler(
 
 	const elapsedTimeMs = Date.now() - startTime;
 	const elapsedTimeInSeconds = (elapsedTimeMs / 1000).toFixed(2);
-	outro(
-		pc.magenta(
-			`Project created successfully in ${pc.bold(
+	logger.info(
+		re.magenta(
+			`Project created successfully in ${re.bold(
 				elapsedTimeInSeconds,
 			)} seconds!`,
 		),
@@ -340,7 +339,7 @@ export async function addAddonsHandler(input: AddInput) {
 		}
 
 		if (!somethingAdded) {
-			outro(pc.yellow("No addons or deployment configurations to add."));
+			logger.info(re.yellow("No addons or deployment configurations to add."));
 			return;
 		}
 
@@ -350,12 +349,12 @@ export async function addAddonsHandler(input: AddInput) {
 				packageManager,
 			});
 		} else {
-			log.info(
-				`Run ${pc.bold(`${packageManager} install`)} to install dependencies`,
+			logger.info(
+				`Run ${re.bold(`${packageManager} install`)} to install dependencies`,
 			);
 		}
 
-		outro("Add command completed successfully!");
+		logger.info("Add command completed successfully!");
 	} catch (error) {
 		handleError(error, "Failed to add addons or deployment");
 	}

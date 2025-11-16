@@ -1,4 +1,4 @@
-import path from "node:path";
+import path from "@reliverse/pathkit";
 import { fileURLToPath } from "node:url";
 import { getUserPkgManager } from "./utils/get-package-manager";
 

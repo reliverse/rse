@@ -1,4 +1,5 @@
 import { logger } from "@reliverse/dler-logger";
+import { groupPrompt } from "@reliverse/dler-prompt";
 import { exitCancelled } from "../utils/errors";
 import { getAddonsChoice } from "./addons";
 import { getApiChoice } from "./api";
@@ -59,7 +60,7 @@ export async function gatherConfig(
 	projectDir: string,
 	relativePath: string,
 ) {
-	const result = await group<PromptGroupResults>(
+	const result = await groupPrompt<PromptGroupResults>(
 		{
 			frontend: () =>
 				getFrontendChoice(flags.frontend, flags.backend, flags.auth),

@@ -197,7 +197,7 @@ function generateStackDescription(
 	}
 
 	if (backend !== "none") {
-		parts.push(backend[0].toUpperCase() + backend.slice(1));
+		parts.push(backend.at(0)?.toUpperCase() + backend.slice(1));
 	}
 
 	if (!isConvex && api !== "none") {
@@ -350,7 +350,7 @@ function generateProjectStructure(
 	}
 
 	if (!isBackendSelf && !isBackendNone && !isConvex) {
-		const backendName = backend[0].toUpperCase() + backend.slice(1);
+		const backendName = (backend.at(0)?.toUpperCase()) ?? "" + backend.slice(1);
 		const apiName = api !== "none" ? api.toUpperCase() : "";
 		const backendDesc = apiName ? `${backendName}, ${apiName}` : backendName;
 		structure.push(`│   └── server/      # Backend API (${backendDesc})`);

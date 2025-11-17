@@ -101,7 +101,7 @@ export async function getAddonsChoice(
 		const option = { value: addon, label, hint };
 
 		if (ADDON_GROUPS.Documentation.includes(addon)) {
-			groupedOptions.Documentation.push(option);
+			groupedOptions.Documentation!.push(option);
 		} else if (ADDON_GROUPS.Linting.includes(addon)) {
 			groupedOptions.Linting.push(option);
 		} else if (ADDON_GROUPS.Other.includes(addon)) {
@@ -122,10 +122,9 @@ export async function getAddonsChoice(
 	);
 
 	const response = await groupMultiselect<Addons>({
-		title: "Select addons",
+		message: "Select addons",
 		options: groupedOptions,
 		initialValues: initialValues,
-		required: false,
 		selectableGroups: false,
 	});
 
@@ -159,7 +158,7 @@ export async function getAddonsToAdd(
 		const option = { value: addon, label, hint };
 
 		if (ADDON_GROUPS.Documentation.includes(addon)) {
-			groupedOptions.Documentation.push(option);
+			groupedOptions.Documentation!.push(option);
 		} else if (ADDON_GROUPS.Linting.includes(addon)) {
 			groupedOptions.Linting.push(option);
 		} else if (ADDON_GROUPS.Other.includes(addon)) {
@@ -178,9 +177,8 @@ export async function getAddonsToAdd(
 	}
 
 	const response = await groupMultiselect<Addons>({
-		title: "Select addons to add",
+		message: "Select addons to add",
 		options: groupedOptions,
-		required: false,
 		selectableGroups: false,
 	});
 

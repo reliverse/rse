@@ -50,7 +50,7 @@ export async function getDatabaseChoice(
 	}
 
 	const response = await selectPrompt<Database>({
-		title: "Select database",
+		message: "Select database",
 		options: databaseOptions,
 	});
 

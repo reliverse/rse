@@ -54,7 +54,7 @@ export async function getProjectName(initialName?: string) {
 
 	while (!isValid) {
 		const response = await inputPrompt({
-			title:
+			message:
 				"Enter your project name or path (relative to current directory)",
 			defaultValue: defaultName,
 			validate: (value) => {

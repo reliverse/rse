@@ -205,13 +205,13 @@ function getConvexDependencies(frontend: Frontend[]) {
 	};
 
 	if (frontend.includes("tanstack-start")) {
-		deps.web.dependencies.push("@convex-dev/react-query");
+		deps.web!.dependencies.push("@convex-dev/react-query");
 	}
 	if (frontend.includes("svelte")) {
-		deps.web.dependencies.push("convex-svelte");
+		deps.web!.dependencies.push("convex-svelte");
 	}
 	if (frontend.includes("nuxt")) {
-		deps.web.dependencies.push("convex-nuxt", "convex-vue");
+		deps.web!.dependencies.push("convex-nuxt", "convex-vue");
 	}
 
 	return deps;
@@ -302,7 +302,7 @@ export async function setupApi(config: ProjectConfig) {
 
 		if (webDirExists && queryDeps.web) {
 			await addPackageDependency({
-				dependencies: queryDeps.web.dependencies as AvailableDependencies[],
+				dependencies: queryDeps.web!.dependencies as AvailableDependencies[],
 				devDependencies: queryDeps.web
 					.devDependencies as AvailableDependencies[],
 				projectDir: webDir,
@@ -311,7 +311,7 @@ export async function setupApi(config: ProjectConfig) {
 
 		if (nativeDirExists && queryDeps.native) {
 			await addPackageDependency({
-				dependencies: queryDeps.native.dependencies as AvailableDependencies[],
+				dependencies: queryDeps.native!.dependencies as AvailableDependencies[],
 				projectDir: nativeDir,
 			});
 		}
@@ -322,14 +322,14 @@ export async function setupApi(config: ProjectConfig) {
 
 		if (webDirExists) {
 			await addPackageDependency({
-				dependencies: convexDeps.web.dependencies as AvailableDependencies[],
+				dependencies: convexDeps.web!.dependencies as AvailableDependencies[],
 				projectDir: webDir,
 			});
 		}
 
 		if (nativeDirExists) {
 			await addPackageDependency({
-				dependencies: convexDeps.native.dependencies as AvailableDependencies[],
+				dependencies: convexDeps.native!.dependencies as AvailableDependencies[],
 				projectDir: nativeDir,
 			});
 		}

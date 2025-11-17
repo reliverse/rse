@@ -127,11 +127,11 @@ async function setupBunCatalogs(
 			catalog,
 		};
 	} else if (typeof rootPkgJson.workspaces === "object") {
-		if (!rootPkgJson.workspaces.catalog) {
-			rootPkgJson.workspaces.catalog = {};
+		if (!(rootPkgJson.workspaces as { catalog?: Record<string, string>; packages?: string[]; nohoist?: string[] }).catalog) {
+			(rootPkgJson.workspaces as { catalog?: Record<string, string>; packages?: string[]; nohoist?: string[] }).catalog = {};
 		}
-		rootPkgJson.workspaces.catalog = {
-			...rootPkgJson.workspaces.catalog,
+		(rootPkgJson.workspaces as { catalog?: Record<string, string>; packages?: string[]; nohoist?: string[] }).catalog = {
+			...(rootPkgJson.workspaces as { catalog?: Record<string, string>; packages?: string[]; nohoist?: string[] }).catalog,
 			...catalog,
 		};
 	}

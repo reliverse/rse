@@ -39,7 +39,7 @@ export async function getPaymentsChoice(
 	];
 
 	const response = await selectPrompt<Payments>({
-		title: "Select payments provider",
+		message: "Select payments provider",
 		options,
 	});
 

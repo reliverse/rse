@@ -79,8 +79,8 @@ async function createNeonProject(
 			response.connection_uris.length > 0
 		) {
 			const projectId = response.project.id;
-			const connectionUri = response.connection_uris[0].connection_uri;
-			const params = response.connection_uris[0].connection_parameters;
+			const connectionUri = response.(connection_uris.at(0)?.connection_uri) ?? "";
+			const params = response.(connection_uris.at(0)?.connection_parameters) ?? "";
 
 			return {
 				connectionString: connectionUri,
@@ -179,7 +179,7 @@ export async function setupNeonPostgres(
 		}
 
 		const mode = await selectPrompt({
-			title: "Neon setup: choose mode",
+			message: "Neon setup: choose mode",
 			options: [
 				{
 					label: "Automatic",
@@ -205,7 +205,7 @@ export async function setupNeonPostgres(
 		}
 
 		const setupMethod = await selectPrompt({
-			title: "Choose your Neon setup method:",
+			message: "Choose your Neon setup method:",
 			options: [
 				{
 					label: "Quick setup with get-db",
@@ -227,13 +227,13 @@ export async function setupNeonPostgres(
 		} else {
 			const suggestedProjectName = path.basename(projectDir);
 			const projectName = await inputPrompt({
-				title: "Enter a name for your Neon project:",
+				message: "Enter a name for your Neon project:",
 				defaultValue: suggestedProjectName,
 			});
 
 			const regionId = await selectPrompt({
-				title: "Select a region for your Neon project:",
-				options: NEON_REGIONS].value,
+				message: "Select a region for your Neon project:",
+				options: NEON_REGIONS,
 			});
 
 			if (isCancel(projectName) || isCancel(regionId))

@@ -43,7 +43,7 @@ async function setupWithCreateDb(
 		logger.info("Starting Prisma Postgres setup with create-db.");
 
 		const selectedRegion = await selectPrompt({
-			title: "Select your preferred region:",
+			message: "Select your preferred region:",
 			options: AVAILABLE_REGIONS,
 		});
 
@@ -112,7 +112,7 @@ async function initPrismaDatabase(
 		);
 
 		const databaseUrl = await inputPrompt({
-			title: "Paste your Prisma Postgres database URL:",
+			message: "Paste your Prisma Postgres database URL:",
 			validate(value) {
 				if (!value) return "Please enter a database URL";
 				if (!value.startsWith("postgresql://")) {
@@ -216,7 +216,7 @@ export async function setupPrismaPostgres(
 		}
 
 		const mode = await selectPrompt({
-			title: "Prisma Postgres setup: choose mode",
+			message: "Prisma Postgres setup: choose mode",
 			options: [
 				{
 					label: "Automatic",
@@ -258,7 +258,7 @@ export async function setupPrismaPostgres(
 		}
 
 		const setupMethod = await selectPrompt({
-			title: "Choose your Prisma Postgres setup method:",
+			message: "Choose your Prisma Postgres setup method:",
 			options: setupOptions,
 		});
 
@@ -296,7 +296,7 @@ export async function setupPrismaPostgres(
 		logger.error(
 			re.red(
 				`Error during Prisma Postgres setup: ${
-					error instanceof Error ? error.title: String(error)
+					error instanceof Error ? error.message : String(error)
 				}`,
 			),
 		);

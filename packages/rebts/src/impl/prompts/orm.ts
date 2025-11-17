@@ -42,7 +42,7 @@ export async function getORMChoice(
 	];
 
 	const response = await selectPrompt<ORM>({
-		title: "Select ORM",
+		message: "Select ORM",
 		options,
 	});
 

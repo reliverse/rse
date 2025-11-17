@@ -34,7 +34,7 @@ export async function handleDirectoryConflict(
 		);
 
 		const action = await selectPrompt<"overwrite" | "merge" | "rename" | "cancel">({
-			title: "What would you like to do?",
+			message: "What would you like to do?",
 			options: [
 				{
 					value: "overwrite",

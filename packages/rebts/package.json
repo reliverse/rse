@@ -28,7 +28,12 @@
     "jsonc-parser": "catalog:",
     "ts-morph": "catalog:",
     "execa": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "yaml": "catalog:",
+    "handlebars": "catalog:",
+    "gradient-string": "catalog:",
+    "dotenv": "catalog:",
+    "@biomejs/js-api": "catalog:"
   },
   "devDependencies": {
     "@p/tsconfig": "workspace:*",

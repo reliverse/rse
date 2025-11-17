@@ -12,7 +12,7 @@ export async function getFrontendChoice(
 	if (frontendOptions !== undefined) return frontendOptions;
 
 	const frontendTypes = await multiselectPrompt({
-		title: "Select project type",
+		message: "Select project type",
 		options: [
 			{
 				value: "web",
@@ -25,7 +25,6 @@ export async function getFrontendChoice(
 				hint: "Create a React Native/Expo app",
 			},
 		],
-		required: false,
 		initialValues: ["web"],
 	});
 
@@ -77,8 +76,8 @@ export async function getFrontendChoice(
 		);
 
 		const webFramework = await selectPrompt<Frontend>({
-			title: "Choose web",
-			options: webOptions],
+			message: "Choose web",
+			options: webOptions,
 		});
 
 		if (isCancel(webFramework)) return exitCancelled("Operation cancelled");
@@ -88,7 +87,7 @@ export async function getFrontendChoice(
 
 	if (frontendTypes.includes("native")) {
 		const nativeFramework = await selectPrompt<Frontend>({
-			title: "Choose native",
+			message: "Choose native",
 			options: [
 				{
 					value: "native-bare" as const,

@@ -57,7 +57,7 @@ export async function getAuthChoice(
 		options.push({ value: "none", label: "None", hint: "No auth" });
 
 		const response = await selectPrompt({
-			title: "Select authentication provider",
+			message: "Select authentication provider",
 			options,
 		});
 		if (isCancel(response)) return exitCancelled("Operation cancelled");
@@ -65,7 +65,7 @@ export async function getAuthChoice(
 	}
 
 	const response = await selectPrompt({
-		title: "Select authentication provider",
+		message: "Select authentication provider",
 		options: [
 			{
 				value: "better-auth",

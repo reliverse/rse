@@ -176,7 +176,7 @@ export async function setupSupabase(
 		}
 
 		const mode = await selectPrompt({
-			title: "Supabase setup: choose mode",
+			message: "Supabase setup: choose mode",
 			options: [
 				{
 					label: "Automatic",

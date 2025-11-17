@@ -1,6 +1,6 @@
 import path from "@reliverse/pathkit";
 import fs from "@reliverse/relifso";
-import { glob } from "tinyglobby";
+import { Glob } from "bun";
 import { PKG_ROOT } from "../../constants";
 import { processTemplate } from "../../utils/template-processor";
 import type { ProjectConfig } from "../../types";
@@ -13,13 +13,22 @@ export async function processAndCopyFiles(
 	overwrite = true,
 	ignorePatterns?: string[],
 ) {
-	const sourceFiles = await glob(sourcePattern, {
+	const sourceFiles = await (async () => {
+			const glob = new Glob(sourcePattern);
+			const files: string[] = [];
+			for await (const file of glob.scan({
 		cwd: baseSourceDir,
 		dot: true,
 		onlyFiles: true,
-		absolute: false,
-		ignore: ignorePatterns,
-	});
+		absolute: false})) {
+				files.push(file);
+			}
+			const ignorePatterns = ignorePatterns;
+			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
+			return files.filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});
+		})();
 
 	for (const relativeSrcPath of sourceFiles) {
 		const srcPath = path.join(baseSourceDir, relativeSrcPath);

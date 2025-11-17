@@ -55,9 +55,8 @@ export async function getExamplesChoice(
 	if (options.length === 0) return [];
 
 	response = await multiselectPrompt<Examples>({
-		title: "Include examples",
+		message: "Include examples",
 		options: options,
-		required: false,
 		initialValues: DEFAULT_CONFIG.examples?.filter((ex) =>
 			options.some((o) => o.value === ex),
 		),

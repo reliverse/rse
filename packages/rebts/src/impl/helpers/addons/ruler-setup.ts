@@ -2,7 +2,7 @@ import path from "@reliverse/pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
 import { logger } from "@reliverse/dler-logger";
 import { createSpinner } from "@reliverse/dler-spinner";
-import { isCancel } from "@reliverse/dler-prompt";
+import { isCancel, multiselectPrompt } from "@reliverse/dler-prompt";
 import { execa } from "execa";
 import fs from "@reliverse/relifso";
 import { re } from "@reliverse/dler-colors";
@@ -56,13 +56,12 @@ export async function setupRuler(config: ProjectConfig) {
 			warp: { label: "Warp" },
 		} as const;
 
-		const selectedEditors = await autocompleteMultiselect({
-			title: "Select AI assistants for Ruler",
+		const selectedEditors = await multiselectPrompt({
+			message: "Select AI assistants for Ruler",
 			options: Object.entries(EDITORS).map(([key, v]) => ({
 				value: key,
 				label: v.label,
 			})),
-			required: false,
 		});
 
 		if (isCancel(selectedEditors)) return exitCancelled("Operation cancelled");

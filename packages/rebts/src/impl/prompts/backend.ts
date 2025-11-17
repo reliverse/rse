@@ -74,7 +74,7 @@ export async function getBackendFrameworkChoice(
 	});
 
 	const response = await selectPrompt<Backend>({
-		title: "Select backend",
+		message: "Select backend",
 		options: backendOptions,
 	});
 

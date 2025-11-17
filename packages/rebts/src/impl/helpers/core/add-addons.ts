@@ -91,7 +91,7 @@ export async function addAddonsToProject(
 			);
 		}
 	} catch (error) {
-		const message = error instanceof Error ? error.title: String(error);
+		const message = error instanceof Error ? error.message : String(error);
 		exitWithError(`Error adding addons: ${message}`);
 	}
 }

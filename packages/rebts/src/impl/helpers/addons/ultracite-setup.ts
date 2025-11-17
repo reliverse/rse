@@ -1,6 +1,6 @@
 import { logger } from "@reliverse/dler-logger";
 import { createSpinner } from "@reliverse/dler-spinner";
-import { multiselectPrompt } from "@reliverse/dler-prompt";
+import { groupPrompt, multiselectPrompt } from "@reliverse/dler-prompt";
 import { execa } from "execa";
 import { re } from "@reliverse/dler-colors";
 import { addPackageDependency } from "../../utils/add-package-deps";
@@ -140,11 +140,11 @@ export async function setupUltracite(config: ProjectConfig, hasHusky: boolean) {
 
 		await setupBiome(projectDir);
 
-		const result = await group(
+		const result = await groupPrompt(
 			{
 				editors: () =>
 					multiselectPrompt<UltraciteEditor>({
-						title: "Choose editors",
+						message: "Choose editors",
 						options: Object.entries(EDITORS).map(([key, editor]) => ({
 							value: key as UltraciteEditor,
 							label: editor.label,
@@ -152,8 +152,8 @@ export async function setupUltracite(config: ProjectConfig, hasHusky: boolean) {
 						required: true,
 					}),
 				agents: () =>
-					autocompleteMultiselect<UltraciteAgent>({
-						title: "Choose agents",
+					multiselectPrompt<UltraciteAgent>({
+						message: "Choose agents",
 						options: Object.entries(AGENTS).map(([key, agent]) => ({
 							value: key as UltraciteAgent,
 							label: agent.label,
@@ -161,8 +161,8 @@ export async function setupUltracite(config: ProjectConfig, hasHusky: boolean) {
 						required: true,
 					}),
 				hooks: () =>
-					autocompleteMultiselect<UltraciteHook>({
-						title: "Choose hooks",
+					multiselectPrompt<UltraciteHook>({
+						message: "Choose hooks",
 						options: Object.entries(HOOKS).map(([key, hook]) => ({
 							value: key as UltraciteHook,
 							label: hook.label,

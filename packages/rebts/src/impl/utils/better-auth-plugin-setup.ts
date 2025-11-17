@@ -1,8 +1,5 @@
 import { SyntaxKind } from "ts-morph";
 import { ensureArrayProperty, tsProject } from "./ts-morph";
-import { reactStartCookies } from "better-auth/react-start";
-import { nextCookies } from "better-auth/next-js";
-import { expo } from "@better-auth/expo";
 import type { ProjectConfig } from "../types";
 
 export async function setupBetterAuthPlugins(

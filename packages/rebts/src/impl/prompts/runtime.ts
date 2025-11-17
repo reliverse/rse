@@ -36,7 +36,7 @@ export async function getRuntimeChoice(runtime?: Runtime, backend?: Backend) {
 	}
 
 	const response = await selectPrompt<Runtime>({
-		title: "Select runtime",
+		message: "Select runtime",
 		options: runtimeOptions,
 	});
 

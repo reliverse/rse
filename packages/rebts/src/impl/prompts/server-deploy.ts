@@ -63,7 +63,7 @@ export async function getServerDeploymentChoice(
 	});
 
 	const response = await selectPrompt<ServerDeploy>({
-		title: "Select server deployment",
+		message: "Select server deployment",
 		options,
 	});
 
@@ -115,7 +115,7 @@ export async function getServerDeploymentToAdd(
 	}
 
 	const response = await selectPrompt<ServerDeploy>({
-		title: "Select server deployment",
+		message: "Select server deployment",
 		options,
 	});
 

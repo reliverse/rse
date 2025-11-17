@@ -116,7 +116,7 @@ export async function addDeploymentToProject(
 			);
 		}
 	} catch (error) {
-		const message = error instanceof Error ? error.title: String(error);
+		const message = error instanceof Error ? error.message : String(error);
 		exitWithError(`Error adding deployment: ${message}`);
 	}
 }

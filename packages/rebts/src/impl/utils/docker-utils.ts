@@ -58,7 +58,7 @@ export async function getDockerStatus(database: Database) {
 		return {
 			installed: false,
 			running: false,
-			title: getDockerInstallInstructions(platform, database),
+			message: getDockerInstallInstructions(platform, database),
 		};
 	}
 
@@ -67,7 +67,7 @@ export async function getDockerStatus(database: Database) {
 		return {
 			installed: true,
 			running: false,
-			title: `${re.yellow("IMPORTANT:")} Docker is installed but not running.`,
+			message: `${re.yellow("IMPORTANT:")} Docker is installed but not running.`,
 		};
 	}
 

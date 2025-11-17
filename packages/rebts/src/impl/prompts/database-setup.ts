@@ -102,7 +102,7 @@ export async function getDBSetupChoice(
 	}
 
 	const response = await selectPrompt<DatabaseSetup>({
-		title: `Select ${databaseType} setup option`,
+		message: `Select ${databaseType} setup option`,
 		options,
 	});
 

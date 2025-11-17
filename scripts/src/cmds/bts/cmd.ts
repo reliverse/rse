@@ -5,12 +5,142 @@ import { join } from "node:path";
 import { defineCommand } from "@reliverse/dler-launcher";
 import { logger } from "@reliverse/dler-logger";
 import { $ } from "bun";
-import MagicString from "magic-string";
 
 const REPO_URL = "https://github.com/AmanVarshney01/create-better-t-stack";
 const REPO_NAME = "create-better-t-stack";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-const REMOVE_INDEX_TS = true; // Delete index.ts after transformation (functionality moved to mod.ts)
+const MOD_TS_CONTENT = [
+  'import { re } from "@reliverse/dler-colors";',
+  'import { logger } from "@reliverse/dler-logger";',
+  "import {",
+  "  addAddonsHandler,",
+  "  createProjectHandler,",
+  '} from "./impl/helpers/core/command-handlers";',
+  "import type {",
+  "  AddInput,",
+  "  Addons,",
+  "  API,",
+  "  Backend,",
+  "  BetterTStackConfig,",
+  "  CreateInput,",
+  "  Database,",
+  "  DatabaseSetup,",
+  "  DirectoryConflict,",
+  "  Examples,",
+  "  Frontend,",
+  "  InitResult,",
+  "  ORM,",
+  "  PackageManager,",
+  "  ProjectConfig,",
+  "  Runtime,",
+  "  ServerDeploy,",
+  "  WebDeploy,",
+  '} from "./impl/types";',
+  'import { handleError } from "./impl/utils/errors";',
+  'import { openUrl } from "./impl/utils/open-url";',
+  'import { renderTitle } from "./impl/utils/render-title";',
+  'import { displaySponsors, fetchSponsors } from "./impl/utils/sponsors";',
+  "",
+  "/**",
+  " * Initialize a new Better-T-Stack project",
+  " *",
+  " * @example CLI usage:",
+  " * ```bash",
+  " * npx create-better-t-stack my-app --yes",
+  " * ```",
+  " *",
+  " * @example Programmatic usage (always returns structured data):",
+  " * ```typescript",
+  " *  *",
+  ' * const result = await init("my-app", {',
+  " *   yes: true,",
+  ' *   frontend: ["tanstack-router"],',
+  ' *   backend: "hono",',
+  ' *   database: "sqlite",',
+  ' *   orm: "drizzle",',
+  ' *   auth: "better-auth",',
+  ' *   addons: ["biome", "turborepo"],',
+  ' *   packageManager: "bun",',
+  " *   install: false,",
+  ' *   directoryConflict: "increment", // auto-handle conflicts',
+  " *   disableAnalytics: true, // disable analytics",
+  " * });",
+  " *",
+  " * if (result.success) {",
+  " *   console.log(`Project created at: \\u0024{result.projectDirectory}`);",
+  " *   console.log(`Reproducible command: \\u0024{result.reproducibleCommand}`);",
+  " *   console.log(`Time taken: \\u0024{result.elapsedTimeMs}ms`);",
+  " * }",
+  " * ```",
+  " */",
+  "export async function init(projectName?: string, options?: CreateInput) {",
+  "  const opts = (options ?? {}) as CreateInput;",
+  "  const combinedInput = {",
+  "    projectName,",
+  "    ...opts,",
+  "  };",
+  "  const result = await createProjectHandler(combinedInput);",
+  "  return result as InitResult;",
+  "}",
+  "",
+  "export async function add(options?: AddInput) {",
+  "  await addAddonsHandler(options ?? {});",
+  "}",
+  "",
+  "export async function sponsors() {",
+  "  try {",
+  "    renderTitle();",
+  '    logger.info(re.magenta("Better-T-Stack Sponsors"));',
+  "    const sponsors = await fetchSponsors();",
+  "    displaySponsors(sponsors);",
+  "  } catch (error) {",
+  '    handleError(error, "Failed to display sponsors");',
+  "  }",
+  "}",
+  "",
+  "export async function docs() {",
+  '  const DOCS_URL = "https://better-t-stack.dev/docs";',
+  "  try {",
+  "    await openUrl(DOCS_URL);",
+  '    logger.success(re.blue("Opened docs in your default browser."));',
+  "  } catch {",
+  "    logger.log(`Please visit \\u0024{DOCS_URL}`);",
+  "  }",
+  "}",
+  "",
+  "export async function builder() {",
+  '  const BUILDER_URL = "https://better-t-stack.dev/new";',
+  "  try {",
+  "    await openUrl(BUILDER_URL);",
+  '    logger.success(re.blue("Opened builder in your default browser."));',
+  "  } catch {",
+  "    logger.log(`Please visit \\u0024{BUILDER_URL}`);",
+  "  }",
+  "}",
+  "",
+  "export type {",
+  "  Database,",
+  "  ORM,",
+  "  Backend,",
+  "  Runtime,",
+  "  Frontend,",
+  "  Addons,",
+  "  Examples,",
+  "  PackageManager,",
+  "  DatabaseSetup,",
+  "  API,",
+  "  WebDeploy,",
+  "  ServerDeploy,",
+  "  DirectoryConflict,",
+  "  CreateInput,",
+  "  AddInput,",
+  "  ProjectConfig,",
+  "  BetterTStackConfig,",
+  "  InitResult,",
+  "};",
+  "",
+  "",
+].join("\n");
 
 function getCacheDirectory(): string {
   return join(homedir(), ".reliverse", "dler", "cache", "bts");
@@ -73,10 +203,12 @@ function transformFileContent(content: string): string {
       const importList = imports.split(",").map((i: string) => i.trim());
       const hasSpinner = importList.some((i: string) => i === "spinner");
       const hasSelect = importList.some((i: string) => i === "select");
+      const hasGroup = importList.some((i: string) => i === "group");
       const hasMultiselect = importList.some(
-        (i: string) => i === "multiselect",
+        (i: string) => i === "multiselect" || i === "autocompleteMultiselect",
       );
       const hasText = importList.some((i: string) => i === "text");
+      const hasConfirm = importList.some((i: string) => i === "confirm");
       const hasIsCancel = importList.some((i: string) => i === "isCancel");
       const hasExitCancelled = importList.some(
         (i: string) => i === "exitCancelled",
@@ -89,7 +221,9 @@ function transformFileContent(content: string): string {
           i !== "spinner" &&
           i !== "select" &&
           i !== "multiselect" &&
+          i !== "autocompleteMultiselect" &&
           i !== "text" &&
+          i !== "confirm" &&
           i !== "log" &&
           i !== "outro" &&
           i !== "isCancel" &&
@@ -112,6 +246,9 @@ function transformFileContent(content: string): string {
       if (hasSelect) {
         result.push('import { selectPrompt } from "@reliverse/dler-prompt";');
       }
+      if (hasGroup) {
+        result.push('import { groupPrompt } from "@reliverse/dler-prompt";');
+      }
 
       // Add multiselectPrompt import if multiselect is present
       if (hasMultiselect) {
@@ -125,6 +262,11 @@ function transformFileContent(content: string): string {
         result.push('import { inputPrompt } from "@reliverse/dler-prompt";');
       }
 
+      // Add confirmPrompt import if confirm is present
+      if (hasConfirm) {
+        result.push('import { confirmPrompt } from "@reliverse/dler-prompt";');
+      }
+
       // Add isCancel and exitCancelled imports if present
       const promptImports: string[] = [];
       if (
@@ -132,12 +274,16 @@ function transformFileContent(content: string): string {
         hasExitCancelled ||
         hasSelect ||
         hasMultiselect ||
-        hasText
+        hasGroup ||
+        hasText ||
+        hasConfirm
       ) {
         const promptImportList: string[] = [];
         if (hasSelect) promptImportList.push("selectPrompt");
+        if (hasGroup) promptImportList.push("groupPrompt");
         if (hasMultiselect) promptImportList.push("multiselectPrompt");
         if (hasText) promptImportList.push("inputPrompt");
+        if (hasConfirm) promptImportList.push("confirmPrompt");
         if (hasIsCancel) promptImportList.push("isCancel");
         if (hasExitCancelled) promptImportList.push("exitCancelled");
         if (promptImportList.length > 0) {
@@ -234,6 +380,12 @@ function transformFileContent(content: string): string {
     'import path from "@reliverse/pathkit";\n',
   );
 
+  // Replace tinyglobby imports with Bun's Glob
+  transformed = transformed.replace(
+    /import\s+\{[^}]*glob[^}]*\}\s+from\s+["']tinyglobby["'];?\n?/g,
+    'import { Glob } from "bun";\n',
+  );
+
   // Remove isCancel imports
   transformed = transformed.replace(
     /import\s+\{[^}]*isCancel[^}]*\}\s+from\s+["']@clack\/prompts["'];?\n?/g,
@@ -264,6 +416,30 @@ function transformFileContent(content: string): string {
     "",
   );
 
+  // Remove unused better-auth imports
+  transformed = transformed.replace(
+    /import\s*\{[^}]*reactStartCookies[^}]*\}\s*from\s+["']better-auth\/react-start["'];?\n?/g,
+    "",
+  );
+  transformed = transformed.replace(
+    /import\s*\{[^}]*nextCookies[^}]*\}\s*from\s+["']better-auth\/next-js["'];?\n?/g,
+    "",
+  );
+  transformed = transformed.replace(
+    /import\s*\{[^}]*expo[^}]*\}\s*from\s+["']@better-auth\/expo["'];?\n?/g,
+    "",
+  );
+
+  // Remove @opennextjs/cloudflare imports
+  transformed = transformed.replace(
+    /import\s*\{[^}]*defineCloudflareConfig[^}]*\}\s*from\s+["']@opennextjs\/cloudflare["'];?\n?/g,
+    "",
+  );
+  transformed = transformed.replace(
+    /import\s+.*from\s+["']@opennextjs\/cloudflare["'];?\n?/g,
+    "",
+  );
+
   // Replace clack/prompts usage with logger
   transformed = transformed.replace(/\bintro\(/g, "logger.info(");
   transformed = transformed.replace(
@@ -272,6 +448,28 @@ function transformFileContent(content: string): string {
   );
   transformed = transformed.replace(/\blog\.message\(/g, "logger.log(");
   transformed = transformed.replace(/\boutro\(/g, "logger.info(");
+  // Transform exitCancelled helper to new behavior
+  transformed = transformed.replace(
+    /export\s+function\s+exitCancelled\(\s*message\s*=\s*"Operation cancelled"\s*\)\s*:\s*never\s*\{([\s\S]*?process\.exit\(0\);\s*)\}/gs,
+    (match, body) => {
+      if (!body.includes("cancel(") || body.includes("PromptCancelledError")) {
+        return match;
+      }
+      const indentMatch = match.match(/^\s*/);
+      const indent = indentMatch?.[0] ?? "";
+      const inner = `${indent}\t`;
+      const innerDeep = `${inner}\t`;
+      return `${indent}export function exitCancelled(message = "Operation cancelled"): never {\n${inner}if (isProgrammatic()) {\n${innerDeep}throw new PromptCancelledError(message);\n${inner}}\n\n${inner}console.log(re.red(message));\n${inner}process.exit(0);\n${indent}}`;
+    },
+  );
+  if (
+    transformed.includes("PromptCancelledError") &&
+    !/import\s+[^;]*PromptCancelledError[^;]*from\s+["']@reliverse\/dler-prompt["'];?/.test(
+      transformed,
+    )
+  ) {
+    transformed = `import { PromptCancelledError } from "@reliverse/dler-prompt";\n${transformed}`;
+  }
   // Replace spinner() calls with createSpinner()
   transformed = transformed.replace(/\bspinner\(/g, "createSpinner(");
   // Replace select() calls with selectPrompt()
@@ -290,27 +488,74 @@ function transformFileContent(content: string): string {
       return generic ? `multiselectPrompt${generic}(` : "multiselectPrompt(";
     },
   );
+  // Replace autocompleteMultiselect() calls with multiselectPrompt()
+  // Handle both autocompleteMultiselect(...) and autocompleteMultiselect<Type>(...)
+  transformed = transformed.replace(
+    /\bautocompleteMultiselect(<[^>]*>)?\(/g,
+    (_match, generic) => {
+      return generic ? `multiselectPrompt${generic}(` : "multiselectPrompt(";
+    },
+  );
+  // Replace autocompleteMultiselect in any other import statements (non-@clack/prompts)
+  transformed = transformed.replace(
+    /import\s+\{([^}]*autocompleteMultiselect[^}]*)\}\s+from\s+["'][^"']+["'];?\n?/g,
+    (match) => {
+      return match.replace(/\bautocompleteMultiselect\b/g, "multiselectPrompt");
+    },
+  );
+  // Replace any remaining references to autocompleteMultiselect
+  transformed = transformed.replace(
+    /\bautocompleteMultiselect\b/g,
+    "multiselectPrompt",
+  );
+  // Replace confirm in any other import statements (non-@clack/prompts)
+  transformed = transformed.replace(
+    /import\s+\{([^}]*\bconfirm\b[^}]*)\}\s+from\s+["'][^"']+["'];?\n?/g,
+    (match) => {
+      return match.replace(/\bconfirm\b/g, "confirmPrompt");
+    },
+  );
+  // Replace group() calls with groupPrompt()
+  transformed = transformed.replace(
+    /\bgroup(<[^>]*>)?\(/g,
+    (_match, generic) => {
+      return generic ? `groupPrompt${generic}(` : "groupPrompt(";
+    },
+  );
   // Replace text() calls with inputPrompt()
   // Handle both text(...) and text<Type>(...) - remove generics as inputPrompt doesn't support them
   // Be careful not to match .text() which is a method on Bun's $ template literals
   transformed = transformed.replace(/\btext(<[^>]*>)?\(/g, () => {
     return "inputPrompt(";
   });
-  // Transform selectPrompt options object properties
-  // message -> title (in the main options object, only in selectPrompt context)
-  // We transform all message: to title: since this codemod runs on specific files
-  transformed = transformed.replace(/\bmessage\s*:/g, "title:");
+  // Replace confirm() calls with confirmPrompt()
+  // Handle both confirm(...) and confirm<Type>(...) - keep generics as confirmPrompt now supports them
+  transformed = transformed.replace(
+    /\bconfirm(<[^>]*>)?\(/g,
+    (_match, generic) => {
+      return generic ? `confirmPrompt${generic}(` : "confirmPrompt(";
+    },
+  );
   // Keep hint as is (dler-prompt now uses hint instead of description)
   // Remove initialValue property (selectPrompt doesn't support it)
   // Handle: , initialValue: "value" or , initialValue: value
   transformed = transformed.replace(
-    /,\s*initialValue\s*:\s*(?:"[^"]*"|'[^']*'|[^,}\]]+)\s*/g,
+    /,\s*initialValue\s*:\s*(?:"[^"]*"|'[^']*'|[^,}\r\n]+)\s*/g,
     "",
   );
   // Handle: initialValue: "value", or initialValue: value (at start or end)
   transformed = transformed.replace(
-    /\binitialValue\s*:\s*(?:"[^"]*"|'[^']*'|[^,}\]]+)\s*,?\s*/g,
+    /\binitialValue\s*:\s*(?:"[^"]*"|'[^']*'|[^,}\r\n]+)\s*,?\s*/g,
     "",
+  );
+  // Clean up leftover conditional fragments introduced by removing initialValue
+  transformed = transformed.replace(
+    /(\boptions)\?\s+[\s\S]*?:[\s\S]*?,/g,
+    "$1,",
+  );
+  transformed = transformed.replace(
+    /(\boptions)\?\s+[\s\S]*?:[\s\S]*?(?=\r?\n?\})/g,
+    "$1",
   );
   // Remove placeholder property (inputPrompt doesn't support it)
   // Handle: , placeholder: "value" or , placeholder: value
@@ -323,6 +568,299 @@ function transformFileContent(content: string): string {
     /\bplaceholder\s*:\s*(?:"[^"]*"|'[^']*'|[^,}\]]+)\s*,?\s*/g,
     "",
   );
+  // Add optional chaining-safe array access for fixed indices
+  // Handle both property access (arr[0].prop) and method calls (arr[0].method())
+  transformed = transformed.replace(
+    /(\b[A-Za-z_$][\w$]*)\[(\d+)\]\.([A-Za-z_$][\w$]*)(\(\))?/g,
+    (_match, arrayName, index, member, isMethod) => {
+      if (isMethod) {
+        // Method call: arr[0].method() -> arr.at(0)?.method()
+        return `${arrayName}.at(${index})?.${member}()`;
+      }
+      // Property access: arr[0].prop -> arr.at(0)?.prop
+      return `${arrayName}.at(${index})?.${member}`;
+    },
+  );
+  // Add nullish coalescing fallback for optional chained array property/method access when no fallback exists
+  // Handle both property access and method calls correctly
+  // Skip if already has nullish coalescing
+  transformed = transformed.replace(
+    /(\b[A-Za-z_$][\w$]*\.at\(\d+\)\?\.[A-Za-z_$][\w$]*(?:\(\))?)(?!\s*\?\?)/g,
+    (match, expression, offset, fullString) => {
+      // Check if already wrapped in parentheses (check before the match)
+      const beforeMatch = fullString.slice(Math.max(0, offset - 20), offset);
+      if (beforeMatch.trim().endsWith("(")) {
+        return match;
+      }
+
+      // Wrap the entire expression (including method call if present) with nullish coalescing
+      return `(${expression}) ?? ""`;
+    },
+  );
+  // Transform tinyglobby glob() calls to Bun's Glob
+  // Pattern: await glob(pattern, options) -> await (async () => { ... })()
+  transformed = transformed.replace(
+    /await\s+glob\s*\(([^,]+),\s*(\{(?:[^{}]|\{[^{}]*\})*\})\)/gs,
+    (_match, patternArg, optionsArg) => {
+      // Extract options
+      const options = optionsArg.trim();
+      const ignoreMatch = options.match(/ignore\s*:\s*([^,}]+)/);
+      const hasIgnore = ignoreMatch !== null;
+      const ignoreValue = ignoreMatch?.[1]?.trim() || "[]";
+
+      // Build scan options (remove ignore from options)
+      let scanOptions = options;
+      if (hasIgnore) {
+        // Remove ignore property with proper handling
+        scanOptions = scanOptions
+          .replace(/,\s*ignore\s*:\s*[^,}]+/g, "")
+          .replace(/ignore\s*:\s*[^,}]+,\s*/g, "")
+          .replace(/ignore\s*:\s*[^,}]+/g, "")
+          .replace(/,\s*,/g, ",") // Clean up double commas
+          .replace(/,\s*\}/g, "}") // Clean up trailing commas
+          .replace(/\{\s*,/g, "{"); // Clean up leading commas
+      }
+
+      // Handle pattern (can be string or array)
+      const pattern = patternArg.trim();
+      const isArrayPattern = pattern.startsWith("[");
+
+      if (isArrayPattern) {
+        // Array of patterns - need to handle multiple globs
+        return `await (async () => {
+			const patterns = ${pattern};
+			const allFiles = new Set<string>();
+			for (const pattern of patterns) {
+				const glob = new Glob(pattern);
+				for await (const file of glob.scan(${scanOptions || "{}"})) {
+					allFiles.add(file);
+				}
+			}
+			${
+        hasIgnore
+          ? `const ignorePatterns = ${ignoreValue};
+			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
+			return Array.from(allFiles).filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+          : "return Array.from(allFiles);"
+      }
+		})()`;
+      } else {
+        // Single pattern
+        return `await (async () => {
+			const glob = new Glob(${pattern});
+			const files: string[] = [];
+			for await (const file of glob.scan(${scanOptions || "{}"})) {
+				files.push(file);
+			}
+			${
+        hasIgnore
+          ? `const ignorePatterns = ${ignoreValue};
+			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
+			return files.filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+          : "return files;"
+      }
+		})()`;
+      }
+    },
+  );
+  // Also handle non-await glob calls
+  transformed = transformed.replace(
+    /(\bconst\s+\w+\s*=\s*)glob\s*\(([^,]+),\s*(\{(?:[^{}]|\{[^{}]*\})*\})\)/gs,
+    (_match, prefix, patternArg, optionsArg) => {
+      const options = optionsArg.trim();
+      const ignoreMatch = options.match(/ignore\s*:\s*([^,}]+)/);
+      const hasIgnore = ignoreMatch !== null;
+      const ignoreValue = ignoreMatch?.[1]?.trim() || "[]";
+      let scanOptions = options;
+      if (hasIgnore) {
+        scanOptions = scanOptions
+          .replace(/,\s*ignore\s*:\s*[^,}]+/g, "")
+          .replace(/ignore\s*:\s*[^,}]+,\s*/g, "")
+          .replace(/ignore\s*:\s*[^,}]+/g, "")
+          .replace(/,\s*,/g, ",")
+          .replace(/,\s*\}/g, "}")
+          .replace(/\{\s*,/g, "{");
+      }
+      const pattern = patternArg.trim();
+      const isArrayPattern = pattern.startsWith("[");
+
+      if (isArrayPattern) {
+        return `${prefix}(async () => {
+			const patterns = ${pattern};
+			const allFiles = new Set<string>();
+			for (const pattern of patterns) {
+				const glob = new Glob(pattern);
+				for await (const file of glob.scan(${scanOptions || "{}"})) {
+					allFiles.add(file);
+				}
+			}
+			${
+        hasIgnore
+          ? `const ignorePatterns = ${ignoreValue};
+			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
+			return Array.from(allFiles).filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+          : "return Array.from(allFiles);"
+      }
+		})()`;
+      } else {
+        return `${prefix}(async () => {
+			const glob = new Glob(${pattern});
+			const files: string[] = [];
+			for await (const file of glob.scan(${scanOptions || "{}"})) {
+				files.push(file);
+			}
+			${
+        hasIgnore
+          ? `const ignorePatterns = ${ignoreValue};
+			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
+			return files.filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+          : "return files;"
+      }
+		})()`;
+      }
+    },
+  );
+  // Normalize workspaces to always be an array when used with .includes() or .push()
+  // Pattern: const workspaces = packageJson.workspaces; followed by workspaces.includes() or workspaces.push()
+  transformed = transformed.replace(
+    /(const\s+workspaces\s*=\s*(\w+)\.workspaces;)([\s\S]*?)(workspaces\.(includes|push))/gs,
+    (_match, _assignment, objectName, between, usage) => {
+      // Only transform if workspaces is used with .includes() or .push() after the assignment
+      return `const workspaces = Array.isArray(${objectName}.workspaces) 
+		? ${objectName}.workspaces 
+		: ${objectName}.workspaces?.packages ?? [];${between}${usage}`;
+    },
+  );
+
+  // Fix workspaces.catalog access by adding type assertion
+  // Pattern: workspaces.catalog -> (workspaces as { catalog?: Record<string, string> }).catalog
+  transformed = transformed.replace(
+    /(\w+\.workspaces)\.catalog/g,
+    (_match, workspacesExpr) => {
+      return `(${workspacesExpr} as { catalog?: Record<string, string>; packages?: string[]; nohoist?: string[] }).catalog`;
+    },
+  );
+
+  // Fix Record<string, T> property access that TypeScript thinks might be undefined
+  // Pattern: deps.web.dependencies -> deps.web!.dependencies
+  // Only apply when accessing a property on a Record that's immediately followed by another property access
+  transformed = transformed.replace(
+    /(\w+)\.(\w+)\.(\w+)/g,
+    (match, objName, firstProp, secondProp, offset, fullString) => {
+      // Check if objName is declared as Record<string, ...> in the same function/scope
+      const beforeMatch = fullString.slice(Math.max(0, offset - 500), offset);
+
+      // Case 1: Direct Record declaration: const objName: Record<string, T> = { ... }
+      const recordPattern = new RegExp(
+        `const\\s+${objName}\\s*:\\s*Record<string,\\s*[^>]+>`,
+      );
+      const objLiteralPattern = new RegExp(
+        `${objName}\\s*:\\s*Record<string,[^>]+>\\s*=\\s*\\{([\\s\\S]*?)\\};`,
+      );
+
+      if (recordPattern.test(beforeMatch)) {
+        const objMatch = beforeMatch.match(objLiteralPattern);
+        if (objMatch?.[1]?.includes(`${firstProp}:`)) {
+          // The property exists in the object literal, add non-null assertion
+          return `${objName}.${firstProp}!.${secondProp}`;
+        }
+      }
+
+      // Case 2: Variable assigned from function that returns Record
+      // Pattern: const objName = functionName(...); where functionName returns Record<string, T>
+      const assignmentPattern = new RegExp(
+        `const\\s+${objName}\\s*=\\s*([\\w]+)\\([^)]*\\);`,
+      );
+      const assignmentMatch = beforeMatch.match(assignmentPattern);
+      if (assignmentMatch) {
+        const funcName = assignmentMatch[1];
+        // Look for the function definition that returns Record
+        const funcPattern = new RegExp(
+          `function\\s+${funcName}[^{]*\\{[\\s\\S]*?const\\s+\\w+\\s*:\\s*Record<string,[^>]+>\\s*=\\s*\\{([\\s\\S]*?)\\};`,
+        );
+        const funcMatch = fullString.match(funcPattern);
+        if (funcMatch?.[1]?.includes(`${firstProp}:`)) {
+          // The property exists in the returned Record, add non-null assertion
+          return `${objName}.${firstProp}!.${secondProp}`;
+        }
+      }
+
+      return match;
+    },
+  );
+
+  // Add cancel import if cancel() is used
+  if (
+    /\bcancel\s*\(/.test(transformed) &&
+    !/import\s+[^;]*cancel[^;]*from\s+["']@reliverse\/dler-prompt["'];?/.test(
+      transformed,
+    )
+  ) {
+    // Check if there's already an import from @reliverse/dler-prompt
+    const promptImportMatch = transformed.match(
+      /import\s+\{([^}]*)\}\s+from\s+["']@reliverse\/dler-prompt["'];?\n?/,
+    );
+    if (promptImportMatch?.[1]) {
+      // Add cancel to existing import
+      const existingImports = promptImportMatch[1]
+        .split(",")
+        .map((i) => i.trim())
+        .filter((i) => i && i !== "cancel");
+      existingImports.push("cancel");
+      transformed = transformed.replace(
+        promptImportMatch[0],
+        `import { ${existingImports.join(", ")} } from "@reliverse/dler-prompt";\n`,
+      );
+    } else {
+      // Add new import
+      const firstImportMatch = transformed.match(
+        /^import\s+.*from\s+["'][^"']+["'];?\n?/m,
+      );
+      if (firstImportMatch) {
+        transformed = transformed.replace(
+          firstImportMatch[0],
+          `import { cancel } from "@reliverse/dler-prompt";\n${firstImportMatch[0]}`,
+        );
+      } else {
+        transformed = `import { cancel } from "@reliverse/dler-prompt";\n${transformed}`;
+      }
+    }
+  }
+
+  // Remove required: false from multiselectPrompt calls
+  // Handle cases where required: false is on its own line with comma before it
+  transformed = transformed.replace(
+    /,\s*\n\s*required\s*:\s*false\s*,?\s*\n/g,
+    ",\n",
+  );
+  // Handle cases where required: false is on the same line with comma before it
+  transformed = transformed.replace(
+    /,\s*required\s*:\s*false\s*,?\s*(?=\n)/g,
+    ",",
+  );
+  // Handle cases where required: false is at the end (before closing brace)
+  transformed = transformed.replace(
+    /,\s*required\s*:\s*false\s*(?=\s*\})/g,
+    "",
+  );
+  transformed = transformed.replace(
+    /required\s*:\s*false\s*,\s*(?=\s*\})/g,
+    "",
+  );
+  // Handle standalone required: false on its own line (without comma before it, at start)
+  transformed = transformed.replace(
+    /\n\s*required\s*:\s*false\s*,?\s*\n/g,
+    "\n",
+  );
+
   // Keep isCancel checks and exitCancelled calls (they're now supported by dler-prompt)
   // Transform isCancel and exitCancelled imports from @clack/prompts to @reliverse/dler-prompt
   transformed = transformed.replace(
@@ -703,366 +1241,20 @@ export default defineCommand({
       await copyDirectoryRecursive(srcSource, srcDest);
       logger.success("✅ Src copied and transformed successfully");
 
-      // Transform index.ts to mod.ts in parent directory using magic-string
-      if (REMOVE_INDEX_TS) {
-        const indexPath = join(srcDest, "index.ts");
-        if (existsSync(indexPath)) {
-          // Read and transform index.ts
-          const indexContent = await readFile(indexPath, "utf-8");
+      const modPath = join(rebtsSrcDir, "mod.ts");
+      await writeFile(modPath, MOD_TS_CONTENT, "utf-8");
+      logger.success(`✅ Wrote hardcoded mod.ts to ${modPath}`);
 
-          // First apply standard transformations
-          const standardTransformed = transformFileContent(indexContent);
+      const indexPath = join(srcDest, "index.ts");
+      if (existsSync(indexPath)) {
+        rmSync(indexPath);
+        logger.debug(`🗑️  Removed ${indexPath}`);
+      }
 
-          // Then use magic-string for precise index.ts -> mod.ts transformations
-          const magic = new MagicString(standardTransformed);
-
-          // Remove router export and related code
-          // Find and remove: export const router = os.router({...});
-          const routerStart = magic.original.search(
-            /export\s+const\s+router\s*=\s*os\.router\(/,
-          );
-          if (routerStart !== -1) {
-            // Find the matching closing brace by tracking depth
-            let depth = 0;
-            let inString = false;
-            let stringChar = "";
-            let i = routerStart;
-            let foundOpening = false;
-
-            // Find the opening brace
-            while (i < magic.original.length) {
-              const char = magic.original[i];
-              if (!inString && char === "{") {
-                depth = 1;
-                foundOpening = true;
-                i++;
-                break;
-              } else if (
-                !inString &&
-                (char === '"' || char === "'" || char === "`")
-              ) {
-                inString = true;
-                stringChar = char;
-              } else if (
-                inString &&
-                char === stringChar &&
-                magic.original[i - 1] !== "\\"
-              ) {
-                inString = false;
-              }
-              i++;
-            }
-
-            // Find the matching closing brace
-            if (foundOpening) {
-              while (i < magic.original.length && depth > 0) {
-                const char = magic.original[i];
-                if (
-                  !inString &&
-                  (char === '"' || char === "'" || char === "`")
-                ) {
-                  inString = true;
-                  stringChar = char;
-                } else if (
-                  inString &&
-                  char === stringChar &&
-                  magic.original[i - 1] !== "\\"
-                ) {
-                  inString = false;
-                } else if (!inString && char === "{") {
-                  depth++;
-                } else if (!inString && char === "}") {
-                  depth--;
-                }
-                i++;
-              }
-              // Include the semicolon after the closing brace
-              while (i < magic.original.length && magic.original[i] !== ";") {
-                i++;
-              }
-              if (i < magic.original.length) i++; // Include the semicolon
-              magic.remove(routerStart, i);
-            }
-          }
-
-          // Remove const caller = createRouterClient(router, { context: {} });
-          const callerMatch = magic.original.match(
-            /const\s+caller\s*=\s*createRouterClient\([^)]+\);/,
-          );
-          if (callerMatch) {
-            const start = magic.original.indexOf(callerMatch[0]);
-            const end = start + callerMatch[0].length;
-            magic.remove(start, end);
-          }
-
-          // Remove export function createBtsCli() {...}
-          const createBtsCliStart = magic.original.search(
-            /export\s+function\s+createBtsCli\(\)/,
-          );
-          if (createBtsCliStart !== -1) {
-            // Find the matching closing brace
-            let depth = 0;
-            let inString = false;
-            let stringChar = "";
-            let i = createBtsCliStart;
-            let foundOpening = false;
-
-            // Find the opening brace
-            while (i < magic.original.length) {
-              const char = magic.original[i];
-              if (!inString && char === "{") {
-                depth = 1;
-                foundOpening = true;
-                i++;
-                break;
-              } else if (
-                !inString &&
-                (char === '"' || char === "'" || char === "`")
-              ) {
-                inString = true;
-                stringChar = char;
-              } else if (
-                inString &&
-                char === stringChar &&
-                magic.original[i - 1] !== "\\"
-              ) {
-                inString = false;
-              }
-              i++;
-            }
-
-            // Find the matching closing brace
-            if (foundOpening) {
-              while (i < magic.original.length && depth > 0) {
-                const char = magic.original[i];
-                if (
-                  !inString &&
-                  (char === '"' || char === "'" || char === "`")
-                ) {
-                  inString = true;
-                  stringChar = char;
-                } else if (
-                  inString &&
-                  char === stringChar &&
-                  magic.original[i - 1] !== "\\"
-                ) {
-                  inString = false;
-                } else if (!inString && char === "{") {
-                  depth++;
-                } else if (!inString && char === "}") {
-                  depth--;
-                }
-                i++;
-              }
-              magic.remove(createBtsCliStart, i);
-            }
-          }
-
-          // Transform programmatic functions to call handlers directly
-          // Replace caller.init([projectName, programmaticOpts]) with direct handler call
-          magic.replace(
-            /const\s+result\s*=\s*await\s+caller\.init\(\[projectName,\s*programmaticOpts\]\);/g,
-            "const result = await createProjectHandler(combinedInput);",
-          );
-
-          // Transform the full init function body - handle multiline
-          const initFunctionMatch = magic.original.match(
-            /export\s+async\s+function\s+init\([^)]*\)\s*\{([\s\S]*?)\n\}/,
-          );
-          if (initFunctionMatch?.[1]) {
-            const fullMatch = initFunctionMatch[0];
-            const bodyMatch = initFunctionMatch[1];
-            if (bodyMatch.includes("caller.init")) {
-              const start = magic.original.indexOf(fullMatch);
-              const bodyStart = start + fullMatch.indexOf("{") + 1;
-              const bodyEnd = start + fullMatch.lastIndexOf("}");
-              const newBody = `	const opts = (options ?? {}) as CreateInput;
-	const combinedInput = {
-		projectName,
-		...opts,
-	};
-	const result = await createProjectHandler(combinedInput);
-	return result as InitResult;`;
-              magic.update(bodyStart, bodyEnd, newBody);
-            }
-          }
-
-          // Transform caller.add() to direct handler call
-          magic.replace(
-            /await\s+caller\.add\(\[options\]\);/g,
-            "await addAddonsHandler(options ?? {});",
-          );
-          magic.replace(
-            /const\s+\[options\]\s*=\s*input;\s*await\s+caller\.add\(\[options\]\);/g,
-            "await addAddonsHandler(options ?? {});",
-          );
-
-          magic.replace(
-            /return\s+caller\.sponsors\(\);/g,
-            `try {
-    renderTitle();
-    logger.info(re.magenta("Better-T-Stack Sponsors"));
-    const sponsors = await fetchSponsors();
-    displaySponsors(sponsors);
-  } catch (error) {
-    handleError(error, "Failed to display sponsors");
-  }`,
-          );
-          magic.replace(
-            /return\s+caller\.docs\(\);/g,
-            `const DOCS_URL = "https://better-t-stack.dev/docs";
-  try {
-    await openUrl(DOCS_URL);
-    logger.success(re.blue("Opened docs in your default browser."));
-  } catch {
-    logger.log(\`Please visit \${DOCS_URL}\`);
-  }`,
-          );
-          magic.replace(
-            /return\s+caller\.builder\(\);/g,
-            `const BUILDER_URL = "https://better-t-stack.dev/new";
-  try {
-    await openUrl(BUILDER_URL);
-    logger.success(re.blue("Opened builder in your default browser."));
-  } catch {
-    logger.log(\`Please visit \${BUILDER_URL}\`);
-  }`,
-          );
-
-          // Remove unused imports: os, createRouterClient, createCli, z, getLatestCLIVersion, init from create-better-t-stack
-          magic.replace(/import\s+.*\bos\b[^;]*from[^;]+;/g, "");
-          magic.replace(
-            /import\s+.*\bcreateRouterClient\b[^;]*from[^;]+;/g,
-            "",
-          );
-          magic.replace(/import\s+.*\bcreateCli\b[^;]*from[^;]+;/g, "");
-          magic.replace(/import\s+z\s+from\s+["']zod["'];?\n?/g, "");
-          magic.replace(
-            /import\s+.*\bgetLatestCLIVersion\b[^;]*from[^;]+;/g,
-            "",
-          );
-          magic.replace(
-            /import\s+\{\s*init\s*\}\s+from\s+["']create-better-t-stack["'];?\n?/g,
-            "",
-          );
-
-          // Fix import paths - add ./impl/ prefix for relative imports
-          magic.replace(
-            /from\s+["']\.\/(utils|helpers|types|prompts)/g,
-            (match) => {
-              return match.replace("./", "./impl/");
-            },
-          );
-
-          // Convert type-only imports to use import type
-          magic.replace(
-            /import\s+\{\s*type\s+([^}]+)\}\s+from\s+["']([^"']+)["'];?/g,
-            (_match, types, from) => {
-              // Remove 'type' keyword and use import type syntax
-              const cleanTypes = types
-                .split(",")
-                .map((i: string) => i.trim().replace(/^type\s+/, ""))
-                .join(", ");
-              return `import type { ${cleanTypes} } from "${from}";`;
-            },
-          );
-          // Convert imports that are only types to import type
-          magic.replace(
-            /import\s+\{\s*([^}]*type[^}]+)\}\s+from\s+["']([^"']+)["'];?/g,
-            (match, imports, from) => {
-              // Check if all imports are types
-              const importList = imports
-                .split(",")
-                .map((i: string) => i.trim());
-              const allTypes = importList.every(
-                (i: string) => i.startsWith("type ") || i.startsWith("type\t"),
-              );
-              if (allTypes) {
-                // Remove 'type' keyword from each import and use import type
-                const cleanImports = importList
-                  .map((i: string) => i.replace(/^type\s+/, ""))
-                  .join(", ");
-                return `import type { ${cleanImports} } from "${from}";`;
-              }
-              return match;
-            },
-          );
-
-          // Remove unused schema imports (keep only types)
-          // Find the types import and remove all Schema imports (handle multiline)
-          // Note: This runs after import path fixes, so it should match ./impl/types
-          const typesImportMatch = magic.original.match(
-            /import\s+\{([\s\S]*?)\}\s+from\s+["']\.\/impl\/types["'];?/,
-          );
-          if (typesImportMatch?.[1]) {
-            const imports = typesImportMatch[1];
-            const importList = imports
-              .split(",")
-              .map((i) => i.trim())
-              .filter(
-                (i) => i && !i.endsWith("Schema") && !i.match(/^\w+Schema$/),
-              );
-
-            if (importList.length > 0) {
-              const start = magic.original.indexOf(typesImportMatch[0]);
-              const end = start + typesImportMatch[0].length;
-              // Clean up type keywords
-              const cleanImports = importList
-                .map((i: string) => i.replace(/^type\s+/, ""))
-                .join(",\n\t");
-              const newImport = `import type {\n\t${cleanImports},\n} from "./impl/types";`;
-              magic.update(start, end, newImport);
-            } else {
-              // Remove the entire import if no types remain
-              const start = magic.original.indexOf(typesImportMatch[0]);
-              const end = start + typesImportMatch[0].length;
-              magic.remove(start, end);
-            }
-          }
-
-          // Remove extra blank lines (more than 2 consecutive newlines)
-          magic.replace(/\n{3,}/g, "\n\n");
-
-          // Fix formatting in init function - fix the function body formatting
-          magic.replace(
-            /export\s+async\s+function\s+init\([^)]*\)\s*\{\s*const\s+opts/g,
-            "export async function init(projectName?: string, options?: CreateInput) {\n\tconst opts",
-          );
-          // Fix closing brace formatting
-          magic.replace(
-            /return\s+result\s+as\s+InitResult;\}/g,
-            "return result as InitResult;\n}",
-          );
-
-          // Add missing add function if it doesn't exist
-          if (!magic.original.includes("export async function add")) {
-            const sponsorsStart = magic.original.search(
-              /export\s+async\s+function\s+sponsors/,
-            );
-            if (sponsorsStart !== -1) {
-              magic.prependLeft(
-                sponsorsStart,
-                "export async function add(options?: AddInput) {\n\tawait addAddonsHandler(options ?? {});\n}\n\n",
-              );
-            }
-          }
-
-          // Write to mod.ts in parent directory (packages/rebts/src/mod.ts)
-          const modPath = join(rebtsSrcDir, "mod.ts");
-          await writeFile(modPath, magic.toString(), "utf-8");
-          logger.debug(
-            `📝 Generated ${modPath} from index.ts using magic-string`,
-          );
-
-          // Remove original index.ts
-          rmSync(indexPath);
-          logger.debug(`🗑️  Removed ${indexPath}`);
-        }
-        const cliPath = join(srcDest, "cli.ts");
-        if (existsSync(cliPath)) {
-          rmSync(cliPath);
-          logger.debug(`🗑️  Removed ${cliPath}`);
-        }
+      const cliPath = join(srcDest, "cli.ts");
+      if (existsSync(cliPath)) {
+        rmSync(cliPath);
+        logger.debug(`🗑️  Removed ${cliPath}`);
       }
     } catch (error) {
       logger.error(

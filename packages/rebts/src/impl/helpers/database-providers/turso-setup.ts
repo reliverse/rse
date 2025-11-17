@@ -2,7 +2,7 @@ import os from "node:os";
 import path from "@reliverse/pathkit";
 import { logger } from "@reliverse/dler-logger";
 import { createSpinner } from "@reliverse/dler-spinner";
-import { inputPrompt, isCancel, selectPrompt } from "@reliverse/dler-prompt";
+import { confirmPrompt, inputPrompt, isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { $ } from "execa";
 import { re } from "@reliverse/dler-colors";
 import { commandExists } from "../../utils/command-exists";
@@ -99,8 +99,8 @@ async function selectTursoGroup() {
 	}
 
 	if (groups.length === 1) {
-		logger.info(`Using the only available group: ${re.blue(groups[0].name)}`);
-		return groups[0].name;
+		logger.info(`Using the only available group: ${re.blue(groups.at(0)?.name)}`);
+		return (groups.at(0)?.name) ?? "";
 	}
 
 	const groupOptions = groups.map((group) => ({
@@ -109,7 +109,7 @@ async function selectTursoGroup() {
 	}));
 
 	const selectedGroup = await selectPrompt({
-		title: "Select a Turso database group:",
+		message: "Select a Turso database group:",
 		options: groupOptions,
 	});
 
@@ -209,7 +209,7 @@ export async function setupTurso(
 		}
 
 		const mode = await selectPrompt({
-			title: "Turso setup: choose mode",
+			message: "Turso setup: choose mode",
 			options: [
 				{
 					label: "Automatic",
@@ -252,8 +252,8 @@ export async function setupTurso(
 		const isCliInstalled = await isTursoInstalled();
 
 		if (!isCliInstalled) {
-			const shouldInstall = await confirm({
-				title: "Would you like to install Turso CLI?",
+			const shouldInstall = await confirmPrompt({
+				message: "Would you like to install Turso CLI?",
 			});
 
 			if (isCancel(shouldInstall)) return exitCancelled("Operation cancelled");
@@ -280,7 +280,7 @@ export async function setupTurso(
 
 		while (!success) {
 			const dbNameResponse = await inputPrompt({
-				title: "Enter a name for your database:",
+				message: "Enter a name for your database:",
 				defaultValue: suggestedName,
 			});
 
@@ -309,7 +309,7 @@ export async function setupTurso(
 		logger.error(
 			re.red(
 				`Error during Turso setup: ${
-					error instanceof Error ? error.title: String(error)
+					error instanceof Error ? error.message : String(error)
 				}`,
 			),
 		);

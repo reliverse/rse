@@ -52,7 +52,7 @@ export async function setupFumadocs(config: ProjectConfig) {
 		logger.info("Setting up Fumadocs...");
 
 		const template = await selectPrompt<FumadocsTemplate>({
-			title: "Choose a template",
+			message: "Choose a template",
 			options: Object.entries(TEMPLATES).map(([key, template]) => ({
 				value: key as FumadocsTemplate,
 				label: template.label,

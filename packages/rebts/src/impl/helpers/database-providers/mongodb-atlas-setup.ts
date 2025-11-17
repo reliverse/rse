@@ -1,6 +1,6 @@
 import path from "@reliverse/pathkit";
 import { logger } from "@reliverse/dler-logger";
-import { inputPrompt, isCancel, selectPrompt } from "@reliverse/dler-prompt";
+import { cancel, inputPrompt, isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { execa } from "execa";
 import fs from "@reliverse/relifso";
 import { re } from "@reliverse/dler-colors";
@@ -53,7 +53,7 @@ async function initMongoDBAtlas(serverDir: string) {
 		logger.success("MongoDB Atlas deployment ready");
 
 		const connectionString = await inputPrompt({
-			title: "Enter your MongoDB connection string:",
+			message: "Enter your MongoDB connection string:",
 			validate(value) {
 				if (!value) return "Please enter a connection string";
 				if (!value.startsWith("mongodb")) {
@@ -140,7 +140,7 @@ export async function setupMongoDBAtlas(
 		}
 
 		const mode = await selectPrompt({
-			title: "MongoDB Atlas setup: choose mode",
+			message: "MongoDB Atlas setup: choose mode",
 			options: [
 				{
 					label: "Automatic",
@@ -182,7 +182,7 @@ export async function setupMongoDBAtlas(
 		logger.error(
 			re.red(
 				`Error during MongoDB Atlas setup: ${
-					error instanceof Error ? error.title: String(error)
+					error instanceof Error ? error.message : String(error)
 				}`,
 			),
 		);

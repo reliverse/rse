@@ -55,9 +55,9 @@ import { displaySponsors, fetchSponsors } from "./impl/utils/sponsors";
  * });
  *
  * if (result.success) {
- *   console.log(`Project created at: ${result.projectDirectory}`);
- *   console.log(`Reproducible command: ${result.reproducibleCommand}`);
- *   console.log(`Time taken: ${result.elapsedTimeMs}ms`);
+ *   console.log(`Project created at: \u0024{result.projectDirectory}`);
+ *   console.log(`Reproducible command: \u0024{result.reproducibleCommand}`);
+ *   console.log(`Time taken: \u0024{result.elapsedTimeMs}ms`);
  * }
  * ```
  */
@@ -92,7 +92,7 @@ export async function docs() {
     await openUrl(DOCS_URL);
     logger.success(re.blue("Opened docs in your default browser."));
   } catch {
-    logger.log(`Please visit ${DOCS_URL}`);
+    logger.log(`Please visit \u0024{DOCS_URL}`);
   }
 }
 
@@ -102,7 +102,7 @@ export async function builder() {
     await openUrl(BUILDER_URL);
     logger.success(re.blue("Opened builder in your default browser."));
   } catch {
-    logger.log(`Please visit ${BUILDER_URL}`);
+    logger.log(`Please visit \u0024{BUILDER_URL}`);
   }
 }
 
@@ -126,3 +126,4 @@ export type {
   BetterTStackConfig,
   InitResult,
 };
+

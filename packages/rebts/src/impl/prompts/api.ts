@@ -38,8 +38,8 @@ export async function getApiChoice(
 	);
 
 	const apiType = await selectPrompt<API>({
-		title: "Select API type",
-		options: apiOptions].value,
+		message: "Select API type",
+		options: apiOptions,
 	});
 
 	if (isCancel(apiType)) return exitCancelled("Operation cancelled");

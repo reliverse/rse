@@ -224,7 +224,9 @@ async function updateRootPackageJson(
 	if (!packageJson.workspaces) {
 		packageJson.workspaces = [];
 	}
-	const workspaces = packageJson.workspaces;
+	const workspaces = Array.isArray(packageJson.workspaces) 
+		? packageJson.workspaces 
+		: packageJson.workspaces?.packages ?? [];
 
 	if (options.backend === "convex") {
 		if (!workspaces.includes("packages/*")) {

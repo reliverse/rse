@@ -59,7 +59,7 @@ export async function getDeploymentChoice(
 	});
 
 	const response = await selectPrompt<WebDeploy>({
-		title: "Select web deployment",
+		message: "Select web deployment",
 		options,
 	});
 
@@ -113,7 +113,7 @@ export async function getDeploymentToAdd(
 	}
 
 	const response = await selectPrompt<WebDeploy>({
-		title: "Select web deployment",
+		message: "Select web deployment",
 		options,
 	});
 

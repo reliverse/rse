@@ -68,7 +68,7 @@ export function processAndValidateFlags(
 	try {
 		validateArrayOptions(options);
 	} catch (error) {
-		exitWithError(error instanceof Error ? error.title: String(error));
+		exitWithError(error instanceof Error ? error.message : String(error));
 	}
 
 	const config = processFlags(options, projectName);

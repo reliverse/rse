@@ -2,7 +2,6 @@ import path from "@reliverse/pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
 import fs from "@reliverse/relifso";
 import { addPackageDependency } from "../../../utils/add-package-deps";
-import { defineCloudflareConfig } from "@opennextjs/cloudflare";
 import type { PackageManager } from "../../../types";
 
 export async function setupNextAlchemyDeploy(

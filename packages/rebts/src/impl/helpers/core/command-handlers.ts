@@ -116,7 +116,7 @@ export async function createProjectHandler(
 			elapsedTimeMs,
 			projectDirectory: "",
 			relativePath: "",
-			error: error instanceof Error ? error.title: String(error),
+			error: error instanceof Error ? error.message : String(error),
 		};
 	}
 

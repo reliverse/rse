@@ -218,8 +218,7 @@ async function ensureGitignoreEntries(
 export default defineCommand({
   meta: {
     name: "rules",
-    description:
-      "Bootstrap AI rules by converting escaped TypeScript files to their original format",
+    description: "Bootstrap AI rules based on selected providers",
     examples: [
       "rules",
       'rules --providers "Cursor,Claude Code"',

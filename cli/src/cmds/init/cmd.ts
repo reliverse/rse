@@ -1,3 +1,4 @@
+import { re } from "@reliverse/dler-colors";
 import { defineArgs, defineCommand } from "@reliverse/dler-launcher";
 import { logger } from "@reliverse/dler-logger";
 import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
@@ -15,27 +16,24 @@ import {
   sponsors as btsSponsors,
 } from "@reliverse/rse-rebts";
 import { $ } from "bun";
-import { welcomeMsg } from "./impl/messages";
 
 export default defineCommand({
   meta: {
     name: "init",
-    description:
-      "Initialize a new Better-T-Stack project, optionally with RSE monorepo structure",
+    description: "Initialize a new web/native project or modify existing one",
     examples: [
-      "rse init --bts",
-      "rse init --bts my-project",
-      "rse init --bts --yes",
-      "rse init --bts --backend hono --database sqlite --orm drizzle",
-      "rse init --bts --frontend next --backend hono --yes",
+      "rse init",
+      "rse init my-project",
+      "rse init --yes",
+      "rse init --backend hono --database sqlite --orm drizzle",
+      "rse init --frontend next --backend hono --yes",
       "rse init --init-monorepo",
       "rse init --add --addons biome,husky",
       "rse init --sponsors",
       "rse init --docs",
       "rse init --builder",
       "",
-      "# Better-T-Stack options (requires --bts):",
-      "# --bts: Initialize Better-T-Stack project (required for Better-T-Stack setup)",
+      "# Better-T-Stack options:",
       "# --name: Project name",
       "# --yes: Use default configuration",
       "# --backend: Backend framework (hono, express, fastify, elysia, convex, self, none)",
@@ -54,7 +52,7 @@ export default defineCommand({
       "# --builder: Open the web-based stack builder",
       "",
       "# RSE options:",
-      "# --init-monorepo: Initialize RSE monorepo structure (mutually exclusive with --bts)",
+      "# --init-monorepo: Initialize RSE monorepo structure (mutually exclusive with Better-T-Stack setup)",
     ],
   },
   args: defineArgs({
@@ -164,10 +162,6 @@ export default defineCommand({
       description:
         "Initialize RSE monorepo structure (mutually exclusive with Better-T-Stack setup)",
     },
-    bts: {
-      type: "boolean",
-      description: "Initialize Better-T-Stack project (default: false)",
-    },
     add: {
       type: "boolean",
       description:
@@ -198,35 +192,28 @@ export default defineCommand({
         process.exit(1);
       }
 
-      // Handle CI mode
-      if (args.ci) {
-        if (!args.bts && !args.initMonorepo) {
-          logger.info("");
-          logger.info(
-            "ℹ️  In CI mode, please specify one of the following flags:",
-          );
-          logger.info("  --bts: Initialize Better-T-Stack project");
-          logger.info("  --init-monorepo: Initialize RSE monorepo structure");
-          logger.info("");
-          process.exit(1);
-        }
-      }
+      // CI mode: if --init-monorepo is not specified, proceed with BTS (default)
 
-      // Show interactive menu if no flags are specified and not in CI mode
-      const hasAnyFlag =
-        args.add ||
-        args.sponsors ||
-        args.docs ||
-        args.builder ||
-        args.initMonorepo ||
-        args.bts;
+      // Show interactive menu if no action flags are specified and not in CI mode
+      // Check for action flags (flags that determine what action to take)
+      const hasAnyActionFlag =
+        args.add === true ||
+        args.sponsors === true ||
+        args.docs === true ||
+        args.builder === true ||
+        args.initMonorepo === true;
 
       let selectedAction: "bts" | "monorepo" | null = null;
 
-      if (!hasAnyFlag && !args.ci) {
-        logger.info("");
-        logger.log(welcomeMsg);
-        logger.info("");
+      // Always show selectPrompt when no action flags are provided (0 flags) and not in CI mode
+      if (!hasAnyActionFlag && !args.ci) {
+        logger.box(`🤖  Hi, it's nice to meet you!`);
+        logger.success(
+          `I'm your assistant for creating new web/native/cli projects, integrating new features, and making advanced codebase modifications.`,
+        );
+        logger.success(
+          "I'm constantly evolving, with even more features soon! Let's get started! By the way, my name is Rse, I'm from Reliverse universe.",
+        );
 
         const response = await selectPrompt<"bts" | "monorepo" | "exit">({
           message: "What would you like to do?",
@@ -336,8 +323,10 @@ export default defineCommand({
         logger.log(`  cd ${config.rootPath}`);
         logger.log("  bun --filter '*' dev");
         logger.info("");
-      } else if (args.bts || selectedAction === "bts") {
-        // Better-T-Stack setup only
+        // Exit after monorepo setup is complete
+        return;
+      } else {
+        // Better-T-Stack setup (default behavior)
         // Prepare Better-T-Stack options
         const btsOptions: Record<string, unknown> = {};
 

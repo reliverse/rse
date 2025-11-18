@@ -1,5 +1,5 @@
 import { logger } from "@reliverse/dler-logger";
-import { askQuestion, multiselectPrompt } from "@reliverse/dler-prompt";
+import { inputPrompt, multiselectPrompt } from "@reliverse/dler-prompt";
 import { DEFAULT_LICENSE, DEFAULT_VERSION, WORKSPACES } from "./config";
 import {
   listIntegrations,
@@ -40,7 +40,10 @@ export const promptMonorepoConfig = async (): Promise<MonorepoConfig> => {
     isValidName = true;
   } else {
     while (!isValidName) {
-      name = await askQuestion("Monorepo name", "my-monorepo");
+      name = await inputPrompt({
+        message: "Monorepo name",
+        defaultValue: "my-monorepo",
+      });
       const validation = validateMonorepoName(name);
 
       if (!validation.valid) {
@@ -55,7 +58,10 @@ export const promptMonorepoConfig = async (): Promise<MonorepoConfig> => {
   const description =
     existingRoot && typeof existingRoot.description === "string"
       ? (existingRoot.description as string)
-      : await askQuestion("Description", "A Bun monorepo project");
+      : await inputPrompt({
+          message: "Description",
+          defaultValue: "A Bun monorepo project",
+        });
 
   let version = "";
   let isValidVersion = false;
@@ -65,7 +71,10 @@ export const promptMonorepoConfig = async (): Promise<MonorepoConfig> => {
     isValidVersion = true;
   } else {
     while (!isValidVersion) {
-      version = await askQuestion("Version", DEFAULT_VERSION);
+      version = await inputPrompt({
+        message: "Version",
+        defaultValue: DEFAULT_VERSION,
+      });
       const validation = validateVersion(version);
 
       if (!validation.valid) {
@@ -80,11 +89,17 @@ export const promptMonorepoConfig = async (): Promise<MonorepoConfig> => {
   const author =
     existingRoot && typeof (existingRoot as any).author === "string"
       ? ((existingRoot as any).author as string)
-      : await askQuestion("Author", "");
+      : await inputPrompt({
+          message: "Author",
+          defaultValue: "",
+        });
   const license =
     existingRoot && typeof (existingRoot as any).license === "string"
       ? ((existingRoot as any).license as string)
-      : await askQuestion("License", DEFAULT_LICENSE);
+      : await inputPrompt({
+          message: "License",
+          defaultValue: DEFAULT_LICENSE,
+        });
 
   const packages = await promptPackages();
 
@@ -111,9 +126,10 @@ const promptPackages = async (): Promise<PackageInfo[]> => {
   let packageIndex = 1;
 
   while (continueAdding) {
-    const packageName = await askQuestion(
-      `Package ${packageIndex} name (or press Enter to finish)`,
-    );
+    const packageName = await inputPrompt({
+      message: `Package ${packageIndex} name (or press Enter to finish)`,
+      defaultValue: "",
+    });
 
     if (!packageName) {
       continueAdding = false;
@@ -127,10 +143,10 @@ const promptPackages = async (): Promise<PackageInfo[]> => {
       continue;
     }
 
-    const workspace = await askQuestion(
-      "Workspace directory",
-      WORKSPACES.PACKAGES,
-    );
+    const workspace = await inputPrompt({
+      message: "Workspace directory",
+      defaultValue: WORKSPACES.PACKAGES,
+    });
     const scope = getWorkspaceScope(workspace);
 
     packages.push({
@@ -185,25 +201,30 @@ export const promptIntegrations = async (
   }));
 
   const multiselectResult = await multiselectPrompt({
-    title: "Select integrations to install:",
+    message: "Select integrations to install:",
     options,
     footerText:
       "Space: toggle, Enter: confirm (or press Enter with none selected to skip)",
   });
 
-  if (multiselectResult.error) {
+  if (multiselectResult === null) {
     logger.info("Integration selection cancelled, skipping integrations");
     return [];
   }
 
-  if (multiselectResult.selectedIndices.length === 0) {
+  if (multiselectResult.length === 0) {
     logger.info("No integrations selected, skipping");
     return [];
   }
 
-  const selectedIntegrations = multiselectResult.selectedIndices
-    .map((idx) => options[idx]?.value)
-    .filter((value): value is string => value !== undefined);
+  const selectedIntegrations = multiselectResult
+    .map(
+      (value: string) =>
+        options.find((option) => option.value === value)?.value,
+    )
+    .filter(
+      (value: string | undefined): value is string => value !== undefined,
+    );
 
   return selectedIntegrations;
 };
@@ -264,24 +285,31 @@ export const promptIntegrationTargets = async (
     }));
 
     const multiselectResult = await multiselectPrompt({
-      title: `Select target(s) for ${integrationName}:`,
+      message: `Select target(s) for ${integrationName}:`,
       options: targetOptions,
       footerText: "Space: toggle, Enter: confirm",
     });
 
-    if (
-      multiselectResult.error ||
-      multiselectResult.selectedIndices.length === 0
-    ) {
+    if (multiselectResult === null || multiselectResult.length === 0) {
       logger.warn(`⚠️ No targets selected for ${integrationName}, skipping`);
       continue;
     }
 
-    const selectedTargets = multiselectResult.selectedIndices
-      .map((idx) => availableTargets[idx])
+    const selectedTargets = multiselectResult
+      .map((value: string) =>
+        availableTargets.find((target) => target.value === value),
+      )
       .filter(
-        (target): target is (typeof availableTargets)[0] =>
-          target !== undefined,
+        (
+          target:
+            | { value: string; label: string; path: string; isRoot: boolean }
+            | undefined,
+        ): target is {
+          value: string;
+          label: string;
+          path: string;
+          isRoot: boolean;
+        } => target !== undefined,
       );
 
     for (const target of selectedTargets) {

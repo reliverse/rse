@@ -1,126 +1,129 @@
+// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
+import { re } from "@reliverse/dler-colors";
+import fs from "@reliverse/dler-fs-utils";
+import { logger } from "@reliverse/dler-logger";
 import path from "@reliverse/dler-pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
-import { logger } from "@reliverse/dler-logger";
 import { createSpinner } from "@reliverse/dler-spinner";
 import { execa } from "execa";
-import fs from "@reliverse/dler-fs-utils";
-import { re } from "@reliverse/dler-colors";
+import type { PackageManager, ProjectConfig } from "../../types";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
-import type { PackageManager, ProjectConfig } from "../../types";
 
 export async function setupServerDeploy(config: ProjectConfig) {
-	const { serverDeploy, webDeploy, projectDir } = config;
-	const { packageManager } = config;
+  const { serverDeploy, webDeploy, projectDir } = config;
+  const { packageManager } = config;
 
-	if (serverDeploy === "none") return;
+  if (serverDeploy === "none") return;
 
-	if (serverDeploy === "alchemy" && webDeploy === "alchemy") {
-		return;
-	}
+  if (serverDeploy === "alchemy" && webDeploy === "alchemy") {
+    return;
+  }
 
-	const serverDir = path.join(projectDir, "apps/server");
-	if (!(await fs.pathExists(serverDir))) return;
+  const serverDir = path.join(projectDir, "apps/server");
+  if (!(await fs.pathExists(serverDir))) return;
 
-	if (serverDeploy === "wrangler") {
-		await setupWorkersServerDeploy(serverDir, packageManager);
-		await generateCloudflareWorkerTypes({ serverDir, packageManager });
-	} else if (serverDeploy === "alchemy") {
-		await setupAlchemyServerDeploy(serverDir, packageManager, projectDir);
-	}
+  if (serverDeploy === "wrangler") {
+    await setupWorkersServerDeploy(serverDir, packageManager);
+    await generateCloudflareWorkerTypes({ serverDir, packageManager });
+  } else if (serverDeploy === "alchemy") {
+    await setupAlchemyServerDeploy(serverDir, packageManager, projectDir);
+  }
 }
 
 async function setupWorkersServerDeploy(
-	serverDir: string,
-	_packageManager: PackageManager,
+  serverDir: string,
+  _packageManager: PackageManager,
 ) {
-	const packageJsonPath = path.join(serverDir, "package.json");
-	if (!(await fs.pathExists(packageJsonPath))) return;
+  const packageJsonPath = path.join(serverDir, "package.json");
+  if (!(await fs.pathExists(packageJsonPath))) return;
 
-	const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
+  const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
-	packageJson.scripts = {
-		...packageJson.scripts,
-		dev: "wrangler dev --port=3000",
-		start: "wrangler dev",
-		deploy: "wrangler deploy",
-		build: "wrangler deploy --dry-run",
-		"cf-typegen": "wrangler types --env-interface CloudflareBindings",
-	};
+  packageJson.scripts = {
+    ...packageJson.scripts,
+    dev: "wrangler dev --port=3000",
+    start: "wrangler dev",
+    deploy: "wrangler deploy",
+    build: "wrangler deploy --dry-run",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+  };
 
-	await writePackageJSON(path.dirname(packageJsonPath), packageJson);
+  await writePackageJSON(path.dirname(packageJsonPath), packageJson);
 
-	await addPackageDependency({
-		devDependencies: ["wrangler", "@types/node"],
-		projectDir: serverDir,
-	});
+  await addPackageDependency({
+    devDependencies: ["wrangler", "@types/node"],
+    projectDir: serverDir,
+  });
 }
 
 async function generateCloudflareWorkerTypes({
-	serverDir,
-	packageManager,
+  serverDir,
+  packageManager,
 }: {
-	serverDir: string;
-	packageManager: ProjectConfig["packageManager"];
+  serverDir: string;
+  packageManager: ProjectConfig["packageManager"];
 }) {
-	if (!(await fs.pathExists(serverDir))) return;
-	const s = createSpinner();
-	try {
-		s.start("Generating Cloudflare Workers types...");
-		const runCmd = getPackageExecutionCommand(
-			packageManager,
-			"wrangler types --env-interface CloudflareBindings",
-		);
-		await execa(runCmd, { cwd: serverDir, shell: true });
-		s.stop("Cloudflare Workers types generated successfully!");
-	} catch {
-		s.stop(re.yellow("Failed to generate Cloudflare Workers types"));
-		const managerCmd = `${packageManager} run`;
-		logger.warn(
-			`Note: You can manually run 'cd apps/server && ${managerCmd} cf-typegen' in the project directory later`,
-		);
-	}
+  if (!(await fs.pathExists(serverDir))) return;
+  const s = createSpinner();
+  try {
+    s.start("Generating Cloudflare Workers types...");
+    const runCmd = getPackageExecutionCommand(
+      packageManager,
+      "wrangler types --env-interface CloudflareBindings",
+    );
+    await execa(runCmd, { cwd: serverDir, shell: true });
+    s.stop("Cloudflare Workers types generated successfully!");
+  } catch {
+    s.stop(re.yellow("Failed to generate Cloudflare Workers types"));
+    const managerCmd = `${packageManager} run`;
+    logger.warn(
+      `Note: You can manually run 'cd apps/server && ${managerCmd} cf-typegen' in the project directory later`,
+    );
+  }
 }
 
 export async function setupAlchemyServerDeploy(
-	serverDir: string,
-	_packageManager: PackageManager,
-	projectDir?: string,
+  serverDir: string,
+  _packageManager: PackageManager,
+  projectDir?: string,
 ) {
-	if (!(await fs.pathExists(serverDir))) return;
+  if (!(await fs.pathExists(serverDir))) return;
 
-	await addPackageDependency({
-		devDependencies: [
-			"alchemy",
-			"wrangler",
-			"@types/node",
-			"@cloudflare/workers-types",
-		],
-		projectDir: serverDir,
-	});
+  await addPackageDependency({
+    devDependencies: [
+      "alchemy",
+      "wrangler",
+      "@types/node",
+      "@cloudflare/workers-types",
+    ],
+    projectDir: serverDir,
+  });
 
-	if (projectDir) {
-		await addAlchemyPackagesDependencies(projectDir);
-	}
+  if (projectDir) {
+    await addAlchemyPackagesDependencies(projectDir);
+  }
 
-	const packageJsonPath = path.join(serverDir, "package.json");
-	if (await fs.pathExists(packageJsonPath)) {
-		const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
+  const packageJsonPath = path.join(serverDir, "package.json");
+  if (await fs.pathExists(packageJsonPath)) {
+    const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
-		packageJson.scripts = {
-			...packageJson.scripts,
-			dev: "alchemy dev",
-			deploy: "alchemy deploy",
-			destroy: "alchemy destroy",
-		};
+    packageJson.scripts = {
+      ...packageJson.scripts,
+      dev: "alchemy dev",
+      deploy: "alchemy deploy",
+      destroy: "alchemy destroy",
+    };
 
-		await writePackageJSON(path.dirname(packageJsonPath), packageJson);
-	}
+    await writePackageJSON(path.dirname(packageJsonPath), packageJson);
+  }
 }
 
 async function addAlchemyPackagesDependencies(projectDir: string) {
-	await addPackageDependency({
-		devDependencies: ["@cloudflare/workers-types"],
-		projectDir,
-	});
+  await addPackageDependency({
+    devDependencies: ["@cloudflare/workers-types"],
+    projectDir,
+  });
 }

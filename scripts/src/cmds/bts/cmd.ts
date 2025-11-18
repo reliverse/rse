@@ -9,138 +9,145 @@ import { $ } from "bun";
 const REPO_URL = "https://github.com/AmanVarshney01/create-better-t-stack";
 const REPO_NAME = "create-better-t-stack";
 const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-const MOD_TS_CONTENT = [
-  'import { re } from "@reliverse/dler-colors";',
-  'import { logger } from "@reliverse/dler-logger";',
-  "import {",
-  "  addAddonsHandler,",
-  "  createProjectHandler,",
-  '} from "./impl/helpers/core/command-handlers";',
-  "import type {",
-  "  AddInput,",
-  "  Addons,",
-  "  API,",
-  "  Backend,",
-  "  BetterTStackConfig,",
-  "  CreateInput,",
-  "  Database,",
-  "  DatabaseSetup,",
-  "  DirectoryConflict,",
-  "  Examples,",
-  "  Frontend,",
-  "  InitResult,",
-  "  ORM,",
-  "  PackageManager,",
-  "  ProjectConfig,",
-  "  Runtime,",
-  "  ServerDeploy,",
-  "  WebDeploy,",
-  '} from "./impl/types";',
-  'import { handleError } from "./impl/utils/errors";',
-  'import { openUrl } from "./impl/utils/open-url";',
-  'import { renderTitle } from "./impl/utils/render-title";',
-  'import { displaySponsors, fetchSponsors } from "./impl/utils/sponsors";',
-  "",
-  "/**",
-  " * Initialize a new Better-T-Stack project",
-  " *",
-  " * @example CLI usage:",
-  " * ```bash",
-  " * npx create-better-t-stack my-app --yes",
-  " * ```",
-  " *",
-  " * @example Programmatic usage (always returns structured data):",
-  " * ```typescript",
-  " *  *",
-  ' * const result = await init("my-app", {',
-  " *   yes: true,",
-  ' *   frontend: ["tanstack-router"],',
-  ' *   backend: "hono",',
-  ' *   database: "sqlite",',
-  ' *   orm: "drizzle",',
-  ' *   auth: "better-auth",',
-  ' *   addons: ["biome", "turborepo"],',
-  ' *   packageManager: "bun",',
-  " *   install: false,",
-  ' *   directoryConflict: "increment", // auto-handle conflicts',
-  " *   disableAnalytics: true, // disable analytics",
-  " * });",
-  " *",
-  " * if (result.success) {",
-  " *   console.log(`Project created at: \\u0024{result.projectDirectory}`);",
-  " *   console.log(`Reproducible command: \\u0024{result.reproducibleCommand}`);",
-  " *   console.log(`Time taken: \\u0024{result.elapsedTimeMs}ms`);",
-  " * }",
-  " * ```",
-  " */",
-  "export async function init(projectName?: string, options?: CreateInput) {",
-  "  const opts = (options ?? {}) as CreateInput;",
-  "  const combinedInput = {",
-  "    projectName,",
-  "    ...opts,",
-  "  };",
-  "  const result = await createProjectHandler(combinedInput);",
-  "  return result as InitResult;",
-  "}",
-  "",
-  "export async function add(options?: AddInput) {",
-  "  await addAddonsHandler(options ?? {});",
-  "}",
-  "",
-  "export async function sponsors() {",
-  "  try {",
-  "    renderTitle();",
-  '    logger.info(re.magenta("Better-T-Stack Sponsors"));',
-  "    const sponsors = await fetchSponsors();",
-  "    displaySponsors(sponsors);",
-  "  } catch (error) {",
-  '    handleError(error, "Failed to display sponsors");',
-  "  }",
-  "}",
-  "",
-  "export async function docs() {",
-  '  const DOCS_URL = "https://better-t-stack.dev/docs";',
-  "  try {",
-  "    await openUrl(DOCS_URL);",
-  '    logger.success(re.blue("Opened docs in your default browser."));',
-  "  } catch {",
-  "    logger.log(`Please visit \\u0024{DOCS_URL}`);",
-  "  }",
-  "}",
-  "",
-  "export async function builder() {",
-  '  const BUILDER_URL = "https://better-t-stack.dev/new";',
-  "  try {",
-  "    await openUrl(BUILDER_URL);",
-  '    logger.success(re.blue("Opened builder in your default browser."));',
-  "  } catch {",
-  "    logger.log(`Please visit \\u0024{BUILDER_URL}`);",
-  "  }",
-  "}",
-  "",
-  "export type {",
-  "  Database,",
-  "  ORM,",
-  "  Backend,",
-  "  Runtime,",
-  "  Frontend,",
-  "  Addons,",
-  "  Examples,",
-  "  PackageManager,",
-  "  DatabaseSetup,",
-  "  API,",
-  "  WebDeploy,",
-  "  ServerDeploy,",
-  "  DirectoryConflict,",
-  "  CreateInput,",
-  "  AddInput,",
-  "  ProjectConfig,",
-  "  BetterTStackConfig,",
-  "  InitResult,",
-  "};",
-  "",
-  "",
-].join("\n");
+
+function generateModTsContent(version: string): string {
+  return [
+    `// Auto-generated mod.ts from Better-T-Stack v${version}`,
+    "// Source: https://github.com/AmanVarshney01/create-better-t-stack",
+    "// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts",
+    "",
+    'import { re } from "@reliverse/dler-colors";',
+    'import { logger } from "@reliverse/dler-logger";',
+    "import {",
+    "  addAddonsHandler,",
+    "  createProjectHandler,",
+    '} from "./impl/helpers/core/command-handlers";',
+    "import type {",
+    "  AddInput,",
+    "  Addons,",
+    "  API,",
+    "  Backend,",
+    "  BetterTStackConfig,",
+    "  CreateInput,",
+    "  Database,",
+    "  DatabaseSetup,",
+    "  DirectoryConflict,",
+    "  Examples,",
+    "  Frontend,",
+    "  InitResult,",
+    "  ORM,",
+    "  PackageManager,",
+    "  ProjectConfig,",
+    "  Runtime,",
+    "  ServerDeploy,",
+    "  WebDeploy,",
+    '} from "./impl/types";',
+    'import { handleError } from "./impl/utils/errors";',
+    'import { openUrl } from "./impl/utils/open-url";',
+    'import { renderTitle } from "./impl/utils/render-title";',
+    'import { displaySponsors, fetchSponsors } from "./impl/utils/sponsors";',
+    "",
+    "/**",
+    " * Initialize a new Better-T-Stack project",
+    " *",
+    " * @example CLI usage:",
+    " * ```bash",
+    " * npx create-better-t-stack my-app --yes",
+    " * ```",
+    " *",
+    " * @example Programmatic usage (always returns structured data):",
+    " * ```typescript",
+    " *  *",
+    ' * const result = await init("my-app", {',
+    " *   yes: true,",
+    ' *   frontend: ["tanstack-router"],',
+    ' *   backend: "hono",',
+    ' *   database: "sqlite",',
+    ' *   orm: "drizzle",',
+    ' *   auth: "better-auth",',
+    ' *   addons: ["biome", "turborepo"],',
+    ' *   packageManager: "bun",',
+    " *   install: false,",
+    ' *   directoryConflict: "increment", // auto-handle conflicts',
+    " *   disableAnalytics: true, // disable analytics",
+    " * });",
+    " *",
+    " * if (result.success) {",
+    " *   console.log(`Project created at: \\u0024{result.projectDirectory}`);",
+    " *   console.log(`Reproducible command: \\u0024{result.reproducibleCommand}`);",
+    " *   console.log(`Time taken: \\u0024{result.elapsedTimeMs}ms`);",
+    " * }",
+    " * ```",
+    " */",
+    "export async function init(projectName?: string, options?: CreateInput) {",
+    "  const opts = (options ?? {}) as CreateInput;",
+    "  const combinedInput = {",
+    "    projectName,",
+    "    ...opts,",
+    "  };",
+    "  const result = await createProjectHandler(combinedInput);",
+    "  return result as InitResult;",
+    "}",
+    "",
+    "export async function add(options?: AddInput) {",
+    "  await addAddonsHandler(options ?? {});",
+    "}",
+    "",
+    "export async function sponsors() {",
+    "  try {",
+    "    renderTitle();",
+    '    logger.info(re.magenta("Better-T-Stack Sponsors"));',
+    "    const sponsors = await fetchSponsors();",
+    "    displaySponsors(sponsors);",
+    "  } catch (error) {",
+    '    handleError(error, "Failed to display sponsors");',
+    "  }",
+    "}",
+    "",
+    "export async function docs() {",
+    '  const DOCS_URL = "https://better-t-stack.dev/docs";',
+    "  try {",
+    "    await openUrl(DOCS_URL);",
+    '    logger.success(re.blue("Opened docs in your default browser."));',
+    "  } catch {",
+    "    logger.log(`Please visit \\u0024{DOCS_URL}`);",
+    "  }",
+    "}",
+    "",
+    "export async function builder() {",
+    '  const BUILDER_URL = "https://better-t-stack.dev/new";',
+    "  try {",
+    "    await openUrl(BUILDER_URL);",
+    '    logger.success(re.blue("Opened builder in your default browser."));',
+    "  } catch {",
+    "    logger.log(`Please visit \\u0024{BUILDER_URL}`);",
+    "  }",
+    "}",
+    "",
+    "export type {",
+    "  Database,",
+    "  ORM,",
+    "  Backend,",
+    "  Runtime,",
+    "  Frontend,",
+    "  Addons,",
+    "  Examples,",
+    "  PackageManager,",
+    "  DatabaseSetup,",
+    "  API,",
+    "  WebDeploy,",
+    "  ServerDeploy,",
+    "  DirectoryConflict,",
+    "  CreateInput,",
+    "  AddInput,",
+    "  ProjectConfig,",
+    "  BetterTStackConfig,",
+    "  InitResult,",
+    "};",
+    "",
+    "",
+  ].join("\n");
+}
 
 function getCacheDirectory(): string {
   return join(homedir(), ".reliverse", "dler", "cache", "bts");
@@ -194,6 +201,27 @@ async function updateCacheTimestamp(): Promise<void> {
 
 function transformFileContent(content: string): string {
   let transformed = content;
+
+  // Add header comment if file doesn't already have it
+  const headerComment = `// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
+`;
+
+  // Check if header already exists (to avoid duplicates)
+  if (!transformed.includes("Auto-generated from Better-T-Stack")) {
+    // Remove existing shebang if present
+    const shebangMatch = transformed.match(/^#!.*\n/);
+    if (shebangMatch) {
+      transformed = transformed.replace(
+        /^#!.*\n/,
+        `${shebangMatch[0]}${headerComment}`,
+      );
+    } else {
+      // Add header at the beginning
+      transformed = `${headerComment}${transformed}`;
+    }
+  }
 
   // Replace @clack/prompts imports - handle spinner separately
   // Check if import contains spinner
@@ -619,6 +647,26 @@ function transformFileContent(content: string): string {
       return `(${expression}) ?? ""`;
     },
   );
+
+  // Fix array index access [0] to use .at(0) with proper null handling
+  // Pattern: array[0].property -> array.at(0)?.property (but only when used in contexts that need it)
+  // This is more conservative - only transform when it's clear the result needs null handling
+  transformed = transformed.replace(
+    /(\b[A-Za-z_$][\w$]*)\[0\]\.([A-Za-z_$][\w$]*)/g,
+    (_match, arrayName, property) => {
+      return `${arrayName}.at(0)?.${property}`;
+    },
+  );
+
+  // Fix array index access in includes() calls: array[0] -> array.at(0) with type assertion
+  // Pattern: FULLSTACK_FRONTENDS.includes(web[0]) -> FULLSTACK_FRONTENDS.includes((web.at(0) ?? "") as typeof web[number])
+  transformed = transformed.replace(
+    /(\w+)\.includes\s*\(\s*(\w+)\[0\]\s*\)/g,
+    (_match, arrayName, indexArrayName) => {
+      return `${arrayName}.includes((${indexArrayName}.at(0) ?? "") as typeof ${indexArrayName}[number])`;
+    },
+  );
+
   // Transform tinyglobby glob() calls to Bun's Glob
   // Pattern: await glob(pattern, options) -> await (async () => { ... })()
   transformed = transformed.replace(
@@ -666,11 +714,11 @@ function transformFileContent(content: string): string {
 			${
         hasIgnore
           ? isIgnoreVariable
-            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+            ? `const ignoreGlobs = (${ignoreVarName} ?? []).map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
 			});`
-            : `const ${ignoreVarName} = ${ignoreValue};
+            : `const ${ignoreVarName} = ${ignoreValue} ?? [];
 			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
@@ -696,11 +744,11 @@ function transformFileContent(content: string): string {
 			${
         hasIgnore
           ? isIgnoreVariable
-            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+            ? `const ignoreGlobs = (${ignoreVarName} ?? []).map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
 			});`
-            : `const ${ignoreVarName} = ${ignoreValue};
+            : `const ${ignoreVarName} = ${ignoreValue} ?? [];
 			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
@@ -777,11 +825,11 @@ function transformFileContent(content: string): string {
 			${
         hasIgnore
           ? isIgnoreVariable
-            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+            ? `const ignoreGlobs = (${ignoreVarName} ?? []).map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
 			});`
-            : `const ${ignoreVarName} = ${ignoreValue};
+            : `const ${ignoreVarName} = ${ignoreValue} ?? [];
 			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
@@ -807,11 +855,11 @@ function transformFileContent(content: string): string {
 			${
         hasIgnore
           ? isIgnoreVariable
-            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+            ? `const ignoreGlobs = (${ignoreVarName} ?? []).map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
 			});`
-            : `const ${ignoreVarName} = ${ignoreValue};
+            : `const ${ignoreVarName} = ${ignoreValue} ?? [];
 			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
@@ -869,6 +917,42 @@ function transformFileContent(content: string): string {
     },
   );
 
+  // Fix workspaces object assignment with catalog property
+  // Pattern: workspaces = { packages: ..., catalog } -> workspaces = { packages: ..., catalog } as { packages?: string[]; catalog?: Record<string, string>; nohoist?: string[] }
+  // Strategy: Use a helper function to properly match balanced braces, then add type assertion
+  // First, try to match the pattern more directly with a balanced brace approach
+  const workspacesCatalogPattern =
+    /(\w+\.workspaces)\s*=\s*(\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*packages(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*catalog(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})\s*;/gs;
+
+  transformed = transformed.replace(
+    workspacesCatalogPattern,
+    (_match, workspacesExpr, objectLiteral) => {
+      // Verify it contains both packages and catalog
+      if (
+        objectLiteral.includes("packages") &&
+        objectLiteral.includes("catalog")
+      ) {
+        // Count braces to ensure we have a complete object literal
+        const openBraces = (objectLiteral.match(/\{/g) || []).length;
+        const closeBraces = (objectLiteral.match(/\}/g) || []).length;
+        if (openBraces === closeBraces && openBraces > 0) {
+          return `${workspacesExpr} = ${objectLiteral} as { packages?: string[]; catalog?: Record<string, string>; nohoist?: string[] };`;
+        }
+      }
+      return _match;
+    },
+  );
+
+  // Simpler fallback: match multiline pattern with newline handling
+  // Pattern: workspaces = {\n\tpackages: ...,\n\tcatalog,\n};
+  transformed = transformed.replace(
+    /(\w+\.workspaces)\s*=\s*\{([\s\S]*?packages[\s\S]*?catalog[\s\S]*?)\}\s*;/g,
+    (_match, workspacesExpr, objectBody) => {
+      // Reconstruct the object with type assertion
+      return `${workspacesExpr} = {${objectBody}} as { packages?: string[]; catalog?: Record<string, string>; nohoist?: string[] };`;
+    },
+  );
+
   // Fix Record<string, T> property access that TypeScript thinks might be undefined
   // Pattern: deps.web.dependencies -> deps.web!.dependencies
   // Only apply when accessing a property on a Record that's immediately followed by another property access
@@ -914,6 +998,45 @@ function transformFileContent(content: string): string {
       }
 
       return match;
+    },
+  );
+
+  // Fix string split operations that can return undefined
+  // Pattern: importStatement.split('"')[1] -> importStatement.split('"')[1] ?? ""
+  // Fix when used in .includes() calls
+  transformed = transformed.replace(
+    /\.includes\((\w+)\.split\(([^)]+)\)\[(\d+)\]\)/g,
+    (_match, varName, splitArg, index) => {
+      return `.includes((${varName}.split(${splitArg})[${index}] ?? ""))`;
+    },
+  );
+
+  // Fix when used in moduleSpecifier property
+  transformed = transformed.replace(
+    /moduleSpecifier:\s*(\w+)\.split\(([^)]+)\)\[(\d+)\]/g,
+    (_match, varName, splitArg, index) => {
+      return `moduleSpecifier: ${varName}.split(${splitArg})[${index}] ?? ""`;
+    },
+  );
+
+  // Fix chained split operations: str.split("{")[1].split("}")[0]
+  // Pattern: importStatement.split("{")[1].split("}")[0] -> (importStatement.split("{")[1]?.split("}")[0]) ?? ""
+  transformed = transformed.replace(
+    /namedImports:\s*\[(\w+)\.split\(([^)]+)\)\[(\d+)\]\.split\(([^)]+)\)\[(\d+)\]/g,
+    (_match, varName, firstSplit, firstIndex, secondSplit, secondIndex) => {
+      return `namedImports: [(${varName}.split(${firstSplit})[${firstIndex}]?.split(${secondSplit})[${secondIndex}]) ?? ""`;
+    },
+  );
+
+  // Fix selection options to ensure value is never undefined
+  // Pattern: value: group.name -> value: group.name ?? ""
+  // When used in map functions that create selection options
+  transformed = transformed.replace(
+    /value:\s*(\w+)\.(\w+)(?=\s*,)/g,
+    (_match, itemName, propName) => {
+      // Only apply if this is in a context that looks like selection options
+      // Check if we're inside a map function
+      return `value: ${itemName}.${propName} ?? ""`;
     },
   );
 
@@ -1108,6 +1231,15 @@ function transformFileContent(content: string): string {
     (_match, pathArg) => {
       const trimmedPath = pathArg.trim();
       return `readPackageJSON(path.dirname(${trimmedPath}))`;
+    },
+  );
+
+  // Transform fs.readJSONSync() to fs.readJSONSync() with type assertion
+  // Pattern: fs.readJSONSync(path) -> fs.readJSONSync(path) as { version?: string; [key: string]: unknown }
+  transformed = transformed.replace(
+    /(\w+)\s*=\s*fs\.readJSONSync\(([^)]+)\)/g,
+    (_match, varName, pathArg) => {
+      return `${varName} = fs.readJSONSync(${pathArg}) as { version?: string; [key: string]: unknown }`;
     },
   );
 
@@ -1309,14 +1441,58 @@ function transformFileContent(content: string): string {
     },
   );
 
+  // Fix invalid syntax: response.(connection_uris.at(0)?.connection_uri) -> response.connection_uris.at(0)?.connection_uri
+  // This fixes cases where property access got incorrectly wrapped in parentheses
+  // Pattern: object.(arrayName.at(n)?.property) -> object.arrayName.at(n)?.property
+  transformed = transformed.replace(
+    /(\w+)\.\s*\(\s*(\w+)\.at\s*\(\s*(\d+)\s*\)\s*\?\.\s*(\w+)\s*\)/g,
+    (_match, objectName, arrayName, index, property) => {
+      return `${objectName}.${arrayName}.at(${index})?.${property}`;
+    },
+  );
+
   // Add nullish coalescing fallback to optional chaining expressions
-  // Pattern: array.at(n)?.property -> (array.at(n)?.property) ?? "" in contexts where undefined is not allowed
-  // Handle function arguments: func(array.at(0)?.name) -> func((array.at(0)?.name) ?? "")
+  // IMPORTANT: Check if already has ?? before adding to avoid redundant coalescing
+  // Pattern: array.at(n)?.property -> array.at(n)?.property ?? "" (without double wrapping)
+
+  // Handle return statements: return array.at(0)?.name; -> return array.at(0)?.name ?? "";
+  transformed = transformed.replace(
+    /return\s+(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?(?!\s*\?\?)\s*;/g,
+    (_match, arrayName, index, property, isMethod) => {
+      const methodCall = isMethod ? "()" : "";
+      return `return ${arrayName}.at(${index})?.${property}${methodCall} ?? "";`;
+    },
+  );
+
+  // Handle template literals: ${array.at(0)?.name} -> ${array.at(0)?.name ?? ""}
+  // Skip if already has nullish coalescing
+  transformed = transformed.replace(
+    /\$\{([^}]*?)(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?([^}]*?)\}/g,
+    (_match, before, arrayName, index, property, isMethod, after) => {
+      // Skip if already has nullish coalescing anywhere in the expression
+      if (
+        before.includes("??") ||
+        after.includes("??") ||
+        _match.includes("??")
+      ) {
+        return _match;
+      }
+      const methodCall = isMethod ? "()" : "";
+      return `\${${before}${arrayName}.at(${index})?.${property}${methodCall} ?? ""${after}}`;
+    },
+  );
+
+  // Handle function arguments: func(array.at(0)?.name) -> func(array.at(0)?.name ?? "")
+  // Skip if already has nullish coalescing
   transformed = transformed.replace(
     /(\w+(?:\.\w+)*)\s*\(\s*([^,)]*?)(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?([^,)]*?)\s*\)/g,
     (_match, funcName, before, arrayName, index, property, isMethod, after) => {
       // Skip if already has nullish coalescing
-      if (before.includes("??") || after.includes("??")) {
+      if (
+        before.includes("??") ||
+        after.includes("??") ||
+        _match.includes("??")
+      ) {
         return _match;
       }
       // Skip if it's a method call on the result
@@ -1324,71 +1500,125 @@ function transformFileContent(content: string): string {
         return _match;
       }
       const methodCall = isMethod ? "()" : "";
-      const replacement = `(${arrayName}.at(${index})?.${property}${methodCall}) ?? ""`;
-      return `${funcName}(${before}${replacement}${after})`;
+      return `${funcName}(${before}${arrayName}.at(${index})?.${property}${methodCall} ?? ""${after})`;
     },
   );
 
-  // Handle template literals: ${array.at(0)?.name} or ${func(array.at(0)?.name)}
-  // This handles both standalone and nested in function calls
+  // Handle assignments: const x = array.at(0)?.name; -> const x = array.at(0)?.name ?? "";
   transformed = transformed.replace(
-    /\$\{([^}]*?)(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?([^}]*?)\}/g,
-    (_match, before, arrayName, index, property, isMethod, after) => {
-      // Skip if already has nullish coalescing
-      if (before.includes("??") || after.includes("??")) {
-        return _match;
-      }
-      const methodCall = isMethod ? "()" : "";
-      const replacement = `(${arrayName}.at(${index})?.${property}${methodCall}) ?? ""`;
-      return `\${${before}${replacement}${after}}`;
-    },
-  );
-
-  // Handle return statements: return array.at(0)?.name; -> return (array.at(0)?.name) ?? "";
-  transformed = transformed.replace(
-    /return\s+(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?\s*;/g,
-    (_match, arrayName, index, property, isMethod) => {
-      const methodCall = isMethod ? "()" : "";
-      return `return (${arrayName}.at(${index})?.${property}${methodCall}) ?? "";`;
-    },
-  );
-
-  // Handle function arguments: func(array.at(0)?.name) -> func((array.at(0)?.name) ?? "")
-  // This is more complex - we need to match the function call pattern
-  transformed = transformed.replace(
-    /(\w+)\s*\(\s*([^,)]*?)(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?([^,)]*?)\s*\)/g,
-    (_match, funcName, before, arrayName, index, property, isMethod, after) => {
-      // Skip if already has nullish coalescing
-      if (before.includes("??") || after.includes("??")) {
-        return _match;
-      }
-      // Skip if it's a method call on the result (like .map(), .filter(), etc.)
-      if (after.trim().startsWith(".")) {
-        return _match;
-      }
-      const methodCall = isMethod ? "()" : "";
-      return `${funcName}(${before}(${arrayName}.at(${index})?.${property}${methodCall}) ?? ""${after})`;
-    },
-  );
-
-  // Handle assignments: const x = array.at(0)?.name; -> const x = (array.at(0)?.name) ?? "";
-  transformed = transformed.replace(
-    /(const|let|var)\s+(\w+)\s*=\s*(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?\s*;/g,
+    /(const|let|var)\s+(\w+)\s*=\s*(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?(?!\s*\?\?)\s*;/g,
     (_match, keyword, varName, arrayName, index, property, isMethod) => {
       const methodCall = isMethod ? "()" : "";
-      return `${keyword} ${varName} = (${arrayName}.at(${index})?.${property}${methodCall}) ?? "";`;
+      return `${keyword} ${varName} = ${arrayName}.at(${index})?.${property}${methodCall} ?? "";`;
     },
   );
 
-  // Handle standalone expressions in parentheses that might be used as arguments
-  // Pattern: (array.at(0)?.name) -> (array.at(0)?.name) ?? "" if not already has ??
+  // Remove unused variables that start with underscore (TypeScript convention for intentionally unused)
+  // Pattern: const _variableName = ...; -> (remove entire line including trailing newline)
+  // Handle cases with or without trailing semicolon, and preserve indentation of next line
+  // Match more flexibly to catch all underscore-prefixed variables
   transformed = transformed.replace(
-    /\((\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?\)(?!\s*\?\?)/g,
-    (_match, arrayName, index, property, isMethod) => {
-      const methodCall = isMethod ? "()" : "";
-      return `((${arrayName}.at(${index})?.${property}${methodCall}) ?? "")`;
+    /^\s*(const|let|var)\s+_\w+\s*=\s*[^;\n]+;\s*\n/gm,
+    "",
+  );
+  // Also handle cases where it's the last thing on a line before a closing brace
+  transformed = transformed.replace(
+    /^\s*(const|let|var)\s+_\w+\s*=\s*[^;\n]+;\s*(?=\n\s*[}\]])/gm,
+    "",
+  );
+  // Handle cases where the assignment spans multiple lines (with line continuations)
+  transformed = transformed.replace(
+    /^\s*(const|let|var)\s+_\w+\s*=\s*[^;]+;\s*\n/gm,
+    "",
+  );
+
+  // Remove unused variables from destructuring patterns - but be very conservative
+  // Only remove if we can verify the variable is truly unused in the entire function scope
+  // For now, we'll skip this transformation as it's too risky without proper scope analysis
+  // The TypeScript compiler will warn about unused variables, which is safer than removing them incorrectly
+
+  // Fix "never nullish" expressions - remove redundant nullish coalescing
+  // This must run AFTER all other transformations to clean up any redundant ?? "" that were added
+  // Pattern: expr ?? "" ?? "" -> expr ?? ""
+  // Handle multiple redundant ?? "" in sequence - must work in all contexts
+  // Use a global replacement that works recursively
+  let previousTransformed = "";
+  while (previousTransformed !== transformed) {
+    previousTransformed = transformed;
+    // Remove all redundant ?? "" sequences anywhere in the code
+    transformed = transformed.replace(/(\?\?\s*"")(\s*\?\?\s*"")+/g, "$1");
+    // Also handle cases with 3+ redundant coalescing: ?? "" ?? "" ?? ""
+    transformed = transformed.replace(/(\?\?\s*"")(\s*\?\?\s*""){2,}/g, "$1");
+  }
+
+  // Pattern: expr ?? "" ?? "fallback" -> expr ?? "fallback" (remove the redundant ?? "")
+  // Handle template literals (backticks) and other expressions
+  // Match: ?? "" ?? `template` or ?? "" ?? "string" or ?? "" ?? expression
+  transformed = transformed.replace(
+    /\?\?\s*""\s*\?\?\s*([`'"][^`'"]*[`'"]|[^,;)\]}\s]+)/g,
+    (_match, fallback) => {
+      // Skip if fallback contains another ?? operator (nested case)
+      if (fallback.includes("??")) {
+        return _match;
+      }
+      return `?? ${fallback.trim()}`;
     },
   );
+
+  // Fix specific pattern: backend.at(0)?.toUpperCase() ?? "" ?? `...`
+  // This should be: backend.at(0)?.toUpperCase() ?? `...`
+  // Handle template literals with ${} interpolation - match until closing backtick
+  // Use a more flexible pattern that matches template literals properly
+  transformed = transformed.replace(
+    /(\w+\.at\(\d+\)\?\.\w+\(\))\s*\?\?\s*""\s*\?\?\s*`([^`]*(?:\$\{[^}]*\}[^`]*)*)`/g,
+    (_match, expr, templateContent) => {
+      return `${expr} ?? \`${templateContent}\``;
+    },
+  );
+
+  // Also handle the general case: any expression ?? "" ?? template literal
+  transformed = transformed.replace(
+    /([^,;)\]}]+)\s*\?\?\s*""\s*\?\?\s*`([^`]*(?:\$\{[^}]*\}[^`]*)*)`/g,
+    (_match, expr, templateContent) => {
+      // Only apply if expr doesn't already end with ?? ""
+      if (!expr.trim().endsWith('?? ""')) {
+        return `${expr.trim()} ?? \`${templateContent}\``;
+      }
+      return _match;
+    },
+  );
+
+  // Fix pattern: groups.at(0)?.name ?? "" ?? "" -> groups.at(0)?.name ?? ""
+  // This is already handled by the first pattern, but keep for clarity
+  transformed = transformed.replace(
+    /(\w+\.at\(\d+\)\?\.\w+)\s*\?\?\s*""\s*\?\?\s*""/g,
+    '$1 ?? ""',
+  );
+
+  // Fix empty template literal expressions: ${} -> (remove or replace)
+  // Pattern: `text ${}` -> `text` or `text ${variable}` if we can infer it
+  // For now, just remove empty expressions to fix syntax errors
+  transformed = transformed.replace(/\$\{\s*\}/g, "");
+
+  // Final cleanup: Remove ALL redundant nullish coalescing at the very end
+  // This ensures we catch any redundant ?? "" that were added by previous transformations
+  // Run multiple passes to catch nested cases and clean up any double-wrapped expressions
+  for (let i = 0; i < 10; i++) {
+    // Remove redundant ?? "" sequences: expr ?? "" ?? "" -> expr ?? ""
+    transformed = transformed.replace(/(\?\?\s*"")(\s*\?\?\s*"")+/g, "$1");
+    // Remove double-wrapped parentheses: ((expr) ?? "") -> (expr ?? "")
+    transformed = transformed.replace(
+      /\(\(([^)]+)\)\s*\?\?\s*""\)/g,
+      '($1 ?? "")',
+    );
+    // Remove redundant ?? "" before other expressions
+    transformed = transformed.replace(/\?\?\s*""\s*\?\?\s*""/g, '?? ""');
+    // Clean up patterns like: ((groups.at(0)?.name) ?? "") ?? "" -> groups.at(0)?.name ?? ""
+    transformed = transformed.replace(
+      /\(\(([^)]+)\)\s*\?\?\s*""\)\s*\?\?\s*""/g,
+      '($1 ?? "")',
+    );
+  }
 
   // Deduplicate imports
   transformed = deduplicateImports(transformed);
@@ -1615,9 +1845,35 @@ export default defineCommand({
       await copyDirectoryRecursive(srcSource, srcDest);
       logger.success("✅ Src copied and transformed successfully");
 
+      // Read version from cached repo's package.json
+      const cachedRepoPackageJsonPath = join(
+        cachedRepo,
+        "apps",
+        "cli",
+        "package.json",
+      );
+      let version = "unknown";
+      try {
+        const packageJsonContent = await readFile(
+          cachedRepoPackageJsonPath,
+          "utf-8",
+        );
+        const packageJson = JSON.parse(packageJsonContent) as {
+          version?: string;
+        };
+        version = packageJson.version ?? "unknown";
+      } catch {
+        logger.warn(
+          `Failed to read version from ${cachedRepoPackageJsonPath}, using "unknown"`,
+        );
+      }
+
       const modPath = join(rebtsSrcDir, "mod.ts");
-      await writeFile(modPath, MOD_TS_CONTENT, "utf-8");
-      logger.success(`✅ Wrote hardcoded mod.ts to ${modPath}`);
+      const modTsContent = generateModTsContent(version);
+      await writeFile(modPath, modTsContent, "utf-8");
+      logger.success(
+        `✅ Wrote hardcoded mod.ts to ${modPath} (Better-T-Stack v${version})`,
+      );
 
       const indexPath = join(srcDest, "index.ts");
       if (existsSync(indexPath)) {

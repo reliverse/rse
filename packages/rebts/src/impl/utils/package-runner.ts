@@ -1,3 +1,6 @@
+// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
 import type { PackageManager } from "../types";
 
 /**
@@ -9,15 +12,15 @@ import type { PackageManager } from "../types";
  * @returns The full command string (e.g., "npx prisma generate --schema=./prisma/schema.prisma").
  */
 export function getPackageExecutionCommand(
-	packageManager: PackageManager | null | undefined,
-	commandWithArgs: string,
+  packageManager: PackageManager | null | undefined,
+  commandWithArgs: string,
 ) {
-	switch (packageManager) {
-		case "pnpm":
-			return `pnpm dlx ${commandWithArgs}`;
-		case "bun":
-			return `bunx ${commandWithArgs}`;
-		default:
-			return `npx ${commandWithArgs}`;
-	}
+  switch (packageManager) {
+    case "pnpm":
+      return `pnpm dlx ${commandWithArgs}`;
+    case "bun":
+      return `bunx ${commandWithArgs}`;
+    default:
+      return `npx ${commandWithArgs}`;
+  }
 }

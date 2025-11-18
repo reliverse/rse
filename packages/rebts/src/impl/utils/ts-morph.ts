@@ -1,31 +1,34 @@
+// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
 import {
-	type ArrayLiteralExpression,
-	IndentationText,
-	type ObjectLiteralExpression,
-	Project,
-	QuoteKind,
-	SyntaxKind,
+  type ArrayLiteralExpression,
+  IndentationText,
+  type ObjectLiteralExpression,
+  Project,
+  QuoteKind,
+  SyntaxKind,
 } from "ts-morph";
 
 export const tsProject = new Project({
-	useInMemoryFileSystem: false,
-	skipAddingFilesFromTsConfig: true,
-	manipulationSettings: {
-		quoteKind: QuoteKind.Single,
-		indentationText: IndentationText.TwoSpaces,
-	},
+  useInMemoryFileSystem: false,
+  skipAddingFilesFromTsConfig: true,
+  manipulationSettings: {
+    quoteKind: QuoteKind.Single,
+    indentationText: IndentationText.TwoSpaces,
+  },
 });
 
 export function ensureArrayProperty(
-	obj: ObjectLiteralExpression,
-	name: string,
+  obj: ObjectLiteralExpression,
+  name: string,
 ) {
-	return (obj
-		.getProperty(name)
-		?.getFirstDescendantByKind(SyntaxKind.ArrayLiteralExpression) ??
-		obj
-			.addPropertyAssignment({ name, initializer: "[]" })
-			.getFirstDescendantByKindOrThrow(
-				SyntaxKind.ArrayLiteralExpression,
-			)) as ArrayLiteralExpression;
+  return (obj
+    .getProperty(name)
+    ?.getFirstDescendantByKind(SyntaxKind.ArrayLiteralExpression) ??
+    obj
+      .addPropertyAssignment({ name, initializer: "[]" })
+      .getFirstDescendantByKindOrThrow(
+        SyntaxKind.ArrayLiteralExpression,
+      )) as ArrayLiteralExpression;
 }

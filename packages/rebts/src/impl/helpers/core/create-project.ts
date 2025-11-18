@@ -1,5 +1,9 @@
-import { logger } from "@reliverse/dler-logger";
+// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
 import fs from "@reliverse/dler-fs-utils";
+import { logger } from "@reliverse/dler-logger";
+import type { ProjectConfig } from "../../types";
 import { writeBtsConfig } from "../../utils/bts-config";
 import { exitWithError } from "../../utils/errors";
 import { setupCatalogs } from "../../utils/setup-catalogs";
@@ -19,115 +23,114 @@ import { installDependencies } from "./install-dependencies";
 import { setupPayments } from "./payments-setup";
 import { displayPostInstallInstructions } from "./post-installation";
 import { updatePackageConfigurations } from "./project-config";
-import type { ProjectConfig } from "../../types";
 import {
-	copyBaseTemplate,
-	handleExtras,
-	setupAddonsTemplate,
-	setupAuthTemplate,
-	setupBackendFramework,
-	setupDeploymentTemplates,
-	setupDockerComposeTemplates,
-	setupExamplesTemplate,
-	setupFrontendTemplates,
-	setupPaymentsTemplate,
+  copyBaseTemplate,
+  handleExtras,
+  setupAddonsTemplate,
+  setupAuthTemplate,
+  setupBackendFramework,
+  setupDeploymentTemplates,
+  setupDockerComposeTemplates,
+  setupExamplesTemplate,
+  setupFrontendTemplates,
+  setupPaymentsTemplate,
 } from "./template-manager";
 
 export async function createProject(
-	options: ProjectConfig,
-	cliInput?: { manualDb?: boolean },
+  options: ProjectConfig,
+  cliInput?: { manualDb?: boolean },
 ) {
-	const projectDir = options.projectDir;
-	const isConvex = options.backend === "convex";
-	const isSelfBackend = options.backend === "self";
-	const needsServerSetup = !isConvex && !isSelfBackend;
+  const projectDir = options.projectDir;
+  const isConvex = options.backend === "convex";
+  const isSelfBackend = options.backend === "self";
+  const needsServerSetup = !isConvex && !isSelfBackend;
 
-	try {
-		await fs.ensureDir(projectDir);
+  try {
+    await fs.ensureDir(projectDir);
 
-		await copyBaseTemplate(projectDir, options);
-		await setupFrontendTemplates(projectDir, options);
+    await copyBaseTemplate(projectDir, options);
+    await setupFrontendTemplates(projectDir, options);
 
-		await setupBackendFramework(projectDir, options);
+    await setupBackendFramework(projectDir, options);
 
-		if (needsServerSetup || (isSelfBackend && options.dbSetup === "docker")) {
-			await setupDockerComposeTemplates(projectDir, options);
-		}
+    if (needsServerSetup || (isSelfBackend && options.dbSetup === "docker")) {
+      await setupDockerComposeTemplates(projectDir, options);
+    }
 
-		await setupAuthTemplate(projectDir, options);
-		if (options.payments && options.payments !== "none") {
-			await setupPaymentsTemplate(projectDir, options);
-		}
-		if (options.examples.length > 0 && options.examples[0] !== "none") {
-			await setupExamplesTemplate(projectDir, options);
-		}
-		await setupAddonsTemplate(projectDir, options);
+    await setupAuthTemplate(projectDir, options);
+    if (options.payments && options.payments !== "none") {
+      await setupPaymentsTemplate(projectDir, options);
+    }
+    if (options.examples.length > 0 && options.examples[0] !== "none") {
+      await setupExamplesTemplate(projectDir, options);
+    }
+    await setupAddonsTemplate(projectDir, options);
 
-		await setupDeploymentTemplates(projectDir, options);
+    await setupDeploymentTemplates(projectDir, options);
 
-		await setupApi(options);
+    await setupApi(options);
 
-		if (!isConvex) {
-			if (needsServerSetup) {
-				await setupBackendDependencies(options);
-				await setupRuntime(options);
-			}
-			await setupDatabase(options, cliInput);
-			if (options.examples.length > 0 && options.examples[0] !== "none") {
-				await setupExamples(options);
-			}
-		}
+    if (!isConvex) {
+      if (needsServerSetup) {
+        await setupBackendDependencies(options);
+        await setupRuntime(options);
+      }
+      await setupDatabase(options, cliInput);
+      if (options.examples.length > 0 && options.examples[0] !== "none") {
+        await setupExamples(options);
+      }
+    }
 
-		if (options.addons.length > 0 && options.addons[0] !== "none") {
-			await setupAddons(options);
-		}
+    if (options.addons.length > 0 && options.addons[0] !== "none") {
+      await setupAddons(options);
+    }
 
-		if (options.auth && options.auth !== "none") {
-			await setupAuth(options);
-		}
+    if (options.auth && options.auth !== "none") {
+      await setupAuth(options);
+    }
 
-		if (options.payments && options.payments !== "none") {
-			await setupPayments(options);
-		}
+    if (options.payments && options.payments !== "none") {
+      await setupPayments(options);
+    }
 
-		await handleExtras(projectDir, options);
+    await handleExtras(projectDir, options);
 
-		await setupEnvironmentVariables(options);
-		await updatePackageConfigurations(projectDir, options);
+    await setupEnvironmentVariables(options);
+    await updatePackageConfigurations(projectDir, options);
 
-		await setupWebDeploy(options);
-		await setupServerDeploy(options);
+    await setupWebDeploy(options);
+    await setupServerDeploy(options);
 
-		await setupCatalogs(projectDir, options);
+    await setupCatalogs(projectDir, options);
 
-		await createReadme(projectDir, options);
+    await createReadme(projectDir, options);
 
-		await writeBtsConfig(options);
+    await writeBtsConfig(options);
 
-		logger.success("Project template successfully scaffolded!");
+    logger.success("Project template successfully scaffolded!");
 
-		if (options.install) {
-			await installDependencies({
-				projectDir,
-				packageManager: options.packageManager,
-			});
-		}
+    if (options.install) {
+      await installDependencies({
+        projectDir,
+        packageManager: options.packageManager,
+      });
+    }
 
-		await initializeGit(projectDir, options.git);
+    await initializeGit(projectDir, options.git);
 
-		await displayPostInstallInstructions({
-			...options,
-			depsInstalled: options.install,
-		});
+    await displayPostInstallInstructions({
+      ...options,
+      depsInstalled: options.install,
+    });
 
-		return projectDir;
-	} catch (error) {
-		if (error instanceof Error) {
-			console.error(error.stack);
-			exitWithError(`Error during project creation: ${error.message}`);
-		} else {
-			console.error(error);
-			exitWithError(`An unexpected error occurred: ${String(error)}`);
-		}
-	}
+    return projectDir;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error(error.stack);
+      exitWithError(`Error during project creation: ${error.message}`);
+    } else {
+      console.error(error);
+      exitWithError(`An unexpected error occurred: ${String(error)}`);
+    }
+  }
 }

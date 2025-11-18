@@ -1,51 +1,56 @@
+// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
+import fs from "@reliverse/dler-fs-utils";
 import path from "@reliverse/dler-pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
-import fs from "@reliverse/dler-fs-utils";
-import { addPackageDependency } from "../../../utils/add-package-deps";
 import type { PackageManager } from "../../../types";
+import { addPackageDependency } from "../../../utils/add-package-deps";
 
 export async function setupNextAlchemyDeploy(
-	projectDir: string,
-	_packageManager: PackageManager,
-	options?: { skipAppScripts?: boolean },
+  projectDir: string,
+  _packageManager: PackageManager,
+  options?: { skipAppScripts?: boolean },
 ) {
-	const webAppDir = path.join(projectDir, "apps/web");
-	if (!(await fs.pathExists(webAppDir))) return;
+  const webAppDir = path.join(projectDir, "apps/web");
+  if (!(await fs.pathExists(webAppDir))) return;
 
-	await addPackageDependency({
-		dependencies: ["@opennextjs/cloudflare"],
-		devDependencies: ["alchemy", "wrangler", "@cloudflare/workers-types"],
-		projectDir: webAppDir,
-	});
+  await addPackageDependency({
+    dependencies: ["@opennextjs/cloudflare"],
+    devDependencies: ["alchemy", "wrangler", "@cloudflare/workers-types"],
+    projectDir: webAppDir,
+  });
 
-	const pkgPath = path.join(webAppDir, "package.json");
-	if (await fs.pathExists(pkgPath)) {
-		const pkg = await readPackageJSON(path.dirname(pkgPath));
+  const pkgPath = path.join(webAppDir, "package.json");
+  if (await fs.pathExists(pkgPath)) {
+    const pkg = await readPackageJSON(path.dirname(pkgPath));
 
-		if (!options?.skipAppScripts) {
-			pkg.scripts = {
-				...pkg.scripts,
-				deploy: "alchemy deploy",
-				destroy: "alchemy destroy",
-			};
-		}
-		await writePackageJSON(path.dirname(pkgPath), pkg);
-	}
+    if (!options?.skipAppScripts) {
+      pkg.scripts = {
+        ...pkg.scripts,
+        deploy: "alchemy deploy",
+        destroy: "alchemy destroy",
+      };
+    }
+    await writePackageJSON(path.dirname(pkgPath), pkg);
+  }
 
-	const openNextConfigPath = path.join(webAppDir, "open-next.config.ts");
-	const openNextConfigContent = `
+  const openNextConfigPath = path.join(webAppDir, "open-next.config.ts");
+  const openNextConfigContent = `
 export default defineCloudflareConfig({});
 `;
 
-	await fs.writeFile(openNextConfigPath, openNextConfigContent);
+  await fs.writeFile(openNextConfigPath, openNextConfigContent);
 
-	const gitignorePath = path.join(webAppDir, ".gitignore");
-	if (await fs.pathExists(gitignorePath)) {
-		const gitignoreContent = await fs.readFile(gitignorePath, { encoding: "utf-8" });
-		if (!gitignoreContent.includes("wrangler.jsonc")) {
-			await fs.appendFile(gitignorePath, "\nwrangler.jsonc\n");
-		}
-	} else {
-		await fs.writeFile(gitignorePath, "wrangler.jsonc\n");
-	}
+  const gitignorePath = path.join(webAppDir, ".gitignore");
+  if (await fs.pathExists(gitignorePath)) {
+    const gitignoreContent = await fs.readFile(gitignorePath, {
+      encoding: "utf-8",
+    });
+    if (!gitignoreContent.includes("wrangler.jsonc")) {
+      await fs.appendFile(gitignorePath, "\nwrangler.jsonc\n");
+    }
+  } else {
+    await fs.writeFile(gitignorePath, "wrangler.jsonc\n");
+  }
 }

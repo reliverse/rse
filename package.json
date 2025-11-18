@@ -16,7 +16,7 @@
     "latest": "bun dler update && bun install && bun check",
     "escaper": "bun rse escape --input 'packages/rse-rules/src/rules' --map 'md:.rules'",
     "scripts": "bun scripts/src/cli.ts",
-    "bts": "bun scripts bts"
+    "bts": "bun scripts bts && bun check"
   },
   "workspaces": {
     "packages": [

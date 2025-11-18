@@ -1,75 +1,78 @@
+// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
+import fs from "@reliverse/dler-fs-utils";
 import path from "@reliverse/dler-pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
-import fs from "@reliverse/dler-fs-utils";
-import { addPackageDependency } from "../../../utils/add-package-deps";
-import { tsProject } from "../../../utils/ts-morph";
 import type { ImportDeclaration } from "ts-morph";
 import type { PackageManager } from "../../../types";
+import { addPackageDependency } from "../../../utils/add-package-deps";
+import { tsProject } from "../../../utils/ts-morph";
 
 export async function setupSvelteWorkersDeploy(
-	projectDir: string,
-	packageManager: PackageManager,
+  projectDir: string,
+  packageManager: PackageManager,
 ) {
-	const webAppDir = path.join(projectDir, "apps/web");
-	if (!(await fs.pathExists(webAppDir))) return;
+  const webAppDir = path.join(projectDir, "apps/web");
+  if (!(await fs.pathExists(webAppDir))) return;
 
-	await addPackageDependency({
-		devDependencies: ["@sveltejs/adapter-cloudflare", "wrangler"],
-		projectDir: webAppDir,
-	});
+  await addPackageDependency({
+    devDependencies: ["@sveltejs/adapter-cloudflare", "wrangler"],
+    projectDir: webAppDir,
+  });
 
-	const pkgPath = path.join(webAppDir, "package.json");
-	if (await fs.pathExists(pkgPath)) {
-		const pkg = await readPackageJSON(path.dirname(pkgPath));
-		pkg.scripts = {
-			...pkg.scripts,
-			deploy: `${packageManager} run build && wrangler deploy`,
-			"cf-typegen": "wrangler types ./src/worker-configuration.d.ts",
-		};
-		await writePackageJSON(path.dirname(pkgPath), pkg);
-	}
+  const pkgPath = path.join(webAppDir, "package.json");
+  if (await fs.pathExists(pkgPath)) {
+    const pkg = await readPackageJSON(path.dirname(pkgPath));
+    pkg.scripts = {
+      ...pkg.scripts,
+      deploy: `${packageManager} run build && wrangler deploy`,
+      "cf-typegen": "wrangler types ./src/worker-configuration.d.ts",
+    };
+    await writePackageJSON(path.dirname(pkgPath), pkg);
+  }
 
-	const possibleConfigFiles = [
-		path.join(webAppDir, "svelte.config.js"),
-		path.join(webAppDir, "svelte.config.ts"),
-	];
+  const possibleConfigFiles = [
+    path.join(webAppDir, "svelte.config.js"),
+    path.join(webAppDir, "svelte.config.ts"),
+  ];
 
-	const existingConfigPath = (
-		await Promise.all(
-			possibleConfigFiles.map(async (p) => ((await fs.pathExists(p)) ? p : "")),
-		)
-	).find((p) => p);
+  const existingConfigPath = (
+    await Promise.all(
+      possibleConfigFiles.map(async (p) => ((await fs.pathExists(p)) ? p : "")),
+    )
+  ).find((p) => p);
 
-	if (existingConfigPath) {
-		const sourceFile =
-			tsProject.addSourceFileAtPathIfExists(existingConfigPath);
-		if (!sourceFile) return;
+  if (existingConfigPath) {
+    const sourceFile =
+      tsProject.addSourceFileAtPathIfExists(existingConfigPath);
+    if (!sourceFile) return;
 
-		const adapterImport = sourceFile
-			.getImportDeclarations()
-			.find((imp: ImportDeclaration) =>
-				["@sveltejs/adapter-auto", "@sveltejs/adapter-node"].includes(
-					imp.getModuleSpecifierValue(),
-				),
-			);
+    const adapterImport = sourceFile
+      .getImportDeclarations()
+      .find((imp: ImportDeclaration) =>
+        ["@sveltejs/adapter-auto", "@sveltejs/adapter-node"].includes(
+          imp.getModuleSpecifierValue(),
+        ),
+      );
 
-		if (adapterImport) {
-			adapterImport.setModuleSpecifier("@sveltejs/adapter-cloudflare");
-		} else {
-			const alreadyHasCloudflare = sourceFile
-				.getImportDeclarations()
-				.some(
-					(imp) =>
-						imp.getModuleSpecifierValue() === "@sveltejs/adapter-cloudflare",
-				);
-			if (!alreadyHasCloudflare) {
-				sourceFile.insertImportDeclaration(0, {
-					defaultImport: "adapter",
-					moduleSpecifier: "@sveltejs/adapter-cloudflare",
-				});
-			}
-		}
+    if (adapterImport) {
+      adapterImport.setModuleSpecifier("@sveltejs/adapter-cloudflare");
+    } else {
+      const alreadyHasCloudflare = sourceFile
+        .getImportDeclarations()
+        .some(
+          (imp) =>
+            imp.getModuleSpecifierValue() === "@sveltejs/adapter-cloudflare",
+        );
+      if (!alreadyHasCloudflare) {
+        sourceFile.insertImportDeclaration(0, {
+          defaultImport: "adapter",
+          moduleSpecifier: "@sveltejs/adapter-cloudflare",
+        });
+      }
+    }
 
-		await tsProject.save();
-	}
+    await tsProject.save();
+  }
 }

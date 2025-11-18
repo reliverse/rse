@@ -1,6 +1,10 @@
+// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
+import fs from "@reliverse/dler-fs-utils";
 import path from "@reliverse/dler-pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
-import fs from "@reliverse/dler-fs-utils";
+import type { PackageManager, ProjectConfig } from "../../types";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { setupCombinedAlchemyDeploy } from "./alchemy/alchemy-combined-setup";
 import { setupNextAlchemyDeploy } from "./alchemy/alchemy-next-setup";
@@ -15,92 +19,91 @@ import { setupNuxtWorkersDeploy } from "./workers/workers-nuxt-setup";
 import { setupSvelteWorkersDeploy } from "./workers/workers-svelte-setup";
 import { setupTanstackStartWorkersDeploy } from "./workers/workers-tanstack-start-setup";
 import { setupWorkersVitePlugin } from "./workers/workers-vite-setup";
-import type { PackageManager, ProjectConfig } from "../../types";
 
 export async function setupWebDeploy(config: ProjectConfig) {
-	const { webDeploy, serverDeploy, frontend, projectDir } = config;
-	const { packageManager } = config;
+  const { webDeploy, serverDeploy, frontend, projectDir } = config;
+  const { packageManager } = config;
 
-	if (webDeploy === "none") return;
+  if (webDeploy === "none") return;
 
-	if (webDeploy !== "wrangler" && webDeploy !== "alchemy") return;
+  if (webDeploy !== "wrangler" && webDeploy !== "alchemy") return;
 
-	if (webDeploy === "alchemy" && serverDeploy === "alchemy") {
-		await setupCombinedAlchemyDeploy(projectDir, packageManager, config);
-		await addAlchemyPackagesDependencies(projectDir);
-		return;
-	}
+  if (webDeploy === "alchemy" && serverDeploy === "alchemy") {
+    await setupCombinedAlchemyDeploy(projectDir, packageManager, config);
+    await addAlchemyPackagesDependencies(projectDir);
+    return;
+  }
 
-	const isNext = frontend.includes("next");
-	const isNuxt = frontend.includes("nuxt");
-	const isSvelte = frontend.includes("svelte");
-	const isTanstackRouter = frontend.includes("tanstack-router");
-	const isTanstackStart = frontend.includes("tanstack-start");
-	const isReactRouter = frontend.includes("react-router");
-	const isSolid = frontend.includes("solid");
+  const isNext = frontend.includes("next");
+  const isNuxt = frontend.includes("nuxt");
+  const isSvelte = frontend.includes("svelte");
+  const isTanstackRouter = frontend.includes("tanstack-router");
+  const isTanstackStart = frontend.includes("tanstack-start");
+  const isReactRouter = frontend.includes("react-router");
+  const isSolid = frontend.includes("solid");
 
-	if (webDeploy === "wrangler") {
-		if (isNext) {
-			await setupNextWorkersDeploy(projectDir, packageManager);
-		} else if (isNuxt) {
-			await setupNuxtWorkersDeploy(projectDir, packageManager);
-		} else if (isSvelte) {
-			await setupSvelteWorkersDeploy(projectDir, packageManager);
-		} else if (isTanstackStart) {
-			await setupTanstackStartWorkersDeploy(projectDir, packageManager);
-		} else if (isTanstackRouter || isReactRouter || isSolid) {
-			await setupWorkersWebDeploy(projectDir, packageManager);
-		}
-	} else if (webDeploy === "alchemy") {
-		if (isNext) {
-			await setupNextAlchemyDeploy(projectDir, packageManager);
-		} else if (isNuxt) {
-			await setupNuxtAlchemyDeploy(projectDir, packageManager);
-		} else if (isSvelte) {
-			await setupSvelteAlchemyDeploy(projectDir, packageManager);
-		} else if (isTanstackStart) {
-			await setupTanStackStartAlchemyDeploy(projectDir, packageManager);
-		} else if (isTanstackRouter) {
-			await setupTanStackRouterAlchemyDeploy(projectDir, packageManager);
-		} else if (isReactRouter) {
-			await setupReactRouterAlchemyDeploy(projectDir, packageManager);
-		} else if (isSolid) {
-			await setupSolidAlchemyDeploy(projectDir, packageManager);
-		}
+  if (webDeploy === "wrangler") {
+    if (isNext) {
+      await setupNextWorkersDeploy(projectDir, packageManager);
+    } else if (isNuxt) {
+      await setupNuxtWorkersDeploy(projectDir, packageManager);
+    } else if (isSvelte) {
+      await setupSvelteWorkersDeploy(projectDir, packageManager);
+    } else if (isTanstackStart) {
+      await setupTanstackStartWorkersDeploy(projectDir, packageManager);
+    } else if (isTanstackRouter || isReactRouter || isSolid) {
+      await setupWorkersWebDeploy(projectDir, packageManager);
+    }
+  } else if (webDeploy === "alchemy") {
+    if (isNext) {
+      await setupNextAlchemyDeploy(projectDir, packageManager);
+    } else if (isNuxt) {
+      await setupNuxtAlchemyDeploy(projectDir, packageManager);
+    } else if (isSvelte) {
+      await setupSvelteAlchemyDeploy(projectDir, packageManager);
+    } else if (isTanstackStart) {
+      await setupTanStackStartAlchemyDeploy(projectDir, packageManager);
+    } else if (isTanstackRouter) {
+      await setupTanStackRouterAlchemyDeploy(projectDir, packageManager);
+    } else if (isReactRouter) {
+      await setupReactRouterAlchemyDeploy(projectDir, packageManager);
+    } else if (isSolid) {
+      await setupSolidAlchemyDeploy(projectDir, packageManager);
+    }
 
-		await addAlchemyPackagesDependencies(projectDir);
-	}
+    await addAlchemyPackagesDependencies(projectDir);
+  }
 }
 
 async function setupWorkersWebDeploy(
-	projectDir: string,
-	pkgManager: PackageManager,
+  projectDir: string,
+  pkgManager: PackageManager,
 ) {
-	const webAppDir = path.join(projectDir, "apps/web");
+  const webAppDir = path.join(projectDir, "apps/web");
 
-	if (!(await fs.pathExists(webAppDir))) {
-		return;
-	}
+  if (!(await fs.pathExists(webAppDir))) {
+    return;
+  }
 
-	const packageJsonPath = path.join(webAppDir, "package.json");
-	if (await fs.pathExists(packageJsonPath)) {
-		const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
+  const packageJsonPath = path.join(webAppDir, "package.json");
+  if (await fs.pathExists(packageJsonPath)) {
+    const packageJson = await readPackageJSON(path.dirname(packageJsonPath));
 
-		packageJson.scripts = {
-			...packageJson.scripts,
-			"wrangler:dev": "wrangler dev --port=3001",
-			deploy: `${pkgManager} run build && wrangler deploy`,
-		};
+    packageJson.scripts = {
+      ...packageJson.scripts,
+      "wrangler:dev": "wrangler dev --port=3001",
+      deploy: `${pkgManager} run build && wrangler deploy`,
+    };
 
-		await writePackageJSON(path.dirname(packageJsonPath), packageJson);
-	}
+    await writePackageJSON(path.dirname(packageJsonPath), packageJson);
+  }
 
-	await setupWorkersVitePlugin(projectDir);
+  await setupWorkersVitePlugin(projectDir);
 }
 
 async function addAlchemyPackagesDependencies(projectDir: string) {
-	await addPackageDependency({
-		devDependencies: ["@cloudflare/workers-types"],
-		projectDir,
-	});
+  await addPackageDependency({
+    devDependencies: ["@cloudflare/workers-types"],
+    projectDir,
+  });
 }

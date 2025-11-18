@@ -8,7 +8,7 @@ import {
   hasWorkspaces,
   readPackageJSON,
 } from "@reliverse/dler-pkg-tsc";
-import { askQuestion } from "@reliverse/dler-prompt";
+import { inputPrompt } from "@reliverse/dler-prompt";
 import type { DetectedPackageInfo, ProjectContext } from "../types";
 
 export const detectProjectContext = async (
@@ -134,10 +134,10 @@ export const selectTargetPackage = async (
   });
 
   while (true) {
-    const answer = await askQuestion(
-      `Select target package (1-${packages.length})`,
-      "1",
-    );
+    const answer = await inputPrompt({
+      message: `Select target package (1-${packages.length})`,
+      defaultValue: "1",
+    });
 
     const index = Number.parseInt(answer, 10) - 1;
     if (index >= 0 && index < packages.length) {

@@ -9,6 +9,9 @@
       "default": "./src/mod.ts"
     }
   },
+  "scripts": {
+    "typecheck": "bun tsc --noEmit"
+  },
   "files": [
     "dist",
     "package.json"

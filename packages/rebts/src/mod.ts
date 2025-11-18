@@ -1,3 +1,7 @@
+// Auto-generated mod.ts from Better-T-Stack v3.4.2
+// Source: https://github.com/AmanVarshney01/create-better-t-stack
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
 import { re } from "@reliverse/dler-colors";
 import { logger } from "@reliverse/dler-logger";
 import {
@@ -126,4 +130,3 @@ export type {
   BetterTStackConfig,
   InitResult,
 };
-

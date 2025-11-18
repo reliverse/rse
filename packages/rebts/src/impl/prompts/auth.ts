@@ -1,82 +1,84 @@
+// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
+// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+
 import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
-import { DEFAULT_CONFIG } from "../constants";
-import { exitCancelled } from "../utils/errors";
 import type { Auth, Backend } from "../types";
+import { exitCancelled } from "../utils/errors";
 
 export async function getAuthChoice(
-	auth: Auth | undefined,
-	backend?: Backend,
-	frontend?: string[],
+  auth: Auth | undefined,
+  backend?: Backend,
+  frontend?: string[],
 ) {
-	if (auth !== undefined) return auth;
-	if (backend === "none") {
-		return "none" as Auth;
-	}
-	if (backend === "convex") {
-		const supportedBetterAuthFrontends = frontend?.some((f) =>
-			[
-				"tanstack-router",
-				"tanstack-start",
-				"next",
-				"native-bare",
-				"native-uniwind",
-				"native-unistyles",
-			].includes(f),
-		);
+  if (auth !== undefined) return auth;
+  if (backend === "none") {
+    return "none" as Auth;
+  }
+  if (backend === "convex") {
+    const supportedBetterAuthFrontends = frontend?.some((f) =>
+      [
+        "tanstack-router",
+        "tanstack-start",
+        "next",
+        "native-bare",
+        "native-uniwind",
+        "native-unistyles",
+      ].includes(f),
+    );
 
-		const hasClerkCompatibleFrontends = frontend?.some((f) =>
-			[
-				"react-router",
-				"tanstack-router",
-				"tanstack-start",
-				"next",
-				"native-bare",
-				"native-uniwind",
-				"native-unistyles",
-			].includes(f),
-		);
+    const hasClerkCompatibleFrontends = frontend?.some((f) =>
+      [
+        "react-router",
+        "tanstack-router",
+        "tanstack-start",
+        "next",
+        "native-bare",
+        "native-uniwind",
+        "native-unistyles",
+      ].includes(f),
+    );
 
-		const options = [];
+    const options = [];
 
-		if (supportedBetterAuthFrontends) {
-			options.push({
-				value: "better-auth",
-				label: "Better-Auth",
-				hint: "comprehensive auth framework for TypeScript",
-			});
-		}
+    if (supportedBetterAuthFrontends) {
+      options.push({
+        value: "better-auth",
+        label: "Better-Auth",
+        hint: "comprehensive auth framework for TypeScript",
+      });
+    }
 
-		if (hasClerkCompatibleFrontends) {
-			options.push({
-				value: "clerk",
-				label: "Clerk",
-				hint: "More than auth, Complete User Management",
-			});
-		}
+    if (hasClerkCompatibleFrontends) {
+      options.push({
+        value: "clerk",
+        label: "Clerk",
+        hint: "More than auth, Complete User Management",
+      });
+    }
 
-		options.push({ value: "none", label: "None", hint: "No auth" });
+    options.push({ value: "none", label: "None", hint: "No auth" });
 
-		const response = await selectPrompt({
-			message: "Select authentication provider",
-			options,
-		});
-		if (isCancel(response)) return exitCancelled("Operation cancelled");
-		return response as Auth;
-	}
+    const response = await selectPrompt({
+      message: "Select authentication provider",
+      options,
+    });
+    if (isCancel(response)) return exitCancelled("Operation cancelled");
+    return response as Auth;
+  }
 
-	const response = await selectPrompt({
-		message: "Select authentication provider",
-		options: [
-			{
-				value: "better-auth",
-				label: "Better-Auth",
-				hint: "comprehensive auth framework for TypeScript",
-			},
-			{ value: "none", label: "None" },
-		],
-	});
+  const response = await selectPrompt({
+    message: "Select authentication provider",
+    options: [
+      {
+        value: "better-auth",
+        label: "Better-Auth",
+        hint: "comprehensive auth framework for TypeScript",
+      },
+      { value: "none", label: "None" },
+    ],
+  });
 
-	if (isCancel(response)) return exitCancelled("Operation cancelled");
+  if (isCancel(response)) return exitCancelled("Operation cancelled");
 
-	return response as Auth;
+  return response as Auth;
 }

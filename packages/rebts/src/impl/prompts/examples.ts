@@ -2,7 +2,6 @@
 // https://github.com/AmanVarshney01/create-better-t-stack/blob/main/apps/cli/src/prompts/examples.ts
 
 import { isCancel, multiselectPrompt } from "@reliverse/dler-prompt";
-import { DEFAULT_CONFIG } from "../constants";
 import type { API, Backend, Database, Examples, Frontend } from "../types";
 import {
   isExampleAIAllowed,
@@ -60,9 +59,6 @@ export async function getExamplesChoice(
   response = await multiselectPrompt<Examples>({
     message: "Include examples",
     options: options,
-    initialValues: DEFAULT_CONFIG.examples?.filter((ex) =>
-      options.some((o) => o.value === ex),
-    ),
   });
 
   if (isCancel(response)) return exitCancelled("Operation cancelled");

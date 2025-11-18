@@ -64,10 +64,10 @@ export async function addPwaToViteConfig(
     name: "${projectName}",
     short_name: "${projectName}",
     description: "${projectName} - PWA Application",
-    theme_color: "#0c0c0c",
-  },
+    theme_color: "#0c0c0c"
+},
   pwaAssets: { disabled: false, config: true },
-  devOptions: { enabled: true },
+  devOptions: { enabled: true }
 })`,
     );
   }

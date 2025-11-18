@@ -1,5 +1,6 @@
 import { defineArgs, defineCommand } from "@reliverse/dler-launcher";
 import { logger } from "@reliverse/dler-logger";
+import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import {
   generateAllPackages,
   generateRootFiles,
@@ -14,6 +15,7 @@ import {
   sponsors as btsSponsors,
 } from "@reliverse/rse-rebts";
 import { $ } from "bun";
+import { welcomeMsg } from "./impl/messages";
 
 export default defineCommand({
   meta: {
@@ -183,6 +185,10 @@ export default defineCommand({
       type: "boolean",
       description: "Open the web-based stack builder",
     },
+    ci: {
+      type: "boolean",
+      description: "CI mode - skip interactive prompts",
+    },
   }),
   run: async ({ args }) => {
     try {
@@ -190,6 +196,67 @@ export default defineCommand({
       if (typeof process.versions.bun === "undefined") {
         logger.error("❌ This command requires Bun runtime. Sorry.");
         process.exit(1);
+      }
+
+      // Handle CI mode
+      if (args.ci) {
+        if (!args.bts && !args.initMonorepo) {
+          logger.info("");
+          logger.info(
+            "ℹ️  In CI mode, please specify one of the following flags:",
+          );
+          logger.info("  --bts: Initialize Better-T-Stack project");
+          logger.info("  --init-monorepo: Initialize RSE monorepo structure");
+          logger.info("");
+          process.exit(1);
+        }
+      }
+
+      // Show interactive menu if no flags are specified and not in CI mode
+      const hasAnyFlag =
+        args.add ||
+        args.sponsors ||
+        args.docs ||
+        args.builder ||
+        args.initMonorepo ||
+        args.bts;
+
+      let selectedAction: "bts" | "monorepo" | null = null;
+
+      if (!hasAnyFlag && !args.ci) {
+        logger.info("");
+        logger.log(welcomeMsg);
+        logger.info("");
+
+        const response = await selectPrompt<"bts" | "monorepo" | "exit">({
+          message: "What would you like to do?",
+          options: [
+            {
+              value: "bts",
+              label: "Create/modify project using Better-T-Stack",
+              hint: "Initialize or modify a Better-T-Stack project",
+            },
+            {
+              value: "monorepo",
+              label: "Create/modify monorepo related things",
+              hint: "Initialize or modify RSE monorepo structure",
+            },
+            {
+              value: "exit",
+              label: "Exit",
+              hint: "Exit the command",
+            },
+          ],
+        });
+
+        if (isCancel(response) || response === "exit") {
+          logger.info("");
+          logger.info("👋 Goodbye!");
+          logger.info("");
+          return;
+        }
+
+        selectedAction = response;
       }
 
       // Handle subcommands first
@@ -241,7 +308,7 @@ export default defineCommand({
       }
 
       // Handle RSE monorepo setup or Better-T-Stack setup (mutually exclusive)
-      if (args.initMonorepo) {
+      if (args.initMonorepo || selectedAction === "monorepo") {
         // RSE monorepo setup only
         const config = await promptMonorepoConfig();
 
@@ -269,7 +336,7 @@ export default defineCommand({
         logger.log(`  cd ${config.rootPath}`);
         logger.log("  bun --filter '*' dev");
         logger.info("");
-      } else if (args.bts) {
+      } else if (args.bts || selectedAction === "bts") {
         // Better-T-Stack setup only
         // Prepare Better-T-Stack options
         const btsOptions: Record<string, unknown> = {};
@@ -336,15 +403,6 @@ export default defineCommand({
             `📁 Better-T-Stack project location: ${btsResult.projectDirectory}`,
           );
         }
-        logger.info("");
-      } else {
-        logger.info("");
-        logger.info("Please specify either --bts or --init-monorepo");
-        logger.info("");
-        logger.info("Examples:");
-        logger.info("  rse init --bts");
-        logger.info("  rse init --bts my-project --backend hono");
-        logger.info("  rse init --init-monorepo");
         logger.info("");
       }
     } catch (error) {

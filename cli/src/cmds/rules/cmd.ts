@@ -3,7 +3,12 @@ import { readFile, writeFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
 import { defineArgs, defineCommand } from "@reliverse/dler-launcher";
 import { logger } from "@reliverse/dler-logger";
-import { confirmPrompt, multiselectPrompt } from "@reliverse/dler-prompt";
+import {
+  confirmPrompt,
+  exitCancelled,
+  isCancel,
+  multiselectPrompt,
+} from "@reliverse/dler-prompt";
 import { bootstrap, getAvailableFiles } from "@reliverse/rse-rules";
 
 const FILE_TO_AGENTS_MAP: Record<string, string[]> = {
@@ -278,23 +283,22 @@ export default defineCommand({
         }));
 
         const multiselectResult = await multiselectPrompt({
-          title: "Select providers to install rules for: ",
+          message: "Select providers to install rules for: ",
           options: options.map(({ value, label }) => ({ value, label })),
           footerText: "Space: toggle, Enter: confirm",
         });
 
-        if (multiselectResult.error) {
-          logger.error("Selection cancelled or error occurred");
-          return;
+        if (isCancel(multiselectResult)) {
+          exitCancelled("Selection cancelled or error occurred");
         }
 
-        if (multiselectResult.selectedIndices.length === 0) {
+        if (multiselectResult.length === 0) {
           logger.warn("No providers selected. Exiting.");
           return;
         }
 
-        selectedProviders = multiselectResult.selectedIndices
-          .map((idx) => options[idx]?.value)
+        selectedProviders = multiselectResult
+          .map((value) => value)
           .filter((value): value is string => value !== undefined);
       }
 
@@ -359,18 +363,16 @@ export default defineCommand({
           }
 
           const confirmResult = await confirmPrompt({
-            title: "Are you sure you want to overwrite these .bak files?",
+            message: "Are you sure you want to overwrite these .bak files?",
             footerText: "Y: confirm, N: cancel",
           });
 
-          if (confirmResult.error) {
-            logger.error("Confirmation cancelled or error occurred");
-            return;
+          if (isCancel(confirmResult)) {
+            exitCancelled("Confirmation cancelled or error occurred");
           }
 
-          if (!confirmResult.confirmed) {
-            logger.warn("Operation cancelled by user.");
-            return;
+          if (!confirmResult) {
+            exitCancelled("Operation cancelled by user.");
           }
         }
       }

@@ -117,7 +117,7 @@ export async function getAddonsChoice(
     }
   });
 
-  const initialValues = DEFAULT_CONFIG.addons.filter((addonValue) =>
+  const initialValue = DEFAULT_CONFIG.addons.filter((addonValue) =>
     Object.values(groupedOptions).some((options) =>
       options.some((opt) => opt.value === addonValue),
     ),
@@ -126,8 +126,8 @@ export async function getAddonsChoice(
   const response = await groupMultiselectPrompt<Addons>({
     message: "Select addons",
     options: groupedOptions,
-    initialValues: initialValues,
     selectableGroups: false,
+    initialValue: initialValue,
   });
 
   if (isCancel(response)) return exitCancelled("Operation cancelled");

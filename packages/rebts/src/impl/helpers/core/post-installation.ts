@@ -222,7 +222,7 @@ export async function displayPostInstallInstructions(
   )} Please consider giving us a star\n   on GitHub:\n`;
   output += re.cyan("https://github.com/AmanVarshney01/create-better-t-stack");
 
-  logger.info(output);
+  logger.box(output);
 }
 
 function getNativeInstructions(

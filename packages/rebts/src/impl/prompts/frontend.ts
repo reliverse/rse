@@ -31,7 +31,6 @@ export async function getFrontendChoice(
         hint: "Create a React Native/Expo app",
       },
     ],
-    initialValues: ["web"],
   });
 
   if (isCancel(frontendTypes)) return exitCancelled("Operation cancelled");

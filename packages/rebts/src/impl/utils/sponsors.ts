@@ -113,5 +113,5 @@ function displaySponsorsBox(sponsors: SponsorEntry) {
     }
   });
 
-  logger.info(output);
+  logger.box(output);
 }

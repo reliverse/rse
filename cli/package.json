@@ -13,6 +13,7 @@
     "@reliverse/rse-addons": "workspace:*",
     "@reliverse/rse-escaper": "workspace:*",
     "@reliverse/rse-rules": "workspace:*",
+    "@reliverse/dler-colors": "catalog:",
     "@reliverse/dler-logger": "catalog:",
     "@reliverse/dler-matcher": "catalog:",
     "@reliverse/dler-launcher": "catalog:",

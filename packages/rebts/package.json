@@ -35,8 +35,7 @@
     "yaml": "catalog:",
     "handlebars": "catalog:",
     "gradient-string": "catalog:",
-    "dotenv": "catalog:",
-    "@biomejs/js-api": "catalog:"
+    "dotenv": "catalog:"
   },
   "devDependencies": {
     "@p/tsconfig": "workspace:*",

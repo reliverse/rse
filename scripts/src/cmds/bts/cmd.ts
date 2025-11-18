@@ -240,6 +240,44 @@ function transformFileContent(
     }
   }
 
+  // Replace biome-formatter.ts with zero external deps alternative
+  if (originalFilePath?.endsWith("biome-formatter.ts")) {
+    const zeroDepsBiomeFormatter = `${headerComment}import path from "@reliverse/dler-pathkit";
+
+function isSupportedFile(filePath: string) {
+  const ext = path.extname(filePath).toLowerCase();
+  const supportedExtensions = [".js", ".jsx", ".ts", ".tsx", ".json", ".jsonc"];
+  return supportedExtensions.includes(ext);
+}
+
+function shouldSkipFile(filePath: string) {
+  const basename = path.basename(filePath);
+  const skipPatterns = [
+    ".hbs",
+    "package-lock.json",
+    "yarn.lock",
+    "pnpm-lock.yaml",
+    "bun.lock",
+    ".d.ts",
+  ];
+
+  return skipPatterns.some((pattern) => basename.includes(pattern));
+}
+
+export function formatFileWithBiome(filePath: string, content: string) {
+  if (!isSupportedFile(filePath) || shouldSkipFile(filePath)) {
+    return null;
+  }
+
+  // Zero-deps formatter: return content as-is (no-op)
+  // The original Biome formatter is replaced with a no-op to eliminate @biomejs/js-api dependency
+  // Formatting should be handled by the project's Biome CLI using: bun format
+  return content;
+}
+`;
+    return zeroDepsBiomeFormatter;
+  }
+
   // Replace @clack/prompts imports - handle spinner separately
   // Check if import contains spinner
   transformed = transformed.replace(
@@ -604,26 +642,92 @@ function transformFileContent(
     },
   );
   // Keep hint as is (dler-prompt now uses hint instead of description)
-  // Remove initialValue property (selectPrompt doesn't support it)
-  // Handle: , initialValue: "value" or , initialValue: value
-  transformed = transformed.replace(
-    /,\s*initialValue\s*:\s*(?:"[^"]*"|'[^']*'|[^,}\r\n]+)\s*/g,
-    "",
-  );
-  // Handle: initialValue: "value", or initialValue: value (at start or end)
-  transformed = transformed.replace(
-    /\binitialValue\s*:\s*(?:"[^"]*"|'[^']*'|[^,}\r\n]+)\s*,?\s*/g,
-    "",
-  );
-  // Clean up leftover conditional fragments introduced by removing initialValue
-  transformed = transformed.replace(
-    /(\boptions)\?\s+[\s\S]*?:[\s\S]*?,/g,
-    "$1,",
-  );
-  transformed = transformed.replace(
-    /(\boptions)\?\s+[\s\S]*?:[\s\S]*?(?=\r?\n?\})/g,
-    "$1",
-  );
+  // Replace initialValues (plural) with initialValue (singular)
+  transformed = transformed.replace(/\binitialValues\b/g, "initialValue");
+
+  // Remove initialValue property (multiselectPrompt doesn't support it)
+  // This handles multiline expressions by finding balanced parentheses/brackets/braces
+  // We need to find and remove: [optional comma/whitespace]initialValue: [entire value expression][comma or closing brace]
+  const initialValueRegex = /\binitialValue\s*:/g;
+  let match: RegExpExecArray | null;
+  const parts: string[] = [];
+  let lastIndex = 0;
+  let foundAny = false;
+
+  // biome-ignore lint/suspicious/noAssignInExpressions: needed for regex exec loop
+  while ((match = initialValueRegex.exec(transformed)) !== null) {
+    foundAny = true;
+    const matchStart = match.index;
+    const beforeMatch = transformed.slice(lastIndex, matchStart);
+
+    // Check if there's a comma before this property
+    const beforeText = beforeMatch.trimEnd();
+    const hasCommaBefore = beforeText.endsWith(",");
+
+    // Find where the value expression ends by tracking nesting
+    let depth = 0;
+    let inString = false;
+    let stringChar = "";
+    let i = matchStart + match[0].length;
+    let endPos = transformed.length;
+
+    while (i < transformed.length) {
+      const char = transformed[i];
+      const prevChar = i > 0 ? transformed[i - 1] : "";
+
+      if (!inString && (char === '"' || char === "'" || char === "`")) {
+        inString = true;
+        stringChar = char;
+      } else if (inString && char === stringChar && prevChar !== "\\") {
+        inString = false;
+      } else if (!inString) {
+        if (char === "(" || char === "[" || char === "{") {
+          depth++;
+        } else if (char === ")" || char === "]" || char === "}") {
+          depth--;
+          if (depth < 0) {
+            endPos = i;
+            break;
+          }
+        } else if (depth === 0 && char === ",") {
+          endPos = i;
+          break;
+          // biome-ignore lint/suspicious/noDuplicateElseIf: <>
+        } else if (depth === 0 && (char === "}" || char === "]")) {
+          endPos = i;
+          break;
+        }
+      }
+      i++;
+    }
+
+    // Add the text before the property (without the comma if it was before initialValue)
+    if (hasCommaBefore) {
+      const commaIndex = beforeMatch.lastIndexOf(",");
+      parts.push(beforeMatch.slice(0, commaIndex));
+    } else {
+      parts.push(beforeMatch);
+    }
+
+    // Skip the property and its value, update lastIndex
+    lastIndex = endPos;
+  }
+
+  // Only reconstruct if we found any matches
+  if (foundAny) {
+    // Add the remaining text
+    if (lastIndex < transformed.length) {
+      parts.push(transformed.slice(lastIndex));
+    }
+    // Reconstruct without initialValue properties
+    transformed = parts.join("");
+  }
+
+  // Clean up leftover commas and whitespace
+  transformed = transformed.replace(/,\s*,/g, ",");
+  transformed = transformed.replace(/,\s*\n\s*\}/g, "\n}");
+  transformed = transformed.replace(/{\s*,/g, "{");
+  transformed = transformed.replace(/\n\s*\n\s*\n/g, "\n\n");
   // Remove placeholder property (inputPrompt doesn't support it)
   // Handle: , placeholder: "value" or , placeholder: value
   transformed = transformed.replace(
@@ -677,9 +781,20 @@ function transformFileContent(
 
   // Fix array index access in includes() calls: array[0] -> array.at(0) with type assertion
   // Pattern: FULLSTACK_FRONTENDS.includes(web[0]) -> FULLSTACK_FRONTENDS.includes((web.at(0) ?? "") as typeof web[number])
+  // But skip ?? "" if there's a length check before (e.g., web.length === 1 && ...)
   transformed = transformed.replace(
     /(\w+)\.includes\s*\(\s*(\w+)\[0\]\s*\)/g,
-    (_match, arrayName, indexArrayName) => {
+    (_match, arrayName, indexArrayName, offset, fullString) => {
+      // Check if there's a length check before this expression
+      const beforeMatch = fullString.slice(Math.max(0, offset - 100), offset);
+      const hasLengthCheck = new RegExp(
+        `\\b${indexArrayName}\\.length\\s*===\\s*1`,
+      ).test(beforeMatch);
+
+      if (hasLengthCheck) {
+        // Don't add ?? "" if length is checked
+        return `${arrayName}.includes(${indexArrayName}.at(0) as typeof ${indexArrayName}[number])`;
+      }
       return `${arrayName}.includes((${indexArrayName}.at(0) ?? "") as typeof ${indexArrayName}[number])`;
     },
   );
@@ -1221,7 +1336,7 @@ function transformFileContent(
     /\bconsola\.(success|info|warn|error|log|fatal)\(/g,
     "logger.$1(",
   );
-  transformed = transformed.replace(/\bconsola\.box\(/g, "logger.info(");
+  transformed = transformed.replace(/\bconsola\.box\(/g, "logger.box(");
   transformed = transformed.replace(/\bconsola\b/g, "logger");
 
   // Replace picocolors usage
@@ -1465,6 +1580,15 @@ function transformFileContent(
     /(\w+)\.\s*\(\s*(\w+)\.at\s*\(\s*(\d+)\s*\)\s*\?\.\s*(\w+)\s*\)/g,
     (_match, objectName, arrayName, index, property) => {
       return `${objectName}.${arrayName}.at(${index})?.${property}`;
+    },
+  );
+
+  // Fix invalid syntax: array.at(0 ?? "") -> array.at(0)
+  // This fixes cases where ?? "" was incorrectly placed inside .at() call
+  transformed = transformed.replace(
+    /(\w+)\.at\s*\(\s*(\d+)\s*\?\?\s*""\s*\)/g,
+    (_match, arrayName, index) => {
+      return `${arrayName}.at(${index})`;
     },
   );
 
@@ -1931,6 +2055,74 @@ export default defineCommand({
       if (existsSync(cliPath)) {
         rmSync(cliPath);
         logger.debug(`🗑️  Removed ${cliPath}`);
+      }
+
+      // Setup Biome configuration and dependencies
+      const biomeJsonPath = join(cwd, "biome.json");
+      if (!existsSync(biomeJsonPath)) {
+        const defaultBiomeConfig = {
+          $schema: "./node_modules/@biomejs/biome/configuration_schema.json",
+          files: {
+            includes: ["**"],
+            ignoreUnknown: false,
+          },
+          formatter: {
+            enabled: true,
+            indentStyle: "tab",
+            indentWidth: 2,
+            lineWidth: 80,
+          },
+          linter: {
+            enabled: false,
+          },
+          javascript: {
+            formatter: {
+              enabled: true,
+            },
+          },
+          json: {
+            formatter: {
+              enabled: true,
+            },
+          },
+        };
+
+        await writeFile(
+          biomeJsonPath,
+          JSON.stringify(defaultBiomeConfig, null, 2),
+          "utf-8",
+        );
+        logger.success("✅ Created biome.json configuration file");
+      }
+
+      // Add @biomejs/biome to devDependencies if not present
+      const packageJsonPath = join(cwd, "package.json");
+      if (existsSync(packageJsonPath)) {
+        try {
+          const packageJsonContent = await readFile(packageJsonPath, "utf-8");
+          const packageJson = JSON.parse(packageJsonContent) as {
+            devDependencies?: Record<string, string>;
+          };
+
+          if (!packageJson.devDependencies) {
+            packageJson.devDependencies = {};
+          }
+
+          if (!packageJson.devDependencies["@biomejs/biome"]) {
+            packageJson.devDependencies["@biomejs/biome"] = "^2.3.6";
+            await writeFile(
+              packageJsonPath,
+              JSON.stringify(packageJson, null, 2),
+              "utf-8",
+            );
+            logger.success("✅ Added @biomejs/biome to devDependencies");
+            logger.info("💡 You can format your code using: bun format");
+          }
+        } catch (error) {
+          logger.warn(
+            `Failed to update package.json: ${error instanceof Error ? error.message : String(error)}`,
+          );
+        }
       }
     } catch (error) {
       logger.error(

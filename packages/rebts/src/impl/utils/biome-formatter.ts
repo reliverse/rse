@@ -1,43 +1,7 @@
 // This file is auto-generated. To contribute: edit scripts/src/cmds/bts/cmd.ts codemod OR the original repo:
 // https://github.com/AmanVarshney01/create-better-t-stack/blob/main/apps/cli/src/utils/biome-formatter.ts
 
-import { Biome } from "@biomejs/js-api/nodejs";
-import { logger } from "@reliverse/dler-logger";
 import path from "@reliverse/dler-pathkit";
-
-function initializeBiome() {
-  try {
-    const biome = new Biome();
-    const result = biome.openProject("./");
-    const projectKey = result.projectKey;
-
-    biome.applyConfiguration(projectKey, {
-      formatter: {
-        enabled: true,
-        indentStyle: "tab",
-        indentWidth: 2,
-        lineWidth: 80,
-      },
-      linter: {
-        enabled: false,
-      },
-      javascript: {
-        formatter: {
-          enabled: true,
-        },
-      },
-      json: {
-        formatter: {
-          enabled: true,
-        },
-      },
-    });
-
-    return { biome, projectKey };
-  } catch (_error) {
-    return null;
-  }
-}
 
 function isSupportedFile(filePath: string) {
   const ext = path.extname(filePath).toLowerCase();
@@ -64,25 +28,8 @@ export function formatFileWithBiome(filePath: string, content: string) {
     return null;
   }
 
-  try {
-    const biomeResult = initializeBiome();
-    if (!biomeResult) return null;
-
-    const { biome, projectKey } = biomeResult;
-
-    const result = biome.formatContent(projectKey, content, {
-      filePath: path.basename(filePath),
-    });
-
-    if (result.diagnostics && result.diagnostics.length > 0) {
-      logger.debug(
-        `Biome formatting diagnostics for ${filePath}:`,
-        result.diagnostics,
-      );
-    }
-
-    return result.content;
-  } catch (_error) {
-    return null;
-  }
+  // Zero-deps formatter: return content as-is (no-op)
+  // The original Biome formatter is replaced with a no-op to eliminate @biomejs/js-api dependency
+  // Formatting should be handled by the project's Biome CLI using: bun format
+  return content;
 }

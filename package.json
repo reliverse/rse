@@ -27,17 +27,17 @@
     "catalog": {
       "@types/bun": "^1.3.2",
       "typescript": "^5.9.3",
-      "@reliverse/dler-logger": "^2.2.1",
-      "@reliverse/dler-matcher": "^2.2.1",
-      "@reliverse/dler-launcher": "^2.2.1",
-      "@reliverse/dler-prompt": "^2.2.1",
-      "@reliverse/dler-helpers": "^2.2.1",
-      "@reliverse/dler-pkg-tsc": "^2.2.1",
-      "@reliverse/dler-mapper": "^2.2.1",
-      "@reliverse/dler-colors": "^2.2.1",
-      "@reliverse/dler-spinner": "^2.2.1",
-      "@reliverse/dler-fs-utils": "^2.2.1",
-      "@reliverse/dler-pathkit": "^2.2.1",
+      "@reliverse/dler-logger": "^2.2.3",
+      "@reliverse/dler-matcher": "^2.2.3",
+      "@reliverse/dler-launcher": "^2.2.3",
+      "@reliverse/dler-prompt": "^2.2.3",
+      "@reliverse/dler-helpers": "^2.2.3",
+      "@reliverse/dler-pkg-tsc": "^2.2.3",
+      "@reliverse/dler-mapper": "^2.2.3",
+      "@reliverse/dler-colors": "^2.2.3",
+      "@reliverse/dler-spinner": "^2.2.3",
+      "@reliverse/dler-fs-utils": "^2.2.3",
+      "@reliverse/dler-pathkit": "^2.2.3",
       "jsonc-parser": "^3.3.1",
       "ts-morph": "^27.0.2",
       "magic-string": "^0.30.21",
@@ -46,12 +46,11 @@
       "dotenv": "^17.2.3",
       "yaml": "^2.8.1",
       "handlebars": "^4.7.8",
-      "gradient-string": "^3.0.0",
-      "@biomejs/js-api": "^4.0.0"
+      "gradient-string": "^3.0.0"
     }
   },
   "devDependencies": {
-    "@reliverse/dler": "^2.2.1",
+    "@reliverse/dler": "^2.2.3",
     "@biomejs/biome": "^2.3.6"
   },
   "packageManager": "bun@1.3.2",

@@ -4,9 +4,12 @@
 import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import type { PackageManager } from "../types";
 import { exitCancelled } from "../utils/errors";
+import { getUserPkgManager } from "../utils/get-package-manager";
 
 export async function getPackageManagerChoice(packageManager?: PackageManager) {
   if (packageManager !== undefined) return packageManager;
+
+  const detectedPackageManager = getUserPkgManager();
 
   const response = await selectPrompt<PackageManager>({
     message: "Choose package manager",
@@ -23,6 +26,7 @@ export async function getPackageManagerChoice(packageManager?: PackageManager) {
         hint: "All-in-one JavaScript runtime & toolkit",
       },
     ],
+    defaultValue: detectedPackageManager,
   });
 
   if (isCancel(response)) return exitCancelled("Operation cancelled");

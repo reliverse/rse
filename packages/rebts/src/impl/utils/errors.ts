@@ -2,8 +2,8 @@ import { re } from "@reliverse/dler-colors";
 import { logger } from "@reliverse/dler-logger";
 import { PromptCancelledError } from "@reliverse/dler-prompt";
 
-// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
-// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+// This file is auto-generated. To contribute: edit scripts/src/cmds/bts/cmd.ts codemod OR the original repo:
+// https://github.com/AmanVarshney01/create-better-t-stack/blob/main/apps/cli/src/utils/errors.ts
 
 function isProgrammatic() {
   return process.env.BTS_PROGRAMMATIC === "1";

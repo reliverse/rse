@@ -111,6 +111,7 @@
       "dependencies": {
         "@reliverse/dler-launcher": "catalog:",
         "@reliverse/dler-logger": "catalog:",
+        "@reliverse/dler-prompt": "catalog:",
         "@reliverse/rse-escaper": "workspace:*",
         "magic-string": "^0.30.21",
         "ts-morph": "catalog:",

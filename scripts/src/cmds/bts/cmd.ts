@@ -4,6 +4,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { defineCommand } from "@reliverse/dler-launcher";
 import { logger } from "@reliverse/dler-logger";
+import { confirmPrompt, isCancel } from "@reliverse/dler-prompt";
 import { $ } from "bun";
 
 const REPO_URL = "https://github.com/AmanVarshney01/create-better-t-stack";
@@ -199,17 +200,33 @@ async function updateCacheTimestamp(): Promise<void> {
   await writeFile(timestampPath, Date.now().toString(), "utf-8");
 }
 
-function transformFileContent(content: string): string {
+function transformFileContent(
+  content: string,
+  originalFilePath?: string,
+): string {
   let transformed = content;
 
-  // Add header comment if file doesn't already have it
-  const headerComment = `// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
-// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+  // Generate header comment with link to original file
+  let headerComment = "";
+  if (originalFilePath) {
+    // Convert file path to GitHub URL
+    // Original path: apps/cli/src/utils/display-config.ts
+    // GitHub URL: https://github.com/AmanVarshney01/create-better-t-stack/blob/main/apps/cli/src/utils/display-config.ts
+    const githubUrl = `https://github.com/AmanVarshney01/create-better-t-stack/blob/main/${originalFilePath}`;
+    headerComment = `// This file is auto-generated. To contribute: edit scripts/src/cmds/bts/cmd.ts codemod OR the original repo:
+// ${githubUrl}
 
 `;
+  } else {
+    // Fallback if no original path provided
+    headerComment = `// This file is auto-generated. To contribute: edit scripts/src/cmds/bts/cmd.ts codemod OR the original repo:
+// https://github.com/AmanVarshney01/create-better-t-stack
+
+`;
+  }
 
   // Check if header already exists (to avoid duplicates)
-  if (!transformed.includes("Auto-generated from Better-T-Stack")) {
+  if (!transformed.includes("This file is auto-generated")) {
     // Remove existing shebang if present
     const shebangMatch = transformed.match(/^#!.*\n/);
     if (shebangMatch) {
@@ -1748,6 +1765,7 @@ function deduplicateImports(content: string): string {
 async function copyDirectoryRecursive(
   src: string,
   dest: string,
+  baseSrcPath: string,
 ): Promise<void> {
   await mkdir(dest, { recursive: true });
 
@@ -1758,12 +1776,22 @@ async function copyDirectoryRecursive(
     const destPath = join(dest, entry.name);
 
     if (entry.isDirectory()) {
-      await copyDirectoryRecursive(srcPath, destPath);
+      await copyDirectoryRecursive(srcPath, destPath, baseSrcPath);
     } else {
       // Read as text for TypeScript files to apply transformations
       if (entry.name.endsWith(".ts") || entry.name.endsWith(".tsx")) {
         const content = await Bun.file(srcPath).text();
-        const transformed = transformFileContent(content);
+        // Calculate relative path from repo root for GitHub URL
+        // baseSrcPath (cachedRepo): /path/to/cache/create-better-t-stack
+        // srcPath: /path/to/cache/create-better-t-stack/apps/cli/src/utils/display-config.ts
+        // We need: apps/cli/src/utils/display-config.ts
+        const relativePath = srcPath.replace(baseSrcPath, "");
+        // Remove leading path separator and normalize to forward slashes
+        const normalizedPath = relativePath
+          .replace(/^[\\/]+/, "")
+          .replace(/\\/g, "/");
+        const originalFilePath = normalizedPath;
+        const transformed = transformFileContent(content, originalFilePath);
         await Bun.write(destPath, transformed);
       } else {
         // Copy binary files as-is
@@ -1804,8 +1832,26 @@ export default defineCommand({
       "Clone create-better-t-stack and move src to packages/rebts/src/impl",
     examples: [],
   },
-  args: {},
-  run: async () => {
+  args: {
+    force: {
+      type: "boolean",
+      description: "Skip confirmation prompt and regenerate immediately",
+      default: false,
+    },
+  },
+  run: async ({ args }) => {
+    // Ask for confirmation unless --force flag is used
+    if (!args.force) {
+      const confirmed = await confirmPrompt({
+        message:
+          "This will regenerate the rebts package from Better-T-Stack. Continue?",
+      });
+
+      if (isCancel(confirmed) || !confirmed) {
+        logger.info("Operation cancelled.");
+        return;
+      }
+    }
     const cwd = process.cwd();
     const cachedRepo = getCachedRepoPath();
     const srcSource = join(cachedRepo, "apps", "cli", "src");
@@ -1842,7 +1888,7 @@ export default defineCommand({
       logger.info(
         `📦 Copying and transforming src from cache to ${srcDest}...`,
       );
-      await copyDirectoryRecursive(srcSource, srcDest);
+      await copyDirectoryRecursive(srcSource, srcDest, cachedRepo);
       logger.success("✅ Src copied and transformed successfully");
 
       // Read version from cached repo's package.json

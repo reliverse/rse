@@ -1,5 +1,5 @@
-// Auto-generated from Better-T-Stack (https://github.com/AmanVarshney01/create-better-t-stack)
-// To contribute: edit the original repo or scripts/src/cmds/bts/cmd.ts
+// This file is auto-generated. To contribute: edit scripts/src/cmds/bts/cmd.ts codemod OR the original repo:
+// https://github.com/AmanVarshney01/create-better-t-stack/blob/main/apps/cli/src/helpers/deployment/alchemy/alchemy-next-setup.ts
 
 import fs from "@reliverse/dler-fs-utils";
 import path from "@reliverse/dler-pathkit";

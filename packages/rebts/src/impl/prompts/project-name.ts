@@ -1,7 +1,7 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { inputPrompt, isCancel } from "@reliverse/dler-prompt";
 import { logger } from "@reliverse/dler-logger";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { re } from "@reliverse/dler-colors";
 import { DEFAULT_CONFIG } from "../constants";
 import { ProjectNameSchema } from "../types";

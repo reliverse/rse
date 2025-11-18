@@ -1,6 +1,6 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { addPackageDependency } from "../../../utils/add-package-deps";
 import { setupAlchemyServerDeploy } from "../server-deploy-setup";
 import { setupNextAlchemyDeploy } from "./alchemy-next-setup";

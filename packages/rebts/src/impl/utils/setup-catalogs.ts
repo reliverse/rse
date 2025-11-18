@@ -1,6 +1,6 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import yaml from "yaml";
 import type { ProjectConfig } from "../types";
 
@@ -149,7 +149,7 @@ async function setupPnpmCatalogs(
 		return;
 	}
 
-	const workspaceContent = await fs.readFile(workspaceYamlPath, "utf-8");
+	const workspaceContent = await fs.readFile(workspaceYamlPath, { encoding: "utf-8" });
 	const workspaceYaml = yaml.parse(workspaceContent);
 
 	if (!workspaceYaml.catalog) {

@@ -1,4 +1,4 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import type { AvailableDependencies } from "../../constants";
 import type { ProjectConfig } from "../../types";

@@ -1,4 +1,4 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { execa } from "execa";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
 import type { PackageManager } from "../../types";

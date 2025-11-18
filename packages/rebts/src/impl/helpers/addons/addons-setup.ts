@@ -1,9 +1,9 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
 import { logger } from "@reliverse/dler-logger";
 import { createSpinner } from "@reliverse/dler-spinner";
 import { execa } from "execa";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { re } from "@reliverse/dler-colors";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { getPackageExecutionCommand } from "../../utils/package-runner";

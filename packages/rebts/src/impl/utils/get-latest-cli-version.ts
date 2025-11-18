@@ -1,5 +1,5 @@
-import path from "@reliverse/pathkit";
-import fs from "@reliverse/relifso";
+import path from "@reliverse/dler-pathkit";
+import fs from "@reliverse/dler-fs-utils";
 import { PKG_ROOT } from "../constants";
 
 export const getLatestCLIVersion = () => {

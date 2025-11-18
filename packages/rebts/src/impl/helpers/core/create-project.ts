@@ -1,5 +1,5 @@
 import { logger } from "@reliverse/dler-logger";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { writeBtsConfig } from "../../utils/bts-config";
 import { exitWithError } from "../../utils/errors";
 import { setupCatalogs } from "../../utils/setup-catalogs";

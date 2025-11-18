@@ -1,4 +1,4 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { Biome } from "@biomejs/js-api/nodejs";
 import { logger } from "@reliverse/dler-logger";
 

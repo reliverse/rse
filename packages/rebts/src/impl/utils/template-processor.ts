@@ -1,6 +1,6 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { logger } from "@reliverse/dler-logger";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import handlebars from "handlebars";
 import { formatFileWithBiome } from "./biome-formatter";
 import type { ProjectConfig } from "../types";
@@ -28,11 +28,11 @@ export async function processTemplate(
 		let content: string;
 
 		if (srcPath.endsWith(".hbs")) {
-			const templateContent = await fs.readFile(srcPath, "utf-8");
+			const templateContent = await fs.readFile(srcPath, { encoding: "utf-8" });
 			const template = handlebars.compile(templateContent);
 			content = template(context);
 		} else {
-			content = await fs.readFile(srcPath, "utf-8");
+			content = await fs.readFile(srcPath, { encoding: "utf-8" });
 		}
 
 		try {

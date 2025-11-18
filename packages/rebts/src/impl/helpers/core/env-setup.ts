@@ -1,5 +1,5 @@
-import path from "@reliverse/pathkit";
-import fs from "@reliverse/relifso";
+import path from "@reliverse/dler-pathkit";
+import fs from "@reliverse/dler-fs-utils";
 import { generateAuthSecret } from "./auth-setup";
 import type { ProjectConfig } from "../../types";
 
@@ -53,7 +53,7 @@ export async function addEnvVariablesToFile(
 
 	let envContent = "";
 	if (await fs.pathExists(filePath)) {
-		envContent = await fs.readFile(filePath, "utf8");
+		envContent = await fs.readFile(filePath, { encoding: "utf8" });
 	}
 
 	let modified = false;
@@ -96,7 +96,7 @@ export async function addEnvVariablesToFile(
 	const exampleFilePath = filePath.replace(/\.env$/, ".env.example");
 	let exampleEnvContent = "";
 	if (await fs.pathExists(exampleFilePath)) {
-		exampleEnvContent = await fs.readFile(exampleFilePath, "utf8");
+		exampleEnvContent = await fs.readFile(exampleFilePath, { encoding: "utf8" });
 	}
 
 	let exampleModified = false;
@@ -285,7 +285,7 @@ export async function setupEnvironmentVariables(config: ProjectConfig) {
 
 				if (
 					!(await fs.pathExists(envLocalPath)) ||
-					!(await fs.readFile(envLocalPath, "utf8")).includes(
+					!(await fs.readFile(envLocalPath, { encoding: "utf8" })).includes(
 						"npx convex env set",
 					)
 				) {

@@ -1,5 +1,5 @@
-import path from "@reliverse/pathkit";
-import fs from "@reliverse/relifso";
+import path from "@reliverse/dler-pathkit";
+import fs from "@reliverse/dler-fs-utils";
 import { readBtsConfig } from "../../utils/bts-config";
 
 export async function detectProjectConfig(projectDir: string) {

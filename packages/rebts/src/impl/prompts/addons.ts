@@ -1,5 +1,5 @@
 import { logger } from "@reliverse/dler-logger";
-import { isCancel } from "@reliverse/dler-prompt";
+import { groupMultiselectPrompt, isCancel } from "@reliverse/dler-prompt";
 import { DEFAULT_CONFIG } from "../constants";
 import { AddonsSchema, type Addons, type Auth, type Frontend } from "../types";
 import { exitCancelled } from "../utils/errors";
@@ -103,14 +103,14 @@ export async function getAddonsChoice(
 		if (ADDON_GROUPS.Documentation.includes(addon)) {
 			groupedOptions.Documentation!.push(option);
 		} else if (ADDON_GROUPS.Linting.includes(addon)) {
-			groupedOptions.Linting.push(option);
+			groupedOptions.Linting!.push(option);
 		} else if (ADDON_GROUPS.Other.includes(addon)) {
-			groupedOptions.Other.push(option);
+			groupedOptions.Other!.push(option);
 		}
 	}
 
 	Object.keys(groupedOptions).forEach((group) => {
-		if (groupedOptions[group].length === 0) {
+		if (groupedOptions[group]?.length === 0) {
 			delete groupedOptions[group];
 		}
 	});
@@ -121,7 +121,7 @@ export async function getAddonsChoice(
 		),
 	);
 
-	const response = await groupMultiselect<Addons>({
+	const response = await groupMultiselectPrompt<Addons>({
 		message: "Select addons",
 		options: groupedOptions,
 		initialValues: initialValues,
@@ -160,14 +160,14 @@ export async function getAddonsToAdd(
 		if (ADDON_GROUPS.Documentation.includes(addon)) {
 			groupedOptions.Documentation!.push(option);
 		} else if (ADDON_GROUPS.Linting.includes(addon)) {
-			groupedOptions.Linting.push(option);
+			groupedOptions.Linting!.push(option);
 		} else if (ADDON_GROUPS.Other.includes(addon)) {
-			groupedOptions.Other.push(option);
+			groupedOptions.Other!.push(option);
 		}
 	}
 
 	Object.keys(groupedOptions).forEach((group) => {
-		if (groupedOptions[group].length === 0) {
+		if (groupedOptions[group]?.length === 0) {
 			delete groupedOptions[group];
 		}
 	});
@@ -176,7 +176,7 @@ export async function getAddonsToAdd(
 		return [];
 	}
 
-	const response = await groupMultiselect<Addons>({
+	const response = await groupMultiselectPrompt<Addons>({
 		message: "Select addons to add",
 		options: groupedOptions,
 		selectableGroups: false,

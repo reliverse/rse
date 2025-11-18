@@ -1,8 +1,8 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { logger } from "@reliverse/dler-logger";
 import { cancel, inputPrompt, isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { execa } from "execa";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { re } from "@reliverse/dler-colors";
 import { commandExists } from "../../utils/command-exists";
 import { exitCancelled } from "../../utils/errors";

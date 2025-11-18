@@ -1,8 +1,8 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { createSpinner } from "@reliverse/dler-spinner";
 import { logger } from "@reliverse/dler-logger";
 import { execa } from "execa";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { re } from "@reliverse/dler-colors";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
 import type { ProjectConfig } from "../../types";

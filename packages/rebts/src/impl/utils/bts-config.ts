@@ -1,5 +1,5 @@
-import path from "@reliverse/pathkit";
-import fs from "@reliverse/relifso";
+import path from "@reliverse/dler-pathkit";
+import fs from "@reliverse/dler-fs-utils";
 import * as JSONC from "jsonc-parser";
 import { getLatestCLIVersion } from "./get-latest-cli-version";
 import type { BetterTStackConfig, ProjectConfig } from "../types";
@@ -60,7 +60,7 @@ export async function writeBtsConfig(projectConfig: ProjectConfig) {
 
 ${configContent}`;
 	const configPath = path.join(projectConfig.projectDir, BTS_CONFIG_FILE);
-	await fs.writeFile(configPath, finalContent, "utf-8");
+	await fs.writeFile(configPath, finalContent, { encoding: "utf-8" });
 }
 
 export async function readBtsConfig(projectDir: string) {
@@ -71,7 +71,7 @@ export async function readBtsConfig(projectDir: string) {
 			return null;
 		}
 
-		const configContent = await fs.readFile(configPath, "utf-8");
+		const configContent = await fs.readFile(configPath, { encoding: "utf-8" });
 
 		const errors: JSONC.ParseError[] = [];
 		const config = JSONC.parse(configContent, errors, {
@@ -103,7 +103,7 @@ export async function updateBtsConfig(
 			return;
 		}
 
-		const configContent = await fs.readFile(configPath, "utf-8");
+		const configContent = await fs.readFile(configPath, { encoding: "utf-8" });
 
 		let modifiedContent = configContent;
 
@@ -118,6 +118,6 @@ export async function updateBtsConfig(
 			modifiedContent = JSONC.applyEdits(modifiedContent, editResult);
 		}
 
-		await fs.writeFile(configPath, modifiedContent, "utf-8");
+		await fs.writeFile(configPath, modifiedContent, { encoding: "utf-8" });
 	} catch (_error) {}
 }

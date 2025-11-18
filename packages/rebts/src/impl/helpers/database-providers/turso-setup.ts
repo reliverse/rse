@@ -1,5 +1,5 @@
 import os from "node:os";
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { logger } from "@reliverse/dler-logger";
 import { createSpinner } from "@reliverse/dler-spinner";
 import { confirmPrompt, inputPrompt, isCancel, selectPrompt } from "@reliverse/dler-prompt";
@@ -99,8 +99,8 @@ async function selectTursoGroup() {
 	}
 
 	if (groups.length === 1) {
-		logger.info(`Using the only available group: ${re.blue(groups.at(0)?.name)}`);
-		return (groups.at(0)?.name) ?? "";
+		logger.info(`Using the only available group: ${re.blue(((groups.at(0)?.name) ?? "") ?? "")}`);
+		return(((groups.at(0)?.name) ?? "") ?? "") ?? "";
 	}
 
 	const groupOptions = groups.map((group) => ({

@@ -1,6 +1,6 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { addPackageDependency } from "../../../utils/add-package-deps";
 import type { PackageManager } from "../../../types";
 
@@ -41,7 +41,7 @@ export default defineCloudflareConfig({});
 
 	const gitignorePath = path.join(webAppDir, ".gitignore");
 	if (await fs.pathExists(gitignorePath)) {
-		const gitignoreContent = await fs.readFile(gitignorePath, "utf-8");
+		const gitignoreContent = await fs.readFile(gitignorePath, { encoding: "utf-8" });
 		if (!gitignoreContent.includes("wrangler.jsonc")) {
 			await fs.appendFile(gitignorePath, "\nwrangler.jsonc\n");
 		}

@@ -1,4 +1,4 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { logger } from "@reliverse/dler-logger";
 import { re } from "@reliverse/dler-colors";
 import { updateBtsConfig } from "../../utils/bts-config";

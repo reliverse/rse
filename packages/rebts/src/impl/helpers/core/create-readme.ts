@@ -1,6 +1,6 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { logger } from "@reliverse/dler-logger";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import type {
 	Addons,
 	API,
@@ -197,7 +197,7 @@ function generateStackDescription(
 	}
 
 	if (backend !== "none") {
-		parts.push(backend.at(0)?.toUpperCase() + backend.slice(1));
+		parts.push(((backend.at(0)?.toUpperCase()) ?? "") ?? "" + backend.slice(1));
 	}
 
 	if (!isConvex && api !== "none") {

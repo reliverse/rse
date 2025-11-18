@@ -1,7 +1,7 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { createSpinner } from "@reliverse/dler-spinner";
 import { logger } from "@reliverse/dler-logger";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { re } from "@reliverse/dler-colors";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { setupCloudflareD1 } from "../database-providers/d1-setup";

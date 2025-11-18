@@ -360,24 +360,24 @@ function transformFileContent(content: string): string {
     'import { re } from "@reliverse/dler-colors";\n',
   );
 
-  // Replace fs-extra imports with @reliverse/relifso
+  // Replace fs-extra imports with @reliverse/dler-fs-utils
   transformed = transformed.replace(
     /import\s+fs\s+from\s+["']fs-extra["'];?\n?/g,
-    'import fs from "@reliverse/relifso";\n',
+    'import fs from "@reliverse/dler-fs-utils";\n',
   );
   transformed = transformed.replace(
     /import\s+\{[^}]*fs[^}]*\}\s+from\s+["']fs-extra["'];?\n?/g,
-    'import fs from "@reliverse/relifso";\n',
+    'import fs from "@reliverse/dler-fs-utils";\n',
   );
 
-  // Replace node:path imports with @reliverse/pathkit
+  // Replace node:path imports with @reliverse/dler-pathkit
   transformed = transformed.replace(
     /import\s+path\s+from\s+["']node:path["'];?\n?/g,
-    'import path from "@reliverse/pathkit";\n',
+    'import path from "@reliverse/dler-pathkit";\n',
   );
   transformed = transformed.replace(
     /import\s+\{[^}]*path[^}]*\}\s+from\s+["']node:path["'];?\n?/g,
-    'import path from "@reliverse/pathkit";\n',
+    'import path from "@reliverse/dler-pathkit";\n',
   );
 
   // Replace tinyglobby imports with Bun's Glob
@@ -522,6 +522,28 @@ function transformFileContent(content: string): string {
       return generic ? `groupPrompt${generic}(` : "groupPrompt(";
     },
   );
+  // Replace groupMultiselect() calls with groupMultiselectPrompt()
+  // Handle both groupMultiselect(...) and groupMultiselect<Type>(...)
+  transformed = transformed.replace(
+    /\bgroupMultiselect(<[^>]*>)?\(/g,
+    (_match, generic) => {
+      return generic
+        ? `groupMultiselectPrompt${generic}(`
+        : "groupMultiselectPrompt(";
+    },
+  );
+  // Replace groupMultiselect in any other import statements (non-@clack/prompts)
+  transformed = transformed.replace(
+    /import\s+\{([^}]*groupMultiselect[^}]*)\}\s+from\s+["'][^"']+["'];?\n?/g,
+    (match) => {
+      return match.replace(/\bgroupMultiselect\b/g, "groupMultiselectPrompt");
+    },
+  );
+  // Replace any remaining references to groupMultiselect
+  transformed = transformed.replace(
+    /\bgroupMultiselect\b/g,
+    "groupMultiselectPrompt",
+  );
   // Replace text() calls with inputPrompt()
   // Handle both text(...) and text<Type>(...) - remove generics as inputPrompt doesn't support them
   // Be careful not to match .text() which is a method on Bun's $ template literals
@@ -624,9 +646,14 @@ function transformFileContent(content: string): string {
       // Handle pattern (can be string or array)
       const pattern = patternArg.trim();
       const isArrayPattern = pattern.startsWith("[");
+      const isVariablePattern = /^[a-zA-Z_$][\w$]*$/.test(pattern);
 
       if (isArrayPattern) {
         // Array of patterns - need to handle multiple globs
+        // Check if ignoreValue is a variable name (not an array literal)
+        const isIgnoreVariable = /^[a-zA-Z_$][\w$]*$/.test(ignoreValue);
+        const ignoreVarName = isIgnoreVariable ? ignoreValue : "ignorePatterns";
+
         return `await (async () => {
 			const patterns = ${pattern};
 			const allFiles = new Set<string>();
@@ -638,8 +665,43 @@ function transformFileContent(content: string): string {
 			}
 			${
         hasIgnore
-          ? `const ignorePatterns = ${ignoreValue};
-			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
+          ? isIgnoreVariable
+            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+			return Array.from(allFiles).filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+            : `const ${ignoreVarName} = ${ignoreValue};
+			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+			return Array.from(allFiles).filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+          : "return Array.from(allFiles);"
+      }
+		})()`;
+      } else if (isVariablePattern) {
+        // Variable that could be string | string[] - handle both cases
+        // Check if ignoreValue is a variable name (not an array literal)
+        const isIgnoreVariable = /^[a-zA-Z_$][\w$]*$/.test(ignoreValue);
+        const ignoreVarName = isIgnoreVariable ? ignoreValue : "ignorePatterns";
+
+        return `await (async () => {
+			const patterns = Array.isArray(${pattern}) ? ${pattern} : [${pattern}];
+			const allFiles = new Set<string>();
+			for (const pattern of patterns) {
+				const glob = new Glob(pattern);
+				for await (const file of glob.scan(${scanOptions || "{}"})) {
+					allFiles.add(file);
+				}
+			}
+			${
+        hasIgnore
+          ? isIgnoreVariable
+            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+			return Array.from(allFiles).filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+            : `const ${ignoreVarName} = ${ignoreValue};
+			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
 			});`
@@ -647,7 +709,11 @@ function transformFileContent(content: string): string {
       }
 		})()`;
       } else {
-        // Single pattern
+        // Single pattern (string literal)
+        // Check if ignoreValue is a variable name (not an array literal)
+        const isIgnoreVariable = /^[a-zA-Z_$][\w$]*$/.test(ignoreValue);
+        const ignoreVarName = isIgnoreVariable ? ignoreValue : "ignorePatterns";
+
         return `await (async () => {
 			const glob = new Glob(${pattern});
 			const files: string[] = [];
@@ -656,8 +722,13 @@ function transformFileContent(content: string): string {
 			}
 			${
         hasIgnore
-          ? `const ignorePatterns = ${ignoreValue};
-			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
+          ? isIgnoreVariable
+            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+			return files.filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+            : `const ${ignoreVarName} = ${ignoreValue};
+			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
 			return files.filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
 			});`
@@ -687,8 +758,13 @@ function transformFileContent(content: string): string {
       }
       const pattern = patternArg.trim();
       const isArrayPattern = pattern.startsWith("[");
+      const isVariablePattern = /^[a-zA-Z_$][\w$]*$/.test(pattern);
 
       if (isArrayPattern) {
+        // Check if ignoreValue is a variable name (not an array literal)
+        const isIgnoreVariable = /^[a-zA-Z_$][\w$]*$/.test(ignoreValue);
+        const ignoreVarName = isIgnoreVariable ? ignoreValue : "ignorePatterns";
+
         return `${prefix}(async () => {
 			const patterns = ${pattern};
 			const allFiles = new Set<string>();
@@ -700,8 +776,43 @@ function transformFileContent(content: string): string {
 			}
 			${
         hasIgnore
-          ? `const ignorePatterns = ${ignoreValue};
-			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
+          ? isIgnoreVariable
+            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+			return Array.from(allFiles).filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+            : `const ${ignoreVarName} = ${ignoreValue};
+			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+			return Array.from(allFiles).filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+          : "return Array.from(allFiles);"
+      }
+		})()`;
+      } else if (isVariablePattern) {
+        // Variable that could be string | string[] - handle both cases
+        // Check if ignoreValue is a variable name (not an array literal)
+        const isIgnoreVariable = /^[a-zA-Z_$][\w$]*$/.test(ignoreValue);
+        const ignoreVarName = isIgnoreVariable ? ignoreValue : "ignorePatterns";
+
+        return `${prefix}(async () => {
+			const patterns = Array.isArray(${pattern}) ? ${pattern} : [${pattern}];
+			const allFiles = new Set<string>();
+			for (const pattern of patterns) {
+				const glob = new Glob(pattern);
+				for await (const file of glob.scan(${scanOptions || "{}"})) {
+					allFiles.add(file);
+				}
+			}
+			${
+        hasIgnore
+          ? isIgnoreVariable
+            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+			return Array.from(allFiles).filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+            : `const ${ignoreVarName} = ${ignoreValue};
+			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
 			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
 			});`
@@ -709,6 +820,10 @@ function transformFileContent(content: string): string {
       }
 		})()`;
       } else {
+        // Check if ignoreValue is a variable name (not an array literal)
+        const isIgnoreVariable = /^[a-zA-Z_$][\w$]*$/.test(ignoreValue);
+        const ignoreVarName = isIgnoreVariable ? ignoreValue : "ignorePatterns";
+
         return `${prefix}(async () => {
 			const glob = new Glob(${pattern});
 			const files: string[] = [];
@@ -717,8 +832,13 @@ function transformFileContent(content: string): string {
 			}
 			${
         hasIgnore
-          ? `const ignorePatterns = ${ignoreValue};
-			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
+          ? isIgnoreVariable
+            ? `const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
+			return files.filter((file) => {
+				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
+			});`
+            : `const ${ignoreVarName} = ${ignoreValue};
+			const ignoreGlobs = ${ignoreVarName}.map((p: string) => new Glob(p));
 			return files.filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
 			});`
@@ -796,6 +916,66 @@ function transformFileContent(content: string): string {
       return match;
     },
   );
+
+  // Fix groupedOptions.Linting.push and groupedOptions.Other.push
+  // Pattern: groupedOptions.Linting.push -> groupedOptions.Linting!.push
+  // Pattern: groupedOptions.Other.push -> groupedOptions.Other!.push
+  transformed = transformed.replace(
+    /(groupedOptions\.(?:Linting|Other))\.push/g,
+    "$1!.push",
+  );
+
+  // Fix groupedOptions[group].length access
+  // Pattern: groupedOptions[group].length -> groupedOptions[group]?.length
+  transformed = transformed.replace(
+    /(groupedOptions\[group\])\.length/g,
+    "$1?.length",
+  );
+
+  // Add groupMultiselectPrompt import if groupMultiselectPrompt() is used
+  // Check for usage with or without generics
+  const hasGroupMultiselectPrompt =
+    /\bgroupMultiselectPrompt\s*(<[^>]*>)?\s*\(/.test(transformed);
+  const hasGroupMultiselectPromptImport =
+    /import\s+[^;]*groupMultiselectPrompt[^;]*from\s+["']@reliverse\/dler-prompt["'];?/.test(
+      transformed,
+    );
+
+  if (hasGroupMultiselectPrompt && !hasGroupMultiselectPromptImport) {
+    // Check if there's already an import from @reliverse/dler-prompt
+    const promptImportRegex =
+      /import\s+\{([^}]*)\}\s+from\s+["']@reliverse\/dler-prompt["'];?\n?/;
+    const promptImportMatch = transformed.match(promptImportRegex);
+
+    if (promptImportMatch?.[1]) {
+      // Add groupMultiselectPrompt to existing import
+      const existingImports = promptImportMatch[1]
+        .split(",")
+        .map((i) => i.trim())
+        .filter((i) => i && i !== "groupMultiselectPrompt" && i !== "type");
+      // Sort imports for consistency
+      existingImports.push("groupMultiselectPrompt");
+      const sortedImports = existingImports.sort();
+      transformed = transformed.replace(
+        promptImportMatch[0],
+        `import { ${sortedImports.join(", ")} } from "@reliverse/dler-prompt";\n`,
+      );
+    } else {
+      // Add new import - find the first import line
+      const firstImportMatch = transformed.match(
+        /^import\s+.*from\s+["'][^"']+["'];?\n?/m,
+      );
+      if (firstImportMatch) {
+        transformed = transformed.replace(
+          firstImportMatch[0],
+          `import { groupMultiselectPrompt } from "@reliverse/dler-prompt";\n${firstImportMatch[0]}`,
+        );
+      } else {
+        // No imports at all, add at the beginning
+        transformed = `import { groupMultiselectPrompt } from "@reliverse/dler-prompt";\n${transformed}`;
+      }
+    }
+  }
 
   // Add cancel import if cancel() is used
   if (
@@ -981,11 +1161,11 @@ function transformFileContent(content: string): string {
         if (firstImportMatch) {
           transformed = transformed.replace(
             firstImportMatch[0],
-            `import path from "@reliverse/pathkit";\nimport { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";\n${firstImportMatch[0]}`,
+            `import path from "@reliverse/dler-pathkit";\nimport { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";\n${firstImportMatch[0]}`,
           );
         } else {
           // No imports found, add at the top
-          transformed = `import path from "@reliverse/pathkit";\nimport { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";\n${transformed}`;
+          transformed = `import path from "@reliverse/dler-pathkit";\nimport { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";\n${transformed}`;
         }
       }
     } else {
@@ -1015,6 +1195,200 @@ function transformFileContent(content: string): string {
       }
     }
   }
+
+  // Fix incorrect transformations: revert { encoding: variable } back to just variable
+  // This fixes cases where variables were incorrectly transformed (e.g., directory names)
+  // First, fix cases where { encoding: variable } appears in path.resolve or other path functions
+  transformed = transformed.replace(
+    /(path\.(?:resolve|join|dirname|basename))\s*\(\s*([^,]+)\s*,\s*\{\s*encoding\s*:\s*([a-zA-Z_$][\w$]*)\s*\}\s*\)/g,
+    (_match, pathFunc, firstArg, varName) => {
+      // This is clearly wrong - path functions don't take encoding options
+      return `${pathFunc}(${firstArg}, ${varName})`;
+    },
+  );
+
+  // Fix readdir calls with incorrect variable transformations
+  transformed = transformed.replace(
+    /\bfs\.readdir\s*\(\s*([^,]+)\s*,\s*\{\s*encoding\s*:\s*([a-zA-Z_$][\w$]*)\s*\}\s*\)/g,
+    (_match, pathArg, varName) => {
+      // Only revert if the variable name doesn't look like an encoding
+      const encodingPattern =
+        /^(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary|encoding|enc|charset)$/i;
+      if (encodingPattern.test(varName)) {
+        return _match; // Keep the transformation if it looks like an encoding
+      }
+      return `fs.readdir(${pathArg}, ${varName})`;
+    },
+  );
+  transformed = transformed.replace(
+    /(?<!\.)\breaddir\s*\(\s*([^,]+)\s*,\s*\{\s*encoding\s*:\s*([a-zA-Z_$][\w$]*)\s*\}\s*\)/g,
+    (_match, pathArg, varName) => {
+      const encodingPattern =
+        /^(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary|encoding|enc|charset)$/i;
+      if (encodingPattern.test(varName)) {
+        return _match;
+      }
+      return `readdir(${pathArg}, ${varName})`;
+    },
+  );
+
+  // Transform fs operations to use options object
+  // Pattern: fs.readFile(path, "utf8") -> fs.readFile(path, { encoding: "utf8" })
+  // Only transform string literals that look like encodings to avoid false positives
+  transformed = transformed.replace(
+    /\bfs\.readFile\s*\(\s*([^,]+)\s*,\s*(["'])(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary)\2\s*\)/gi,
+    (_match, pathArg, quote, encoding) => {
+      return `fs.readFile(${pathArg}, { encoding: ${quote}${encoding}${quote} })`;
+    },
+  );
+
+  // Pattern: fs.writeFile(path, data, "utf8") -> fs.writeFile(path, data, { encoding: "utf8" })
+  // Only transform string literals that look like encodings
+  transformed = transformed.replace(
+    /\bfs\.writeFile\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*(["'])(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary)\3\s*\)/gi,
+    (_match, pathArg, dataArg, quote, encoding) => {
+      return `fs.writeFile(${pathArg}, ${dataArg}, { encoding: ${quote}${encoding}${quote} })`;
+    },
+  );
+
+  // Pattern: fs.appendFile(path, data, "utf8") -> fs.appendFile(path, data, { encoding: "utf8" })
+  // Only transform string literals that look like encodings
+  transformed = transformed.replace(
+    /\bfs\.appendFile\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*(["'])(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary)\3\s*\)/gi,
+    (_match, pathArg, dataArg, quote, encoding) => {
+      return `fs.appendFile(${pathArg}, ${dataArg}, { encoding: ${quote}${encoding}${quote} })`;
+    },
+  );
+
+  // Pattern: fs.readdir(path, "utf8") -> fs.readdir(path, { encoding: "utf8" })
+  // Only transform string literals that look like encodings (utf8, utf-8, ascii, base64, etc.)
+  // Do NOT transform variables as they might be directory names or other options
+  transformed = transformed.replace(
+    /\bfs\.readdir\s*\(\s*([^,]+)\s*,\s*(["'])(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary)\2\s*\)/gi,
+    (_match, pathArg, quote, encoding) => {
+      return `fs.readdir(${pathArg}, { encoding: ${quote}${encoding}${quote} })`;
+    },
+  );
+
+  // Also handle node:fs/promises imports (readFile, writeFile, appendFile, readdir)
+  // Use negative lookbehind to ensure we only match standalone function calls, not method calls
+  // Pattern: readFile(path, "utf8") -> readFile(path, { encoding: "utf8" })
+  // Only transform string literals that look like encodings
+  transformed = transformed.replace(
+    /(?<!\.)\breadFile\s*\(\s*([^,]+)\s*,\s*(["'])(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary)\2\s*\)/gi,
+    (_match, pathArg, quote, encoding) => {
+      return `readFile(${pathArg}, { encoding: ${quote}${encoding}${quote} })`;
+    },
+  );
+
+  // Pattern: writeFile(path, data, "utf8") -> writeFile(path, data, { encoding: "utf8" })
+  // Only transform string literals that look like encodings
+  transformed = transformed.replace(
+    /(?<!\.)\bwriteFile\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*(["'])(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary)\3\s*\)/gi,
+    (_match, pathArg, dataArg, quote, encoding) => {
+      return `writeFile(${pathArg}, ${dataArg}, { encoding: ${quote}${encoding}${quote} })`;
+    },
+  );
+
+  // Pattern: appendFile(path, data, "utf8") -> appendFile(path, data, { encoding: "utf8" })
+  // Only transform string literals that look like encodings
+  transformed = transformed.replace(
+    /(?<!\.)\bappendFile\s*\(\s*([^,]+)\s*,\s*([^,]+)\s*,\s*(["'])(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary)\3\s*\)/gi,
+    (_match, pathArg, dataArg, quote, encoding) => {
+      return `appendFile(${pathArg}, ${dataArg}, { encoding: ${quote}${encoding}${quote} })`;
+    },
+  );
+
+  // Pattern: readdir(path, "utf8") -> readdir(path, { encoding: "utf8" })
+  // Only transform string literals that look like encodings
+  // Do NOT transform variables as they might be directory names or other options
+  transformed = transformed.replace(
+    /(?<!\.)\breaddir\s*\(\s*([^,]+)\s*,\s*(["'])(utf-?8|ascii|base64|hex|latin1|ucs-?2|utf16le|binary)\2\s*\)/gi,
+    (_match, pathArg, quote, encoding) => {
+      return `readdir(${pathArg}, { encoding: ${quote}${encoding}${quote} })`;
+    },
+  );
+
+  // Add nullish coalescing fallback to optional chaining expressions
+  // Pattern: array.at(n)?.property -> (array.at(n)?.property) ?? "" in contexts where undefined is not allowed
+  // Handle function arguments: func(array.at(0)?.name) -> func((array.at(0)?.name) ?? "")
+  transformed = transformed.replace(
+    /(\w+(?:\.\w+)*)\s*\(\s*([^,)]*?)(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?([^,)]*?)\s*\)/g,
+    (_match, funcName, before, arrayName, index, property, isMethod, after) => {
+      // Skip if already has nullish coalescing
+      if (before.includes("??") || after.includes("??")) {
+        return _match;
+      }
+      // Skip if it's a method call on the result
+      if (after.trim().startsWith(".")) {
+        return _match;
+      }
+      const methodCall = isMethod ? "()" : "";
+      const replacement = `(${arrayName}.at(${index})?.${property}${methodCall}) ?? ""`;
+      return `${funcName}(${before}${replacement}${after})`;
+    },
+  );
+
+  // Handle template literals: ${array.at(0)?.name} or ${func(array.at(0)?.name)}
+  // This handles both standalone and nested in function calls
+  transformed = transformed.replace(
+    /\$\{([^}]*?)(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?([^}]*?)\}/g,
+    (_match, before, arrayName, index, property, isMethod, after) => {
+      // Skip if already has nullish coalescing
+      if (before.includes("??") || after.includes("??")) {
+        return _match;
+      }
+      const methodCall = isMethod ? "()" : "";
+      const replacement = `(${arrayName}.at(${index})?.${property}${methodCall}) ?? ""`;
+      return `\${${before}${replacement}${after}}`;
+    },
+  );
+
+  // Handle return statements: return array.at(0)?.name; -> return (array.at(0)?.name) ?? "";
+  transformed = transformed.replace(
+    /return\s+(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?\s*;/g,
+    (_match, arrayName, index, property, isMethod) => {
+      const methodCall = isMethod ? "()" : "";
+      return `return (${arrayName}.at(${index})?.${property}${methodCall}) ?? "";`;
+    },
+  );
+
+  // Handle function arguments: func(array.at(0)?.name) -> func((array.at(0)?.name) ?? "")
+  // This is more complex - we need to match the function call pattern
+  transformed = transformed.replace(
+    /(\w+)\s*\(\s*([^,)]*?)(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?([^,)]*?)\s*\)/g,
+    (_match, funcName, before, arrayName, index, property, isMethod, after) => {
+      // Skip if already has nullish coalescing
+      if (before.includes("??") || after.includes("??")) {
+        return _match;
+      }
+      // Skip if it's a method call on the result (like .map(), .filter(), etc.)
+      if (after.trim().startsWith(".")) {
+        return _match;
+      }
+      const methodCall = isMethod ? "()" : "";
+      return `${funcName}(${before}(${arrayName}.at(${index})?.${property}${methodCall}) ?? ""${after})`;
+    },
+  );
+
+  // Handle assignments: const x = array.at(0)?.name; -> const x = (array.at(0)?.name) ?? "";
+  transformed = transformed.replace(
+    /(const|let|var)\s+(\w+)\s*=\s*(\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?\s*;/g,
+    (_match, keyword, varName, arrayName, index, property, isMethod) => {
+      const methodCall = isMethod ? "()" : "";
+      return `${keyword} ${varName} = (${arrayName}.at(${index})?.${property}${methodCall}) ?? "";`;
+    },
+  );
+
+  // Handle standalone expressions in parentheses that might be used as arguments
+  // Pattern: (array.at(0)?.name) -> (array.at(0)?.name) ?? "" if not already has ??
+  transformed = transformed.replace(
+    /\((\w+)\.at\((\d+)\)\?\.(\w+)(\(\))?\)(?!\s*\?\?)/g,
+    (_match, arrayName, index, property, isMethod) => {
+      const methodCall = isMethod ? "()" : "";
+      return `((${arrayName}.at(${index})?.${property}${methodCall}) ?? "")`;
+    },
+  );
 
   // Deduplicate imports
   transformed = deduplicateImports(transformed);

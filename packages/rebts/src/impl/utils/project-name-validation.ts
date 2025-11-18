@@ -1,4 +1,4 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { ProjectNameSchema } from "../types";
 import { exitWithError } from "./errors";
 

@@ -1,8 +1,8 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { logger } from "@reliverse/dler-logger";
 import { createSpinner } from "@reliverse/dler-spinner";
 import { isCancel, selectPrompt } from "@reliverse/dler-prompt";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { re } from "@reliverse/dler-colors";
 import { getProjectName } from "../prompts/project-name";
 import { exitCancelled, handleError } from "./errors";

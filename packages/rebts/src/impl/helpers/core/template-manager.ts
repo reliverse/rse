@@ -1,5 +1,5 @@
-import path from "@reliverse/pathkit";
-import fs from "@reliverse/relifso";
+import path from "@reliverse/dler-pathkit";
+import fs from "@reliverse/dler-fs-utils";
 import { Glob } from "bun";
 import { PKG_ROOT } from "../../constants";
 import { processTemplate } from "../../utils/template-processor";
@@ -14,18 +14,20 @@ export async function processAndCopyFiles(
 	ignorePatterns?: string[],
 ) {
 	const sourceFiles = await (async () => {
-			const glob = new Glob(sourcePattern);
-			const files: string[] = [];
-			for await (const file of glob.scan({
+			const patterns = Array.isArray(sourcePattern) ? sourcePattern : [sourcePattern];
+			const allFiles = new Set<string>();
+			for (const pattern of patterns) {
+				const glob = new Glob(pattern);
+				for await (const file of glob.scan({
 		cwd: baseSourceDir,
 		dot: true,
 		onlyFiles: true,
 		absolute: false})) {
-				files.push(file);
+					allFiles.add(file);
+				}
 			}
-			const ignorePatterns = ignorePatterns;
 			const ignoreGlobs = ignorePatterns.map((p: string) => new Glob(p));
-			return files.filter((file) => {
+			return Array.from(allFiles).filter((file) => {
 				return !ignoreGlobs.some((ignoreGlob) => ignoreGlob.match(file));
 			});
 		})();

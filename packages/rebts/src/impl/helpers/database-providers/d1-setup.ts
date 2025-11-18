@@ -1,4 +1,4 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { addPackageDependency } from "../../utils/add-package-deps";
 import { addEnvVariablesToFile, type EnvVariable } from "../core/env-setup";
 import type { ProjectConfig } from "../../types";

@@ -1,6 +1,6 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { readPackageJSON, writePackageJSON } from "@reliverse/dler-pkg-tsc";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { IndentationText, Node, Project, QuoteKind } from "ts-morph";
 import { addPackageDependency } from "../../../utils/add-package-deps";
 import type { PackageManager } from "../../../types";

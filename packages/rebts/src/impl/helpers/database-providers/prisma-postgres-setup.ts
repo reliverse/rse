@@ -1,9 +1,9 @@
-import path from "@reliverse/pathkit";
+import path from "@reliverse/dler-pathkit";
 import { logger } from "@reliverse/dler-logger";
 import { createSpinner } from "@reliverse/dler-spinner";
 import { inputPrompt, isCancel, selectPrompt } from "@reliverse/dler-prompt";
 import { execa } from "execa";
-import fs from "@reliverse/relifso";
+import fs from "@reliverse/dler-fs-utils";
 import { re } from "@reliverse/dler-colors";
 import { exitCancelled } from "../../utils/errors";
 import { getPackageExecutionCommand } from "../../utils/package-runner";
@@ -175,7 +175,7 @@ async function addDotenvImportToPrismaConfig(
 			projectDir,
 			"packages/db/prisma.config.ts",
 		);
-		let content = await fs.readFile(prismaConfigPath, "utf8");
+		let content = await fs.readFile(prismaConfigPath, { encoding: "utf8" });
 		const envPath =
 			backend === "self" ? "../../apps/web/.env" : "../../apps/server/.env";
 		content = `\ndotenv.config({ path: "${envPath}" });\n${content}`;

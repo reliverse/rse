@@ -26,7 +26,7 @@ export async function getPackageManagerChoice(packageManager?: PackageManager) {
         hint: "All-in-one JavaScript runtime & toolkit",
       },
     ],
-    defaultValue: detectedPackageManager,
+    initialValue: detectedPackageManager,
   });
 
   if (isCancel(response)) return exitCancelled("Operation cancelled");

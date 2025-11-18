@@ -1,15 +1,10 @@
 import { existsSync, rmSync } from "node:fs";
 import { exists, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
-import { homedir } from "node:os";
 import { join } from "node:path";
 import { defineCommand } from "@reliverse/dler-launcher";
 import { logger } from "@reliverse/dler-logger";
 import { confirmPrompt, isCancel } from "@reliverse/dler-prompt";
-import { $ } from "bun";
-
-const REPO_URL = "https://github.com/AmanVarshney01/create-better-t-stack";
-const REPO_NAME = "create-better-t-stack";
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+import { ensureBetterTStackRepo } from "@reliverse/rse-git-utils";
 
 function generateModTsContent(version: string): string {
   return [
@@ -148,56 +143,6 @@ function generateModTsContent(version: string): string {
     "",
     "",
   ].join("\n");
-}
-
-function getCacheDirectory(): string {
-  return join(homedir(), ".reliverse", "dler", "cache", "bts");
-}
-
-function getCacheTimestampPath(): string {
-  return join(getCacheDirectory(), ".timestamp");
-}
-
-function getCachedRepoPath(): string {
-  return join(getCacheDirectory(), REPO_NAME);
-}
-
-async function isCacheValid(): Promise<boolean> {
-  const cachedRepo = getCachedRepoPath();
-  const timestampPath = getCacheTimestampPath();
-
-  // Check if cache exists
-  const cacheExists = await exists(cachedRepo);
-  const timestampExists = await exists(timestampPath);
-
-  if (!cacheExists || !timestampExists) {
-    return false;
-  }
-
-  // Check if timestamp is valid
-  try {
-    const timestampContent = await readFile(timestampPath, "utf-8");
-    const lastDownloadTime = Number.parseInt(timestampContent.trim(), 10);
-
-    if (Number.isNaN(lastDownloadTime)) {
-      return false;
-    }
-
-    const now = Date.now();
-    const age = now - lastDownloadTime;
-
-    return age < CACHE_TTL_MS;
-  } catch {
-    return false;
-  }
-}
-
-async function updateCacheTimestamp(): Promise<void> {
-  const cacheDir = getCacheDirectory();
-  const timestampPath = getCacheTimestampPath();
-
-  await mkdir(cacheDir, { recursive: true });
-  await writeFile(timestampPath, Date.now().toString(), "utf-8");
 }
 
 function transformFileContent(
@@ -1926,29 +1871,6 @@ async function copyDirectoryRecursive(
   }
 }
 
-async function ensureCacheIsValid(): Promise<void> {
-  const cacheDir = getCacheDirectory();
-  const cachedRepo = getCachedRepoPath();
-  const isValid = await isCacheValid();
-
-  if (!isValid) {
-    if (await exists(cachedRepo)) {
-      logger.info("🔄 Cache expired, re-downloading repository...");
-      rmSync(cachedRepo, { recursive: true, force: true });
-    } else {
-      logger.info(`📥 Cloning ${REPO_URL}...`);
-    }
-
-    // Clone to cache
-    await mkdir(cacheDir, { recursive: true });
-    await $`git clone ${REPO_URL} ${cachedRepo}`.quiet();
-    await updateCacheTimestamp();
-    logger.success("✅ Repository cloned successfully");
-  } else {
-    logger.info("📦 Using cached repository...");
-  }
-}
-
 export default defineCommand({
   meta: {
     name: "bts",
@@ -1977,15 +1899,12 @@ export default defineCommand({
       }
     }
     const cwd = process.cwd();
-    const cachedRepo = getCachedRepoPath();
+    const cachedRepo = await ensureBetterTStackRepo();
     const srcSource = join(cachedRepo, "apps", "cli", "src");
     const srcDest = join(cwd, "packages", "rebts", "src", "impl");
     const rebtsSrcDir = join(cwd, "packages", "rebts", "src");
 
     try {
-      // Ensure cache is valid (clone if needed)
-      await ensureCacheIsValid();
-
       // Check if src directory exists in cached repo
       const srcExists = await exists(srcSource);
       if (!srcExists) {

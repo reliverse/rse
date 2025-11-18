@@ -127,7 +127,7 @@ export async function getAddonsChoice(
     message: "Select addons",
     options: groupedOptions,
     selectableGroups: false,
-    initialValue: initialValue,
+    initialValue,
   });
 
   if (isCancel(response)) return exitCancelled("Operation cancelled");

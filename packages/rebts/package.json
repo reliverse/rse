@@ -35,7 +35,8 @@
     "yaml": "catalog:",
     "handlebars": "catalog:",
     "gradient-string": "catalog:",
-    "dotenv": "catalog:"
+    "dotenv": "catalog:",
+    "@reliverse/rse-git-utils": "workspace:*"
   },
   "devDependencies": {
     "@p/tsconfig": "workspace:*",

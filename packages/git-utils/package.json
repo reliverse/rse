@@ -19,6 +19,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "@reliverse/dler-logger": "catalog:",
     "@reliverse/rse-escaper": "workspace:*"
   },
   "devDependencies": {

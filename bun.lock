@@ -6,7 +6,7 @@
       "name": "@reliverse/rse-monorepo",
       "devDependencies": {
         "@biomejs/biome": "^2.3.6",
-        "@reliverse/dler": "^2.2.4",
+        "@reliverse/dler": "^2.2.6",
       },
     },
     "cli": {
@@ -67,6 +67,7 @@
       "name": "@reliverse/rse-git-utils",
       "version": "2.0.7",
       "dependencies": {
+        "@reliverse/dler-logger": "catalog:",
         "@reliverse/rse-escaper": "workspace:*",
       },
       "devDependencies": {
@@ -86,6 +87,7 @@
         "@reliverse/dler-pkg-tsc": "catalog:",
         "@reliverse/dler-prompt": "catalog:",
         "@reliverse/dler-spinner": "catalog:",
+        "@reliverse/rse-git-utils": "workspace:*",
         "dotenv": "catalog:",
         "execa": "catalog:",
         "gradient-string": "catalog:",
@@ -125,6 +127,7 @@
         "@reliverse/dler-logger": "catalog:",
         "@reliverse/dler-prompt": "catalog:",
         "@reliverse/rse-escaper": "workspace:*",
+        "@reliverse/rse-git-utils": "workspace:*",
         "magic-string": "^0.30.21",
         "ts-morph": "catalog:",
       },
@@ -136,17 +139,17 @@
     },
   },
   "catalog": {
-    "@reliverse/dler-colors": "^2.2.4",
-    "@reliverse/dler-fs-utils": "^2.2.4",
-    "@reliverse/dler-helpers": "^2.2.4",
-    "@reliverse/dler-launcher": "^2.2.4",
-    "@reliverse/dler-logger": "^2.2.4",
-    "@reliverse/dler-mapper": "^2.2.4",
-    "@reliverse/dler-matcher": "^2.2.4",
-    "@reliverse/dler-pathkit": "^2.2.4",
-    "@reliverse/dler-pkg-tsc": "^2.2.4",
-    "@reliverse/dler-prompt": "^2.2.4",
-    "@reliverse/dler-spinner": "^2.2.4",
+    "@reliverse/dler-colors": "^2.2.6",
+    "@reliverse/dler-fs-utils": "^2.2.6",
+    "@reliverse/dler-helpers": "^2.2.6",
+    "@reliverse/dler-launcher": "^2.2.6",
+    "@reliverse/dler-logger": "^2.2.6",
+    "@reliverse/dler-mapper": "^2.2.6",
+    "@reliverse/dler-matcher": "^2.2.6",
+    "@reliverse/dler-pathkit": "^2.2.6",
+    "@reliverse/dler-pkg-tsc": "^2.2.6",
+    "@reliverse/dler-prompt": "^2.2.6",
+    "@reliverse/dler-spinner": "^2.2.6",
     "@types/bun": "^1.3.2",
     "dotenv": "^17.2.3",
     "execa": "^9.6.0",
@@ -238,37 +241,37 @@
 
     "@p/tsconfig": ["@p/tsconfig@workspace:packages/tsconfig"],
 
-    "@reliverse/dler": ["@reliverse/dler@2.2.4", "", { "dependencies": { "@reliverse/dler-build": "^2.1.18", "@reliverse/dler-bump": "^2.1.18", "@reliverse/dler-helpers": "^2.1.18", "@reliverse/dler-launcher": "^2.1.18", "@reliverse/dler-logger": "^2.1.18", "@reliverse/dler-mapper": "^2.1.18", "@reliverse/dler-matcher": "^2.1.18", "@reliverse/dler-pkg-tsc": "^2.1.18", "@reliverse/dler-prompt": "^2.1.18", "@reliverse/dler-publish": "^2.1.18", "c12": "^3.3.2", "clipboardy": "^5.0.0", "lookpath": "^1.2.3", "semver": "^7.7.3" }, "bin": { "dler": "dist/cli.js" } }, "sha512-gvMAXBLZctW9cmc9ohYTjoRly5JA0TykRUAGjdaHcK64ZfUJcx5VfnLJUcSJ9Mq3BUvbmJ6sGK9mnDhjJkZPwQ=="],
+    "@reliverse/dler": ["@reliverse/dler@2.2.6", "", { "dependencies": { "@reliverse/dler-build": "^2.2.5", "@reliverse/dler-bump": "^2.2.5", "@reliverse/dler-helpers": "^2.2.5", "@reliverse/dler-launcher": "^2.2.5", "@reliverse/dler-logger": "^2.2.5", "@reliverse/dler-mapper": "^2.2.5", "@reliverse/dler-matcher": "^2.2.5", "@reliverse/dler-pkg-tsc": "^2.2.5", "@reliverse/dler-prompt": "^2.2.5", "@reliverse/dler-publish": "^2.2.5", "c12": "^3.3.2", "clipboardy": "^5.0.0", "lookpath": "^1.2.3", "semver": "^7.7.3" }, "bin": { "dler": "dist/cli.js" } }, "sha512-XRnIW3r6bgIX18Z6oqJ2lcbB+K7KSSF2M19m4LF7sn4DRmkq0FyHK7zQn5fNPYgJ9Ql2eXEPwdVXoLM4QlvO5A=="],
 
-    "@reliverse/dler-build": ["@reliverse/dler-build@2.1.21", "", { "dependencies": { "@reliverse/dler-config": "2.1.21", "@reliverse/dler-helpers": "2.1.21", "@reliverse/dler-logger": "2.1.21", "@reliverse/dler-mapper": "2.1.21", "@reliverse/dler-matcher": "2.1.21", "@reliverse/dler-pkg-tsc": "2.1.21", "autoprefixer": "^10.4.22", "c12": "^3.3.2", "cssnano": "^7.1.2", "defu": "^6.1.4", "dts-bundle-generator": "^9.5.1", "esbuild": "^0.27.0", "jiti": "^2.6.1", "lookpath": "^1.2.3", "mlly": "^1.8.0", "pkg-types": "^2.3.0", "semver": "^7.7.3", "tinyglobby": "^0.2.15" } }, "sha512-p90FGpCtbdUlbffak/4q4FThBQhKpcz+l2a5Qln/9lgdDm0dREneAvSKrYj1utoAc0jAhvkmI3ySPZ+OZR4THQ=="],
+    "@reliverse/dler-build": ["@reliverse/dler-build@2.2.6", "", { "dependencies": { "@reliverse/dler-config": "2.2.6", "@reliverse/dler-helpers": "2.2.6", "@reliverse/dler-logger": "2.2.6", "@reliverse/dler-mapper": "2.2.6", "@reliverse/dler-matcher": "2.2.6", "@reliverse/dler-pkg-tsc": "2.2.6", "autoprefixer": "^10.4.22", "c12": "^3.3.2", "cssnano": "^7.1.2", "defu": "^6.1.4", "dts-bundle-generator": "^9.5.1", "esbuild": "^0.27.0", "jiti": "^2.6.1", "lookpath": "^1.2.3", "mlly": "^1.8.0", "pkg-types": "^2.3.0", "semver": "^7.7.3", "tinyglobby": "^0.2.15" } }, "sha512-csA6/ULZRDkbMdIWrH2Mhjibe5Yls6EOrHJ9z35Zw9e6aoKPrpXd5+2cHOYvpuQz5LljFsVAAEL0zRLDZu17Cg=="],
 
-    "@reliverse/dler-bump": ["@reliverse/dler-bump@2.1.21", "", { "dependencies": { "semver": "^7.7.3" } }, "sha512-/v5F8MG9sTjw/YMSZv8LwQUfeCIygwl50hTWFYXjUtnzvfNJWAkbvlW66EZFxWXNB9xO7rZXftLLUXVY/Wpyxw=="],
+    "@reliverse/dler-bump": ["@reliverse/dler-bump@2.2.6", "", { "dependencies": { "semver": "^7.7.3" } }, "sha512-mjQCGwo5BQSDj7jGT2PtJPBChUVAWbj1PilhtL0C+Y8zKSRqrB/qqxbCdeGrD3evWGfqY4hWmc/ycZFauwhnnQ=="],
 
-    "@reliverse/dler-colors": ["@reliverse/dler-colors@2.2.4", "", {}, "sha512-yBYIbUf938qyeZtTrmNLLZIQqbSiSoR95bH9rzn+hClUS5HyeL4dnhOAO9nIG05gq3yBVNmGVkI6KPshHAJn2Q=="],
+    "@reliverse/dler-colors": ["@reliverse/dler-colors@2.2.6", "", {}, "sha512-cqHeZKXILOtq3e4/VY9fCTUq//OvoHGoObZhA+SD3zGeuVgd8fkYuRKI0lzfJL+GnKCmEr/vLPfixXEofpe0qA=="],
 
-    "@reliverse/dler-config": ["@reliverse/dler-config@2.1.21", "", { "dependencies": { "@reliverse/dler-matcher": "2.1.21", "@reliverse/dler-pkg-tsc": "2.1.21", "c12": "^3.3.2", "semver": "^7.7.3" } }, "sha512-Sn03RdKOrYdkHYBiELwbUEDaZaRRgdms2LEwhM1f+qaEz5/dO0ZB4v3KIZbMvkN4BsPEyzSZLosv9glgdX/1AQ=="],
+    "@reliverse/dler-config": ["@reliverse/dler-config@2.2.6", "", { "dependencies": { "@reliverse/dler-matcher": "2.2.6", "@reliverse/dler-pkg-tsc": "2.2.6", "c12": "^3.3.2", "semver": "^7.7.3" } }, "sha512-5bDAUiWPvTbPfxi7WRoUKnOQmnvi4HjFp/OC5/KiVfDUqn1IHTMJUhkLjlVm2crLCiJsvrM+u/i+32VTw5XFPg=="],
 
-    "@reliverse/dler-fs-utils": ["@reliverse/dler-fs-utils@2.2.4", "", {}, "sha512-5g7jTlpAVpPJTnZGGu7NMjWmmJ0rlUWnb07mK2X9sZP+zxTb6BwWpWpevlB8ndApwo8G+617a8vmt7ZWZUZBxg=="],
+    "@reliverse/dler-fs-utils": ["@reliverse/dler-fs-utils@2.2.6", "", {}, "sha512-Ymzt1ouMy4VkfKMAqS3o8IcgLc8ZocwjSxk0Wovzc1muQxKbZTJnlX3G7uDobUqGiVMAM/a017E2c0Nqvmvm6Q=="],
 
-    "@reliverse/dler-helpers": ["@reliverse/dler-helpers@2.2.4", "", { "dependencies": { "@reliverse/dler-fs-utils": "2.2.4", "@reliverse/dler-matcher": "2.2.4", "@reliverse/dler-pkg-tsc": "2.2.4" } }, "sha512-iphWcUyzagradaF0N9W+VuipktbpEBcFMWZbQUeke4bqSXAg0VOBXqtvkcegPXKP4xPDfDHiUYNvbL6VG2ERGQ=="],
+    "@reliverse/dler-helpers": ["@reliverse/dler-helpers@2.2.6", "", { "dependencies": { "@reliverse/dler-fs-utils": "2.2.6", "@reliverse/dler-matcher": "2.2.6", "@reliverse/dler-pkg-tsc": "2.2.6" } }, "sha512-coF1NOdVV4xx1m5dySxgKaTKvS55f/YQ5OIbWpDQdZN9Ozadxq90fYK2s4Pdog9Z0EM9mNCZjTitTPHuSivRaQ=="],
 
-    "@reliverse/dler-launcher": ["@reliverse/dler-launcher@2.2.4", "", { "dependencies": { "@reliverse/dler-colors": "2.2.4", "@reliverse/dler-helpers": "2.2.4", "@reliverse/dler-logger": "2.2.4", "@reliverse/dler-mapper": "2.2.4" } }, "sha512-yyvZC58oDcmoM2BjRxTpEBqZ3NlZ5ecHkcg6WkCy6y8rusdhGMdObHYxyTitmWOJYyWQfVZCJRHTeWWU9v4QzQ=="],
+    "@reliverse/dler-launcher": ["@reliverse/dler-launcher@2.2.6", "", { "dependencies": { "@reliverse/dler-colors": "2.2.6", "@reliverse/dler-helpers": "2.2.6", "@reliverse/dler-logger": "2.2.6", "@reliverse/dler-mapper": "2.2.6" } }, "sha512-DE28+f9uvJW/NnJCi5dTamuboXfGP5U2ebw6ISbX5KbQdU8a72MKECzx5H0SoxEyqC8jAoMl7nG91wNT2oUDQA=="],
 
-    "@reliverse/dler-logger": ["@reliverse/dler-logger@2.2.4", "", { "dependencies": { "@reliverse/dler-colors": "2.2.4" } }, "sha512-t1S0EcR92e9sZ8ewO2XGa1lVMNAB7AR5B6FM9vxu8nFM026nTCU3XnNNmILNgt1r1M5kxBnO1nOE0g/J9F2jhA=="],
+    "@reliverse/dler-logger": ["@reliverse/dler-logger@2.2.6", "", { "dependencies": { "@reliverse/dler-colors": "2.2.6" } }, "sha512-RzrnegbLGZMtQn/cibJcx/nsr/uNLRilHA0vHWpu/H995CYg1xXSTA7DvbVQl5i3XLVashbmNj3+yHeDn0XKgg=="],
 
-    "@reliverse/dler-mapper": ["@reliverse/dler-mapper@2.2.4", "", {}, "sha512-FjF+NEpOwhoOC/6D76I1kDB5mILy2/PXmsDYwOBmUhxyA12PHLZ64amBXmKbf/MPe5pLfTZYUE9EFRj9fxgVlw=="],
+    "@reliverse/dler-mapper": ["@reliverse/dler-mapper@2.2.6", "", {}, "sha512-rZkU+3F4hUCCAliBemN0VzTRgCdNMLBp5NSBukAyNN43+Qnq6WcjVuybAECu4ztVHiPycbfmFmgDKYJ5rXIsRw=="],
 
-    "@reliverse/dler-matcher": ["@reliverse/dler-matcher@2.2.4", "", { "dependencies": { "zeptomatch": "^2.1.0" } }, "sha512-OqIrV9Uzc1KqNb18voqjpU98DlaGVQ54zOGxWoRgGoTpDKN6k+0L63aeIlQqiKp7KQhe+60W05RdJO8ZX00RcQ=="],
+    "@reliverse/dler-matcher": ["@reliverse/dler-matcher@2.2.6", "", { "dependencies": { "zeptomatch": "^2.1.0" } }, "sha512-ZHnAZuAV2UPiDz+TMJ3XaUEw04XUOWAogLS8XFhZ34xGdEdNNO1ObCycof8ghFURRzygF4AM7aS5+fPzGpG/NA=="],
 
-    "@reliverse/dler-pathkit": ["@reliverse/dler-pathkit@2.2.4", "", {}, "sha512-IMuXnMjxB/Lu0TUSWlPE0DqWWcJ5aO7jaLsilOZG+IC/h62v52jFq3HDBkFZzEw+WEq3/nGm3S1Cujuje9wOnA=="],
+    "@reliverse/dler-pathkit": ["@reliverse/dler-pathkit@2.2.6", "", {}, "sha512-V2dhl4PhGWLMCPbUGv4UT9U5HGnXTeCDhAtU3WNbCr7WnCSez+lNl9bZPhVy3B/87RMAzs9v0IglOtQD1uWGfw=="],
 
-    "@reliverse/dler-pkg-tsc": ["@reliverse/dler-pkg-tsc@2.2.4", "", { "dependencies": { "pkg-types": "^2.3.0" } }, "sha512-LTWRcOHIhIMFlocHTwkHVqOBpKOlW165FuvxFrvTcA/bb3xHOjzoCZdYkZPGqu90rxh4Qi8P8WMV7yzXAjNTjA=="],
+    "@reliverse/dler-pkg-tsc": ["@reliverse/dler-pkg-tsc@2.2.6", "", { "dependencies": { "pkg-types": "^2.3.0" } }, "sha512-Vaf8Im9IfK9NY/0quZZLGp16gtFgFLSFAYaTwIjSweN0B5c1PFikNPfK81nYihB4r8G8hNF/zEC9qJ7Wj1W1mQ=="],
 
-    "@reliverse/dler-prompt": ["@reliverse/dler-prompt@2.2.4", "", { "dependencies": { "log-update": "^7.0.1", "sisteransi": "^1.0.5" } }, "sha512-rO+jdAvdcj4rKCVKTN7/RHo1tDSxc/pRm+kF4jYcWFb4yQV2QG0vDcmqO/za4NNTIdQATFRM4yjuwBzCQXx2+Q=="],
+    "@reliverse/dler-prompt": ["@reliverse/dler-prompt@2.2.6", "", { "dependencies": { "log-update": "^7.0.1", "sisteransi": "^1.0.5" } }, "sha512-mcdC5LSaXM7nHZU0VDQRJUznQLM6YCOudcsRtHDh67zzeGZA7Cd8oPXe3g6U34pnEw8PUf54Beh6onbQX54pxA=="],
 
-    "@reliverse/dler-publish": ["@reliverse/dler-publish@2.1.21", "", { "dependencies": { "@reliverse/dler-build": "2.1.21", "@reliverse/dler-bump": "2.1.21", "@reliverse/dler-colors": "2.1.21", "@reliverse/dler-config": "2.1.21", "@reliverse/dler-logger": "2.1.21", "@reliverse/dler-pkg-tsc": "2.1.21", "c12": "^3.3.2" } }, "sha512-mRm81SZg9Olj+xOEHSBCgSLkx6/n4GpujtohijJXJhEkjnIQKlnPD1Bjuy0W4mwr7hfd4xaV5/KGUD8hSp/0FQ=="],
+    "@reliverse/dler-publish": ["@reliverse/dler-publish@2.2.6", "", { "dependencies": { "@reliverse/dler-build": "2.2.6", "@reliverse/dler-bump": "2.2.6", "@reliverse/dler-colors": "2.2.6", "@reliverse/dler-config": "2.2.6", "@reliverse/dler-logger": "2.2.6", "@reliverse/dler-pkg-tsc": "2.2.6", "c12": "^3.3.2" } }, "sha512-KvuPv051CmLF06yHl6YiFKQfL/PARXC+CWa4rAE1SYTDTEiUjVKBjhb9pj5R7oILQY0lEdL+6FIsM1Ro01SAEQ=="],
 
-    "@reliverse/dler-spinner": ["@reliverse/dler-spinner@2.2.4", "", { "dependencies": { "@reliverse/dler-colors": "2.2.4", "cli-cursor": "^5.0.0", "cli-spinners": "^3.3.0", "is-interactive": "^2.0.0", "is-unicode-supported": "^2.1.0", "pretty-bytes": "^7.1.0", "pretty-ms": "^9.3.0", "stdin-discarder": "^0.3.0", "string-width": "^8.1.0", "strip-ansi": "^7.1.2" } }, "sha512-Nwlhw/yKQ62OwVEB8TZyHwJq01WBiurUkszFIgHaeg+eDND9olOTX5/Z3NdgAXTCQsZieR+5KHxKLAevXEXhnQ=="],
+    "@reliverse/dler-spinner": ["@reliverse/dler-spinner@2.2.6", "", { "dependencies": { "@reliverse/dler-colors": "2.2.6", "cli-cursor": "^5.0.0", "cli-spinners": "^3.3.0", "is-interactive": "^2.0.0", "is-unicode-supported": "^2.1.0", "pretty-bytes": "^7.1.0", "pretty-ms": "^9.3.0", "stdin-discarder": "^0.3.0", "string-width": "^8.1.0", "strip-ansi": "^7.1.2" } }, "sha512-KyKHP04Y8Ax5iMB4dftF/xwIGLzSsPZQ7T4VEkKYLCkAnO+5xqCwK+6PjY1rq5e6WjpE9fHTNnuVYRDxgCmOOQ=="],
 
     "@reliverse/rse": ["@reliverse/rse@workspace:cli"],
 
@@ -660,26 +663,6 @@
 
     "zod": ["zod@4.1.12", "", {}, "sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ=="],
 
-    "@reliverse/dler-build/@reliverse/dler-helpers": ["@reliverse/dler-helpers@2.1.21", "", { "dependencies": { "@reliverse/dler-matcher": "2.1.21", "@reliverse/dler-pkg-tsc": "2.1.21" } }, "sha512-gQbbqsKiY+KwFDR+sny1it4QpTYSsc079y+cuIjWByPCsUYXZfd1Y4v/g/82fJVmbR5g88IeFx0oic0bE3BBKA=="],
-
-    "@reliverse/dler-build/@reliverse/dler-logger": ["@reliverse/dler-logger@2.1.21", "", { "dependencies": { "@reliverse/dler-colors": "2.1.21" } }, "sha512-cuVHlt5OsQ48PHQpz4d/ajcAwnsWdpuWx18aVN8dtAoh5Xn8X/AXGheiM3St1ktDUwGRq5UkxpKnRIdoRggCfg=="],
-
-    "@reliverse/dler-build/@reliverse/dler-mapper": ["@reliverse/dler-mapper@2.1.21", "", {}, "sha512-9NpSxbEPMeGZ15htC0FHlyyqFbTNv1PqKrMT4/BleHRHTx5J0l5rmgjaB4O+80lAYIOV4rbvwyhCCHylF4eGxQ=="],
-
-    "@reliverse/dler-build/@reliverse/dler-matcher": ["@reliverse/dler-matcher@2.1.21", "", { "dependencies": { "zeptomatch": "^2.1.0" } }, "sha512-1RNHd2mE8LFNFkO/hM4i6dYL0kr3QkqWTfFodCBXiRNiux8stB99UbXyQ18xf9DvqLS9JFdD42F0EJHW6ERPSA=="],
-
-    "@reliverse/dler-build/@reliverse/dler-pkg-tsc": ["@reliverse/dler-pkg-tsc@2.1.21", "", { "dependencies": { "pkg-types": "^2.3.0" } }, "sha512-y3nBYAkhi4wTyVDONt0y3rg0YgDdBIrNDCq1mxleTkmDrHJv9IeKMsoupeSHjEcadVykHP4wBP2S/a3GBh7csw=="],
-
-    "@reliverse/dler-config/@reliverse/dler-matcher": ["@reliverse/dler-matcher@2.1.21", "", { "dependencies": { "zeptomatch": "^2.1.0" } }, "sha512-1RNHd2mE8LFNFkO/hM4i6dYL0kr3QkqWTfFodCBXiRNiux8stB99UbXyQ18xf9DvqLS9JFdD42F0EJHW6ERPSA=="],
-
-    "@reliverse/dler-config/@reliverse/dler-pkg-tsc": ["@reliverse/dler-pkg-tsc@2.1.21", "", { "dependencies": { "pkg-types": "^2.3.0" } }, "sha512-y3nBYAkhi4wTyVDONt0y3rg0YgDdBIrNDCq1mxleTkmDrHJv9IeKMsoupeSHjEcadVykHP4wBP2S/a3GBh7csw=="],
-
-    "@reliverse/dler-publish/@reliverse/dler-colors": ["@reliverse/dler-colors@2.1.21", "", {}, "sha512-qXt9Z/pDuBQF/fRp+440/uXiCAWPwAOgrRFARKJ35e9IcG86ZPxNV+lcJUWztumzqhrfbch4ptFh1Iyd8WQbvA=="],
-
-    "@reliverse/dler-publish/@reliverse/dler-logger": ["@reliverse/dler-logger@2.1.21", "", { "dependencies": { "@reliverse/dler-colors": "2.1.21" } }, "sha512-cuVHlt5OsQ48PHQpz4d/ajcAwnsWdpuWx18aVN8dtAoh5Xn8X/AXGheiM3St1ktDUwGRq5UkxpKnRIdoRggCfg=="],
-
-    "@reliverse/dler-publish/@reliverse/dler-pkg-tsc": ["@reliverse/dler-pkg-tsc@2.1.21", "", { "dependencies": { "pkg-types": "^2.3.0" } }, "sha512-y3nBYAkhi4wTyVDONt0y3rg0YgDdBIrNDCq1mxleTkmDrHJv9IeKMsoupeSHjEcadVykHP4wBP2S/a3GBh7csw=="],
-
     "cliui/string-width": ["string-width@4.2.3", "", { "dependencies": { "emoji-regex": "^8.0.0", "is-fullwidth-code-point": "^3.0.0", "strip-ansi": "^6.0.1" } }, "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g=="],
 
     "cliui/strip-ansi": ["strip-ansi@6.0.1", "", { "dependencies": { "ansi-regex": "^5.0.1" } }, "sha512-Y38VPSHcqkFrCpFnQ9vuSXmquuv5oXOKpGeT6aGrr3o3Gc9AlVa6JBfUSOCnbxGGZF+/0ooI7KrPuUSztUdU5A=="],
@@ -695,8 +678,6 @@
     "wrap-ansi/string-width": ["string-width@7.2.0", "", { "dependencies": { "emoji-regex": "^10.3.0", "get-east-asian-width": "^1.0.0", "strip-ansi": "^7.1.0" } }, "sha512-tsaTIkKW9b4N+AEj+SVA+WhJzV7/zMhcSu78mLKWSk7cXMOSHsBKFWUs0fWwq8QyK3MgJBQRX6Gbi4kYbdvGkQ=="],
 
     "yargs/string-width": ["string-width@4.2.3", "", { "dependencies": { "emoji-regex": "^8.0.0", "is-fullwidth-code-point": "^3.0.0", "strip-ansi": "^6.0.1" } }, "sha512-wKyQRQpjJ0sIp62ErSZdGsjMJWsap5oRNihHhu6G7JVO/9jIB6UyevL+tXuOqrng8j/cxKTWyWUwvSTriiZz/g=="],
-
-    "@reliverse/dler-build/@reliverse/dler-logger/@reliverse/dler-colors": ["@reliverse/dler-colors@2.1.21", "", {}, "sha512-qXt9Z/pDuBQF/fRp+440/uXiCAWPwAOgrRFARKJ35e9IcG86ZPxNV+lcJUWztumzqhrfbch4ptFh1Iyd8WQbvA=="],
 
     "cliui/string-width/emoji-regex": ["emoji-regex@8.0.0", "", {}, "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A=="],
 

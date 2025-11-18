@@ -1,4 +1,3 @@
-import { re } from "@reliverse/dler-colors";
 import { defineArgs, defineCommand } from "@reliverse/dler-launcher";
 import { logger } from "@reliverse/dler-logger";
 import { isCancel, selectPrompt } from "@reliverse/dler-prompt";

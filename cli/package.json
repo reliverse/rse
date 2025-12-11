@@ -9,6 +9,7 @@
     "rse": "dist/cli.js"
   },
   "dependencies": {
+    "@p/linear": "workspace:*",
     "@reliverse/rse-rebts": "workspace:*",
     "@reliverse/rse-addons": "workspace:*",
     "@reliverse/rse-escaper": "workspace:*",

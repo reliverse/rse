@@ -1,0 +1,30 @@
+{
+  "name": "@p/linear",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./src/mod.ts",
+      "default": "./src/mod.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@reliverse/dler-colors": "catalog:",
+    "@reliverse/dler-logger": "catalog:",
+    "@reliverse/dler-prompt": "catalog:",
+    "@linear/sdk": "catalog:",
+    "clipboardy": "catalog:",
+    "jiti": "catalog:",
+    "p-map": "catalog:",
+    "tinyglobby": "catalog:"
+  },
+  "devDependencies": {
+    "@p/tsconfig": "workspace:*",
+    "@types/bun": "catalog:",
+    "typescript": "catalog:"
+  }
+}

@@ -5,10 +5,7 @@
       "**",
       "!**/bun.lock",
       "!**/.zed",
-      "!**/.js",
-      "!**/.d.ts",
       "!**/dist",
-      "!**/templates",
       "!**/node_modules"
     ],
     "ignoreUnknown": false
@@ -17,18 +14,18 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "suspicious": {
-        "noExplicitAny": "off"
-      },
-      "security": {},
       "a11y": {},
+      "complexity": {},
+      "correctness": {},
+      "nursery": {},
+      "performance": {},
+      "security": {},
       "style": {
         "noNonNullAssertion": "off"
       },
-      "correctness": {},
-      "complexity": {},
-      "performance": {},
-      "nursery": {}
+      "suspicious": {
+        "noExplicitAny": "off"
+      }
     }
   },
   "formatter": {
@@ -41,19 +38,19 @@
     "globals": ["Bun"],
     "formatter": {
       "enabled": true,
-      "lineEnding": "lf",
-      "jsxQuoteStyle": "double",
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
-      "lineWidth": 80,
-      "indentWidth": 2,
-      "indentStyle": "space",
-      "semicolons": "always",
       "arrowParentheses": "always",
-      "bracketSpacing": true,
+      "attributePosition": "auto",
       "bracketSameLine": false,
+      "bracketSpacing": true,
+      "indentStyle": "space",
+      "indentWidth": 2,
+      "jsxQuoteStyle": "double",
+      "lineEnding": "lf",
+      "lineWidth": 80,
+      "quoteProperties": "asNeeded",
       "quoteStyle": "double",
-      "attributePosition": "auto"
+      "semicolons": "always",
+      "trailingCommas": "all"
     }
   },
   "assist": {
